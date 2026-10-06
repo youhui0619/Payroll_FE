@@ -1,0 +1,125 @@
+<div class="row mt-4">
+    <div class="d-flex align-items-center flex-wrap gap-2">
+        <p class="text-muted me-2 mb-0 text-nowrap">Filter By: </p>
+        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+            <input type="text" matInput placeholder="Search..." >
+            <span matTextPrefix class="text-muted me-2">
+                <i-tabler name="search" class="icon-16"></i-tabler>
+            </span>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+            <mat-select placeholder="Select">
+                <mat-option value="Disclosure">Disclosure</mat-option>
+                <mat-option value="Other">Other</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-input me-2" subscriptSizing="dynamic">
+            <mat-select placeholder="Select">
+                <mat-option value="Disclosure">Disclosure</mat-option>
+                <mat-option value="Other">Other</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" class="ms-auto">
+            <i-tabler name="plus"></i-tabler> Add Adjustment
+        </button>
+    </div>
+</div>
+<!-- Table -->
+<div class="row mt-4">
+    <div class="col-sm-12 px-2">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <h4 class="mb-0">Inventory Adjustment List</h4>
+                    <div>
+                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
+                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
+                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <i-tabler name="download" class="icon-16"></i-tabler> Export</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="material-datatables table-responsive">
+                    <table matSort class="mat-sort table no-wrap w-100 text-left" matSort>
+                        <thead>
+                            <tr>
+                                <th mat-sort-header="id">#</th>
+                                <th mat-sort-header="assigned">Inventory Name</th>
+                                <th mat-sort-header="name">Adjustment Type</th>
+                                <th mat-sort-header="budget">Status</th>
+                                <th mat-sort-header="budget">Requested Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="/inventory/adjustment/view">ADJ-0012345</a></td>
+                                <td>Wireless Keyboard</td>
+                                <td>Damaged</td>
+                                <td><span class="chip bg-light-warning text-warning">draft</span></td>
+                                <td>12/12/2025</td>
+                                <td>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="eye"></i-tabler>
+                                    </button>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="edit"></i-tabler>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="/inventory/adjustment/view">ADJ-0012345</a></td>
+                                <td>Wireless Keyboard</td>
+                                <td>Damaged</td>
+                                <td><span class="chip bg-light-success text-success">Approved</span></td>
+                                <td>12/12/2025</td>
+                                <td>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="eye"></i-tabler>
+                                    </button>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="edit"></i-tabler>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="/inventory/adjustment/view">ADJ-0012345</a></td>
+                                <td>Wireless Keyboard</td>
+                                <td>Damaged</td>
+                                <td><span class="chip bg-light-danger text-danger">Rejected</span></td>
+                                <td>12/12/2025</td>
+                                <td>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="eye"></i-tabler>
+                                    </button>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="edit"></i-tabler>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="/inventory/adjustment/view">ADJ-0012345</a></td>
+                                <td>Wireless Keyboard</td>
+                                <td>Damaged</td>
+                                <td><span class="chip bg-light-info text-info">Pending</span></td>
+                                <td>12/12/2025</td>
+                                <td>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="eye"></i-tabler>
+                                    </button>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="edit"></i-tabler>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <mat-paginator [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

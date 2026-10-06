@@ -1,0 +1,190 @@
+<div class="row">
+    <div class="col-sm-12 px-2">
+        <div class="row mx-0">
+            <div class="col-sm-3 pb-3" style="border-right: 1px solid var(--border);">
+                <div class="d-flex align-items-center">
+                    <span class="text-primary bg-light-primary icon p-3">
+                        <i-tabler name="users" class="icon-24"></i-tabler>
+                    </span>
+                    <div class="ms-3">
+                        <span class="f-s-12 text-muted">Total Customers</span>
+                        <h4>18</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-5 px-3">
+                <h5><span class="text-muted ps-1 fw-400">New customers in this month: </span>2
+                </h5>
+                <div class="summary-progress">
+                    <div class="progress-bar bg-success" style="width: 80%;"></div>
+                    <div class="progress-bar bg-danger" style="width: 20%;"></div>
+                </div>
+                <div class="row p-x-8">
+                    <div class="col-6 p-x-8">
+                        <div class="d-flex align-items-center gap-2">
+                            <div
+                                class="progress-bar bg-success"
+                                style="width: 10px; height: 10px; border-radius: 50%;"></div>
+                            <div>Active:<span class="fw-600 ms-1">13</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 p-x-8">
+                        <div class="d-flex align-items-center gap-2">
+                            <div
+                                class="progress-bar bg-danger"
+                                style="width: 10px; height: 10px; border-radius: 50%;"></div>
+                            <div>Inactive:<span class="fw-600 ms-1">5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row mt-4">
+    <div class="d-flex align-items-center flex-wrap gap-2">
+        <p class="text-muted me-2 mb-0 text-nowrap">Filter By: </p>
+        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+            <input type="text" matInput placeholder="Search..." >
+            <span matTextPrefix class="text-muted me-2">
+                <i-tabler name="search" class="icon-16"></i-tabler>
+            </span>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+            <mat-select placeholder="Select Status" multiple>
+                <mat-option value="active">Active</mat-option>
+                <mat-option value="inactive">Inactive</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+            <mat-select placeholder="Select Payment Terms" multiple>
+                <mat-option value="COD">COD</mat-option>
+                <mat-option value="NET 15">NET 15</mat-option>
+                <mat-option value="NET 30">NET 30</mat-option>
+                <mat-option value="NET 60">NET 60</mat-option>
+                <mat-option value="NET 90">NET 90</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <button mat-flat-button color="primary" class="ms-auto" routerLink="/parties/customers/create">
+            <i-tabler name="plus"></i-tabler> Add Customer
+        </button>
+    </div>
+</div>
+<!-- Table -->
+<div class="row mt-4">
+    <div class="col-sm-12 px-2">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <h4 class="mb-0">Customer List (18)</h4>
+                    <div>
+                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
+                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
+                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <i-tabler name="download" class="icon-16"></i-tabler> Export</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="material-datatables table-responsive">
+                    <table matSort class="mat-sort table no-wrap w-100 text-left" matSort>
+                        <thead>
+                            <tr>
+                                <th mat-sort-header="id">#</th>
+                                <th mat-sort-header="assigned">Customer Name</th>
+                                <th mat-sort-header="name">Person In charge</th>
+                                <th mat-sort-header="status">Contact No.</th>
+                                <th mat-sort-header="budget">Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="/parties/customers/view">CUS-0001</a></td>
+                                <td>ABC Packaging</td>
+                                <td>Ahmad</td>
+                                <td>+6012-345 6789</td>
+                                <td><span class="chip bg-light-success text-success">Active</span></td>
+                                <td>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="eye"></i-tabler>
+                                    </button>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="edit"></i-tabler>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="/parties/customers/view">CUS-0002</a></td>
+                                <td>Mega Warehouse</td>
+                                <td>Lim Wei</td>
+                                <td>+6012-345 6789</td>
+                                <td><span class="chip bg-light-success text-success">Active</span></td>
+                                <td>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="eye"></i-tabler>
+                                    </button>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="edit"></i-tabler>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="/parties/customers/view">CUS-0003</a></td>
+                                <td>ABC Packaging</td>
+                                <td>Ahmad</td>
+                                <td>+6012-345 6789</td>
+                                <td><span class="chip bg-light-success text-success">Active</span></td>
+                                <td>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="eye"></i-tabler>
+                                    </button>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="edit"></i-tabler>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="/parties/customers/view">CUS-0004</a></td>
+                                <td>XYZ Logistics</td>
+                                <td>Sarah</td>
+                                <td>+6012-345 6789</td>
+                                <td><span class="chip bg-light-danger text-danger">Inactive</span></td>
+                                <td>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="eye"></i-tabler>
+                                    </button>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="edit"></i-tabler>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="/parties/customers/view">CUS-0005</a></td>
+                                <td>Global Supplies</td>
+                                <td>Daniel</td>
+                                <td>+6012-345 6789</td>
+                                <td><span class="chip bg-light-danger text-danger">Inactive</span></td>
+                                <td>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="eye"></i-tabler>
+                                    </button>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="edit"></i-tabler>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <mat-paginator [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>
+            
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

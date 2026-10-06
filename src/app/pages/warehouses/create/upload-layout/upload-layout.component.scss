@@ -1,0 +1,30 @@
+.uploaded-layout-preview {
+  display: block;
+  width: 100%;
+  object-fit: contain;
+  padding: 8px;
+}
+
+.file-img{
+    width: 60px;
+    height: 60px;
+    border-radius: 9px;
+    overflow: hidden;
+
+    i-tabler{
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+    }
+}
+
+.file-name{
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--header);
+}
+
+.file-size{
+    font-size: 10px;
+    color: var(--disabled);
+}

@@ -1,0 +1,396 @@
+import { CommonModule } from '@angular/common';
+import { Component, OnDestroy } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
+import { RouterLink } from '@angular/router';
+import { ToastrService, ToastrModule } from 'ngx-toastr';
+import { createFormGroupFromFields, FormConfig, FormFieldConfig, FormsComponent } from '../../../../shared/forms/forms.component';
+
+const hiddenField = (name: string, formControlName: string, type = 'text'): FormFieldConfig => ({
+  name,
+  type,
+  formControlName,
+  placeholder: '',
+  size: 'col-sm-12',
+});
+
+@Component({
+  selector: 'app-create',
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule,  ToastrModule, FormsComponent],
+  providers: [...MaterialProviders, ToastrService],
+  templateUrl: './create.component.html',
+  styleUrl: './create.component.scss'
+})
+export class CreateComponent {
+  vendors: FormConfig[] = [
+    {
+      section: 'Company Information',
+      ordering: 0,
+      fields: [
+        {
+          name: 'Company Name',
+          type: 'text',
+          required: true, 
+          validation: true,
+          formControlName: 'name',
+          options: [],
+          errorMessage: "Customer company name is required",
+          placeholder: "Enter company name",
+          size: 'col-sm-8',
+          surfix: '',
+          prefix: '',
+        },
+        {
+          name: 'Registration No.',
+          type: 'number',
+          required: true, 
+          validation: true,
+          formControlName: 'registrationNo',
+          options: [],
+          errorMessage: "Registration No. is required",
+          placeholder: "Enter registration number",
+          size: 'col-sm-4',
+          surfix: '',
+          prefix: '',
+        },
+        {
+          name: 'SST No.',
+          type: 'text',
+          required: false, 
+          validation: false,
+          formControlName: 'sstNo',
+          options: [],
+          errorMessage: "",
+          placeholder: "Enter SST No.",
+          size: 'col-sm-4',
+          surfix: '',
+          prefix: '',
+        },
+        {
+          name: 'Tax No.',
+          type: 'text',
+          required: false, 
+          validation: false,
+          formControlName: 'taxNo',
+          options: [],
+          errorMessage: "",
+          placeholder: "Enter Tax No.",
+          size: 'col-sm-4',
+          surfix: '',
+          prefix: '',
+        },
+        {
+          name: 'Website',
+          type: 'text',
+          required: false, 
+          validation: false,
+          formControlName: 'website',
+          options: [],
+          errorMessage: "",
+          placeholder: "Enter Website",
+          size: 'col-sm-4',
+          surfix: '',
+          prefix: '',
+        }
+      ]
+    },
+    {
+      section: 'Contact Information',
+      ordering: 1,
+      fields: [
+        {
+          name: 'Person In Charge',
+          type: 'text',
+          required: true, 
+          validation: true,
+          formControlName: 'personInCharge',
+          options: [],
+          errorMessage: "Person in charge is required",
+          placeholder: "Enter person in charge",
+          size: 'col-sm-9',
+          surfix: '',
+          prefix: '',
+        },
+        {
+          name: 'Contact No.',
+          type: 'text',
+          required: true, 
+          validation: true,
+          formControlName: 'contactNo',
+          options: [],
+          errorMessage: "Contact No. is required",
+          placeholder: "Enter contact no.",
+          size: 'col-sm-4',
+          surfix: '',
+          prefix: '',
+        },
+        {
+          name: 'Email',
+          type: 'email',
+          required: true, 
+          validation: true,
+          formControlName: 'email',
+          options: [],
+          errorMessage: "Email is required",
+          placeholder: "Enter email",
+          size: 'col-sm-4',
+          surfix: '',
+          prefix: '',
+        },
+      ]
+    },
+    {
+        section: 'Supported Documents',
+        ordering: 2,
+        fields: [
+            {
+            name: 'Files',
+            type: 'file',
+            required: false, 
+            validation: false,
+            formControlName: 'files',
+            options: [],
+            errorMessage: "",
+            placeholder: "Select supported files",
+            size: 'col-sm-12',
+            surfix: '',
+            prefix: '',
+            isMultipleFiles: true,
+            accept: 'application/pdf',
+            headline: 'Drop or select files',
+            }
+        ]
+    },
+    {
+      section: 'Billing Address',
+      ordering: 3,
+      fields: [
+        {
+          name: 'Address Line 1',
+          type: 'text',
+          required: true, 
+          validation: true,
+          formControlName: 'billingAddressLine1',
+          options: [],
+          errorMessage: "Address Line 1 is required",
+          placeholder: "Address Line 1",
+          size: 'col-sm-6',
+          surfix: '',
+          prefix: '',
+        },
+        {
+        name: 'Address Line 2',
+        type: 'text',
+        required: true, 
+        validation: true,
+        formControlName: 'billingAddressLine2',
+        options: [],
+        errorMessage: "Address Line 2 is required",
+        placeholder: "Address Line 2",
+        size: 'col-sm-6',
+        surfix: '',
+        prefix: '',
+      },
+      {
+        name: 'City',
+        type: 'text',
+        required: true, 
+        validation: true,
+        formControlName: 'billingCity',
+        options: [],
+        errorMessage: "City is required",
+        placeholder: "Enter City",
+        size: 'col-sm-3',
+        surfix: '',
+        prefix: '',
+      },
+      {
+        name: 'Postcode',
+        type: 'number',
+        required: true, 
+        validation: true,
+        formControlName: 'billingPostcode',
+        options: [],
+        errorMessage: "Postcode is required",
+        placeholder: "Enter Postcode",
+        size: 'col-sm-3',
+        surfix: '',
+        prefix: '',
+      },
+      {
+        name: 'State',
+        type: 'text',
+        required: true, 
+        validation: true,
+        formControlName: 'billingState',
+        options: [],
+        errorMessage: "State is required",
+        placeholder: "Enter State",
+        size: 'col-sm-3',
+        surfix: '',
+        prefix: '',
+      },
+      {
+        name: 'Country',
+        type: 'select',
+        required: true, 
+        validation: true,
+        formControlName: 'billingCountry',
+        options: [
+          { value: 'MALAYSIA', label: 'Malaysia' }
+        ],
+        errorMessage: "Country is required",
+        placeholder: "Enter country",
+        size: 'col-sm-3',
+        surfix: '',
+        prefix: '',
+      },
+      ]
+    },
+    {
+      section: 'Shipping Address',
+      ordering: 4,
+      fields: [
+        {
+          name: 'Address Line 1',
+          type: 'text',
+          required: true, 
+          validation: true,
+          formControlName: 'shippingAddressLine1',
+          options: [],
+          errorMessage: "Address Line 1 is required",
+          placeholder: "Address Line 1",
+          size: 'col-sm-6',
+          surfix: '',
+          prefix: '',
+        },
+        {
+        name: 'Address Line 2',
+        type: 'text',
+        required: true, 
+        validation: true,
+        formControlName: 'shippingAddressLine2',
+        options: [],
+        errorMessage: "Address Line 2 is required",
+        placeholder: "Address Line 2",
+        size: 'col-sm-6',
+        surfix: '',
+        prefix: '',
+      },
+      {
+        name: 'City',
+        type: 'text',
+        required: true, 
+        validation: true,
+        formControlName: 'shippingCity',
+        options: [],
+        errorMessage: "City is required",
+        placeholder: "Enter City",
+        size: 'col-sm-3',
+        surfix: '',
+        prefix: '',
+      },
+      {
+        name: 'Postcode',
+        type: 'number',
+        required: true, 
+        validation: true,
+        formControlName: 'shippingPostcode',
+        options: [],
+        errorMessage: "Postcode is required",
+        placeholder: "Enter Postcode",
+        size: 'col-sm-3',
+        surfix: '',
+        prefix: '',
+      },
+      {
+        name: 'State',
+        type: 'text',
+        required: true, 
+        validation: true,
+        formControlName: 'shippingState',
+        options: [],
+        errorMessage: "State is required",
+        placeholder: "Enter State",
+        size: 'col-sm-3',
+        surfix: '',
+        prefix: '',
+      },
+      {
+        name: 'Country',
+        type: 'select',
+        required: true, 
+        validation: true,
+        formControlName: 'shippingCountry',
+        options: [
+          { value: 'MALAYSIA', label: 'Malaysia' }
+        ],
+        errorMessage: "Country is required",
+        placeholder: "Enter country",
+        size: 'col-sm-3',
+        surfix: '',
+        prefix: '',
+      },
+      ]
+    },
+    {
+      section: 'Payment and Purchasing',
+      ordering: 5,
+      fields: [
+        {
+          name: 'Payment Terms',
+          type: 'select',
+          required: true, 
+          validation: true,
+          formControlName: 'paymentTerms',
+          options: [
+            { value: 'COD', label: 'COD 15' },
+            { value: 'NET_15', label: 'NET 15' },
+            { value: 'NET_30', label: 'NET 30' },
+            { value: 'NET_60', label: 'NET 60' },
+            { value: 'NET_90', label: 'NET 90' },
+          ],
+          errorMessage: "Payment terms is required",
+          placeholder: "Enter payment terms",
+          size: 'col-sm-4'
+        },
+        {
+          name: 'Currency',
+          type: 'select',
+          required: true, 
+          validation: true,
+          formControlName: 'currency',
+          options: [
+            { value: 'MYR', label: 'MYR' },
+            { value: 'SGD', label: 'SGD' }
+          ],
+          errorMessage: "Currency is required",
+          placeholder: "Enter currency",
+          size: 'col-sm-4',
+          surfix: '',
+          prefix: '',
+        },
+        {
+          name: 'Remark',
+          type: 'textarea',
+          required: false, 
+          validation: false,
+          formControlName: 'remark',
+          options: [],
+          errorMessage: "",
+          placeholder: "Enter Remark",
+          size: 'col-sm-12',
+          surfix: '',
+          prefix: '',
+        }
+      ]
+    },
+  ];
+
+  vendorForm = createFormGroupFromFields(this.vendors);
+
+  onSubmit(form: any){
+    form.markAllAsTouched();
+    console.log("form.value", form.value)
+  }
+}

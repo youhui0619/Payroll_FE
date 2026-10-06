@@ -1,0 +1,500 @@
+<form [formGroup]="form">
+    <div class="row">
+        <div class="col-sm-7">
+            <h4 class="text-primary">Inventory Information</h4>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mx-0">
+                        <div class="col-sm-12 px-2">
+                            <mat-label class="form-label">Name
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <input type="text" matInput placeholder="Enter inventory name" formControlName="name">
+                                <mat-error class="text-danger">Inventory name is required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-6 px-2">
+                            <mat-label class="form-label">SKU
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field
+                                appearance="outline"
+                                class="form-input w-100"
+                                [class.is-invalid]="form.get('sku')?.touched && form.get('sku')?.invalid">
+                                <input type="text" matInput placeholder="Enter SKU" formControlName="sku">
+                                    <mat-error class="text-danger">SKU is required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-6 px-2">
+                            <mat-label class="form-label">UOM
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <mat-select placeholder="Select unit of measure" formControlName="uom">
+                                    <mat-option value="Disclosure">Disclosure</mat-option>
+                                    <mat-option value="Other">Other</mat-option>
+                                </mat-select>
+                                <mat-error class="text-danger">UOM is required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+
+                        <div class="col-sm-6 px-2">
+                            <mat-label class="form-label">Batch No.
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <input type="text" matInput placeholder="Enter batch number" formControlName="batchNo">
+                                <mat-error class="text-danger">Batch No is required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-6 px-2">
+                            <mat-label class="form-label">Serial No.
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <input type="text" matInput placeholder="Enter serial number" formControlName="serialNo">
+                                <mat-error class="text-danger">Serial No is required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-6 px-2">
+                            <mat-label class="form-label">Barcode Ref</mat-label>
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <input type="text" matInput placeholder="Enter barcode reference" formControlName="barcodeRef">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-6 px-2">
+                            <mat-label class="form-label">QR Code Ref
+                            </mat-label>
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <input type="text" matInput placeholder="Enter QR code reference" formControlName="qrCodeRef">
+                                
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-6 px-2">
+                            <mat-label class="form-label">Brand
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field
+                                appearance="outline"
+                                class="form-input w-100"
+                                [class.is-invalid]="form.get('brand')?.touched && form.get('brand')?.invalid">
+                                <input type="text" matInput placeholder="Enter brand" formControlName="brand">
+                                    <mat-error class="text-danger">Brand is required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-6 px-2">
+                            <mat-label class="form-label">Model
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field
+                                appearance="outline"
+                                class="form-input w-100"
+                                [class.is-invalid]="form.get('model')?.touched && form.get('model')?.invalid">
+                                <input type="text" matInput placeholder="Enter model" formControlName="model">
+                                    <mat-error class="text-danger">Model is required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-12 px-2">
+                            <mat-label class="form-label">Description
+                            </mat-label>
+                            <mat-form-field
+                                appearance="outline"
+                                class="form-input w-100">
+                                    <textarea matInput formControlName="description" placeholder="Enter description" rows="4"></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <h4 class="text-primary">Quantity Settings</h4>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mx-0">
+                        <div class="col-sm-6 px-2">
+                            <mat-label class="form-label">Quantity
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field
+                                appearance="outline"
+                                class="form-input w-100"
+                                [class.is-invalid]="form.get('quantity')?.touched && form.get('quantity')?.invalid">
+                                <input type="number" matInput placeholder="Enter quantity" formControlName="quantity">
+                                <span matTextSuffix class="text-muted">PCS</span>
+                                <mat-error class="text-danger">Quantity is required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-6 px-2">
+                            <mat-label class="form-label">Max Quantity
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field
+                                appearance="outline"
+                                class="form-input w-100"
+                                [class.is-invalid]="form.get('maxQuantity')?.touched && form.get('maxQuantity')?.invalid">
+                                <input type="number" matInput placeholder="Enter maximum quantity" formControlName="maxQuantity">
+                                <span matTextSuffix class="text-muted">PCS</span>
+                                <mat-error class="text-danger">Max Quantity is required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-3 px-2">
+                            <mat-label class="form-label">Expiry Tracking
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-slide-toggle formControlName="expiryTracking" color="primary"></mat-slide-toggle>
+                        </div>
+
+                        <div class="col-sm-3 px-2">
+                            <mat-label class="form-label">Low Stock Alert
+                                
+                            </mat-label>
+                            <mat-slide-toggle formControlName="lowStockAlert" color="primary"></mat-slide-toggle>
+                        </div>
+
+                        <div class="col-sm-6 px-2">
+                            <mat-label class="form-label">Reorder level
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field
+                                appearance="outline"
+                                class="form-input w-100"
+                                [class.is-invalid]="form.get('reorderLevel')?.touched && form.get('reorderLevel')?.invalid">
+                                <input type="number" matInput placeholder="Enter reorder level" formControlName="reorderLevel">
+                                <span matTextSuffix class="text-muted">PCS</span>
+                                <mat-error class="text-danger">Reorder level is required</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="d-flex justify-content-between mb-2 align-items-center">
+                <h4 class="text-primary">Location & Storage</h4>
+                <button type="button" mat-flat-button class="btn-sm" color="primary"><i-tabler name="plus"></i-tabler>Add</button>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mx-0">
+                        <div class="col-sm-12 px-2">
+                            <mat-label class="form-label">Warehouse
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                             <mat-form-field appearance="outline" class="form-input w-100">
+                                <input
+                                    type="text"
+                                    matInput
+                                    placeholder="Search supplier"
+                                    formControlName="supplier" [matAutocomplete]="supplierAuto">
+                                <mat-autocomplete #supplierAuto="matAutocomplete">
+                                    <mat-option value="Disclosure">Disclosure</mat-option>
+                                    <mat-option value="Other">Other</mat-option>
+                                </mat-autocomplete>
+                                <mat-error class="text-danger">Warehouse is required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-3 px-2">
+                            <mat-label class="form-label">Zone
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field
+                                appearance="outline"
+                                class="form-input w-100"
+                                [class.is-invalid]="form.get('zone')?.touched && form.get('zone')?.invalid">
+                                <input type="text" matInput placeholder="Enter zone" formControlName="zone">
+                                <mat-error class="text-danger">Zone is required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-3 px-2">
+                            <mat-label class="form-label">Rack
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field
+                                appearance="outline"
+                                class="form-input w-100"
+                                [class.is-invalid]="form.get('rack')?.touched && form.get('rack')?.invalid">
+                                <input type="text" matInput placeholder="Enter rack" formControlName="rack">
+                                <mat-error class="text-danger">Rack is required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-3 px-2">
+                            <mat-label class="form-label">Bin
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field
+                                appearance="outline"
+                                class="form-input w-100"
+                                [class.is-invalid]="form.get('bin')?.touched && form.get('bin')?.invalid">
+                                <input type="text" matInput placeholder="Enter bin" formControlName="bin">
+                                <mat-error class="text-danger">Bin is required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-3 px-2">
+                            <mat-label class="form-label">Location
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field
+                                appearance="outline"
+                                class="form-input w-100"
+                                [class.is-invalid]="form.get('location')?.touched && form.get('location')?.invalid">
+                                <input type="text" matInput placeholder="Enter location" formControlName="location">
+                                <mat-error class="text-danger">Location is required</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="d-flex justify-content-between mb-2 align-items-center">
+                <h4 class="text-primary">Supplier Information</h4>
+                <button type="button" mat-flat-button class="btn-sm" color="primary"><i-tabler name="plus"></i-tabler>Add</button>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mx-0">
+                        <div class="col-sm-12 px-2">
+                            <mat-label class="form-label">Supplier
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <input
+                                    type="text"
+                                    matInput
+                                    placeholder="Search supplier"
+                                    formControlName="supplier" [matAutocomplete]="supplierAuto">
+                                <mat-autocomplete #supplierAuto="matAutocomplete">
+                                    <mat-option value="Disclosure">Disclosure</mat-option>
+                                    <mat-option value="Other">Other</mat-option>
+                                </mat-autocomplete>
+                                <mat-error class="text-danger">Supplier is required</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-sm-12 px-2">
+                            <div class="row">
+                                <div class="col-sm-4 mb-3">
+                                    <mat-label class="form-label">Person in charge</mat-label>
+                                    <p>Alice Tan</p>
+                                </div>
+
+                                <div class="col-sm-4 mb-3">
+                                    <mat-label class="form-label">Email Address</mat-label>
+                                    <p>B20260901</p>
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <mat-label class="form-label">Contact No.</mat-label>
+                                    <p>+60123456789</p>
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <mat-label class="form-label">Serial No.</mat-label>
+                                    <p>SN-00012345</p>
+                                </div>
+                                <div class="col-sm-3 mb-3">
+                                    <mat-label class="form-label">Quantity</mat-label>
+                                    <p>250</p>
+                                </div>
+                                <div class="col-sm-3 mb-3">
+                                    <mat-label class="form-label">Reserved Qty</mat-label>
+                                    <p>30</p>
+                                </div>
+                                <div class="col-sm-3 mb-3">
+                                    <mat-label class="form-label">Available Qty</mat-label>
+                                    <p>220</p>
+                                </div>
+                                <div class="col-sm-3 mb-3">
+                                    <mat-label class="form-label">UOM</mat-label>
+                                    <p>PCS</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-sm-5">
+            <h4 class="text-primary">Inventory Image</h4>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mx-0">
+                        <div class="col-sm-12 px-2">
+                            <mat-label class="form-label">Image
+                            </mat-label>
+                                <app-dropzone
+                                    accept="image/png,image/jpeg"
+                                    [multiple]="false"
+                                    formControlName="image"
+                                    headline="Drop or select images"
+                                    description="Drop PNG or JPEG images here or click to">
+                                </app-dropzone>
+                        </div>
+                        <div class="col-sm-12 px-2">
+                            <mat-label class="form-label">Categories</mat-label>
+                            <mat-form-field appearance="outline" class="form-input tags-input w-100">
+                                <mat-chip-grid #chipGrid formControlName="category" aria-label="Categories">
+                                    <mat-chip-row color="primary-outline" class="chip-sm" *ngFor="let tag of tags" (removed)="removeTag(tag)">
+                                        {{ tag }}
+                                        <button type="button" matChipRemove [attr.aria-label]="'Remove ' + tag">×</button>
+                                    </mat-chip-row>
+                                </mat-chip-grid>
+                                <input #tagInput placeholder="Select or enter categories"
+                                    [matAutocomplete]="tagsAuto"
+                                    [matChipInputFor]="chipGrid"
+                                    (matChipInputTokenEnd)="addTagFromInput($event)" />
+                                <mat-autocomplete #tagsAuto="matAutocomplete"
+                                    (optionSelected)="selectTag($event.option.value); tagInput.value = ''">
+                                    <mat-option value="Disclosure">Disclosure</mat-option>
+                                    <mat-option value="Other">Other</mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="text-primary">Pricing & Additional</h4>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mx-0">
+                        <div class="col-sm-6 px-2">
+                            <mat-label class="form-label">Unit Price
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field
+                                appearance="outline"
+                                class="form-input w-100"
+                                [class.is-invalid]="form.get('unitPrice')?.touched && form.get('unitPrice')?.invalid">
+                                <input type="number" matInput placeholder="Enter unit price" formControlName="unitPrice">
+                                <span matTextPrefix class="text-muted me-2">RM</span>
+                                <mat-error class="text-danger">Unit Price is required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-6 px-2">
+                            <mat-label class="form-label">Selling Price
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field
+                                appearance="outline"
+                                class="form-input w-100"
+                                [class.is-invalid]="form.get('sellingPrice')?.touched && form.get('sellingPrice')?.invalid">
+                                <input type="number" matInput placeholder="Enter selling price" formControlName="sellingPrice">
+                                <span matTextPrefix class="text-muted me-2">RM</span>
+                                <mat-error class="text-danger">Selling Price is required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-3 px-2 mb-4">
+                            <mat-label class="form-label">Tax Included</mat-label>
+                            <mat-slide-toggle formControlName="taxIncluded" color="primary"></mat-slide-toggle>
+                        </div>
+                        <div class="col-sm-12 px-2">
+                            <div class="row mx-0">
+                                <div class="col-sm-6 px-2">
+                                    <mat-label class="form-label">Tax Type
+                                        <span class="text-danger">*</span>
+                                    </mat-label>
+                                    <mat-form-field appearance="outline" class="form-input w-100">
+                                        <mat-select placeholder="Select tax type" formControlName="taxType">
+                                            <mat-option value="Disclosure">Disclosure</mat-option>
+                                            <mat-option value="Other">Other</mat-option>
+                                        </mat-select>
+                                        <mat-error class="text-danger">Tax Type is required</mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-6 px-2">
+                                    <mat-label class="form-label">Tax Rate
+                                        <span class="text-danger">*</span>
+                                    </mat-label>
+                                    <mat-form-field
+                                        appearance="outline"
+                                        class="form-input w-100"
+                                        [class.is-invalid]="form.get('taxRate')?.touched && form.get('taxRate')?.invalid">
+                                        <input type="number" matInput placeholder="Enter tax rate" formControlName="taxRate">
+                                        <span matTextSuffix class="text-muted me-2">%</span>
+                                        <mat-error class="text-danger">Tax Rate is required</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 px-2">
+                            <mat-label class="form-label">Total Value
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field
+                                appearance="outline"
+                                class="form-input w-100"
+                                [class.is-invalid]="form.get('totalValue')?.touched && form.get('totalValue')?.invalid">
+                                <input type="number" matInput placeholder="Enter total value" formControlName="totalValue">
+                                <span matTextPrefix class="text-muted me-2">RM</span>
+                                <mat-error class="text-danger">Total Value is required</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <h4 class="text-primary">Inventory Files</h4>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mx-0">
+                        <div class="col-sm-12 px-2">
+                            <app-dropzone
+                                accept="image/png,image/jpeg"
+                                [multiple]="true"
+                                formControlName="files"
+                                headline="Drop or select files"
+                                description="Drop PDF or Excel here or click to">
+                            </app-dropzone>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <h4 class="text-primary">Notes</h4>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mx-0">
+                        <div class="col-sm-12 px-2">
+                            <mat-label class="form-label">Notes
+                            </mat-label>
+                            <mat-form-field
+                                appearance="outline"
+                                class="form-input w-100">
+                                    <textarea matInput formControlName="notes" placeholder="Enter notes" rows="4"></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex align-items-center justify-content-end gap-3">
+        <button type="button" mat-flat-button color="primary-outline"><i-tabler name="check"></i-tabler>Draft</button>
+        <button type="submit" mat-flat-button color="primary" (click)="submit()"><i-tabler name="check"></i-tabler>Submit</button>
+    </div>
+</form>

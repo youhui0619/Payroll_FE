@@ -1,0 +1,260 @@
+<div class="row">
+    <div class="col-sm-3 px-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="summary-info">
+                        <p class="f-s-12 text-muted">Total </p>
+                        <h3 class="mb-0">123</h3>
+                    </div>
+                    <div class="text-primary bg-light-primary text-end icon">
+                        <i-tabler name="transfer"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-sm-3 px-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="summary-info">
+                        <p>Draft </p>
+                        <h3 class="mb-0">20</h3>
+                    </div>
+                    <div class="text-warning bg-light-warning text-end icon">
+                        <i-tabler name="file-description"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-3 px-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="summary-info">
+                        <p>Pending </p>
+                        <h3 class="mb-0">13</h3>
+                    </div>
+                    <div class="text-info bg-light-info text-end icon">
+                        <i-tabler name="loader"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-3 px-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="summary-info">
+                        <p>In Transit </p>
+                        <h3 class="mb-0">13</h3>
+                    </div>
+                    <div class="text-secondary bg-light-secondary text-end icon">
+                        <i-tabler name="truck-delivery"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-3 px-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="summary-info">
+                        <p>Completed </p>
+                        <h3 class="mb-0">40</h3>
+                    </div>
+                    <div class="text-success bg-light-success text-end icon">
+                        <i-tabler name="progress-check"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-3 px-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="summary-info">
+                        <p>Cancelled </p>
+                        <h3 class="mb-0">40</h3>
+                    </div>
+                    <div class="text-danger bg-light-danger text-end icon">
+                        <i-tabler name="x"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="d-flex align-items-center flex-wrap gap-2">
+        <p class="text-muted me-2 mb-0 text-nowrap">Filter By: </p>
+        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+            <input type="text" matInput placeholder="Search..." >
+            <span matTextPrefix class="text-muted me-2">
+                <i-tabler name="search" class="icon-16"></i-tabler>
+            </span>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+            <mat-date-range-input [rangePicker]="rangePicker">
+                <input matStartDate placeholder="Start date">
+                <input matEndDate placeholder="End date">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+            <mat-date-range-picker #rangePicker></mat-date-range-picker>
+            <mat-error class="text-danger">Date Range is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+            <mat-select placeholder="Select Priority">
+                <mat-option value="Disclosure">Disclosure</mat-option>
+                <mat-option value="Other">Other</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" class="ms-auto">
+            <i-tabler name="plus"></i-tabler> Add Transfer
+        </button>
+    </div>
+</div>
+<!-- Table -->
+<div class="row mt-4">
+    <div class="col-sm-12 px-2">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <h4 class="mb-0">Inventory Transfer List</h4>
+                    <div>
+                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
+                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
+                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <i-tabler name="download" class="icon-16"></i-tabler> Export</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="material-datatables table-responsive">
+                    <table matSort class="mat-sort table no-wrap w-100 text-left" matSort>
+                        <thead>
+                            <tr>
+                                <th mat-sort-header="id">#</th>
+                                <th mat-sort-header="assigned">From Warehouse</th>
+                                <th mat-sort-header="name"></th>
+                                <th mat-sort-header="budget">To Warehouse</th>
+                                <th mat-sort-header="budget">Total Items</th>
+                                <th mat-sort-header="budget">Priority</th>
+                                <th mat-sort-header="budget">Transfer Date</th>
+                                <th mat-sort-header="budget">Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="/inventory/transfer/view">TR-0012345</a></td>
+                                <td>Warehouse A</td>
+                                <td><i-tabler name="arrow-narrow-right" class="icon-16"></i-tabler></td>
+                                <td>Warehouse A</td>
+                                <td>10</td>
+                                <td class="text-center"><span class="priority-badge bg-warning"></span></td>
+                                <td><span class="chip bg-light-warning text-warning">Draft</span></td>
+                                <td>12/12/2025</td>
+                                <td>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="eye"></i-tabler>
+                                    </button>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="edit"></i-tabler>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="/inventory/transfer/view">TR-0012345</a></td>
+                                <td>Warehouse A</td>
+                                <td><i-tabler name="arrow-narrow-right" class="icon-16"></i-tabler></td>
+                                <td>Warehouse B</td>
+                                <td>12</td>
+                                <td class="text-center"><span class="priority-badge bg-danger"></span></td>
+                                <td><span class="chip bg-light-info text-info">Pending</span></td>
+                                <td>12/12/2025</td>
+                                <td>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="eye"></i-tabler>
+                                    </button>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="edit"></i-tabler>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="/inventory/transfer/view">TR-0012345</a></td>
+                                <td>Warehouse A</td>
+                                <td><i-tabler name="arrow-narrow-right" class="icon-16"></i-tabler></td>
+                                <td>Warehouse A</td>
+                                <td>10</td>
+                                <td class="text-center"><span class="priority-badge bg-info"></span></td>
+                                <td><span class="chip bg-light-secondary text-secondary">In Transit</span></td>
+                                <td>12/12/2025</td>
+                                <td>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="eye"></i-tabler>
+                                    </button>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="edit"></i-tabler>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="/inventory/transfer/view">TR-0012345</a></td>
+                                <td>Warehouse A</td>
+                                <td><i-tabler name="arrow-narrow-right" class="icon-16"></i-tabler></td>
+                                <td>Warehouse A</td>
+                                <td>10</td>
+                                <td class="text-center"><span class="priority-badge bg-warning"></span></td>
+                                <td><span class="chip bg-light-success text-success">Completed</span></td>
+                                <td>12/12/2025</td>
+                                <td>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="eye"></i-tabler>
+                                    </button>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="edit"></i-tabler>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="/inventory/transfer/view">TR-0012345</a></td>
+                                <td>Warehouse A</td>
+                                <td><i-tabler name="arrow-narrow-right" class="icon-16"></i-tabler></td>
+                                <td>Warehouse A</td>
+                                <td>10</td>
+                                <td class="text-center"><span class="priority-badge bg-warning"></span></td>
+                                <td><span class="chip bg-light-danger text-danger">Cancelled</span></td>
+                                <td>12/12/2025</td>
+                                <td>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="eye"></i-tabler>
+                                    </button>
+                                    <button class="action-btn" mat-icon-button>
+                                        <i-tabler name="edit"></i-tabler>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <mat-paginator [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

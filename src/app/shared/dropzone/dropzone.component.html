@@ -1,0 +1,43 @@
+<ngx-dropzone
+  class="form-dropzone"
+  [accept]="accept"
+  [multiple]="multiple"
+  [disabled]="disabled"
+  (change)="onFilesChanged($event)">
+  <ngx-dropzone-label>
+    <div class="dropzone-content d-flex flex-column align-items-center justify-content-center">
+      <p class="headline mb-0 text-dark">{{ headline }}</p>
+      <p class="subtext small mb-0">
+        {{ description }}
+        <span class="browse-link text-primary">browse</span>
+        through your machine.
+      </p>
+    </div>
+  </ngx-dropzone-label>
+</ngx-dropzone>
+
+<div class="mt-4" *ngIf="value.length">
+  <div class="file-item d-flex align-items-center gap-3 w-100 mb-4" *ngFor="let file of value">
+    <div class="file-img flex-shrink-0 d-flex justify-content-center align-items-center">
+      <i-tabler
+        *ngIf="file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf'); else imagePreview"
+        name="file-type-pdf"
+        class="text-danger"
+        [attr.aria-label]="'PDF file: ' + file.name">
+      </i-tabler>
+      <ng-template #imagePreview>
+        <img [src]="previewUrls.get(file)" [alt]="file.name" class="file-preview">
+      </ng-template>
+    </div>
+    <div class="file-info flex-grow-1">
+      <div class="file-name">{{ file.name }}</div>
+      <div class="file-size">{{ formatFileSize(file.size) }}</div>
+    </div>
+    <button
+      type="button"
+       class="btn btn-link p-0 cursor-pointer"
+      (click)="removeFile(file)">
+      <i-tabler name="x" class="icon-16 text-muted"/>
+    </button>
+  </div>
+</div>

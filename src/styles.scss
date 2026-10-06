@@ -1,0 +1,329 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.dev/guide/theming
+
+@use './styles/input';
+@use './styles/color';
+@use './styles/card';
+@use './styles/chip';
+@use './styles/table';
+
+*{
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+a{
+    color: var(--primary);
+    text-decoration: none;
+}
+
+hr{
+  border-color: #eaeaea;
+  opacity: 1;
+}
+
+h4{
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--header)
+}
+
+.form-label{
+  margin-bottom: 4px;
+  display: block;
+  font-weight: 500;
+}
+
+.mat-mdc-menu-panel{
+  border-radius: 12px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+  background: var(--white) !important;
+  min-width: 200px!important;
+  max-width: 250px!important;
+}
+
+.mat-mdc-menu-item:hover {
+    background-color: var(--light-primary) !important;
+  }
+
+  /* Focus */
+  .mat-mdc-menu-item:focus {
+    background-color: var(--light-primary) !important;;
+    color: var(--primary)!important
+  }
+
+  /* Pressed */
+  .mat-mdc-menu-item:active {
+    background-color: var(--light-primary) !important;
+    color: var(--primary)!important
+  }
+
+  /* Disabled */
+  .mat-mdc-menu-item[disabled] {
+    color: var(--disabled) !important;
+    cursor: not-allowed;
+  }
+
+  .mat-mdc-tab-group {
+  --mdc-tab-indicator-active-indicator-color: var(--primary)!important;
+  --mdc-tab-active-indicator-height: 2px!important;
+
+  .mat-mdc-tab-label-container {
+    border-bottom: 1px solid #eaeaea;
+  }
+
+  .mat-mdc-tab {
+    min-width: auto;
+    padding: 0 16px;
+    height: 44px;
+
+    .mdc-tab__text-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);;
+    }
+
+    &:hover {
+      .mdc-tab__text-label {
+        color: var(--primary)!important;
+      }
+    }
+  }
+
+  /* Active tab */
+  .mat-mdc-tab.mdc-tab--active {
+    .mdc-tab__text-label {
+      color: var(--primary)!important;
+      font-weight: 600!important;
+    }
+  }
+
+  /* Active indicator */
+  .mdc-tab-indicator__content--underline {
+    width: 40px !important;
+    height: 3px !important;
+    background-color: var(--primary) !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+
+    /* Important: don't animate */
+    transition: none !important;
+  }
+
+  .mdc-tab-indicator {
+    transition: none !important;
+  }
+
+  /* Prevent the indicator from inheriting Material animation */
+  .mdc-tab-indicator--active {
+    transition: none !important;
+  }
+}
+
+//text
+.fw-300{
+  font-weight: 300!important;
+}
+
+.fw-400{
+  font-weight: 400!important;
+}
+
+.fw-550{
+  font-weight: 550!important;
+}
+
+.fw-600{
+  font-weight: 600!important;
+}
+
+.fw-700{
+  font-weight: 700!important;
+}
+
+.fw-300{
+  font-weight: 300!important;
+}
+
+.icon{
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-16{
+  width: 16px!important;
+  height: 16px!important;
+}
+
+.icon-14{
+  width: 14px!important;
+  height: 14px!important;
+}
+
+.icon-32{
+  width: 32px!important;
+  height: 32px!important;
+}
+
+.icon-40{
+  width: 40px!important;
+  height: 32px!important;
+}
+
+
+/* =========================================
+   Angular Material Stepper
+   ========================================= */
+
+.custom-stepper {
+    background: transparent !important;
+
+    .mat-horizontal-stepper-header {
+            height: 80px!important;
+            padding: 8px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mat-step-label {
+            margin-top: 6px;
+            font-size: 13px;
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        .mat-step-icon {
+            width: 25px!important;
+            height: 25px!important;
+            margin-right: 0px!important;
+            margin: 0;
+        }
+
+        .mat-step-icon-content span{
+          font-size: 12px!important;
+        }
+
+        /*
+         * Keep the connector line horizontally centered
+         * between the vertical step headers.
+         */
+        .mat-stepper-horizontal-line {
+            flex: 1;
+            margin: 0 4px;
+            border-top-width: 2px;
+        }
+    /* Step header */
+    .mat-horizontal-stepper-header-container {
+        padding: 0;
+    }
+
+    .mat-horizontal-stepper-header {
+        height: 64px;
+        padding: 0 20px;
+    }
+
+     /* Default connecting line */
+    .mat-stepper-horizontal-line {
+        border-top: 2px solid var(--border) !important;
+    }
+
+    /* Step label */
+    .mat-step-label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #8a8377;
+    }
+
+    .mat-step-label-selected {
+        color: #212529;
+        font-weight: 600;
+    }
+
+    /* Step number */
+    .mat-step-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 13px;
+        font-weight: 600;
+        background: var(--border);
+        color: var(--header);
+    }
+
+    /* Active step */
+    .mat-step-icon-selected {
+        background: var(--primary);
+        color: var(--white);
+    }
+
+    /* Completed step */
+    .mat-step-icon-state-done {
+        background: var(--primary);
+        color: var(--white);
+    }
+
+    /* Connecting line */
+    .mat-stepper-horizontal-line {
+        border-top-color: #e9ecef;
+        margin: 0 8px;
+    }
+
+    /* Content */
+    .mat-horizontal-content-container {
+        padding: 0;
+    }
+}
+
+
+/* =========================================
+   Step Header Hover
+   ========================================= */
+
+.custom-stepper {
+
+    .mat-horizontal-stepper-header:hover:not([aria-disabled='true']) {
+        background: transparent;
+    }
+
+    .mat-horizontal-stepper-header.cdk-keyboard-focused,
+    .mat-horizontal-stepper-header.cdk-program-focused {
+        background: transparent;
+    }
+}
+
+
+/* =========================================
+   Active Step Indicator
+   ========================================= */
+
+.custom-stepper {
+
+    .mat-horizontal-stepper-header[aria-selected='true'] {
+
+        .mat-step-label {
+            color: var(--primary);
+            font-weight: 600;
+        }
+    }
+
+    .mat-horizontal-stepper-header:has(
+        .mat-step-icon-state-done
+    )
+    + .mat-stepper-horizontal-line {
+        border-top-color: var(--primary) !important;
+    }
+  }
+
+  .warehouse-highlight{
+    fill: var(--primary)!important;
+}
+
+.fs-10{
+  font-size: 10px!important;
+}

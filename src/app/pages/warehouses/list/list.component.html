@@ -1,0 +1,313 @@
+<div class="row">
+    <div class="d-flex align-items-center flex-wrap gap-2 w-90">
+        <mat-form-field
+            appearance="outline"
+            class="form-input w-50"
+            subscriptSizing="dynamic">
+            <input
+                type="text"
+                matInput
+                placeholder="Enter warehouse name"
+                formControlName="autocomplete"
+                [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option value="Warehouse 1">Warehouse 1</mat-option>
+                    <mat-option value="Warehouse 2">Warehouse 2</mat-option>
+                    <mat-option value="Warehouse 2">Warehouse 3</mat-option>
+                    <mat-option value="Warehouse 2">Warehouse 4</mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+            <mat-form-field
+                appearance="outline"
+                class="form-input"
+                subscriptSizing="dynamic">
+                <mat-select>
+                    <mat-option value="Floor 1">Floor 1</mat-option>
+                    <mat-option value="Floor 2">Floor 2</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <button
+                mat-flat-button
+                color="primary"
+                class="ms-auto"
+                routerLink="/warehouses/create">
+                <i-tabler name="plus"></i-tabler>
+                Add Warehouse
+            </button>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-sm-12 px-2">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="summary-info">
+                                    <p class="f-s-12 text-muted">Total Zones</p>
+                                    <h3 class="mb-0">5</h3>
+                                </div>
+                                <div class="text-primary bg-light-primary text-end icon">
+                                    <i-tabler name="map-2"></i-tabler>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="summary-info">
+                                    <p class="f-s-12 text-muted">Locations
+                                    </p>
+                                    <h3 class="mb-0">120</h3>
+                                </div>
+                                <div class="text-primary bg-light-primary text-end icon">
+                                    <i-tabler name="map-pin"></i-tabler>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="summary-info">
+                                    <p class="f-s-12 text-muted">Total Capacity
+                                    </p>
+                                    <h3 class="mb-0">1,200</h3>
+                                </div>
+                                <div class="text-primary bg-light-primary text-end icon">
+                                    <i-tabler name="package"></i-tabler>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="summary-info">
+                                    <p class="f-s-12 text-muted">Utilization</p>
+                                    <h3 class="mb-0">78%</h3>
+                                </div>
+                                <div class="text-primary bg-light-primary text-end icon">
+                                    <i-tabler name="chart-donut"></i-tabler>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mx-0">
+                <div class="col-sm-3 px-2">
+                    <h4 class="text-primary">Zone List</h4>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row mx-0">
+                                <div class="col-sm-12 px-2">
+                                    <div class="zone-box mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <span class="my-0 text-muted fs-10">Z01</span>
+                                                <h4 class="my-0">Zone 1</h4>
+                                                <p class="text-muted mt-0 mb-2 fs-10">12 racks · 288 bins</p>
+                                            </div>
+                                            <span class="chip bg-light-success text-success fs-10">Active</span>
+                                        </div>
+                                        <div class="progress w-100">
+                                            <div class="progress-bar bg-warning" style="width: 60%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 px-2">
+                                    <div class="zone-box mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <span class="my-0 text-muted fs-10">Z02</span>
+                                                <h4 class="my-0">Zone 2</h4>
+                                                <p class="text-muted mt-0 mb-2 fs-10">12 racks · 288 bins</p>
+                                            </div>
+                                            <span class="chip bg-light-success text-success fs-10">Active</span>
+                                        </div>
+                                            <div class="progress w-100">
+                                                <div class="progress-bar bg-warning" style="width: 60%"></div>
+                                            </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 px-2">
+                                    <div class="zone-box mb-3" style="opacity: 0.5">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <span class="my-0 text-muted fs-10">Z03</span>
+                                                <h4 class="my-0">Zone 3</h4>
+                                                <p class="text-muted mt-0 mb-2 fs-10">12 racks · 288 bins</p>
+                                            </div>
+                                            <span class="chip bg-light-disabled text-disabled fs-10">Inactive</span>
+                                        </div>
+                                        <div class="progress w-100">
+                                            <div class="progress-bar bg-warning" style="width: 60%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 px-2">
+                                    <div class="zone-box mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <span class="my-0 text-muted fs-10">Z04</span>
+                                                <h4 class="my-0">Zone 4</h4>
+                                                <p class="text-muted mt-0 mb-2 fs-10">12 racks · 288 bins</p>
+                                            </div>
+                                            <span class="chip bg-light-success text-success fs-10">Active</span>
+                                        </div>
+                                        <div class="progress w-100">
+                                            <div class="progress-bar bg-warning" style="width: 60%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 px-2">
+                                    <div class="zone-box mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <div>
+                                                <span class="my-0 text-muted fs-10">Z01</span>
+                                                <h4 class="my-0">Zone 1</h4>
+                                                <p class="text-muted mt-0 mb-2 fs-10">12 racks · 288 bins</p>
+                                            </div>
+                                            <span class="chip bg-light-success text-success fs-10">Active</span>
+                                        </div>
+                                        <div class="progress w-100">
+                                            <div class="progress-bar bg-warning" style="width: 60%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-9 px-2">
+
+                    <h4 class="text-primary">Warehouse 1 · Floor 1</h4>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row mx-0">
+                                <div class="col-sm-12 px-2">
+
+                                    <div class="warehouse-map">
+                                        <div #svgContainer class="svg-container" [innerHTML]="warehouse.layout"></div>
+                                        <div
+                                            #locationPopup
+                                            class="location-popup"
+                                            role="dialog"
+                                            aria-labelledby="location-popup-title"
+                                            *ngIf="selectedRectId"
+                                            [style.top.px]="popupPosition.top"
+                                            [style.left.px]="popupPosition.left"
+                                            [style.max-width.px]="popupMaxWidth"
+                                            (click)="$event.stopPropagation()">
+                                            <div class="location-popup-body">
+                                                <div class="d-flex justify-content-between">
+                                                    <div>
+                                                        <p class="text-muted my-0 fs-10">Rack</p>
+                                                        <h4 class="my-0">{{selectedLocation?.row}}-{{selectedLocation?.position}}</h4>
+                                                        <p class="text-muted my-0 fs-10">Storage Zone
+                                                            {{selectedLocation?.zone}}</p>
+                                                    </div>
+                                                    <div class="text-end">
+                                                        <button
+                                                            type="button"
+                                                            class="location-popup-close ms-auto mb-3"
+                                                            aria-label="Close location details"
+                                                            (click)="clearSelection()">&times;</button>
+                                                        <br/>
+                                                        <span class="mb-2 chip bg-light-success text-success">Active</span>
+                                                    </div>
+                                                </div>
+                                                <hr/>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="mb-2">
+                                                            <label class="text-muted fs-10">Capacity</label>
+                                                            <p>78 / 100</p>
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <label class="text-muted fs-10">Utilization</label>
+                                                            <p class="text-warning">78%</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="mb-2">
+                                                            <label class="text-muted fs-10">Levels</label>
+                                                            <p>3</p>
+                                                        </div>
+                                                        <div class="mb-2">
+                                                            <label class="text-muted fs-10">Bins</label>
+                                                            <p>24</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-12 mb-2 mt-2">
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-warning" style="width: 78%"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr/>
+                                                <label class="text-muted mb-2">Level Capacity</label>
+                                                <div class="row">
+                                                    <div class="col-sm-12 my-2">
+                                                        <div class="d-flex justify-content-between mb-1">
+                                                            <span>Level 3</span>
+                                                            <span>32 / 40</span>
+                                                        </div>
+
+                                                        <div class="progress w-100">
+                                                            <div class="progress-bar bg-warning" style="width: 60%"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 my-2">
+                                                        <div class="d-flex justify-content-between mb-1">
+                                                            <span>Level 2</span>
+                                                            <span>24 / 35</span>
+                                                        </div>
+
+                                                        <div class="progress w-100">
+                                                            <div class="progress-bar bg-danger" style="width: 90%"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12 my-2">
+                                                        <div class="d-flex justify-content-between mb-1">
+                                                            <span>Level 1</span>
+                                                            <span>5 / 25</span>
+                                                        </div>
+
+                                                        <div class="progress w-100">
+                                                            <div class="progress-bar bg-success" style="width: 20%"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="text-end w-100 mt-3">
+                                                    <a href="javascript:void(0)" routerLink="/warehouses/1/floor/2/zone/1/rack/1">View rack details
+                                                        <i-tabler name="arrow-narrow-right"></i-tabler>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>

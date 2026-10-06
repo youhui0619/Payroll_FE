@@ -1,0 +1,632 @@
+<div class="row">
+    <div class="col-sm-8 px-2">
+        <div class="card">
+            <div class="card-header">
+                <h4>Dashboard</h4>
+                <p>Overview of your application</p>
+            </div>
+            <div class="card-body">
+                <p>This is your dashboard where you can find an overview of your application.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 px-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Dashboard111</h4>
+                        <p>Overview of your application</p>
+                    </div>
+                    <div class="card-body">
+                        <p>This is your dashboard where you can find an overview of your application.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 px-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Dashboard</h4>
+                        <p>Overview of your application</p>
+                    </div>
+                    <div class="card-body">
+                        <p>This is your dashboard where you can find an overview of your application.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Dashboard</h4>
+                        <p>Overview of your application</p>
+                    </div>
+                    <div class="card-body">
+                        <p>This is your dashboard where you can find an overview of your application.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-4 px-2">
+        <div class="card">
+            <div class="card-header">
+                <h4>Dashboard</h4>
+                <p>Overview of your application</p>
+            </div>
+            <div class="card-body">
+                <p>This is your dashboard where you can find an overview of your application.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Input -->
+<div class="row">
+    <div class="col-sm-12 px-2">
+        <div class="card">
+            <div class="card-header">
+                <h4>Input</h4>
+                <p>Overview of your application</p>
+            </div>
+            <div class="card-body">
+                <form [formGroup]="form">
+                    <div class="row">
+                        <!-- input / number -->
+                        <div class="col-sm-6">
+                            <mat-label class="form-label">Text / Number
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field
+                                appearance="outline"
+                                class="form-input w-100"
+                                [class.is-invalid]="form.get('name')?.touched && form.get('name')?.invalid">
+                                <input
+                                    type="text"
+                                    matInput
+                                    placeholder="Enter name"
+                                    formControlName="name"
+                                    [disabled]="true">
+                                    <mat-error class="text-danger">Name is required</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <!-- password -->
+                            <div class="col-sm-6">
+                                <mat-label class="form-label">Password
+                                    <span class="text-danger">*</span>
+                                </mat-label>
+                                <mat-form-field
+                                    appearance="outline"
+                                    class="form-input w-100"
+                                    [class.is-invalid]="form.get('password')?.touched && form.get('password')?.invalid">
+                                    <div class="d-flex align-items-center justify-content-between  w-100">
+                                        <input
+                                            [type]="hide ? 'password' : 'text'"
+                                            matInput
+                                            placeholder="Enter password"
+                                            formControlName="password">
+                                            <button
+                                                type="button"
+                                                mat-icon-button
+                                                matSuffix
+                                                class="toggle-password"
+                                                (click)="togglePasswordVisibility()"
+                                                [attr.aria-label]="hide ? 'Show password' : 'Hide password'"
+                                                [attr.aria-pressed]="!hide">
+                                                <i-tabler [name]="hide ? 'eye' : 'eye-off'"></i-tabler>
+                                            </button>
+                                        </div>
+                                        <mat-error class="text-danger">Password is required</mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <!-- select -->
+                                <div class="col-sm-6">
+                                    <mat-label class="form-label">Select Dropdown
+                                        <span class="text-danger">*</span>
+                                    </mat-label>
+                                    <mat-form-field appearance="outline" class="form-input w-100">
+                                        <mat-select formControlName="category">
+                                            <mat-option value="Disclosure">Disclosure</mat-option>
+                                            <mat-option value="Other">Other</mat-option>
+                                        </mat-select>
+                                        <mat-error class="text-danger">Select Dropdown is required</mat-error>
+                                    </mat-form-field>
+                                </div>
+
+                                <!-- Date -->
+                                <div class="col-sm-6">
+                                    <mat-label class="form-label">Date
+                                        <span class="text-danger">*</span>
+                                    </mat-label>
+                                    <mat-form-field appearance="outline" class="form-input w-100">
+                                        <input matInput [matDatepicker]="singlePicker">
+                                            <mat-datepicker-toggle matSuffix [for]="singlePicker"></mat-datepicker-toggle>
+                                            <mat-datepicker #singlePicker></mat-datepicker>
+                                            <mat-error class="text-danger">Date Range is required</mat-error>
+                                        </mat-form-field>
+                                    </div>
+
+                                    <!-- Date Range-->
+                                    <div class="col-sm-6">
+                                        <mat-label class="form-label">Date Range
+                                            <span class="text-danger">*</span>
+                                        </mat-label>
+                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                            <mat-date-range-input [rangePicker]="rangePicker">
+                                                <input matStartDate placeholder="Start date">
+                                                    <input matEndDate placeholder="End date"></mat-date-range-input>
+                                                    <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+                                                    <mat-date-range-picker #rangePicker></mat-date-range-picker>
+                                                    <mat-error class="text-danger">Date Range is required</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <!-- select -->
+                                            <div class="col-sm-6">
+                                                <mat-label class="form-label">Checkbox
+                                                    <span class="text-danger">*</span>
+                                                </mat-label>
+                                                <mat-checkbox color="primary" class="form-checkbox">
+                                                    Active
+                                                </mat-checkbox>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <mat-label class="form-label">Radio Button
+                                                    <span class="text-danger">*</span>
+                                                </mat-label>
+                                                <mat-radio-group class="form-radio-group">
+                                                    <mat-radio-button class="form-radio" value="male">Male</mat-radio-button>
+                                                    <mat-radio-button class="form-radio" value="female">Female</mat-radio-button>
+                                                </mat-radio-group>
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <mat-label class="form-label">Slide Toggle
+                                                    <span class="text-danger">*</span>
+                                                </mat-label>
+                                                <mat-slide-toggle color="primary">Slide me!</mat-slide-toggle>
+                                            </div>
+
+                                            <!-- Autocomplete -->
+                                            <div class="col-sm-12">
+                                                <mat-label class="form-label">Autocompleted
+                                                    <span class="text-danger">*</span>
+                                                </mat-label>
+                                                <mat-form-field
+                                                    appearance="outline"
+                                                    class="form-input w-100"
+                                                    [class.is-invalid]="form.get('autocomplete')?.touched && form.get('autocomplete')?.invalid">
+                                                    <input
+                                                        type="text"
+                                                        matInput
+                                                        placeholder="Enter name"
+                                                        formControlName="autocomplete"
+                                                        [matAutocomplete]="auto">
+                                                        <mat-autocomplete #auto="matAutocomplete">
+                                                            <mat-option value="Disclosure">Disclosure</mat-option>
+                                                            <mat-option value="Other">Other</mat-option>
+                                                        </mat-autocomplete>
+                                                    </mat-form-field>
+                                                </div>
+
+                                                <div class="col-sm-12 mb-4">
+                                                    <mat-label class="form-label">Dropzone</mat-label>
+                                                    <ngx-dropzone
+                                                        class="form-dropzone"
+                                                        [accept]="'image/png,image/jpeg'"
+                                                        [multiple]="true"
+                                                        (change)="onSelect($event)"
+                                                    >
+                                                        <ngx-dropzone-label>
+                                                            <div class="dropzone-content d-flex flex-column align-items-center justify-content-center">
+                                                                <p class="headline mb-0 text-dark">
+                                                                    Drop or select images
+                                                                </p>
+
+                                                                <p class="subtext small mb-0">
+                                                                    Drop image files here or click to
+                                                                    <span class="browse-link text-primary">browse</span>
+                                                                    through your machine.
+                                                                </p>
+                                                            </div>
+                                                        </ngx-dropzone-label>
+                                                    </ngx-dropzone>
+
+                                                    <div class="mt-4" *ngIf="files.length > 0">
+
+                                                        <div
+                                                            class="file-item d-flex align-items-center gap-3 w-100 mb-4"
+                                                            *ngFor="let file of files; let i = index"
+                                                        >
+
+                                                            <!-- Image preview -->
+                                                            <div class="file-img flex-shrink-0">
+                                                                <img
+                                                                    [src]="filePreviewUrls[i]"
+                                                                    [alt]="file.name"
+                                                                    class="file-preview"
+                                                                >
+                                                            </div>
+
+                                                            <!-- File information -->
+                                                            <div class="file-info flex-grow-1 overflow-hidden">
+                                                                <div class="file-name fs-14 text-truncate">
+                                                                    {{ file.name }}
+                                                                </div>
+
+                                                                <div class="file-size fs-10 text-muted">
+                                                                    {{ formatFileSize(file.size) }}
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Remove -->
+                                                            <button
+                                                                type="button"
+                                                                class="btn btn-link p-0 cursor-pointer flex-shrink-0"
+                                                                (click)="onRemove(i)"
+                                                            >
+                                                                <i-tabler
+                                                                    name="x"
+                                                                    class="icon-16 text-muted">
+                                                                </i-tabler>
+                                                            </button>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                <div class="col-sm-12">
+                                                    <mat-label class="form-label">Textarea
+                                                        <span class="text-danger">*</span>
+                                                    </mat-label>
+                                                    <mat-form-field appearance="outline" class="form-input w-100">
+                                                        <textarea matInput formControlName="remark" placeholder="Enter remark" rows="4"></textarea>
+                                                        <mat-error class="text-danger">Textarea is required</mat-error>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Button -->
+                        <div class="row">
+                            <div class="col-sm-12 px-2">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Button</h4>
+                                        <p>Overview of your application</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <div style="display: flex; align-items: center; gap: 10px">
+                                            <button mat-flat-button color="ghost">Ghost</button>
+                                            <button mat-flat-button color="primary">Primary
+                                            </button>
+                                            <button mat-flat-button color="secondary">Secondary</button>
+                                            <button mat-flat-button color="success">Success</button>
+                                            <button mat-flat-button color="warning">Warning</button>
+                                            <button mat-flat-button color="danger">Danger</button>
+                                            <button mat-flat-button color="info">Info</button>
+                                            <button mat-flat-button color="dark">Dark</button>
+                                            <button mat-flat-button disabled color="disabled">Disabled</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-header">
+                                        <h4>Button Outline</h4>
+                                        <p>Overview of your application</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <button mat-flat-button color="primary-outline">Primary
+                                            </button>
+                                            <button mat-flat-button color="secondary-outline">Secondary</button>
+                                            <button mat-flat-button color="success-outline">Success</button>
+                                            <button mat-flat-button color="warning-outline">Warning</button>
+                                            <button mat-flat-button color="danger-outline">Danger</button>
+                                            <button mat-flat-button color="info-outline">Info</button>
+                                            <button mat-flat-button color="dark-outline">Dark</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Button -->
+                        <div class="row">
+                            <div class="col-sm-12 px-2">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Text</h4>
+                                        <p>Overview of your application</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <div style="display: flex; align-items: center; gap: 10px">
+                                            <p>Text</p>
+                                            <p class="text-primary">Primary
+                                            </p>
+                                            <p class="text-secondary">Secondary</p>
+                                            <p class="text-success">Success</p>
+                                            <p class="text-warning">Warning</p>
+                                            <p class="text-danger">Danger</p>
+                                            <p class="text-info">Info</p>
+                                            <p class="text-dark">Dark</p>
+                                            <p disabled class="text-disabled">Disabled</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Table -->
+                        <div class="row">
+                            <div class="col-sm-12 px-2">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Table</h4>
+                                        <p>Overview of your application</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="material-datatables table-responsive">
+                                            <table matSort class="mat-sort table no-wrap w-100 text-left" matSort>
+                                                <thead>
+                                                    <tr>
+                                                        <th mat-sort-header="id">#</th>
+                                                        <th mat-sort-header="assigned">Assigned</th>
+                                                        <th mat-sort-header="name">Name</th>
+                                                        <th mat-sort-header="status">Status</th>
+                                                        <th mat-sort-header="budget">Bugdet</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>Sunil Joshi</td>
+                                                        <td>Elite Admin</td>
+                                                        <td>
+                                                            <span class="chip bg-light-primary text-primary">Primary</span>
+                                                        </td>
+                                                        <td>RM1000</td>
+                                                        <td>
+                                                            <button class="action-btn" mat-icon-button>
+                                                                <i-tabler name="edit"></i-tabler>
+                                                            </button>
+                                                            <button class="action-btn" mat-icon-button>
+                                                                <i-tabler name="edit"></i-tabler>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>Sunil Joshi</td>
+                                                        <td>Elite Admin</td>
+                                                        <td>
+                                                            <span class="chip bg-light-success text-success">Success</span>
+                                                        </td>
+                                                        <td>RM1000</td>
+                                                        <td>
+                                                            <button class="action-btn" mat-icon-button>
+                                                                <i-tabler name="edit"></i-tabler>
+                                                            </button>
+                                                            <button class="action-btn" mat-icon-button>
+                                                                <i-tabler name="edit"></i-tabler>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>Sunil Joshi</td>
+                                                        <td>Elite Admin</td>
+                                                        <td>
+                                                            <span class="chip bg-light-secondary text-secondary">Secondary</span>
+                                                        </td>
+                                                        <td>RM1000</td>
+                                                        <td>
+                                                            <button class="action-btn" mat-icon-button>
+                                                                <i-tabler name="edit"></i-tabler>
+                                                            </button>
+                                                            <button class="action-btn" mat-icon-button>
+                                                                <i-tabler name="edit"></i-tabler>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>Sunil Joshi</td>
+                                                        <td>Elite Admin</td>
+                                                        <td>
+                                                            <span class="chip bg-light-info text-info">Info</span>
+                                                        </td>
+                                                        <td>RM1000</td>
+                                                        <td>
+                                                            <button class="action-btn" mat-icon-button>
+                                                                <i-tabler name="edit"></i-tabler>
+                                                            </button>
+                                                            <button class="action-btn" mat-icon-button>
+                                                                <i-tabler name="edit"></i-tabler>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <mat-paginator [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dropdown -->
+                        <div class="row">
+                            <div class="col-sm-12 px-2">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Dropdown</h4>
+                                        <p>Overview of your application</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <div>
+                                            <button mat-flat-button color="primary" class="mt-2" [matMenuTriggerFor]="menu">
+                                                Menu
+                                            </button>
+                                            <mat-menu #menu="matMenu">
+                                                <button mat-menu-item>Item 1</button>
+                                                <button mat-menu-item>Item 2</button>
+                                            </mat-menu>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- tab -->
+                        <div class="row">
+                            <div class="col-sm-12 px-2">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Tab</h4>
+                                        <p>Overview of your application</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <mat-tab-group
+                                            mat-stretch-tabs="false"
+                                            mat-align-tabs="start"
+                                            animationDuration="0ms">
+                                            <mat-tab label="Item One">
+                                                <div class="px-2 mt-3">
+                                                    <h4>The standard Lorem Ipsum passage, used since 1966</h4>
+                                                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                                                        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                                        consequat.</p>
+
+                                                    <h4>The standard Lorem Ipsum passage, used since 1966</h4>
+                                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                                        consequat.</p>
+                                                </div>
+                                            </mat-tab>
+                                            <mat-tab label="Item Two">
+                                                <div class="px-2 mt-3">
+                                                    <h4>The standard Lorem Ipsum passage, used since 1966</h4>
+                                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                                        consequat.</p>
+                                                </div>
+                                            </mat-tab>
+                                            <mat-tab label="Item Three">
+                                                <div class="px-2 mt-3">
+                                                    <h4>The standard Lorem Ipsum passage, used since 1966</h4>
+                                                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                                                        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                                        consequat.</p>
+
+                                                    <h4>The standard Lorem Ipsum passage, used since 1966</h4>
+                                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                                        consequat.</p>
+                                                </div>
+                                            </mat-tab>
+                                        </mat-tab-group>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stepper -->
+                        <div class="row">
+                            <div class="col-sm-12 px-2">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Stepper</h4>
+                                        <p>Overview of your application</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <mat-stepper #stepper class="custom-stepper" [attr.data-step]="stepper.selectedIndex">
+                                            <mat-step [stepControl]="firstFormGroup">
+                                                <form class="mt-6" [formGroup]="firstFormGroup">
+                                                    <ng-template matStepLabel>Account</ng-template>
+                                                    <div class="px-2 mt-3">
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <mat-label class="form-label">Text / Number
+                                                                    <span class="text-danger">*</span>
+                                                                </mat-label>
+                                                                <mat-form-field
+                                                                    appearance="outline"
+                                                                    class="form-input w-100"
+                                                                    [class.is-invalid]="form.get('name')?.touched && form.get('name')?.invalid">
+                                                                    <input
+                                                                        type="text"
+                                                                        matInput
+                                                                        placeholder="Enter name"
+                                                                        formControlName="name"
+                                                                        [disabled]="true">
+                                                                        <mat-error class="text-danger">Name is required</mat-error>
+                                                                    </mat-form-field>
+                                                                </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-right rtl:text-left">
+                                                        <button mat-flat-button matStepperNext>Next</button>
+                                                    </div>
+                                                </form>
+                                            </mat-step>
+                                            <mat-step [stepControl]="secondFormGroup">
+                                                <form class="mt-6" [formGroup]="secondFormGroup">
+                                                    <ng-template matStepLabel>Profile</ng-template>
+                                                    <div>
+                                                        <!-- input -->
+                                                        <mat-label class="text-sm font-semibold block mb-2">First Name
+                                                        </mat-label>
+                                                        <mat-form-field appearance="outline" class="w-full">
+                                                            <input matInput formControlName="secondCtrl" required/>
+                                                        </mat-form-field>
+                                                        <!-- input -->
+                                                        <mat-label class="text-sm font-semibold block mb-2">Last Name
+                                                        </mat-label>
+                                                        <mat-form-field appearance="outline" class="w-full">
+                                                            <input matInput formControlName="secondCtrl" required/>
+                                                        </mat-form-field>
+                                                        <!-- input -->
+                                                        <mat-label class="text-sm font-semibold block mb-2">Address
+                                                        </mat-label>
+                                                        <mat-form-field appearance="outline" class="w-full">
+                                                            <textarea rows="5" matInput formControlName="secondCtrl" required></textarea>
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="flex items-center justify-between">
+                                                        <button mat-flat-button class="bg-error text-white!" matStepperPrevious>
+                                                            Back
+                                                        </button>
+                                                        <button mat-flat-button matStepperNext>Next</button>
+                                                    </div>
+                                                </form>
+                                            </mat-step>
+                                            <mat-step>
+                                                <ng-template matStepLabel>Finish</ng-template>
+                                                <h4 class="mat-headline-6 mt-6">Terms and condition</h4>
+                                                <p class="mt-2 text-sm">
+                                                    Sard about this site or you have been to it, but you cannot figure out what it
+                                                    is or what it can do. MTA web directory isSard about this site or you have been
+                                                    to it, but you cannot figure out what it is or what it can do. MTA web directory
+                                                    is
+                                                </p>
+                                                <mat-checkbox checked color="primary">Agree with terms?</mat-checkbox>
+                                                <div class="flex justify-between mt-4">
+                                                    <button mat-flat-button class="bg-error text-white!" matStepperPrevious>
+                                                        Back
+                                                    </button>
+                                                    <button mat-flat-button (click)="stepper.reset()">Finish</button>
+                                                </div>
+                                            </mat-step>
+                                        </mat-stepper>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>

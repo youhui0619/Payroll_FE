@@ -1,0 +1,138 @@
+
+.table{
+  border-radius: 9px;
+  overflow: hidden;
+
+  th{
+    color: #909495;
+    background: #fafbfd;
+    font-weight: 400;
+    padding: 14px 10px;
+    border-bottom: 1px solid #eaeaea;
+  }
+
+  td{
+    padding: 14px 10px;
+    color: var(--header);
+    border-bottom: 1px solid #eaeaea;
+    vertical-align: middle;
+
+  }
+}
+
+.action-btn{
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  line-height: 1 !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  i-tabler,
+  svg,
+  .mat-icon {
+    width: 18px !important;
+    height: 18px !important;
+    font-size: 18px !important;
+    color: var(--header);
+    display: block;
+  }
+}
+
+.action-btn:hover{
+
+  i-tabler,
+  svg,
+  .mat-icon {
+    color: var(--primary)
+  }
+}
+
+.mat-mdc-paginator {
+  background: #fff !important;
+  font-size: 14px;
+
+  .mat-mdc-paginator-container {
+    min-height: 52px;
+    padding: 0 12px;
+  }
+
+  // Page size label
+  .mat-mdc-paginator-page-size-label {
+    font-size: 14px;
+    color: #6c757d;
+  }
+
+  // Page size select
+  .mat-mdc-paginator-page-size {
+     .mdc-text-field--outlined {
+      --mdc-outlined-text-field-outline-color: var(--border);
+      --mdc-outlined-text-field-hover-outline-color: var(--primary);
+      --mdc-outlined-text-field-container-shape: 8px;
+    }
+    
+    .mat-mdc-text-field-wrapper {
+      background: #fff !important;
+      border-radius: 6px;
+      width: 100%;
+      padding: 0 10px;
+    }
+
+    .mat-mdc-paginator-page-size-select{
+      width: 54px
+    }
+    .mat-mdc-form-field-infix {
+      min-height: 32px;
+      height: 32px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 9px;
+    }
+
+    .mat-mdc-select-value {
+      font-size: 14px;
+      color: var(--header);
+    }
+  }
+
+  // Range text
+  .mat-mdc-paginator-range-label {
+    font-size: 14px;
+    color: #6c757d;
+    margin: 0 20px;
+  }
+
+  // Navigation buttons
+  .mat-mdc-icon-button {
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+    border-radius: 6px;
+
+    &:hover:not(:disabled) {
+      background-color: #f8f9fa;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+    }
+
+    .mat-mdc-paginator-icon {
+      width: 20px;
+      height: 20px;
+      fill: var(--header);
+    }
+  }
+}
+
+.chip{
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  height: 28px;
+}

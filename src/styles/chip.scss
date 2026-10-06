@@ -1,0 +1,63 @@
+// Match the rounded shape, sizes, and color variants in button.scss.
+@mixin chip-colors($background, $foreground, $border) {
+  --mdc-chip-elevated-container-color: #{$background};
+  --mdc-chip-elevated-selected-container-color: #{$background};
+  --mdc-chip-label-text-color: #{$foreground};
+  --mdc-chip-selected-label-text-color: #{$foreground};
+  --mdc-chip-with-icon-icon-color: #{$foreground};
+  --mdc-chip-with-icon-selected-icon-color: #{$foreground};
+  --mdc-chip-with-trailing-icon-trailing-icon-color: #{$foreground};
+  --mdc-chip-outline-color: #{$border};
+  --mdc-chip-focus-outline-color: #{$border};
+}
+
+.mat-mdc-standard-chip {
+  @include chip-colors(var(--white), var(--text), var(--light-disabled));
+  --mdc-chip-container-shape-radius: 9px;
+  --mdc-chip-outline-width: 1px;
+  --mdc-chip-flat-selected-outline-width: 1px;
+  --mdc-chip-container-height: 32px;
+  --mdc-chip-label-text-size: 13px;
+  --mdc-chip-label-text-weight: 500;
+
+  @each $size, $height, $font-size in (sm, 32px, 13px), (md, 40px, 14px), (lg, 44px, 16px), (xl, 52px, 18px) {
+    &.chip-#{$size} {
+      --mdc-chip-container-height: #{$height};
+      --mdc-chip-label-text-size: #{$font-size};
+    }
+  }
+
+  @each $color in primary, secondary, success, warning, danger, dark, info {
+    &[color="#{$color}"] {
+      @include chip-colors(var(--#{$color}), var(--white), var(--#{$color}));
+    }
+
+    &[color="#{$color}-outline"] {
+      @include chip-colors(var(--light-#{$color}), var(--#{$color}), var(--#{$color}));
+    }
+  }
+
+  &[color="info"] {
+    @include chip-colors(var(--info), var(--text), var(--light-info));
+  }
+
+  &[color="ghost"] {
+    @include chip-colors(transparent, var(--text), var(--light-disabled));
+  }
+
+  &[color="disabled"],
+  &.mat-mdc-chip-disabled {
+    @include chip-colors(var(--light-disabled), var(--disabled), var(--light-disabled));
+    --mdc-chip-elevated-disabled-container-color: var(--light-disabled);
+    --mdc-chip-disabled-label-text-color: var(--disabled);
+    --mdc-chip-disabled-outline-color: var(--light-disabled);
+    --mdc-chip-with-trailing-icon-disabled-trailing-icon-color: var(--disabled);
+    cursor: not-allowed;
+  }
+
+  .mat-mdc-chip-remove:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: -2px;
+    border-radius: 50%;
+  }
+}

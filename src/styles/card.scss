@@ -1,0 +1,42 @@
+
+.card{
+    border-radius: 10px;
+    background: #fff;
+    overflow: hidden;
+    padding: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+    border: 0;
+
+    .card-header{
+        background: #fff;
+        border: none;
+
+        h4{
+            color: var(--header);
+            font-size: 16px;
+            font-weight: 550;
+            margin-bottom: 1px;
+            line-height: 1.25;
+        }
+
+        p{
+            color: var(--text);
+            font-size: 11px;
+            margin-bottom: 0;
+            line-height: 1.25;
+        }
+    }
+
+    .card-body{
+        font-size: 14px;
+        color: var(--header);
+        line-height: 1.5;
+        margin-bottom: 0;
+        padding: 8px;
+
+        p{
+            margin-bottom: 0;
+        }
+    }
+}

@@ -1,0 +1,505 @@
+/* =========================================
+   Material Form Input
+   ========================================= */
+
+.form-input {
+  /* Input background */
+  .mat-mdc-text-field-wrapper {
+    background: #fff;
+    border-radius: 8px;
+  }
+
+  /* Input height */
+  .mat-mdc-form-field-infix {
+    min-height: 38px;
+    height: 38px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 14px;
+    color: var(--header);
+    display: flex;
+    align-items: center;
+  }
+
+  /* Input text */
+  input.mat-mdc-input-element {
+    font-size: 14px;
+    color: var(--header);
+  }
+
+  /* Placeholder */
+  input.mat-mdc-input-element::placeholder {
+    color: var(--placeholder) !important;
+    opacity: 1 !important;
+  }
+
+  input.mat-mdc-input-element::-webkit-input-placeholder {
+    color: var(--placeholder) !important;
+    opacity: 1 !important;
+  }
+
+  input.mat-mdc-input-element::-moz-placeholder {
+    color: var(--placeholder) !important;
+    opacity: 1 !important;
+  }
+
+  /* Outlined */
+  .mdc-text-field--outlined {
+    --mdc-outlined-text-field-container-shape: 8px;
+    --mdc-outlined-text-field-outline-color: var(--light-disabled);
+    --mdc-outlined-text-field-hover-outline-color: var(--primary);
+    --mdc-outlined-text-field-focus-outline-color: var(--primary);
+  }
+
+  /* Normal border */
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: var(--light-disabled);
+  }
+
+  /* Hover */
+  .mdc-text-field--outlined:hover {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: var(--primary);
+    }
+  }
+
+  /* Focus */
+  .mdc-text-field--focused {
+
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: var(--primary);
+    }
+  }
+
+  //Disabled
+  .mdc-text-field--disabled {
+    background-color: var(--light-disabled) !important;
+    cursor: not-allowed;
+
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: var(--light-disabled) !important;
+    }
+
+    .mat-mdc-input-element {
+      color: var(--disabled) !important;
+      cursor: not-allowed;
+    }
+
+    .mat-mdc-input-element::placeholder {
+      color: #6c757d !important;
+      opacity: 1 !important;
+    }
+  }
+
+
+  /* =========================================
+     INVALID
+     ========================================= */
+
+  &.mat-form-field-invalid {
+
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: var(--danger) !important;
+    }
+
+    /* Invalid + hover */
+    .mdc-text-field--outlined:hover {
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: var(--danger) !important;
+      }
+    }
+
+    /* Invalid + focus */
+    .mdc-text-field--focused {
+
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: var(--danger) !important;
+      }
+    }
+  }
+
+  /* Hint */
+  mat-hint {
+    font-size: 12px;
+    padding-left: 0;
+  }
+
+  /* Error */
+  mat-error {
+    font-size: 12px;
+  }
+}
+
+/* =========================================
+   Mat Select Dropdown
+   ========================================= */
+
+.mat-mdc-select-panel,
+.mat-mdc-autocomplete-panel {
+  background-color: var(--white) !important;
+  padding: 4px 0 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12) !important;
+}
+
+.mat-mdc-select-panel .mat-mdc-option,
+.mat-mdc-autocomplete-panel .mat-mdc-option {
+  min-height: 38px;
+  font-size: 14px;
+  color: var(--header);
+
+  &:hover {
+    background-color: var(--light-primary) !important;
+  }
+
+  &.mat-mdc-option-active {
+    background-color: var(--light-primary) !important;
+    color: var(--primary) !important;
+  }
+}
+
+.mat-mdc-select-panel .mat-mdc-option.mdc-list-item--selected,
+.mat-mdc-autocomplete-panel .mat-mdc-option.mdc-list-item--selected {
+  background-color: var(--light-primary) !important;
+  color: var(--primary) !important;
+
+  .mat-pseudo-checkbox {
+    --mat-minimal-pseudo-checkbox-selected-checkmark-color: var(--primary);
+  }
+}
+
+//Text area
+
+
+.form-input {
+
+  /* Textarea */
+  textarea.mat-mdc-input-element {
+    min-height: 100px;
+    padding: 8px 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--header);
+    resize: vertical;
+  }
+
+  /* Placeholder */
+  textarea.mat-mdc-input-element::placeholder {
+    color: var(--placeholder) !important;
+    opacity: 1 !important;
+  }
+
+  /* Textarea should not use the 38px input height */
+  .mat-mdc-form-field-infix:has(textarea) {
+    min-height: 100px;
+    height: auto;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    display: block;
+  }
+}
+
+/* =========================================
+   Material Checkbox
+   ========================================= */
+/* =========================================
+   Material Checkbox
+   ========================================= */
+
+.form-checkbox {
+  --mdc-checkbox-selected-icon-color: var(--primary);
+  --mdc-checkbox-selected-hover-icon-color: var(--primary);
+  --mdc-checkbox-selected-focus-icon-color: var(--primary);
+  --mdc-checkbox-selected-pressed-icon-color: var(--primary);
+
+  --mdc-checkbox-unselected-icon-color: var(--light-disabled);
+  --mdc-checkbox-unselected-hover-icon-color: var(--primary);
+  --mdc-checkbox-unselected-focus-icon-color:var(--primary);
+  --mdc-checkbox-unselected-pressed-icon-color: var(--primary);
+  --mdc-checkbox-selected-checkmark-color: var(--white);
+}
+
+/* =========================================
+   Material Radio
+   ========================================= */
+
+.form-radio {
+
+  .mdc-form-field {
+    font-size: 14px;
+    color: var(--header);
+  }
+
+  /* Outer circle */
+  .mdc-radio__outer-circle {
+     border: 1px solid var(--light-disabled) !important;
+  }
+
+  /* Selected outer circle */
+  .mdc-radio__native-control:checked
+    + .mdc-radio__background
+    .mdc-radio__outer-circle {
+    border-color: var(--primary) !important;
+  }
+
+  /* Selected inner circle */
+  .mdc-radio__native-control:checked
+    + .mdc-radio__background
+    .mdc-radio__inner-circle {
+    border-color: var(--primary) !important;
+  }
+}
+
+.form-checkbox,
+.form-radio {
+
+  .mdc-checkbox,
+  .mdc-radio {
+    width: 18px;
+    height: 18px;
+  }
+
+  .mdc-form-field {
+    font-size: 14px;
+  }
+}
+
+
+
+
+.mat-calendar-table{
+    padding: 8px;
+    background: var(--white)!important;
+}
+
+
+/* Date range picker popup */
+.mat-datepicker-content {
+  border-radius: 12px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+  background: var(--white) !important;
+}
+
+/* Calendar */
+.mat-calendar {
+  width: 320px !important;
+  height: auto !important;
+  font-family: inherit;
+}
+
+/* Calendar header */
+.mat-calendar-header {
+  padding: 12px 16px 8px;
+}
+
+.mat-calendar-controls {
+  margin: 0 !important;
+}
+
+/* Month / year label */
+.mat-calendar-period-button {
+  color: #1f2937 !important;
+  font-weight: 600 !important;
+}
+
+/* Previous / next buttons */
+.mat-calendar-previous-button,
+.mat-calendar-next-button {
+  color: var(--primary) !important;
+}
+
+/* Week day labels */
+.mat-calendar-table-header {
+  color: #6b7280 !important;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Calendar dates */
+.mat-calendar-body-cell-content {
+  font-size: 14px;
+}
+
+/* Hover */
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover
+.mat-calendar-body-cell-content {
+  background-color: var(--light-primary) !important;
+  color: var(--primary) !important;
+}
+
+/* Today */
+.mat-calendar-body-today {
+  border-color: var(--primary) !important;
+}
+
+/* Selected date */
+.mat-calendar-body-selected {
+  background-color: var(--primary) !important;
+  color: var(--white) !important;
+}
+
+/* Selected date hover */
+.mat-calendar-body-selected:hover {
+  background-color: var(--primary-hover) !important;
+}
+
+/* Range selection */
+.mat-calendar-body-in-range::before {
+  background-color: var(--light-primary) !important;
+}
+
+/* Range start / end */
+.mat-calendar-body-range-start::before,
+.mat-calendar-body-range-end::before {
+  background-color: var(--primary) !important;
+}
+
+/* Disabled dates */
+.mat-calendar-body-disabled
+.mat-calendar-body-cell-content {
+  color: var(--disabled) !important;
+}
+
+.mat-mdc-slide-toggle {
+  .mdc-switch {
+    --mdc-switch-track-width: 52px;
+    --mdc-switch-track-height: 32px;
+
+    --mdc-switch-unselected-handle-width: 16px;
+    --mdc-switch-unselected-handle-height: 16px;
+
+    --mdc-switch-selected-handle-width: 16px;
+    --mdc-switch-selected-handle-height: 16px;
+
+    /* Same track */
+    --mdc-switch-unselected-track-color: var(--light-disabled);
+    --mdc-switch-unselected-hover-track-color: var(--light-disabled);
+    --mdc-switch-unselected-focus-track-color: var(--light-disabled);
+    --mdc-switch-unselected-pressed-track-color: var(--light-disabled);
+
+    --mdc-switch-selected-track-color: var(--primary);
+    --mdc-switch-selected-hover-track-color: var(--primary);
+    --mdc-switch-selected-focus-track-color: var(--primary);
+    --mdc-switch-selected-pressed-track-color: var(--primary);
+
+    /* Same thumb */
+    --mdc-switch-unselected-handle-color: var(--dark);
+    --mdc-switch-unselected-hover-handle-color: var(--dark);
+    --mdc-switch-unselected-focus-handle-color: var(--dark);
+    --mdc-switch-unselected-pressed-handle-color: var(--dark);
+
+    --mdc-switch-selected-handle-color: var(--light-primary);
+    --mdc-switch-selected-hover-handle-color: var(--light-primary);
+    --mdc-switch-selected-focus-handle-color: var(--light-primary);
+    --mdc-switch-selected-pressed-handle-color: var(--light-primary);
+  }
+
+  .mdc-switch__track {
+    border-radius: 999px !important;
+  }
+
+  .mdc-switch__handle {
+    border-radius: 50% !important;
+  }
+
+  .mdc-switch__track::before,
+  .mdc-switch__track::after {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .mdc-switch__shadow {
+    box-shadow: none !important;
+  }
+}
+
+
+  /* =========================================
+     X / Tick Icons
+     ========================================= */
+
+  .mdc-switch__icon {
+    fill: none !important;
+  }
+
+
+
+  /* OFF - X */
+  .mdc-switch__icon--off {
+    fill: var(--white) !important;
+    stroke-width: 2px !important;
+  }
+
+
+  /* ON - Tick */
+  .mdc-switch__icon--on {
+    fill: var(--primary) !important;
+    stroke-width: 2px !important;
+  }
+
+  .mat-mdc-form-field-error-wrapper{
+    padding-left: 4px!important;
+  }
+
+
+
+  //Dropzone
+  .form-dropzone {
+  width: 100%;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--white);
+  border: 1px dashed var(--border)!important;
+  border-radius: 8px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  margin-bottom: 20px;
+
+  &:hover {
+  background-color: var(--white);
+  border: 1px dashed var(--primary);
+  }
+
+  &:focus-within {
+    background-color: var(--white);
+    border-color: var(--primary);
+    outline: none;
+  }
+
+  input[type="file"] {
+    cursor: pointer;
+  }
+}
+
+.mdc-line-ripple::before{
+    border: none!important
+}
+// Allow tag fields to grow as chips wrap onto additional rows.
+.form-input.tags-input {
+  .mat-mdc-form-field-infix {
+    height: auto;
+    display: block;
+  }
+
+  .mat-mdc-chip-grid {
+    width: 100%;
+  }
+}

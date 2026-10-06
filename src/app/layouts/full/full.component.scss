@@ -1,0 +1,57 @@
+.admin-layout {
+  width: 100%;
+  /* lock layout to viewport height so inner areas can scroll independently */
+  height: 100vh;
+  display: flex;
+  background: #f4f5f9;
+  overflow: hidden;
+}
+
+.main-wrapper {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  /* prevent body scrolling; main content will scroll internally */
+  overflow: hidden;
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+  padding: 16px;
+  /* make the main area scrollable while sidebar stays fixed */
+  overflow: auto;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Mobile overlay
+|--------------------------------------------------------------------------
+*/
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 1039;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Tablet / Mobile
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 991.98px) {
+
+  .main-content {
+    padding: 16px;
+  }
+
+  .page-content {
+    min-height: calc(100vh - 130px);
+  }
+
+}

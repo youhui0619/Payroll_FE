@@ -1,0 +1,7 @@
+<form [formGroup]="vendorForm" (ngSubmit)="onSubmit(vendorForm)">
+    <app-forms [fields]="vendors" [form]="vendorForm"></app-forms>
+    <div class="d-flex align-items-center justify-content-end gap-3">
+        <button type="button" mat-flat-button color="primary-outline"><i-tabler name="check"></i-tabler>Draft</button>
+        <button type="submit" mat-flat-button color="primary"><i-tabler name="check"></i-tabler>Submit</button>
+    </div>
+</form>

@@ -1,0 +1,21 @@
+.breadcrumb-wrapper {
+  margin-bottom: 20px;
+}
+
+.breadcrumb {
+  font-size: 14px;
+  justify-content: end;
+}
+
+.breadcrumb a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: var(--primary);
+}
+
+.breadcrumb-item.active {
+  color: var(--primary);
+}

@@ -1,0 +1,253 @@
+<form>
+    <div class="row">
+        <div class="col-sm-12">
+            <h4 class="text-primary">Transfer Detail</h4>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mx-0">
+                        <div class="col-sm-4 px-2">
+                            <mat-label class="form-label">Requested Date
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <input matInput [matDatepicker]="singlePicker" placeholder="Enter requested date">
+                                <mat-datepicker-toggle matSuffix [for]="singlePicker"></mat-datepicker-toggle>
+                                <mat-datepicker #singlePicker></mat-datepicker>
+                                <mat-error class="text-danger">Date is required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-4 px-2">
+                            <mat-label class="form-label">Reference No.
+                            </mat-label>
+                            <mat-form-field
+                                appearance="outline"
+                                class="form-input w-100">
+                                <input type="text" matInput placeholder="Enter reference no.">
+                            </mat-form-field>
+                        </div>
+
+
+                        <div class="col-sm-4 px-2">
+                            <mat-label class="form-label">Priority
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <mat-select >
+                                    <mat-option value="Urgent">Urgent</mat-option>
+                                    <mat-option value="High">High</mat-option>
+                                    <mat-option value="Medium">Medium</mat-option>
+                                    <mat-option value="Low">Low</mat-option>
+                                </mat-select>
+                                <mat-error class="text-danger">Select Dropdown is required</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="row h-100 mx-0">
+                <div class="col px-2">
+                    <h4 class="text-primary">From</h4>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row mx-0">
+                                <div class="col-sm-12 px-2">
+                                    <mat-label class="form-label">Warehouse
+                                    </mat-label>
+                                    <mat-form-field
+                                        appearance="outline"
+                                        class="form-input w-100">
+                                        <input type="number" matInput placeholder="Enter Warehouse">
+                                    </mat-form-field>
+                                </div>
+
+
+                                <div class="col-sm-4 px-2">
+                                    <mat-label class="form-label">Zone
+                                    </mat-label>
+                                    <mat-form-field
+                                        appearance="outline"
+                                        class="form-input w-100">
+                                        <input type="number" matInput placeholder="Enter Adjustment Quantity">
+                                    </mat-form-field>
+                                </div>
+
+
+                                <div class="col-sm-4 px-2">
+                                    <mat-label class="form-label">Rack
+                                    </mat-label>
+                                    <mat-form-field
+                                        appearance="outline"
+                                        class="form-input w-100">
+                                        <input type="number" matInput placeholder="Enter rack">
+                                    </mat-form-field>
+                                </div>
+
+
+                                <div class="col-sm-4 px-2">
+                                    <mat-label class="form-label">Bin
+                                    </mat-label>
+                                    <mat-form-field
+                                        appearance="outline"
+                                        class="form-input w-100">
+                                        <input type="number" matInput placeholder="Enter Bin">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-1 d-flex justify-content-center align-items-center px-2">
+                    <i-tabler name="arrow-right"></i-tabler>
+                </div>
+                <div class="col px-2 ">
+                    <h4 class="text-primary">To</h4>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row mx-0">
+                                <div class="col-sm-12 px-2">
+                                    <mat-label class="form-label">Warehouse
+                                    </mat-label>
+                                    <mat-form-field
+                                        appearance="outline"
+                                        class="form-input w-100">
+                                        <input type="number" matInput placeholder="Enter Warehouse">
+                                    </mat-form-field>
+                                </div>
+
+
+                                <div class="col-sm-4 px-2">
+                                    <mat-label class="form-label">Zone
+                                    </mat-label>
+                                    <mat-form-field
+                                        appearance="outline"
+                                        class="form-input w-100">
+                                        <input type="number" matInput placeholder="Enter Adjustment Quantity">
+                                    </mat-form-field>
+                                </div>
+
+
+                                <div class="col-sm-4 px-2">
+                                    <mat-label class="form-label">Rack
+                                    </mat-label>
+                                    <mat-form-field
+                                        appearance="outline"
+                                        class="form-input w-100">
+                                        <input type="number" matInput placeholder="Enter rack">
+                                    </mat-form-field>
+                                </div>
+
+
+                                <div class="col-sm-4 px-2">
+                                    <mat-label class="form-label">Bin
+                                    </mat-label>
+                                    <mat-form-field
+                                        appearance="outline"
+                                        class="form-input w-100">
+                                        <input type="number" matInput placeholder="Enter Bin">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="d-flex justify-content-between mb-2 align-items-center">
+                <h4 class="text-primary">Transfer Items</h4>
+                <button type="button" mat-flat-button class="btn-sm" color="primary"><i-tabler name="plus"></i-tabler>Add</button>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mx-0">
+                        <div class="col-sm-12 px-2">
+                            <mat-label class="form-label">Inventory
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field
+                                appearance="outline"
+                                class="form-input w-100">
+                                <input
+                                    type="text"
+                                    matInput
+                                    placeholder="Enter name"
+                                    [matAutocomplete]="auto">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                    <mat-option value="Disclosure">Disclosure</mat-option>
+                                    <mat-option value="Other">Other</mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <h4 class="text-primary">Transfer Detail</h4>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mx-0">
+                        <div class="col-sm-4 px-2">
+                            <mat-label class="form-label">Expected Transfer Date
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <input matInput [matDatepicker]="transferDate" placeholder="Enter expected transfer date">
+                                <mat-datepicker-toggle matSuffix [for]="transferDate"></mat-datepicker-toggle>
+                                <mat-datepicker #transferDate></mat-datepicker>
+                                <mat-error class="text-danger">Date is required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+
+                        <div class="col-sm-4 px-2">
+                            <mat-label class="form-label">Delivery Method
+                                <span class="text-danger">*</span>
+                            </mat-label>
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <mat-select >
+                                    <mat-option value="Truck">Truck</mat-option>
+                                    <mat-option value="Courier">Courier</mat-option>
+                                </mat-select>
+                                <mat-error class="text-danger">Select Dropdown is required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-4 px-2">
+                            <mat-label class="form-label">Tracking Reference No.
+                            </mat-label>
+                            <mat-form-field
+                                appearance="outline"
+                                class="form-input w-100">
+                                <input type="text" matInput placeholder="Enter reference no.">
+                            </mat-form-field>
+                        </div>
+                        
+                        <div class="col-sm-12 px-2">
+                            <mat-label class="form-label">Remark
+                            </mat-label>
+                            <mat-form-field
+                                appearance="outline"
+                                class="form-input w-100">
+                                <textarea matInput placeholder="Enter remark" rows="4"></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="d-flex align-items-center justify-content-end gap-3">
+        <button mat-flat-button color="primary-outline"><i-tabler name="check"></i-tabler>Draft</button>
+        <button mat-flat-button color="primary"><i-tabler name="check"></i-tabler>Submit</button>
+    </div>
+</form>

@@ -1,0 +1,37 @@
+.summary-info{
+    p{
+        font-size: 12px;
+        color: var(--text);
+        margin-bottom: 4px;
+    }
+
+    h3{
+        font-size: 20px;
+        color: var(--header);
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+}
+
+.summary-icon{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+
+    i-tabler{
+        width: 20px!important;
+        height: 20px!important;
+    }
+}
+
+.priority-badge{
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: block;
+    text-align: center;
+}

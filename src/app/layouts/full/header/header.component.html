@@ -1,0 +1,52 @@
+<header class="top-navbar">
+
+  <!-- Desktop toggle -->
+  <button
+    mat-icon-button
+    class="toggle-btn d-none d-lg-flex"
+    (click)="onToggle()"
+    aria-label="Toggle sidebar"
+  >
+   <i-tabler [name]="toggleIconName"></i-tabler>
+  </button>
+
+
+  <!-- Mobile toggle -->
+  <button
+    mat-icon-button
+    class="toggle-btn d-flex d-lg-none"
+    (click)="onToggleMobile()"
+    aria-label="Open sidebar"
+  >
+   <i-tabler [name]="toggleIconName"></i-tabler>
+  </button>
+
+  <!-- Right -->
+    <div class="navbar-actions">
+      <!-- <div class="notification">
+        <button
+          mat-icon-button
+          class="btn notification-button"
+          (click)="toggleNotifications($event)"
+          aria-haspopup="true"
+          [attr.aria-expanded]="isDropdownOpen">
+          <i-tabler name="layout-sidebar-left-collapse"></i-tabler>
+          <span class="notif-count" *ngIf="unreadCount">{{ unreadCount }}</span>
+        </button>
+        <app-dropdown [(isOpen)]="isDropdownOpen" [notifications]="dropdownList"></app-dropdown>
+      </div> -->
+    <!-- User -->
+    <div class="user-profile profile" (click)="$event.stopPropagation(); toggleProfile($event)">
+      <div class="avatar">
+        Y
+      </div>
+
+      <app-dropdown [(isOpen)]="isProfileOpen" mode="custom">
+        <div class="profile-item"><a class="profile-link" routerLink="/profile">Profile</a></div>
+        <div class="profile-item"><button class="profile-logout" (click)="onLogout()">Logout</button></div>
+      </app-dropdown>
+    </div>
+
+  </div>
+
+</header>

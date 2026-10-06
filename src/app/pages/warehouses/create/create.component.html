@@ -1,0 +1,1348 @@
+<mat-stepper
+    #stepper
+    [linear]="true"
+    class="custom-stepper"
+    [attr.data-step]="stepper.selectedIndex">
+    <mat-step [completed]="true">
+        <form class="mt-6" [formGroup]="form" (ngSubmit)="nextInformation(stepper)">
+            <ng-template matStepLabel>Information</ng-template>
+            <div class="px-2 mt-3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="text-primary">Warehouse Information</h4>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mx-0">
+                                    <div class="col-sm-12 px-2 ms-auto text-end">
+                                        <mat-checkbox color="primary" class="form-checkbox" formControlName="isPrimary">
+                                            Set as primary warehouse
+                                        </mat-checkbox>
+                                    </div>
+                                    <div class="col-sm-4 px-2">
+                                        <mat-label class="form-label">Code
+                                            <span class="text-danger">*</span>
+                                        </mat-label>
+                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                            <input
+                                                type="text"
+                                                matInput
+                                                placeholder="Enter warehouse code"
+                                                formControlName="code">
+                                                <mat-error class="text-danger">Code is required</mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="col-sm-8 px-2">
+                                            <mat-label class="form-label">Name
+                                                <span class="text-danger">*</span>
+                                            </mat-label>
+                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                <input
+                                                    type="text"
+                                                    matInput
+                                                    placeholder="Enter warehouse name"
+                                                    formControlName="name">
+                                                    <mat-error class="text-danger">Name is required</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="col-sm-4 px-2">
+                                                <mat-label class="form-label">Type
+                                                    <span class="text-danger">*</span>
+                                                </mat-label>
+                                                <mat-form-field appearance="outline" class="form-input w-100">
+                                                    <mat-select placeholder="Select Type" formControlName="type">
+                                                        <mat-option value="Distribution Center">Distribution Center</mat-option>
+                                                        <mat-option value="Fulfillment Center">Fulfillment Center</mat-option>
+                                                        <mat-option value="Manufacturing Warehouse">Manufacturing Warehouse</mat-option>
+                                                        <mat-option value="Retail Store">Retail Store</mat-option>
+                                                        <mat-option value="3PL Warehouse">3PL Warehouse</mat-option>
+                                                        <mat-option value="Cold Storage">Cold Storage</mat-option>
+                                                        <mat-option value="Other">Other</mat-option>
+                                                    </mat-select>
+                                                    <mat-error class="text-danger">Type is required</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="col-sm-4 px-2">
+                                                <mat-label class="form-label">Status
+                                                    <span class="text-danger">*</span>
+                                                </mat-label>
+                                                <mat-form-field appearance="outline" class="form-input w-100">
+                                                    <mat-select formControlName="status" placeholder="Enter status">
+                                                        <mat-option value="Active">Active</mat-option>
+                                                        <mat-option value="Inactive">Inactive</mat-option>
+                                                    </mat-select>
+                                                    <mat-error class="text-danger">Status is required</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="col-sm-12 px-2">
+                                                <mat-label class="form-label">Remark
+                                                </mat-label>
+                                                <mat-form-field appearance="outline" class="form-input w-100">
+                                                    <textarea matInput placeholder="Enter remark" rows="4" formControlName="remark"></textarea>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4 class="text-primary">Location</h4>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row mx-0">
+                                            <div class="col-sm-6 px-2">
+                                                <mat-label class="form-label">Address line 1
+                                                    <span class="text-danger">*</span>
+                                                </mat-label>
+                                                <mat-form-field appearance="outline" class="form-input w-100">
+                                                    <input
+                                                        type="text"
+                                                        matInput
+                                                        placeholder="Enter address line 1"
+                                                        formControlName="addressLine1">
+                                                        <mat-error class="text-danger">Address line 1 is required</mat-error>
+                                                    </mat-form-field>
+                                                </div>
+
+                                                <div class="col-sm-6 px-2">
+                                                    <mat-label class="form-label">Address line 2
+                                                        <span class="text-danger">*</span>
+                                                    </mat-label>
+                                                    <mat-form-field appearance="outline" class="form-input w-100">
+                                                        <input
+                                                            type="text"
+                                                            matInput
+                                                            placeholder="Enter address line 2"
+                                                            formControlName="addressLine2">
+                                                            <mat-error class="text-danger">Address line 2 is required</mat-error>
+                                                        </mat-form-field>
+                                                    </div>
+
+                                                    <div class="col-sm-4 px-2">
+                                                        <mat-label class="form-label">City
+                                                            <span class="text-danger">*</span>
+                                                        </mat-label>
+                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                            <input type="text" matInput placeholder="Enter city" formControlName="city">
+                                                                <mat-error class="text-danger">City is required</mat-error>
+                                                            </mat-form-field>
+                                                        </div>
+
+                                                        <div class="col-sm-4 px-2">
+                                                            <mat-label class="form-label">State
+                                                                <span class="text-danger">*</span>
+                                                            </mat-label>
+                                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                                <input type="text" matInput placeholder="Enter state" formControlName="state">
+                                                                    <mat-error class="text-danger">State is required</mat-error>
+                                                                </mat-form-field>
+                                                            </div>
+
+                                                            <div class="col-sm-4 px-2">
+                                                                <mat-label class="form-label">Postcode
+                                                                    <span class="text-danger">*</span>
+                                                                </mat-label>
+                                                                <mat-form-field appearance="outline" class="form-input w-100">
+                                                                    <input
+                                                                        type="text"
+                                                                        matInput
+                                                                        placeholder="Enter postcode"
+                                                                        formControlName="postcode">
+                                                                        <mat-error class="text-danger">Postcode is required</mat-error>
+                                                                    </mat-form-field>
+                                                                </div>
+
+                                                                <div class="col-sm-6 px-2">
+                                                                    <mat-label class="form-label">Country
+                                                                        <span class="text-danger">*</span>
+                                                                    </mat-label>
+                                                                    <mat-form-field appearance="outline" class="form-input w-100">
+                                                                        <mat-select formControlName="country" placeholder="Select Country">
+                                                                            <mat-option value="Malaysia">Malaysia</mat-option>
+                                                                        </mat-select>
+                                                                        <mat-error class="text-danger">Country is required</mat-error>
+                                                                    </mat-form-field>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <h4 class="text-primary">Operation Setting</h4>
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row mx-0">
+                                                                <div class="col-sm-3 px-2">
+                                                                    <mat-checkbox
+                                                                        color="primary"
+                                                                        class="form-checkbox"
+                                                                        formControlName="isReceiving">
+                                                                        Receiving
+                                                                    </mat-checkbox>
+                                                                </div>
+                                                                <div class="col-sm-3 px-2">
+                                                                    <mat-checkbox color="primary" class="form-checkbox" formControlName="isPutaway">
+                                                                        Putaway
+                                                                    </mat-checkbox>
+                                                                </div>
+
+                                                                <div class="col-sm-3 px-2">
+                                                                    <mat-checkbox color="primary" class="form-checkbox" formControlName="isPicking">
+                                                                        Picking
+                                                                    </mat-checkbox>
+                                                                </div>
+
+                                                                <div class="col-sm-3 px-2">
+                                                                    <mat-checkbox color="primary" class="form-checkbox" formControlName="isPacking">
+                                                                        Packing
+                                                                    </mat-checkbox>
+                                                                </div>
+
+                                                                <div class="col-sm-3 px-2">
+                                                                    <mat-checkbox
+                                                                        color="primary"
+                                                                        class="form-checkbox"
+                                                                        formControlName="isShippingReturns">
+                                                                        Shipping & Returns
+                                                                    </mat-checkbox>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <h4 class="text-primary">Physical Information</h4>
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row mx-0">
+                                                                <div class="col-sm-12 px-2">
+                                                                    <mat-label class="form-label">Total Floors
+                                                                        <span class="text-danger">*</span>
+                                                                    </mat-label>
+                                                                    <mat-form-field appearance="outline" class="form-input w-100">
+                                                                        <input
+                                                                            type="number"
+                                                                            matInput
+                                                                            placeholder="Enter total floor"
+                                                                            formControlName="floor">
+                                                                            <mat-error class="text-danger">Enter a whole number of floors greater than zero</mat-error>
+                                                                        </mat-form-field>
+                                                                    </div>
+
+                                                                    <div class="col-sm-4 px-2">
+                                                                        <mat-label class="form-label">Length
+                                                                            <span class="text-danger">*</span>
+                                                                        </mat-label>
+                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                            <input
+                                                                                type="number"
+                                                                                matInput
+                                                                                placeholder="Enter length"
+                                                                                formControlName="length">
+                                                                                <span matTextSuffix class="text-muted me-2">m</span>
+                                                                                <mat-error class="text-danger">Enter a length of at least 0.01 m</mat-error>
+                                                                            </mat-form-field>
+                                                                        </div>
+
+                                                                        <div class="col-sm-4 px-2">
+                                                                            <mat-label class="form-label">weight
+                                                                                <span class="text-danger">*</span>
+                                                                            </mat-label>
+                                                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                <input
+                                                                                    type="number"
+                                                                                    matInput
+                                                                                    placeholder="Enter weight"
+                                                                                    formControlName="weight">
+                                                                                    <span matTextSuffix class="text-muted me-2">m</span>
+                                                                                    <mat-error class="text-danger">Enter a weight of at least 0.01 m</mat-error>
+                                                                                </mat-form-field>
+                                                                            </div>
+
+                                                                            <div class="col-sm-4 px-2">
+                                                                                <mat-label class="form-label">Height
+                                                                                    <span class="text-danger">*</span>
+                                                                                </mat-label>
+                                                                                <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                    <input
+                                                                                        type="number"
+                                                                                        matInput
+                                                                                        placeholder="Enter height"
+                                                                                        formControlName="height">
+                                                                                        <span matTextSuffix class="text-muted me-2">m</span>
+                                                                                        <mat-error class="text-danger">Enter a height of at least 0.01 m</mat-error>
+                                                                                    </mat-form-field>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <h4 class="text-primary">Contact Information</h4>
+                                                                    <div class="card">
+                                                                        <div class="card-body">
+                                                                            <div class="row mx-0">
+                                                                                <div class="col-sm-12 px-2">
+                                                                                    <mat-label class="form-label">Person In Charge
+                                                                                        <span class="text-danger">*</span>
+                                                                                    </mat-label>
+                                                                                    <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                        <input
+                                                                                            type="text"
+                                                                                            matInput
+                                                                                            placeholder="Enter person in charge"
+                                                                                            formControlName="personInCharge">
+                                                                                            <mat-error class="text-danger">Person In charge is required</mat-error>
+                                                                                        </mat-form-field>
+                                                                                    </div>
+
+                                                                                    <div class="col-sm-4 px-2">
+                                                                                        <mat-label class="form-label">Contact No.
+                                                                                            <span class="text-danger">*</span>
+                                                                                        </mat-label>
+                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                            <input
+                                                                                                type="text"
+                                                                                                matInput
+                                                                                                placeholder="Enter Contact No."
+                                                                                                formControlName="contactNo">
+                                                                                                <mat-error class="text-danger">Contact No. is required</mat-error>
+                                                                                            </mat-form-field>
+                                                                                        </div>
+
+                                                                                        <div class="col-sm-4 px-2">
+                                                                                            <mat-label class="form-label">Email Address
+                                                                                            </mat-label>
+                                                                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                <input
+                                                                                                    type="email"
+                                                                                                    matInput
+                                                                                                    placeholder="Enter Email Address"
+                                                                                                    formControlName="email">
+                                                                                                    <mat-error class="text-danger">Enter a valid email address</mat-error>
+                                                                                                </mat-form-field>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row"></div>
+                                                                    </div>
+                                                                    <div class="text-end">
+                                                                        <button
+                                                                            type="submit"
+                                                                            mat-flat-button
+                                                                            [attr.color]="form.valid ? 'primary' : 'primary'">Next</button>
+                                                                    </div>
+                                                                </form>
+                                                            </mat-step>
+                                                            <mat-step>
+                                                                <ng-template matStepLabel>Upload Layout</ng-template>
+                                                                <app-upload-layout
+                                                                    [totalFloors]="totalFloors"
+                                                                    [stepper]="stepper"
+                                                                    (floorsChange)="onFloorsChange($event)"></app-upload-layout>
+                                                            </mat-step>
+                                                            <mat-step>
+                                                                <ng-template matStepLabel>Map Layout</ng-template>
+                                                                <mat-drawer-container
+                                                                    class="map-layout-drawer-container mt-3"
+                                                                    [hasBackdrop]="true">
+                                                                    <mat-drawer
+                                                                        position="end"
+                                                                        mode="over"
+                                                                        class="map-layout-drawer"
+                                                                        [(opened)]="sidebar.open"
+                                                                        aria-label="Map location details">
+                                                                        <div class="p-3">
+                                                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                                                <h4 class="mb-0">{{ sidebar.selectedElement?.id || 'Location details' }}</h4>
+                                                                                <button
+                                                                                    type="button"
+                                                                                    mat-icon-button
+                                                                                    aria-label="Close location details"
+                                                                                    (click)="sidebar.open = false">
+                                                                                    <i-tabler name="x"></i-tabler>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="row mx-0">
+                                                                                <div class="col-sm-12 px-2">
+                                                                                    <mat-label class="form-label">Name
+                                                                                        <span class="text-danger">*</span>
+                                                                                    </mat-label>
+                                                                                    <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                        <input type="text" matInput placeholder="Enter name">
+                                                                                            <mat-error class="text-danger">name is required</mat-error>
+                                                                                        </mat-form-field>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 px-2">
+                                                                                        <mat-label class="form-label">Type
+                                                                                            <span class="text-danger">*</span>
+                                                                                        </mat-label>
+                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                            <mat-select placeholder="Select Type">
+                                                                                                <mat-option value="Receiving Area">Receiving Area</mat-option>
+                                                                                                <mat-option value="Zone">Zone</mat-option>
+                                                                                                <mat-option value="Rack">Rack</mat-option>
+                                                                                                <mat-option value="Floor Storage">Floor Storage</mat-option>
+                                                                                                <mat-option value="Packing Area">Packing Area</mat-option>
+                                                                                                <mat-option value="Staging Area">Staging Area</mat-option>
+                                                                                                <mat-option value="Quality Inspection">Quality Inspection</mat-option>
+                                                                                                <mat-option value="Other">Other</mat-option>
+                                                                                            </mat-select>
+                                                                                            <mat-error class="text-danger">Select Dropdown is required</mat-error>
+                                                                                        </mat-form-field>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 px-2">
+                                                                                        <mat-label class="form-label">Status
+                                                                                            <span class="text-danger">*</span>
+                                                                                        </mat-label>
+                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                            <mat-select placeholder="Select Status">
+                                                                                                <mat-option value="Active">Active</mat-option>
+                                                                                                <mat-option value="Inactive">Inactive</mat-option>
+                                                                                            </mat-select>
+                                                                                            <mat-error class="text-danger">Status is required</mat-error>
+                                                                                        </mat-form-field>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 px-2">
+                                                                                        <mat-label class="form-label">Level(s)
+                                                                                            <span class="text-danger">*</span>
+                                                                                        </mat-label>
+                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                            <input type="number" matInput placeholder="Enter Levels">
+                                                                                                <mat-error class="text-danger">Levels is required</mat-error>
+                                                                                            </mat-form-field>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 px-2">
+                                                                                            <mat-label class="form-label">Length
+                                                                                                <span class="text-danger">*</span>
+                                                                                            </mat-label>
+                                                                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                <input type="number" matInput placeholder="Enter length">
+                                                                                                    <span matTextSurfix class="text-muted me-2">m</span>
+                                                                                                    <mat-error class="text-danger">Total floor is required</mat-error>
+                                                                                                </mat-form-field>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 px-2">
+                                                                                                <mat-label class="form-label">weight
+                                                                                                    <span class="text-danger">*</span>
+                                                                                                </mat-label>
+                                                                                                <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                    <input type="number" matInput placeholder="Enter weight">
+                                                                                                        <span matTextSurfix class="text-muted me-2">m</span>
+                                                                                                        <mat-error class="text-danger">weight is required</mat-error>
+                                                                                                    </mat-form-field>
+                                                                                                </div>
+                                                                                                <div class="col-sm-12 px-2">
+                                                                                                    <mat-label class="form-label">Height
+                                                                                                        <span class="text-danger">*</span>
+                                                                                                    </mat-label>
+                                                                                                    <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                        <input type="number" matInput placeholder="Enter height">
+                                                                                                            <span matTextSurfix class="text-muted me-2">m</span>
+                                                                                                            <mat-error class="text-danger">Height is required</mat-error>
+                                                                                                        </mat-form-field>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 px-2">
+                                                                                                        <mat-label class="form-label">Bins per Level
+                                                                                                        </mat-label>
+                                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                            <input type="number" matInput placeholder="Enter Bins per Level"></mat-form-field>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-12 px-2">
+                                                                                                            <mat-label class="form-label">Capacity per Bin
+                                                                                                            </mat-label>
+                                                                                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                <input type="number" matInput placeholder="Enter Capacity per Bin"></mat-form-field>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="d-flex justify-content-between align-items-center">
+                                                                                                            <button
+                                                                                                                type="button"
+                                                                                                                mat-flat-button
+                                                                                                                color="primary-outline"
+                                                                                                                (click)="sidebar.open = false">Cancel</button>
+                                                                                                            <button type="button" mat-flat-button color="primary">Save</button>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </mat-drawer>
+                                                                                                <mat-drawer-content>
+                                                                                                    <div class="px-2">
+                                                                                                        <div class="card">
+                                                                                                            <div class="card-body">
+                                                                                                                <div
+                                                                                                                    #svgContainer
+                                                                                                                    class="svg-container"
+                                                                                                                    (click)="onSvgClick($event)"
+                                                                                                                    [innerHTML]="warehouse.layout"></div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="card" *ngIf="sidebar?.selectedElement?.id">
+                                                                                                            <div class="card-header">
+                                                                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                                                                    <h4>{{sidebar.selectedElement.id || 'N/A'}}</h4>
+                                                                                                                    <span class="chip bg-light-success text-success">Active</span>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                            <div class="card-body">
+                                                                                                                <div class="row mx-0">
+                                                                                                                    <div class="col-sm-3 px-2 mb-3">
+                                                                                                                        <label class="text-muted">Level(s)</label>
+                                                                                                                        <p>3</p>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-sm-3 px-2 mb-3">
+                                                                                                                        <label class="text-muted">Total Bins</label>
+                                                                                                                        <p>24</p>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-sm-3 px-2 mb-3">
+                                                                                                                        <label class="text-muted">Total Units</label>
+                                                                                                                        <p>240</p>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+
+                                                                                                    </div>
+                                                                                                </mat-drawer-content>
+                                                                                            </mat-drawer-container>
+                                                                                        </mat-step>
+                                                                                        <mat-step>
+                                                                                            <ng-template matStepLabel>Define Zones</ng-template>
+                                                                                            <div class="px-2 mt-3">
+                                                                                                <app-zone-editor [layout]="warehouse.layout"></app-zone-editor>
+                                                                                            </div>
+                                                                                        </mat-step>
+                                                                                        <mat-step>
+                                                                                            <ng-template matStepLabel>Configure Storage</ng-template>
+                                                                                            <div class="px-2 mt-3">
+                                                                                                <h4 class="text-primary">Configure Storage</h4>
+                                                                                                <div class="card">
+                                                                                                    <div class="card-header">
+                                                                                                        <p>Configure the physical structure and storage capacity of your storage locations.</p>
+                                                                                                    </div>
+                                                                                                    <div class="card-body">
+                                                                                                        <div class="row mx-0">
+                                                                                                            <div class="col-sm-12 px-2">
+                                                                                                                <div class="d-flex gap-4">
+                                                                                                                    <div>
+                                                                                                                        <mat-label class="form-label">Floor
+                                                                                                                        </mat-label>
+                                                                                                                        <mat-form-field appearance="outline" class="form-input">
+                                                                                                                            <mat-select>
+                                                                                                                                <mat-option value="Ground Floor">Ground Floor</mat-option>
+                                                                                                                                <mat-option value="First Floor">First Floor</mat-option>
+                                                                                                                            </mat-select>
+                                                                                                                        </mat-form-field>
+                                                                                                                    </div>
+                                                                                                                    <div>
+                                                                                                                        <mat-label class="form-label">Zone
+                                                                                                                        </mat-label>
+                                                                                                                        <mat-form-field appearance="outline" class="form-input">
+                                                                                                                            <mat-select>
+                                                                                                                                <mat-option value="Zone 1">Zone 1</mat-option>
+                                                                                                                                <mat-option value="Zone 2">Zone 2</mat-option>
+                                                                                                                            </mat-select>
+                                                                                                                        </mat-form-field>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+
+                                                                                                <div class="row mx-0">
+                                                                                                    <div class="col-sm-8 px-2">
+                                                                                                        <h4 class="text-primary">Storage Locations (24)</h4>
+                                                                                                        <div class="card">
+                                                                                                            <div class="card-body">
+                                                                                                                <div class="row mx-0 mb-4">
+                                                                                                                    <div class="d-flex align-items-center flex-wrap gap-2">
+                                                                                                                        <mat-form-field
+                                                                                                                            appearance="outline"
+                                                                                                                            class="form-input"
+                                                                                                                            subscriptSizing="dynamic">
+                                                                                                                            <input type="text" matInput placeholder="Search...">
+                                                                                                                                <span matTextPrefix class="text-muted me-2">
+                                                                                                                                    <i-tabler name="search" class="icon-16"></i-tabler>
+                                                                                                                                </span>
+                                                                                                                            </mat-form-field>
+
+                                                                                                                            <mat-form-field
+                                                                                                                                appearance="outline"
+                                                                                                                                class="form-input"
+                                                                                                                                subscriptSizing="dynamic">
+                                                                                                                                <mat-select placeholder="Select Type" multiple>
+                                                                                                                                    <mat-option value="FIFO">FIFO (First In, First Out)</mat-option>
+                                                                                                                                    <mat-option value="FEFO">FEFO (First Expired, First Out)</mat-option>
+                                                                                                                                    <mat-option value="LIFO">FEFO (Last In, First Out)</mat-option>
+                                                                                                                                    <mat-option value="Specific Identification">Specific Identification</mat-option>
+                                                                                                                                </mat-select>
+                                                                                                                            </mat-form-field>
+
+                                                                                                                            <mat-form-field
+                                                                                                                                appearance="outline"
+                                                                                                                                class="form-input"
+                                                                                                                                subscriptSizing="dynamic">
+                                                                                                                                <mat-select placeholder="Select Status" multiple>
+                                                                                                                                    <mat-option value="FIFO">FIFO (First In, First Out)</mat-option>
+                                                                                                                                    <mat-option value="FEFO">FEFO (First Expired, First Out)</mat-option>
+                                                                                                                                    <mat-option value="LIFO">FEFO (Last In, First Out)</mat-option>
+                                                                                                                                    <mat-option value="Specific Identification">Specific Identification</mat-option>
+                                                                                                                                </mat-select>
+                                                                                                                            </mat-form-field>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                    <div class="material-datatables table-responsive">
+                                                                                                                        <table matSort class="mat-sort table no-wrap w-100 text-left" matSort>
+                                                                                                                            <thead>
+                                                                                                                                <tr>
+                                                                                                                                    <th mat-sort-header="assigned">Location</th>
+                                                                                                                                    <th mat-sort-header="name">Type</th>
+                                                                                                                                    <th mat-sort-header="status">Structure</th>
+                                                                                                                                    <th mat-sort-header="budget">Capacity</th>
+                                                                                                                                    <th mat-sort-header="budget">Status</th>
+                                                                                                                                    <th mat-sort-header="budget">Action</th>
+                                                                                                                                </tr>
+                                                                                                                            </thead>
+                                                                                                                            <tbody>
+                                                                                                                                <tr>
+                                                                                                                                    <td>Rack A-01</td>
+                                                                                                                                    <td>Rack Storage</td>
+                                                                                                                                    <td>3 Levels · 24 Bins</td>
+                                                                                                                                    <td>240 units · 1,500 kg</td>
+                                                                                                                                    <td>
+                                                                                                                                        <span class="chip bg-light-success text-success">Available</span>
+                                                                                                                                    </td>
+                                                                                                                                    <td>
+                                                                                                                                        <button class="action-btn" mat-icon-button>
+                                                                                                                                            <i-tabler name="edit"></i-tabler>
+                                                                                                                                        </button>
+                                                                                                                                    </td>
+                                                                                                                                </tr>
+
+                                                                                                                                <tr>
+                                                                                                                                    <td>Rack A-0</td>
+                                                                                                                                    <td>Rack Storage</td>
+                                                                                                                                    <td>3 Levels · 24 Bins</td>
+                                                                                                                                    <td>240 units · 1,500 kg</td>
+                                                                                                                                    <td>
+                                                                                                                                        <span class="chip bg-light-success text-success">Available</span>
+                                                                                                                                    </td>
+                                                                                                                                    <td>
+                                                                                                                                        <button class="action-btn" mat-icon-button>
+                                                                                                                                            <i-tabler name="edit"></i-tabler>
+                                                                                                                                        </button>
+                                                                                                                                    </td>
+                                                                                                                                </tr>
+
+                                                                                                                                <tr>
+                                                                                                                                    <td>Rack A-03</td>
+                                                                                                                                    <td>Rack Storage</td>
+                                                                                                                                    <td>3 Levels · 24 Bins</td>
+                                                                                                                                    <td>240 units · 1,500 kg</td>
+                                                                                                                                    <td>
+                                                                                                                                        <span class="chip bg-light-success text-success">Available</span>
+                                                                                                                                    </td>
+                                                                                                                                    <td>
+                                                                                                                                        <button class="action-btn" mat-icon-button>
+                                                                                                                                            <i-tabler name="edit"></i-tabler>
+                                                                                                                                        </button>
+                                                                                                                                    </td>
+                                                                                                                                </tr>
+
+                                                                                                                                <tr>
+                                                                                                                                    <td>Rack A-04</td>
+                                                                                                                                    <td>Rack Storage</td>
+                                                                                                                                    <td>3 Levels · 24 Bins</td>
+                                                                                                                                    <td>240 units · 1,500 kg</td>
+                                                                                                                                    <td>
+                                                                                                                                        <span class="chip bg-light-success text-success">Available</span>
+                                                                                                                                    </td>
+                                                                                                                                    <td>
+                                                                                                                                        <button class="action-btn" mat-icon-button>
+                                                                                                                                            <i-tabler name="edit"></i-tabler>
+                                                                                                                                        </button>
+                                                                                                                                    </td>
+                                                                                                                                </tr>
+                                                                                                                            </tbody>
+                                                                                                                        </table>
+                                                                                                                        <mat-paginator [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>
+
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-4 px-2">
+                                                                                                            <h4 class="text-primary">Storage Structure</h4>
+                                                                                                            <div class="card">
+                                                                                                                <div class="card-body">
+                                                                                                                    <div class="row mx-0">
+                                                                                                                        <div class="col-sm-12 px-2">
+                                                                                                                            <div class="d-flex justify-content-between">
+                                                                                                                                <mat-label class="form-label text-muted">Metrics</mat-label>
+                                                                                                                                <p>Total</p>
+                                                                                                                            </div>
+                                                                                                                            <hr class="my-1"/>
+                                                                                                                            <div class="d-flex justify-content-between my-2">
+                                                                                                                                <mat-label class="form-label text-muted">Storage Locations</mat-label>
+                                                                                                                                <p>24</p>
+                                                                                                                            </div>
+                                                                                                                            <div class="d-flex justify-content-between my-2">
+                                                                                                                                <mat-label class="form-label text-muted">Total Rack(s)</mat-label>
+                                                                                                                                <p>24</p>
+                                                                                                                            </div>
+                                                                                                                            <div class="d-flex justify-content-between my-2">
+                                                                                                                                <mat-label class="form-label text-muted">Total Levels(s)</mat-label>
+                                                                                                                                <p>72</p>
+                                                                                                                            </div>
+                                                                                                                            <div class="d-flex justify-content-between my-2">
+                                                                                                                                <mat-label class="form-label text-muted">Total Bin(s)</mat-label>
+                                                                                                                                <p>576</p>
+                                                                                                                            </div>
+                                                                                                                            <div class="d-flex justify-content-between my-2">
+                                                                                                                                <mat-label class="form-label text-muted">Total Unit Capacity</mat-label>
+                                                                                                                                <p>5,760</p>
+                                                                                                                            </div>
+                                                                                                                            <hr class="my-1"/>
+                                                                                                                            <div class="d-flex justify-content-between my-2">
+                                                                                                                                <mat-label class="form-label text-muted">Rack Weight Capacity</mat-label>
+                                                                                                                                <p>
+                                                                                                                                    <strong>36,000 kg</strong>
+                                                                                                                                </p>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </mat-step>
+                                                                                            <mat-step>
+                                                                                                <ng-template matStepLabel>Opertation Rules</ng-template>
+                                                                                                <div class="px-2 mt-3">
+                                                                                                    <div class="row mx-0">
+                                                                                                        <div class="col-sm-12 px-2">
+                                                                                                            <h4 class="text-primary">Receiving</h4>
+                                                                                                            <div class="card">
+                                                                                                                <div class="card-header">
+                                                                                                                    <p class="text-sm">Define what happens when inventory arrives at the warehouse</p>
+                                                                                                                </div>
+                                                                                                                <div class="card-body">
+                                                                                                                    <div class="row mx-0">
+                                                                                                                        <div class="col-sm-4 px-2">
+                                                                                                                            <mat-label class="form-label">Default Receiving Location
+                                                                                                                            </mat-label>
+                                                                                                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                                <mat-select>
+                                                                                                                                    <mat-option value="Disclosure">Disclosure</mat-option>
+                                                                                                                                    <mat-option value="Other">Other</mat-option>
+                                                                                                                                </mat-select>
+                                                                                                                            </mat-form-field>
+                                                                                                                        </div>
+                                                                                                                        <div class="col-sm-12 px-2">
+                                                                                                                            <mat-label class="form-label">Receiving Requirements
+                                                                                                                            </mat-label>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Require receiving confirmation
+                                                                                                                            </mat-checkbox>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Require quantity verification
+                                                                                                                            </mat-checkbox>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Require quality inspection
+                                                                                                                            </mat-checkbox>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Require barcode scanning
+                                                                                                                            </mat-checkbox>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+
+                                                                                                            <h4 class="text-primary">Putaway</h4>
+                                                                                                            <div class="card">
+                                                                                                                <div class="card-header">
+                                                                                                                    <p class="text-sm">Define how received inventory is assigned to storage locations</p>
+                                                                                                                </div>
+                                                                                                                <div class="card-body">
+                                                                                                                    <div class="row mx-0">
+                                                                                                                        <div class="col-sm-4 px-2">
+                                                                                                                            <mat-label class="form-label">Putaway Strategy
+                                                                                                                            </mat-label>
+                                                                                                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                                <mat-select>
+                                                                                                                                    <mat-option value="Nearest Available Location">Nearest Available Location</mat-option>
+                                                                                                                                    <mat-option value="Fixed Location">Fixed Location</mat-option>
+                                                                                                                                    <mat-option value="Zone-Based">Zone-Based</mat-option>
+                                                                                                                                    <mat-option value="Capacity-Based">Capacity-Based</mat-option>
+                                                                                                                                    <mat-option value="Product-Based">Product-Based</mat-option>
+                                                                                                                                    <mat-option value="Manual Assignment">Manual Assignment</mat-option>
+                                                                                                                                </mat-select>
+                                                                                                                            </mat-form-field>
+                                                                                                                        </div>
+                                                                                                                        <div class="col-sm-12 px-2 mb-4">
+                                                                                                                            <mat-label class="form-label">Allow Partial Putaway
+                                                                                                                            </mat-label>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Allow inventory to be split across multiple locations
+                                                                                                                            </mat-checkbox>
+                                                                                                                        </div>
+
+                                                                                                                        <div class="col-sm-12 px-2">
+                                                                                                                            <mat-label class="form-label">Putaway Requirements
+                                                                                                                            </mat-label>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Check location capacity
+                                                                                                                            </mat-checkbox>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Check weight capacity
+                                                                                                                            </mat-checkbox>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Require supervisor approval
+                                                                                                                            </mat-checkbox>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+
+                                                                                                            <h4 class="text-primary">Storage</h4>
+                                                                                                            <div class="card">
+                                                                                                                <div class="card-header">
+                                                                                                                    <p class="text-sm">Define rules for inventory while it is stored</p>
+                                                                                                                </div>
+                                                                                                                <div class="card-body">
+                                                                                                                    <div class="row mx-0">
+                                                                                                                        <div class="col-sm-4 px-2">
+                                                                                                                            <mat-label class="form-label">Location Assignment
+                                                                                                                            </mat-label>
+                                                                                                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                                <mat-select>
+                                                                                                                                    <mat-option value="Automatic">Automatic</mat-option>
+                                                                                                                                    <mat-option value="Manual">Manual</mat-option>
+                                                                                                                                    <mat-option value="Fixed by Product">Fixed by Product</mat-option>
+                                                                                                                                </mat-select>
+                                                                                                                            </mat-form-field>
+                                                                                                                        </div>
+                                                                                                                        <div class="col-sm-12 px-2 mb-4">
+                                                                                                                            <mat-label class="form-label">Allow different products in the same bin?
+                                                                                                                            </mat-label>
+                                                                                                                            <mat-radio-group class="form-radio-group">
+                                                                                                                                <mat-radio-button class="form-radio" value="Yes">Yes</mat-radio-button>
+                                                                                                                                <mat-radio-button class="form-radio" value="No">No</mat-radio-button>
+                                                                                                                            </mat-radio-group>
+                                                                                                                        </div>
+
+                                                                                                                        <div class="col-sm-12 px-2 mb-4">
+                                                                                                                            <mat-label class="form-label">Lot / Batch Handling
+                                                                                                                            </mat-label>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Keep lot / batch inventory separated
+                                                                                                                            </mat-checkbox>
+                                                                                                                        </div>
+
+                                                                                                                        <div class="col-sm-12 px-2">
+                                                                                                                            <mat-label class="form-label">Expiry Handling
+                                                                                                                            </mat-label>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Track expiration dates
+                                                                                                                            </mat-checkbox>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+
+                                                                                                            <h4 class="text-primary">Picking</h4>
+                                                                                                            <div class="card">
+                                                                                                                <div class="card-header">
+                                                                                                                    <p class="text-sm">Define how inventory is selected when an order is picked</p>
+                                                                                                                </div>
+                                                                                                                <div class="card-body">
+                                                                                                                    <div class="row mx-0">
+                                                                                                                        <div class="col-sm-4 px-2">
+                                                                                                                            <mat-label class="form-label">Picking Strategy
+                                                                                                                            </mat-label>
+                                                                                                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                                <mat-select>
+                                                                                                                                    <mat-option value="FIFO">FIFO — First In, First Out</mat-option>
+                                                                                                                                    <mat-option value="FEFO">LIFO — Last In, First Out</mat-option>
+                                                                                                                                    <mat-option value="FEFO">FEFO — First Expired, First Out</mat-option>
+                                                                                                                                    <mat-option value="Nearest Location">Nearest Location</mat-option>
+                                                                                                                                    <mat-option value="Manual">Manual</mat-option>
+                                                                                                                                </mat-select>
+                                                                                                                            </mat-form-field>
+                                                                                                                        </div>
+
+                                                                                                                        <div class="col-sm-4 px-2">
+                                                                                                                            <mat-label class="form-label">Picking Method
+                                                                                                                            </mat-label>
+                                                                                                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                                <mat-select>
+                                                                                                                                    <mat-option value="Single Order">Single Order</mat-option>
+                                                                                                                                    <mat-option value="Batch Picking">Batch Picking</mat-option>
+                                                                                                                                    <mat-option value="Wave Picking">Wave Picking</mat-option>
+                                                                                                                                    <mat-option value="Zone Picking">Zone Picking</mat-option>
+                                                                                                                                </mat-select>
+                                                                                                                            </mat-form-field>
+                                                                                                                        </div>
+
+                                                                                                                        <div class="col-sm-12 px-2 mb-4">
+                                                                                                                            <mat-label class="form-label">Picking Requirements
+                                                                                                                            </mat-label>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Require barcode scanning
+                                                                                                                            </mat-checkbox>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Verify picked quantity
+                                                                                                                            </mat-checkbox>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Require supervisor approval
+                                                                                                                            </mat-checkbox>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+
+                                                                                                            <h4 class="text-primary">Packing</h4>
+                                                                                                            <div class="card">
+                                                                                                                <div class="card-header">
+                                                                                                                    <p class="text-sm">Define how picked inventory moves into packing</p>
+                                                                                                                </div>
+                                                                                                                <div class="card-body">
+                                                                                                                    <div class="row mx-0">
+                                                                                                                        <div class="col-sm-4 px-2">
+                                                                                                                            <mat-label class="form-label">Default Packing Area
+                                                                                                                            </mat-label>
+                                                                                                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                                <mat-select>
+                                                                                                                                    <mat-option value="FIFO">FIFO — First In, First Out</mat-option>
+                                                                                                                                    <mat-option value="FEFO">LIFO — Last In, First Out</mat-option>
+                                                                                                                                    <mat-option value="FEFO">FEFO — First Expired, First Out</mat-option>
+                                                                                                                                    <mat-option value="Nearest Location">Nearest Location</mat-option>
+                                                                                                                                    <mat-option value="Manual">Manual</mat-option>
+                                                                                                                                </mat-select>
+                                                                                                                            </mat-form-field>
+                                                                                                                        </div>
+
+                                                                                                                        <div class="col-sm-12 px-2 mb-4">
+                                                                                                                            <mat-label class="form-label">Packing Requirements
+                                                                                                                            </mat-label>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Require packing confirmation
+                                                                                                                            </mat-checkbox>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Require order verification
+                                                                                                                            </mat-checkbox>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Require weight verification
+                                                                                                                            </mat-checkbox>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Require barcode scanning
+                                                                                                                            </mat-checkbox>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+
+                                                                                                            <h4 class="text-primary">Shipping</h4>
+                                                                                                            <div class="card">
+                                                                                                                <div class="card-header">
+                                                                                                                    <p class="text-sm">Define where completed orders go before shipment</p>
+                                                                                                                </div>
+                                                                                                                <div class="card-body">
+                                                                                                                    <div class="row mx-0">
+                                                                                                                        <div class="col-sm-4 px-2">
+                                                                                                                            <mat-label class="form-label">Default Shipping / Staging Location
+                                                                                                                            </mat-label>
+                                                                                                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                                <mat-select>
+                                                                                                                                    <mat-option value="FIFO">FIFO — First In, First Out</mat-option>
+                                                                                                                                    <mat-option value="FEFO">LIFO — Last In, First Out</mat-option>
+                                                                                                                                    <mat-option value="FEFO">FEFO — First Expired, First Out</mat-option>
+                                                                                                                                    <mat-option value="Nearest Location">Nearest Location</mat-option>
+                                                                                                                                    <mat-option value="Manual">Manual</mat-option>
+                                                                                                                                </mat-select>
+                                                                                                                            </mat-form-field>
+                                                                                                                        </div>
+
+                                                                                                                        <div class="col-sm-12 px-2 mb-4">
+                                                                                                                            <mat-label class="form-label">Shipping Requirements
+                                                                                                                            </mat-label>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Require shipment confirmation
+                                                                                                                            </mat-checkbox>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Require order verification
+                                                                                                                            </mat-checkbox>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Require barcode scanning
+                                                                                                                            </mat-checkbox>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+
+                                                                                                            <h4 class="text-primary">Returns</h4>
+                                                                                                            <div class="card">
+                                                                                                                <div class="card-header">
+                                                                                                                    <p class="text-sm">Define where returned inventory initially goes</p>
+                                                                                                                </div>
+                                                                                                                <div class="card-body">
+                                                                                                                    <div class="row mx-0">
+                                                                                                                        <div class="col-sm-4 px-2">
+                                                                                                                            <mat-label class="form-label">Default Returns Location
+                                                                                                                            </mat-label>
+                                                                                                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                                <mat-select>
+                                                                                                                                    <mat-option value="FIFO">FIFO — First In, First Out</mat-option>
+                                                                                                                                    <mat-option value="FEFO">LIFO — Last In, First Out</mat-option>
+                                                                                                                                    <mat-option value="FEFO">FEFO — First Expired, First Out</mat-option>
+                                                                                                                                    <mat-option value="Nearest Location">Nearest Location</mat-option>
+                                                                                                                                    <mat-option value="Manual">Manual</mat-option>
+                                                                                                                                </mat-select>
+                                                                                                                            </mat-form-field>
+                                                                                                                        </div>
+
+                                                                                                                        <div class="col-sm-12 px-2 mb-4">
+                                                                                                                            <mat-label class="form-label">Return Handling
+                                                                                                                            </mat-label>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Require inspection before restocking
+                                                                                                                            </mat-checkbox>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Require return confirmation
+                                                                                                                            </mat-checkbox>
+                                                                                                                            <mat-checkbox color="primary" class="form-checkbox">
+                                                                                                                                Automatically return approved items to storage
+                                                                                                                            </mat-checkbox>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </mat-step>
+                                                                                            <mat-step>
+                                                                                                <ng-template matStepLabel>Review</ng-template>
+                                                                                                <div class="px-2 mt-3">
+                                                                                                    <div class="row">
+                                                                                                        <div class="col-sm-8 px-2 align-items-start">
+                                                                                                            <div class="card">
+                                                                                                                <div class="card-body">
+                                                                                                                    <div class="d-flex align-items-start justify-content-between">
+                                                                                                                        <div class="d-flex align-items-center">
+                                                                                                                            <div class="text-primary bg-light-primary text-end icon me-3">
+                                                                                                                                <i-tabler name="building-warehouse" class=" icon-40"></i-tabler>
+                                                                                                                            </div>
+                                                                                                                            <div>
+                                                                                                                                <h4 class="mb-0">Warehouse 1
+                                                                                                                                    <span class="px-2 fs-10 text-muted">WAREHOUSE-001</span>
+                                                                                                                                    <span class="chip bg-light-success text-success me-2">Active</span>
+                                                                                                                                </h4>
+                                                                                                                                <p class="my-0 text-muted fs-10">Distribution Center</p>
+                                                                                                                                <p class="mt-1 text-muted fs-10">
+                                                                                                                                    <i-tabler name="map-pin" class="icon-14 text-muted me-1"></i-tabler>
+                                                                                                                                    address, Kuala Lumpur, Malaysia</p>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                        <i-tabler name="star" class="icon-18 text-warning" style="fill: #fbba03"></i-tabler>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+
+                                                                                                            <div class="row">
+                                                                                                                <div class="col-sm-4">
+                                                                                                                    <div class="card">
+                                                                                                                        <div class="card-body">
+                                                                                                                            <div class="d-flex align-items-center justify-content-between">
+                                                                                                                                <div class="summary-info">
+                                                                                                                                    <p class="f-s-12 text-muted">Total Zones</p>
+                                                                                                                                    <h3 class="mb-0">5</h3>
+                                                                                                                                </div>
+                                                                                                                                <div class="text-primary bg-light-primary text-end icon">
+                                                                                                                                    <i-tabler name="map-2"></i-tabler>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <div class="col-sm-4">
+                                                                                                                    <div class="card">
+                                                                                                                        <div class="card-body">
+                                                                                                                            <div class="d-flex align-items-center justify-content-between">
+                                                                                                                                <div class="summary-info">
+                                                                                                                                    <p class="f-s-12 text-muted">Dimensions (m)
+                                                                                                                                    </p>
+                                                                                                                                    <h3 class="mb-0">120x80</h3>
+                                                                                                                                </div>
+                                                                                                                                <div class="text-primary bg-light-primary text-end icon">
+                                                                                                                                    <i-tabler name="dimensions"></i-tabler>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <div class="col-sm-4">
+                                                                                                                    <div class="card">
+                                                                                                                        <div class="card-body">
+                                                                                                                            <div class="d-flex align-items-center justify-content-between">
+                                                                                                                                <div class="summary-info">
+                                                                                                                                    <p class="f-s-12 text-muted">Floor Area (m²)
+                                                                                                                                    </p>
+                                                                                                                                    <h3 class="mb-0">9,600</h3>
+                                                                                                                                </div>
+                                                                                                                                <div class="text-primary bg-light-primary text-end icon">
+                                                                                                                                    <i-tabler name="building"></i-tabler>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+
+                                                                                                            <h4 class="text-primary">Floor Plan</h4>
+                                                                                                            <div class="card">
+                                                                                                                <div class="card-header">
+                                                                                                                    <strong>3</strong>
+                                                                                                                    floor plans configured
+                                                                                                                </div>
+                                                                                                                <div class="card-body">
+                                                                                                                    <div class="material-datatables table-responsive">
+                                                                                                                        <table matSort class="mat-sort table no-wrap w-100 text-left" matSort>
+                                                                                                                            <thead>
+                                                                                                                                <tr>
+                                                                                                                                    <th mat-sort-header="assigned">Floor</th>
+                                                                                                                                    <th mat-sort-header="name">Layout</th>
+                                                                                                                                    <th mat-sort-header="status">Dimensions</th>
+                                                                                                                                    <th mat-sort-header="budget">Status</th>
+                                                                                                                                    <th>Action</th>
+                                                                                                                                </tr>
+                                                                                                                            </thead>
+                                                                                                                            <tbody>
+                                                                                                                                <tr>
+                                                                                                                                    <td>Ground Floor</td>
+                                                                                                                                    <td>floor-1.svg</td>
+                                                                                                                                    <td>120 × 80 m</td>
+                                                                                                                                    <td>
+                                                                                                                                        <span class="chip bg-light-success text-success">Calibrated</span>
+                                                                                                                                    </td>
+                                                                                                                                    <td>
+                                                                                                                                        <button class="action-btn" mat-icon-button>
+                                                                                                                                            <i-tabler name="edit"></i-tabler>
+                                                                                                                                        </button>
+                                                                                                                                    </td>
+                                                                                                                                </tr>
+                                                                                                                                <tr>
+                                                                                                                                    <td>Mezzanine</td>
+                                                                                                                                    <td>floor-2.svg</td>
+                                                                                                                                    <td>120 × 80 m</td>
+                                                                                                                                    <td>
+                                                                                                                                        <span class="chip bg-light-success text-success">Calibrated</span>
+                                                                                                                                    </td>
+                                                                                                                                    <td>
+                                                                                                                                        <button class="action-btn" mat-icon-button>
+                                                                                                                                            <i-tabler name="edit"></i-tabler>
+                                                                                                                                        </button>
+                                                                                                                                    </td>
+                                                                                                                                </tr>
+                                                                                                                                <tr>
+                                                                                                                                    <td>Upper Storage</td>
+                                                                                                                                    <td>floor-1.svg</td>
+                                                                                                                                    <td>100 × 60 m</td>
+                                                                                                                                    <td>
+                                                                                                                                        <span class="chip bg-light-success text-success">Calibrated</span>
+                                                                                                                                    </td>
+                                                                                                                                    <td>
+                                                                                                                                        <button class="action-btn" mat-icon-button>
+                                                                                                                                            <i-tabler name="edit"></i-tabler>
+                                                                                                                                        </button>
+                                                                                                                                    </td>
+                                                                                                                                </tr>
+                                                                                                                            </tbody>
+                                                                                                                        </table>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+
+                                                                                                            <div class="row mx-0">
+                                                                                                                <div class="col-sm-6 px-2">
+                                                                                                                    <h4 class="text-primary">Layout & Storage
+                                                                                                                        <span class="text-muted text-sm">4 Zones</span>
+                                                                                                                    </h4>
+                                                                                                                    <div class="card">
+                                                                                                                        <div class="card-header">
+                                                                                                                            <h4>Receiving Zone</h4>
+
+                                                                                                                        </div>
+                                                                                                                        <div class="card-body">
+                                                                                                                            <ul class="storage-bullet">
+                                                                                                                                <li>Receiving Area</li>
+                                                                                                                            </ul>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                    <div class="card">
+                                                                                                                        <div class="card-header">
+                                                                                                                            <h4>Zone 03</h4>
+
+                                                                                                                        </div>
+                                                                                                                        <div class="card-body">
+                                                                                                                            <ul class="storage-bullet">
+                                                                                                                                <li>Rack 03</li>
+                                                                                                                                <li>Rack 03</li>
+                                                                                                                                <li>Rack 03</li>
+                                                                                                                                <li>Rack 03</li>
+                                                                                                                            </ul>
+                                                                                                                        </div>
+                                                                                                                    </div>
+
+                                                                                                                    <div class="card">
+                                                                                                                        <div class="card-header">
+                                                                                                                            <h4>Zone 2</h4>
+
+                                                                                                                        </div>
+                                                                                                                        <div class="card-body">
+                                                                                                                            <ul class="storage-bullet">
+                                                                                                                                <li>Rack 02</li>
+                                                                                                                                <li>Rack 02</li>
+                                                                                                                                <li>Rack 02</li>
+                                                                                                                                <li>Rack 02</li>
+                                                                                                                                <li>Rack 02</li>
+                                                                                                                            </ul>
+                                                                                                                        </div>
+                                                                                                                    </div>
+
+                                                                                                                    <div class="card">
+                                                                                                                        <div class="card-header">
+                                                                                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                                                                                <h4>Receiving Zone</h4>
+                                                                                                                                <a href="#">View All</a>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                        <div class="card-body">
+                                                                                                                            <ul class="storage-bullet">
+                                                                                                                                <li>Rack 01</li>
+                                                                                                                                <li>Rack 01</li>
+                                                                                                                                <li>Rack 01</li>
+                                                                                                                                <li>Rack 01</li>
+                                                                                                                                <li>Rack 01</li>
+                                                                                                                            </ul>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <div class="col-sm-6 px-2">
+                                                                                                                    <h4 class="text-primary">Storage Structure</h4>
+                                                                                                                    <div class="card">
+                                                                                                                        <div class="card-body">
+                                                                                                                            <div class="row mx-0">
+                                                                                                                                <div class="col-sm-12 px-2">
+                                                                                                                                    <div class="d-flex justify-content-between">
+                                                                                                                                        <mat-label class="form-label text-muted">Metrics</mat-label>
+                                                                                                                                        <p>Total</p>
+                                                                                                                                    </div>
+                                                                                                                                    <hr class="my-1"/>
+                                                                                                                                    <div class="d-flex justify-content-between my-2">
+                                                                                                                                        <mat-label class="form-label text-muted">Storage Locations</mat-label>
+                                                                                                                                        <p>24</p>
+                                                                                                                                    </div>
+                                                                                                                                    <div class="d-flex justify-content-between my-2">
+                                                                                                                                        <mat-label class="form-label text-muted">Total Rack(s)</mat-label>
+                                                                                                                                        <p>24</p>
+                                                                                                                                    </div>
+                                                                                                                                    <div class="d-flex justify-content-between my-2">
+                                                                                                                                        <mat-label class="form-label text-muted">Total Levels(s)</mat-label>
+                                                                                                                                        <p>72</p>
+                                                                                                                                    </div>
+                                                                                                                                    <div class="d-flex justify-content-between my-2">
+                                                                                                                                        <mat-label class="form-label text-muted">Total Bin(s)</mat-label>
+                                                                                                                                        <p>576</p>
+                                                                                                                                    </div>
+                                                                                                                                    <div class="d-flex justify-content-between my-2">
+                                                                                                                                        <mat-label class="form-label text-muted">Total Unit Capacity</mat-label>
+                                                                                                                                        <p>5,760</p>
+                                                                                                                                    </div>
+                                                                                                                                    <hr class="my-1"/>
+                                                                                                                                    <div class="d-flex justify-content-between my-2">
+                                                                                                                                        <mat-label class="form-label text-muted">Rack Weight Capacity</mat-label>
+                                                                                                                                        <p>
+                                                                                                                                            <strong>36,000 kg</strong>
+                                                                                                                                        </p>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-4 px-2">
+                                                                                                            <div class="review-summary-sticky">
+                                                                                                                <div class="p-4 bg-light-success mb-3" style="border-radius: 9px">
+                                                                                                                    <div class="d-flex align-items-center">
+                                                                                                                        <i-tabler name="circle-check" class="text-success icon-40 me-2"></i-tabler>
+                                                                                                                        <div>
+                                                                                                                            <h4 class="text-success">Warehouse Ready to create</h4>
+                                                                                                                            <p class="text-muted my-1">Everything required has been completed.</p>
+                                                                                                                        </div>
+                                                                                                                    </div>
+
+                                                                                                                </div>
+                                                                                                                <div class="card">
+                                                                                                                    <div class="card-body">
+                                                                                                                        <div class="d-flex align-items-center">
+                                                                                                                            <i-tabler name="check" class="text-success me-2"></i-tabler>
+                                                                                                                            <div class="my-2" style="text-decoration: line-through;">Warehouse details</div>
+                                                                                                                        </div>
+
+                                                                                                                        <div class="d-flex align-items-center">
+                                                                                                                            <i-tabler name="check" class="text-success me-2"></i-tabler>
+                                                                                                                            <div class="my-2" style="text-decoration: line-through;">Floor plans</div>
+                                                                                                                        </div>
+
+                                                                                                                        <div class="d-flex align-items-center">
+                                                                                                                            <i-tabler name="check" class="text-success me-2"></i-tabler>
+                                                                                                                            <div class="my-2" style="text-decoration: line-through;">SVG layouts calibrated</div>
+                                                                                                                        </div>
+
+                                                                                                                        <div class="d-flex align-items-center">
+                                                                                                                            <i-tabler name="check" class="text-success me-2"></i-tabler>
+                                                                                                                            <div class="my-2" style="text-decoration: line-through;">Locations mapped</div>
+                                                                                                                        </div>
+
+                                                                                                                        <div class="d-flex align-items-center">
+                                                                                                                            <i-tabler name="check" class="me-2"></i-tabler>
+                                                                                                                            <div class="my-2">Zones mapped</div>
+                                                                                                                        </div>
+
+                                                                                                                        <div class="d-flex align-items-center">
+                                                                                                                            <i-tabler name="check" class="me-2"></i-tabler>
+                                                                                                                            <div class="my-2">Storage configured</div>
+                                                                                                                        </div>
+
+                                                                                                                        <div class="d-flex align-items-center">
+                                                                                                                            <i-tabler name="check" class="text-success me-2"></i-tabler>
+                                                                                                                            <div class="my-2" style="text-decoration: line-through;">Operational rules configured</div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+
+                                                                                                                <div class="card">
+                                                                                                                    <div class="card-body">
+                                                                                                                        <h4>Warehouse 01</h4>
+                                                                                                                        <p>3 Floors 24 · locations · 72 levels · 576 bins</p>
+                                                                                                                    </div>
+                                                                                                                </div>
+
+                                                                                                                <div class="w-100 text-end">
+                                                                                                                    <button type="submit" mat-flat-button color="primary">
+                                                                                                                        <i-tabler name="check"></i-tabler>Submit</button>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </mat-step>
+
+                                                                                        </mat-stepper>

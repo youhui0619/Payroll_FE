@@ -1,0 +1,106 @@
+<aside
+    class="sidebar"
+    [class.collapsed]="collapsed && !mobileOpen"
+    [class.mobile-open]="mobileOpen">
+    <!-- Logo -->
+    <div class="sidebar-logo">
+
+        <ng-container *ngIf="!collapsed || mobileOpen">
+            <span class="logo-text">{{ title }}</span>
+        </ng-container>
+
+        <ng-container *ngIf="collapsed && !mobileOpen">
+            <span class="logo-short">A</span>
+        </ng-container>
+
+    </div>
+
+    <!-- Menu -->
+    <nav class="sidebar-menu">
+        <ng-container *ngFor="let item of menu; let i = index">
+            <ng-container *ngIf="item.header; else normalItem">
+                <div class="menu-group-header" *ngIf="(!collapsed || mobileOpen)">{{ item.header }}</div>
+            </ng-container>
+
+            <ng-template #normalItem>
+                <ng-container *ngIf="!item.children || item.children.length === 0; else hasChildren">
+                    <a
+                        [routerLink]="item.route"
+                        routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: false }"
+                        class="menu-item"
+                        [class.active]="isItemActive(item)"
+                        [title]="item.label"
+                        (click)="onMenuClick()">
+                        <i class="iconify" [attr.data-icon]="item.icon"></i>
+                        <span class="menu-badge-collapsed" *ngIf="collapsed && !mobileOpen && item.badge">{{ item.badge }}</span>
+
+                        <ng-container *ngIf="!collapsed || mobileOpen">
+                             <div class="d-flex justify-content-between align-items-center w-100" [title]="item.label">
+                                <span>{{ item.label }}</span>
+                                <span class="menu-badge" *ngIf="item.badge">{{ item.badge }}</span>
+                            </div>
+                        </ng-container>
+                    </a>
+                </ng-container>
+
+                <ng-template #hasChildren>
+                    <div
+                        class="menu-item"
+                        [class.active]="isItemActive(item)"
+                        [title]="item.label"
+                        (click)="toggleSubmenu(item.id, $event)">
+                        <i class="iconify" [attr.data-icon]="item.icon"></i>
+                        <span class="menu-badge-collapsed dot" *ngIf="collapsed && !mobileOpen && hasChildBadge(item)"></span>
+
+                        <ng-container *ngIf="!collapsed || mobileOpen">
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <span>{{ item.label }} <span class="child-badge-indicator" *ngIf="hasChildBadge(item)"></span></span>
+                                <span
+                                    class="iconify chevron"
+                                    [attr.data-icon]="'zondicons:cheveron-down'"
+                                    [class.open]="isOpen(item.id)"
+                                    [attr.aria-expanded]="isOpen(item.id)"></span>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <nav class="submenu" [class.expanded]="isOpen(item.id) && (!collapsed || mobileOpen)" [attr.aria-hidden]="!(isOpen(item.id) && (!collapsed || mobileOpen))">
+                        <a
+                            *ngFor="let child of item.children"
+                            [routerLink]="child.route"
+                            routerLinkActive="active"
+                            [routerLinkActiveOptions]="{ exact: false }"
+                            class="submenu-item"
+                            (click)="onMenuClick()">
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                {{ child.label }}
+                                <span class="submenu-badge" *ngIf="child.badge">{{ child.badge }}</span>
+                            </div>
+                        </a>
+                    </nav>
+                </ng-template>
+            </ng-template>
+        </ng-container>
+
+    </nav>
+
+    <!-- Footer -->
+    <div class="sidebar-footer">
+        <!-- User -->
+        <div class="user-profile" [ngClass]="{'user-profile-collapsed': collapsed }">
+            <div class="avatar">
+                Y
+            </div>
+            <div class="user-info d-none d-md-block" *ngIf="!collapsed || mobileOpen">
+                <div class="user-name">
+                    Youhui
+                </div>
+                <div class="user-role">
+                    Administrator
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aside>

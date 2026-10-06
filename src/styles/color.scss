@@ -1,0 +1,145 @@
+
+:root {
+  --transparent: transparent;
+  --header: #172a48;
+  --text: #6b7280;
+  --placeholder: #9ca3af;
+  --border: #e7e5de;
+  --shadow: #afb8c14d 0 0 2px, #afb8c14d 0 12px 24px -4px;
+  --primary: #ff4d18;
+  --light-primary: #fff1ec;
+  --secondary: #6b32fe;
+  --light-secondary: #efeaf9;
+  --info: #016df7;
+  --light-info: #e7f1fd;
+  --success: #00bc92;
+  --light-success: #ebfbfa;
+  --danger: #fd4855;
+  --light-danger: #faeff3;
+  --warning: #fbba03;
+  --light-warning: #fef5e9;
+  --dark: #172a48;
+  --light-dark: #efeffb;
+  --disabled: #8a8377;
+  --light-disabled: #f3f4f6;
+  --white: #fff;
+  --black: #333;
+}
+
+.text-primary {
+  color: var(--primary)!important;
+}
+
+.text-secondary {
+  color: var(--secondary)!important;
+}
+
+.text-success {
+  color: var(--success)!important;
+}
+
+.text-warning {
+  color: var(--warning)!important;
+}
+
+.text-danger {
+  color: var(--danger)!important;
+}
+
+.text-info {
+  color: var(--info)!important;
+}
+
+.text-dark {
+  color: var(--dark)!important;
+}
+
+.text-disabled {
+  color: var(--disabled)!important;
+}
+
+.text-muted {
+  color: var(--text)!important
+}
+
+//Background color
+.bg-primary {
+  background: var(--primary)!important;
+}
+
+.bg-secondary {
+  background: var(--secondary)!important;
+}
+
+.bg-success {
+  background: var(--success)!important;
+}
+
+.bg-warning {
+  background: var(--warning)!important;
+}
+
+.bg-danger {
+  background: var(--danger)!important;
+}
+
+.bg-info {
+  background: var(--info)!important;
+}
+
+.bg-dark {
+  background: var(--dark)!important;
+}
+
+.bg-light-primary {
+  background: var(--light-primary)!important;
+}
+
+.bg-light-secondary {
+  background: var(--light-secondary)!important;
+}
+
+.bg-light-success {
+  background: var(--light-success)!important;
+}
+
+.bg-light-warning {
+  background: var(--light-warning)!important;
+}
+
+.bg-light-danger {
+  background: var(--light-danger)!important;
+}
+
+.bg-light-info {
+  background: var(--light-info)!important;
+}
+
+.bg-light-dark {
+  background: var(--light-dark)!important;
+}
+.bg-light-disabled {
+  background: var(--light-disabled)!important;
+}
+
+//
+  .toast-success {
+    background-color: var(--success)!important;
+  }
+
+  .toast-warning {
+    background-color: var(--warning)!important;
+  }
+
+  .toast-error {
+    background-color: var(--danger)!important;
+  }
+
+  .toast-info {
+    background-color: var(--info)!important;
+  }
+
+.toast-container .ngx-toastr{
+  border-radius: 9px!important;
+  box-shadow: var(--shadow)!important;
+}

@@ -1,0 +1,37 @@
+<div
+  class="admin-layout"
+  [class.sidebar-collapsed]="sidebarCollapsed"
+>
+  <!-- Sidebar -->
+  <app-sidebar
+    [collapsed]="sidebarCollapsed"
+    [mobileOpen]="mobileSidebarOpen"
+    (closeMobile)="closeMobileSidebar()"
+  ></app-sidebar>
+
+  <!-- Mobile overlay -->
+  <div *ngIf="mobileSidebarOpen" class="sidebar-overlay d-lg-none" (click)="closeMobileSidebar()"></div>
+
+  <!-- Main -->
+  <div class="main-wrapper">
+    <!-- Header -->
+    <app-header
+      [sidebarOpen]="!sidebarCollapsed"
+      (toggleSidebar)="toggleSidebar()"
+      (toggleMobileSidebar)="toggleMobileSidebar()"
+    />
+
+    <!-- Content -->
+    <main class="main-content">
+
+      <app-breadcrumb />
+
+      <div class="page-content">
+        <router-outlet />
+      </div>
+
+    </main>
+
+  </div>
+
+</div>

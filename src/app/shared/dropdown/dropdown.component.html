@@ -1,0 +1,21 @@
+<!-- Layout-only dropdown content. The trigger/button lives in the header. -->
+<div class="notification-dropdown" *ngIf="isOpen">
+  <ng-container *ngIf="mode === 'notifications'; else customContent">
+    <div class="dropdown-header">
+      <strong>Notifications</strong>
+      <button class="mark-read" (click)="onMarkAllRead()">Mark all read</button>
+    </div>
+    <div class="dropdown-list">
+      <div *ngFor="let n of notifications" class="notification-item" [class.unread]="n.unread">
+        <div class="notif-title">{{ n.title }}</div>
+        <div class="notif-meta">{{ n.time }}</div>
+      </div>
+      <div *ngIf="notifications.length === 0" class="notification-empty">No notifications</div>
+    </div>
+  </ng-container>
+  <ng-template #customContent>
+    <div class="dropdown-content">
+      <ng-content></ng-content>
+    </div>
+  </ng-template>
+</div>
