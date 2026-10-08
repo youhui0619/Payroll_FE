@@ -9,7 +9,7 @@ import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.componen
 
 @Component({
   selector: 'app-create',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule,  ToastrModule, DropzoneComponent],
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule,  ToastrModule, DropzoneComponent, RouterLink],
   providers: [...MaterialProviders, ToastrService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'

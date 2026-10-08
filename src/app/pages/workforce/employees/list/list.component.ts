@@ -1,8 +1,15 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnDestroy } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
+import { RouterLink } from '@angular/router';
+import { ToastrService, ToastrModule } from 'ngx-toastr';
+import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
 
 @Component({
   selector: 'app-list',
-  imports: [],
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule,  ToastrModule, RouterLink],
+  providers: [...MaterialProviders, ToastrService],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
 })
