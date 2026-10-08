@@ -1,0 +1,720 @@
+<div class="row justify-content-between mb-3">
+    <div class="col-sm-12">
+        <div class="d-flex align-items-center gap-2">
+            <a mat-icon-button class="d-flex justify-content-center w-auto mb-0">
+                <i-tabler name="chevron-left" class="text-dark icon-16 d-flex"></i-tabler>
+            </a>
+            <p class="text-muted mb-0">Back to employees list</p>
+        </div>
+    </div>
+</div>
+<div class="row justify-content-between mb-4">
+    <div class="col-sm-7">
+        <h3 class="text-dark my-0">Create Employee</h3>
+        <p class="text-muted mb-0">Create an employee record. Save a draft and return at any time.</p>
+    </div>
+
+    <div class="col-sm-5 d-flex align-items-center justify-content-end">
+        <button mat-flat-button color="primary" class="ms-2">
+            <i-tabler name="edit"></i-tabler>
+            Edit
+        </button>
+        <button mat-flat-button color="primary" class="ms-2">
+            <i-tabler name="edit"></i-tabler>
+            Edit
+        </button>
+        <button mat-flat-button color="primary" class="ms-2">
+            <i-tabler name="edit"></i-tabler>
+            Edit
+        </button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <mat-stepper
+            #stepper
+            class="custom-stepper"
+            [attr.data-step]="stepper.selectedIndex">
+            <mat-step>
+                <form class="mt-6">
+                    <ng-template matStepLabel>Account</ng-template>
+                    <div class="px-2 mt-3">
+                        <h4 class="text-primary">Personal Information</h4>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-4 px-2">
+                                        <mat-label class="form-label">Employee ID
+                                            <span class="text-danger">
+                                                *</span>
+                                        </mat-label>
+                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                            <input type="text" matInput placeholder="Enter employee ID">
+                                                <mat-error class="text-danger">Employee ID is required</mat-error>
+                                            </mat-form-field>
+                                        </div>
+
+                                        <div class="col-sm-8 px-2">
+                                            <mat-label class="form-label">Employee Name
+                                                <span class="text-danger">
+                                                    *</span>
+                                            </mat-label>
+                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                <input type="text" matInput placeholder="Enter employee name">
+                                                    <mat-error class="text-danger">Employee name is required</mat-error>
+                                                </mat-form-field>
+                                            </div>
+
+                                            <div class="col-sm-4 px-2">
+                                                <mat-label class="form-label">NRIC / Passport No.
+                                                    <span class="text-danger">
+                                                        *</span>
+                                                </mat-label>
+                                                <mat-form-field appearance="outline" class="form-input w-100">
+                                                    <input type="text" matInput placeholder="Enter employee name">
+                                                        <mat-error class="text-danger">Employee name is required</mat-error>
+                                                    </mat-form-field>
+                                                </div>
+
+                                                <div class="col-sm-4 px-2">
+                                                    <mat-label class="form-label">Date of Birth
+                                                        <span class="text-danger">*</span>
+                                                    </mat-label>
+                                                    <mat-form-field appearance="outline" class="form-input w-100">
+                                                        <input matInput [matDatepicker]="dob" placeholder="Select date of birth">
+                                                            <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
+                                                            <mat-datepicker #dob></mat-datepicker>
+                                                            <mat-error class="text-danger">Date of birth is required</mat-error>
+                                                        </mat-form-field>
+                                                    </div>
+
+                                                    <div class="col-sm-4 px-2">
+                                                        <mat-label class="form-label">Gender
+                                                            <span class="text-danger">*</span>
+                                                        </mat-label>
+                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                            <mat-select placeholder="Select gender">
+                                                                <mat-option value="MALE">Male</mat-option>
+                                                                <mat-option value="FEMALE">Female</mat-option>
+                                                            </mat-select>
+                                                            <mat-error class="text-danger">Gender is required</mat-error>
+                                                        </mat-form-field>
+                                                    </div>
+
+                                                    <div class="col-sm-4 px-2">
+                                                        <mat-label class="form-label">Nationality
+                                                            <span class="text-danger">*</span>
+                                                        </mat-label>
+                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                            <mat-select placeholder="Select nationality">
+                                                                <mat-option value="MALAYSIAN">Malaysian</mat-option>
+                                                                <mat-option value="SINGAPOREAN">Singaporean</mat-option>
+                                                            </mat-select>
+                                                            <mat-error class="text-danger">Nationality is required</mat-error>
+                                                        </mat-form-field>
+                                                    </div>
+
+                                                    <div class="col-sm-4 px-2">
+                                                        <mat-label class="form-label">Race
+                                                            <span class="text-danger">*</span>
+                                                        </mat-label>
+                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                            <mat-select placeholder="Select race">
+                                                                <mat-option value="MALAYSIAN">Malaysian</mat-option>
+                                                                <mat-option value="SINGAPOREAN">Singaporean</mat-option>
+                                                            </mat-select>
+                                                            <mat-error class="text-danger">Race is required</mat-error>
+                                                        </mat-form-field>
+                                                    </div>
+
+                                                    <div class="col-sm-4 px-2">
+                                                        <mat-label class="form-label">Religion
+                                                            <span class="text-danger">*</span>
+                                                        </mat-label>
+                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                            <mat-select placeholder="Select religion">
+                                                                <mat-option value="MALAYSIAN">Malaysian</mat-option>
+                                                                <mat-option value="SINGAPOREAN">Singaporean</mat-option>
+                                                            </mat-select>
+                                                            <mat-error class="text-danger">Religion is required</mat-error>
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="col-sm-4 px-2">
+                                                        <mat-label class="form-label">Marital Status
+                                                            <span class="text-danger">*</span>
+                                                        </mat-label>
+                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                            <mat-select placeholder="Select marital status">
+                                                                <mat-option value="MALAYSIAN">Malaysian</mat-option>
+                                                                <mat-option value="SINGAPOREAN">Singaporean</mat-option>
+                                                            </mat-select>
+                                                            <mat-error class="text-danger">Marital Status is required</mat-error>
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <h4 class="text-primary">Contact Detail</h4>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-sm-4 px-2">
+                                                        <mat-label class="form-label">Email Address
+                                                        </mat-label>
+                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                            <input type="email" matInput placeholder="Enter employee ID"></mat-form-field>
+                                                        </div>
+
+                                                        <div class="col-sm-8 px-2">
+                                                            <mat-label class="form-label">Contact No.
+                                                                <span class="text-danger">
+                                                                    *</span>
+                                                            </mat-label>
+                                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                                <input type="text" matInput placeholder="Enter contact no.">
+                                                                    <mat-error class="text-danger">Contact No. is required</mat-error>
+                                                                </mat-form-field>
+                                                            </div>
+
+                                                            <div class="col-sm-6 px-2">
+                                                                <mat-label class="form-label">Address Line 1
+                                                                    <span class="text-danger">
+                                                                        *</span>
+                                                                </mat-label>
+                                                                <mat-form-field appearance="outline" class="form-input w-100">
+                                                                    <input type="text" matInput placeholder="Enter address line 1">
+                                                                        <mat-error class="text-danger">Address line 1 is required</mat-error>
+                                                                    </mat-form-field>
+                                                                </div>
+
+                                                                <div class="col-sm-6 px-2">
+                                                                    <mat-label class="form-label">Address Line 2
+                                                                        <span class="text-danger">
+                                                                            *</span>
+                                                                    </mat-label>
+                                                                    <mat-form-field appearance="outline" class="form-input w-100">
+                                                                        <input type="text" matInput placeholder="Enter address line 2">
+                                                                            <mat-error class="text-danger">Address line 2 is required</mat-error>
+                                                                        </mat-form-field>
+                                                                    </div>
+
+                                                                    <div class="col-sm-3 px-2">
+                                                                        <mat-label class="form-label">City
+                                                                            <span class="text-danger">
+                                                                                *</span>
+                                                                        </mat-label>
+                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                            <input type="text" matInput placeholder="Enter city">
+                                                                                <mat-error class="text-danger">City is required</mat-error>
+                                                                            </mat-form-field>
+                                                                        </div>
+
+                                                                        <div class="col-sm-3 px-2">
+                                                                            <mat-label class="form-label">Postcode
+                                                                                <span class="text-danger">
+                                                                                    *</span>
+                                                                            </mat-label>
+                                                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                <input type="text" matInput placeholder="Enter postcode">
+                                                                                    <mat-error class="text-danger">Postcode is required</mat-error>
+                                                                                </mat-form-field>
+                                                                            </div>
+
+                                                                            <div class="col-sm-3 px-2">
+                                                                                <mat-label class="form-label">State
+                                                                                    <span class="text-danger">*</span>
+                                                                                </mat-label>
+                                                                                <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                    <mat-select placeholder="Select state">
+                                                                                        <mat-option value="MALE">Male</mat-option>
+                                                                                        <mat-option value="FEMALE">Female</mat-option>
+                                                                                    </mat-select>
+                                                                                    <mat-error class="text-danger">Gender is required</mat-error>
+                                                                                </mat-form-field>
+                                                                            </div>
+
+                                                                            <div class="col-sm-3 px-2">
+                                                                                <mat-label class="form-label">Country
+                                                                                    <span class="text-danger">*</span>
+                                                                                </mat-label>
+                                                                                <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                    <mat-select placeholder="Select country">
+                                                                                        <mat-option value="MALAYSIA">Malaysia</mat-option>
+                                                                                        <mat-option value="SINGAPORE">Singapore</mat-option>
+                                                                                    </mat-select>
+                                                                                    <mat-error class="text-danger">Country is required</mat-error>
+                                                                                </mat-form-field>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="text-right rtl:text-left">
+                                                                <button mat-flat-button matStepperNext>Next</button>
+                                                            </div>
+                                                        </form>
+                                                    </mat-step>
+                                                    <mat-step>
+                                                        <form class="mt-6">
+                                                            <ng-template matStepLabel>Employment Information</ng-template>
+                                                            <div class="px-2 mt-3">
+                                                                <h4 class="text-primary">Contact Detail</h4>
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        <div class="row">
+                                                                            <div class="col-sm-12 px-2">
+                                                                                <mat-label class="form-label">Employment Status
+                                                                                </mat-label>
+                                                                                <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                    <input type="email" matInput placeholder="Enter employee ID"></mat-form-field>
+                                                                                </div>
+
+                                                                                <div class="col-sm-12 px-2">
+                                                                                    <mat-label class="form-label">Employment Type
+                                                                                        <span class="text-danger">
+                                                                                            *</span>
+                                                                                    </mat-label>
+                                                                                    <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                        <input type="email" matInput placeholder="Enter employee ID"></mat-form-field>
+                                                                                    </div>
+
+                                                                                    <div class="col-sm-4 px-2">
+                                                                                        <mat-label class="form-label">Department
+                                                                                            <span class="text-danger">*</span>
+                                                                                        </mat-label>
+                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                            <mat-select placeholder="Select state">
+                                                                                                <mat-option value="MALE">Male</mat-option>
+                                                                                                <mat-option value="FEMALE">Female</mat-option>
+                                                                                            </mat-select>
+                                                                                            <mat-error class="text-danger">Gender is required</mat-error>
+                                                                                        </mat-form-field>
+                                                                                    </div>
+
+                                                                                    <div class="col-sm-4 px-2">
+                                                                                        <mat-label class="form-label">Position
+                                                                                            <span class="text-danger">*</span>
+                                                                                        </mat-label>
+                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                            <mat-select placeholder="Select state">
+                                                                                                <mat-option value="MALE">Male</mat-option>
+                                                                                                <mat-option value="FEMALE">Female</mat-option>
+                                                                                            </mat-select>
+                                                                                            <mat-error class="text-danger">Gender is required</mat-error>
+                                                                                        </mat-form-field>
+                                                                                    </div>
+
+                                                                                    <div class="col-sm-4 px-2">
+                                                                                        <mat-label class="form-label">Reporting Manager
+                                                                                            <span class="text-danger">*</span>
+                                                                                        </mat-label>
+                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                            <mat-select placeholder="Select state">
+                                                                                                <mat-option value="MALE">Male</mat-option>
+                                                                                                <mat-option value="FEMALE">Female</mat-option>
+                                                                                            </mat-select>
+                                                                                            <mat-error class="text-danger">Gender is required</mat-error>
+                                                                                        </mat-form-field>
+                                                                                    </div>
+
+                                                                                    <div class="col-sm-12 px-2">
+                                                                                        <mat-label class="form-label">Work Location
+                                                                                            <span class="text-danger">*</span>
+                                                                                        </mat-label>
+                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                            <input
+                                                                                                type="text"
+                                                                                                matInput
+                                                                                                placeholder="Enter work location"
+                                                                                                [matAutocomplete]="auto">
+                                                                                                <mat-autocomplete #auto="matAutocomplete">
+                                                                                                    <mat-option value="Disclosure">Disclosure</mat-option>
+                                                                                                    <mat-option value="Other">Other</mat-option>
+                                                                                                </mat-autocomplete>
+                                                                                            </mat-form-field>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <h4 class="text-primary">Employment Dates</h4>
+                                                                        <div class="card">
+                                                                            <div class="card-body">
+                                                                                <div class="row">
+                                                                                    <div class="col-sm-4 px-2">
+                                                                                        <mat-label class="form-label">Joined Date
+                                                                                            <span class="text-danger">*</span>
+                                                                                        </mat-label>
+                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                            <input matInput [matDatepicker]="joined_at" placeholder="Enter joined date">
+                                                                                                <mat-datepicker-toggle matSuffix [for]="joined_at"></mat-datepicker-toggle>
+                                                                                                <mat-datepicker #joined_at></mat-datepicker>
+                                                                                                <mat-error class="text-danger">Joined date is required</mat-error>
+                                                                                            </mat-form-field>
+                                                                                        </div>
+
+                                                                                        <div class="col-sm-4 px-2">
+                                                                                            <mat-label class="form-label">Confirmation Date
+                                                                                            </mat-label>
+                                                                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                <input
+                                                                                                    matInput
+                                                                                                    [matDatepicker]="confirmed_at"
+                                                                                                    placeholder="Enter confirmation date">
+                                                                                                    <mat-datepicker-toggle matSuffix [for]="confirmed_at"></mat-datepicker-toggle>
+                                                                                                    <mat-datepicker #confirmed_at></mat-datepicker>
+                                                                                                </mat-form-field>
+                                                                                            </div>
+
+                                                                                            <div class="col-sm-4 px-2">
+                                                                                                <mat-label class="form-label">Resignation Date
+                                                                                                </mat-label>
+                                                                                                <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                    <input
+                                                                                                        matInput
+                                                                                                        [matDatepicker]="resigned_at"
+                                                                                                        placeholder="Enter resignation date">
+                                                                                                        <mat-datepicker-toggle matSuffix [for]="resigned_at"></mat-datepicker-toggle>
+                                                                                                        <mat-datepicker #resigned_at></mat-datepicker>
+                                                                                                    </mat-form-field>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="flex items-center justify-between">
+                                                                                        <button mat-flat-button class="bg-error text-white!" matStepperPrevious>
+                                                                                            Back
+                                                                                        </button>
+                                                                                        <button mat-flat-button matStepperNext>Next</button>
+                                                                                    </div>
+                                                                                </form>
+                                                                            </mat-step>
+                                                                            <mat-step>
+                                                                                <ng-template matStepLabel>Payroll Information</ng-template>
+                                                                                <div class="px-2 mt-3">
+                                                                                    <h4 class="text-primary">Salary & payment</h4>
+                                                                                    <div class="card">
+                                                                                        <div class="card-body">
+                                                                                            <div class="row">
+                                                                                                <div class="col-sm-6 px-2">
+                                                                                                    <mat-label class="form-label">Basic Salary
+                                                                                                        <span class="text-danger">
+                                                                                                            *</span>
+                                                                                                    </mat-label>
+                                                                                                    <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                        <span matTextPrefix class="text-muted me-2">MYR</span>
+                                                                                                        <input type="number" matInput placeholder="Enter basic salary"></mat-form-field>
+                                                                                                    </div>
+
+                                                                                                    <div class="col-sm-6 px-2">
+                                                                                                        <mat-label class="form-label">Salary Type
+                                                                                                            <span class="text-danger">
+                                                                                                                *</span>
+                                                                                                        </mat-label>
+                                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                            <mat-select placeholder="Select salary type">
+                                                                                                                <mat-option value="Monthly">Monthly</mat-option>
+                                                                                                                <mat-option value="Daily">Daily</mat-option>
+                                                                                                                <mat-option value="Hourly">Hourly</mat-option>
+                                                                                                            </mat-select>
+                                                                                                            <mat-error class="text-danger">Salary type is required</mat-error>
+                                                                                                        </mat-form-field>
+                                                                                                    </div>
+
+                                                                                                    <div class="col-sm-4 px-2">
+                                                                                                        <mat-label class="form-label">Payment Method
+                                                                                                            <span class="text-danger">
+                                                                                                                *</span>
+                                                                                                        </mat-label>
+                                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                            <mat-select placeholder="Select payment method">
+                                                                                                                <mat-option value="Monthly">Monthly</mat-option>
+                                                                                                                <mat-option value="Daily">Daily</mat-option>
+                                                                                                                <mat-option value="Hourly">Hourly</mat-option>
+                                                                                                            </mat-select>
+                                                                                                            <mat-error class="text-danger">Payment Method is required</mat-error>
+                                                                                                        </mat-form-field>
+                                                                                                    </div>
+
+                                                                                                    <div class="col-sm-4 px-2">
+                                                                                                        <mat-label class="form-label">Bank
+                                                                                                            <span class="text-danger">
+                                                                                                                *</span>
+                                                                                                        </mat-label>
+                                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                            <mat-select placeholder="Select bank">
+                                                                                                                <mat-option value="Monthly">Monthly</mat-option>
+                                                                                                                <mat-option value="Daily">Daily</mat-option>
+                                                                                                                <mat-option value="Hourly">Hourly</mat-option>
+                                                                                                            </mat-select>
+                                                                                                            <mat-error class="text-danger">Bank is required</mat-error>
+                                                                                                        </mat-form-field>
+                                                                                                    </div>
+
+                                                                                                    <div class="col-sm-6 px-2">
+                                                                                                        <mat-label class="form-label">Bank Account
+                                                                                                            <span class="text-danger">
+                                                                                                                *</span>
+                                                                                                        </mat-label>
+                                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                            <input type="text" matInput placeholder="Enter bank account">
+                                                                                                                <mat-error class="text-danger">Bank account is required</mat-error>
+                                                                                                            </mat-form-field>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <h4 class="text-primary">Salary & payment</h4>
+                                                                                            <div class="card">
+                                                                                                <div class="card-body">
+                                                                                                    <div class="row">
+
+                                                                                                        <div class="col-sm-6 px-2">
+                                                                                                            <mat-label class="form-label">EPF Employee No.
+                                                                                                                <span class="text-danger">
+                                                                                                                    *</span>
+                                                                                                            </mat-label>
+                                                                                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                <input type="text" matInput placeholder="Enter EPF Employee No.">
+                                                                                                                    <mat-error class="text-danger">EPF Employee No. is required</mat-error>
+                                                                                                                </mat-form-field>
+                                                                                                            </div>
+
+                                                                                                            <div class="col-sm-6 px-2">
+                                                                                                                <mat-label class="form-label">EPF Employer No.
+                                                                                                                    <span class="text-danger">
+                                                                                                                        *</span>
+                                                                                                                </mat-label>
+                                                                                                                <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                    <input type="text" matInput placeholder="Enter EPF Employer No.">
+                                                                                                                        <mat-error class="text-danger">EPF Employer No. is required</mat-error>
+                                                                                                                    </mat-form-field>
+                                                                                                                </div>
+
+                                                                                                                <div class="col-sm-6 px-2">
+                                                                                                                    <mat-label class="form-label">SOCSO No.
+                                                                                                                        <span class="text-danger">
+                                                                                                                            *</span>
+                                                                                                                    </mat-label>
+                                                                                                                    <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                        <input type="text" matInput placeholder="Enter SOCSO No.">
+                                                                                                                            <mat-error class="text-danger">SOCSO No. is required</mat-error>
+                                                                                                                        </mat-form-field>
+                                                                                                                    </div>
+
+                                                                                                                    <div class="col-sm-6 px-2">
+                                                                                                                        <mat-label class="form-label">EIS Status
+                                                                                                                            <span class="text-danger">
+                                                                                                                                *</span>
+                                                                                                                        </mat-label>
+                                                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                            <mat-select placeholder="Select EIS Status">
+                                                                                                                                <mat-option value="Monthly">Monthly</mat-option>
+                                                                                                                                <mat-option value="Daily">Daily</mat-option>
+                                                                                                                                <mat-option value="Hourly">Hourly</mat-option>
+                                                                                                                            </mat-select>
+                                                                                                                            <mat-error class="text-danger">EIS Status is required</mat-error>
+                                                                                                                        </mat-form-field>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="flex justify-between mt-4">
+                                                                                                        <button mat-flat-button class="bg-error text-white!" matStepperPrevious>
+                                                                                                            Back
+                                                                                                        </button>
+                                                                                                        <button mat-flat-button (click)="stepper.reset()">Finish</button>
+                                                                                                    </div>
+                                                                                                </mat-step>
+                                                                                                <mat-step>
+                                                                                                    <ng-template matStepLabel>Tax / PCB Information</ng-template>
+                                                                                                    <h4 class="mat-headline-6 mt-6">Terms and condition</h4>
+                                                                                                    <p class="mt-2 text-sm">
+                                                                                                        Sard about this site or you have been to it, but you cannot figure out what it
+                                                                                                        is or what it can do. MTA web directory isSard about this site or you have been
+                                                                                                        to it, but you cannot figure out what it is or what it can do. MTA web directory
+                                                                                                        is
+                                                                                                    </p>
+                                                                                                    <mat-checkbox checked color="primary">Agree with terms?</mat-checkbox>
+                                                                                                    <div class="flex justify-between mt-4">
+                                                                                                        <button mat-flat-button class="bg-error text-white!" matStepperPrevious>
+                                                                                                            Back
+                                                                                                        </button>
+                                                                                                        <button mat-flat-button (click)="stepper.reset()">Finish</button>
+                                                                                                    </div>
+                                                                                                </mat-step>
+                                                                                                <mat-step>
+                                                                                                    <ng-template matStepLabel>Leave</ng-template>
+                                                                                                    <h4 class="mat-headline-6 mt-6">Terms and condition</h4>
+                                                                                                    <p class="mt-2 text-sm">
+                                                                                                        Sard about this site or you have been to it, but you cannot figure out what it
+                                                                                                        is or what it can do. MTA web directory isSard about this site or you have been
+                                                                                                        to it, but you cannot figure out what it is or what it can do. MTA web directory
+                                                                                                        is
+                                                                                                    </p>
+                                                                                                    <mat-checkbox checked color="primary">Agree with terms?</mat-checkbox>
+                                                                                                    <div class="flex justify-between mt-4">
+                                                                                                        <button mat-flat-button class="bg-error text-white!" matStepperPrevious>
+                                                                                                            Back
+                                                                                                        </button>
+                                                                                                        <button mat-flat-button (click)="stepper.reset()">Finish</button>
+                                                                                                    </div>
+                                                                                                </mat-step>
+                                                                                                <mat-step>
+                                                                                                    <ng-template matStepLabel>Emergency Contact</ng-template>
+                                                                                                    <div class="px-2 mt-3">
+                                                                                                        <h4 class="text-primary">Primary emergency contact</h4>
+                                                                                                        <div class="card">
+                                                                                                            <div class="card-body">
+                                                                                                                <div class="row">
+                                                                                                                    <div class="col-sm-4 px-2">
+                                                                                                                        <mat-label class="form-label">Contact Name
+                                                                                                                            <span class="text-danger">
+                                                                                                                                *</span>
+                                                                                                                        </mat-label>
+                                                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                            <input type="email" matInput placeholder="Enter contact name">
+                                                                                                                                <mat-error class="text-danger">Contact name. is required</mat-error>
+                                                                                                                            </mat-form-field>
+                                                                                                                        </div>
+
+                                                                                                                        <div class="col-sm-4 px-2">
+                                                                                                                            <mat-label class="form-label">Relationship
+                                                                                                                                <span class="text-danger">*</span>
+                                                                                                                            </mat-label>
+                                                                                                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                                <mat-select placeholder="Select relationship">
+                                                                                                                                    <mat-option value="MALE">Male</mat-option>
+                                                                                                                                    <mat-option value="FEMALE">Female</mat-option>
+                                                                                                                                </mat-select>
+                                                                                                                                <mat-error class="text-danger">Relationship is required</mat-error>
+                                                                                                                            </mat-form-field>
+                                                                                                                        </div>
+
+                                                                                                                        <div class="col-sm-4 px-2">
+                                                                                                                            <mat-label class="form-label">Contact No.
+                                                                                                                                <span class="text-danger">
+                                                                                                                                    *</span>
+                                                                                                                            </mat-label>
+                                                                                                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                                <input type="text" matInput placeholder="Enter contact no.">
+                                                                                                                                    <mat-error class="text-danger">Contact No. is required</mat-error>
+                                                                                                                                </mat-form-field>
+                                                                                                                            </div>
+
+                                                                                                                            <div class="col-sm-6 px-2">
+                                                                                                                                <mat-label class="form-label">Address Line 1
+                                                                                                                                    <span class="text-danger">
+                                                                                                                                        *</span>
+                                                                                                                                </mat-label>
+                                                                                                                                <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                                    <input type="text" matInput placeholder="Enter address line 1">
+                                                                                                                                        <mat-error class="text-danger">Address line 1 is required</mat-error>
+                                                                                                                                    </mat-form-field>
+                                                                                                                                </div>
+
+                                                                                                                                <div class="col-sm-6 px-2">
+                                                                                                                                    <mat-label class="form-label">Address Line 2
+                                                                                                                                        <span class="text-danger">
+                                                                                                                                            *</span>
+                                                                                                                                    </mat-label>
+                                                                                                                                    <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                                        <input type="text" matInput placeholder="Enter address line 2">
+                                                                                                                                            <mat-error class="text-danger">Address line 2 is required</mat-error>
+                                                                                                                                        </mat-form-field>
+                                                                                                                                    </div>
+
+                                                                                                                                    <div class="col-sm-3 px-2">
+                                                                                                                                        <mat-label class="form-label">City
+                                                                                                                                            <span class="text-danger">
+                                                                                                                                                *</span>
+                                                                                                                                        </mat-label>
+                                                                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                                            <input type="text" matInput placeholder="Enter city">
+                                                                                                                                                <mat-error class="text-danger">City is required</mat-error>
+                                                                                                                                            </mat-form-field>
+                                                                                                                                        </div>
+
+                                                                                                                                        <div class="col-sm-3 px-2">
+                                                                                                                                            <mat-label class="form-label">Postcode
+                                                                                                                                                <span class="text-danger">
+                                                                                                                                                    *</span>
+                                                                                                                                            </mat-label>
+                                                                                                                                            <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                                                <input type="text" matInput placeholder="Enter postcode">
+                                                                                                                                                    <mat-error class="text-danger">Postcode is required</mat-error>
+                                                                                                                                                </mat-form-field>
+                                                                                                                                            </div>
+
+                                                                                                                                            <div class="col-sm-3 px-2">
+                                                                                                                                                <mat-label class="form-label">State
+                                                                                                                                                    <span class="text-danger">*</span>
+                                                                                                                                                </mat-label>
+                                                                                                                                                <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                                                    <mat-select placeholder="Select state">
+                                                                                                                                                        <mat-option value="MALE">Male</mat-option>
+                                                                                                                                                        <mat-option value="FEMALE">Female</mat-option>
+                                                                                                                                                    </mat-select>
+                                                                                                                                                    <mat-error class="text-danger">Gender is required</mat-error>
+                                                                                                                                                </mat-form-field>
+                                                                                                                                            </div>
+
+                                                                                                                                            <div class="col-sm-3 px-2">
+                                                                                                                                                <mat-label class="form-label">Country
+                                                                                                                                                    <span class="text-danger">*</span>
+                                                                                                                                                </mat-label>
+                                                                                                                                                <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                                                    <mat-select placeholder="Select country">
+                                                                                                                                                        <mat-option value="MALAYSIA">Malaysia</mat-option>
+                                                                                                                                                        <mat-option value="SINGAPORE">Singapore</mat-option>
+                                                                                                                                                    </mat-select>
+                                                                                                                                                    <mat-error class="text-danger">Country is required</mat-error>
+                                                                                                                                                </mat-form-field>
+                                                                                                                                            </div>
+                                                                                                                                        </div>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                            <div class="flex justify-between mt-4">
+                                                                                                                                <button mat-flat-button class="bg-error text-white!" matStepperPrevious>
+                                                                                                                                    Back
+                                                                                                                                </button>
+                                                                                                                                <button mat-flat-button (click)="stepper.reset()">Finish</button>
+                                                                                                                            </div>
+                                                                                                                        </mat-step>
+
+                                                                                                                        <mat-step>
+                                                                                                                            <ng-template matStepLabel>Documentations</ng-template>
+                                                                                                                            <div class="px-2 mt-3">
+                                                                                                                                <h4 class="text-primary">Employee documents</h4>
+                                                                                                                                <div class="card">
+                                                                                                                                    <div class="card-body">
+                                                                                                                                        <div class="row">
+                                                                                                                                            <div class="col-sm-12 px-2">
+                                                                                                                                                <mat-label class="form-label text-muted mb-3">Upload supporting records by category. All document categories are optional.
+                                                                                                                                                </mat-label>
+
+                                                                                                                                                <app-dropzone
+                                                                                                                                                    accept="application/pdf"
+                                                                                                                                                    [multiple]="true"
+                                                                                                                                                    [headline]="'Drag files here or browse to upload'"
+                                                                                                                                                    [description]="'PDF, JPG or PNG · Maximum 10 MB per file'"></app-dropzone>
+                                                                                                                                            </div>
+                                                                                                                                        </div>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                            <div class="flex justify-between mt-4">
+                                                                                                                                <button mat-flat-button class="bg-error text-white!" matStepperPrevious>
+                                                                                                                                    Back
+                                                                                                                                </button>
+                                                                                                                                <button mat-flat-button (click)="stepper.reset()">Finish</button>
+                                                                                                                            </div>
+                                                                                                                        </mat-step>
+                                                                                                                    </mat-stepper>
+                                                                                                                </div>
+                                                                                                            </div>

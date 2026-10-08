@@ -1,7 +1,7 @@
 {
   
   "hosting": {
-    "public": "dist/warehouse-system/browser",
+    "public": "dist/payroll-system/browser",
     "ignore": [
       "firebase.json",
       "**/.*",

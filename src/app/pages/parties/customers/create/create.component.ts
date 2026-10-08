@@ -6,14 +6,6 @@ import { RouterLink } from '@angular/router';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { createFormGroupFromFields, FormConfig, FormFieldConfig, FormsComponent } from '../../../../shared/forms/forms.component';
 
-const hiddenField = (name: string, formControlName: string, type = 'text'): FormFieldConfig => ({
-  name,
-  type,
-  formControlName,
-  placeholder: '',
-  size: 'col-sm-12',
-});
-
 @Component({
   selector: 'app-create',
   imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule,  ToastrModule, FormsComponent],

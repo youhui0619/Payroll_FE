@@ -1,13 +1,14 @@
-import { Component, Output, EventEmitter, ElementRef, HostListener, Input } from '@angular/core';
+ import { Component, Output, EventEmitter, ElementRef, HostListener, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DropdownComponent } from '../../../shared/dropdown/dropdown.component';
 import { TablerIconComponent, provideTablerIcons } from 'angular-tabler-icons';
 import * as TablerIcons from 'angular-tabler-icons/icons';
 import { MatButtonModule } from '@angular/material/button';
+import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, DropdownComponent, TablerIconComponent, MatButtonModule ],
+  imports: [BreadcrumbComponent, CommonModule, DropdownComponent, TablerIconComponent, MatButtonModule ],
   providers: [
     provideTablerIcons(TablerIcons)
   ],

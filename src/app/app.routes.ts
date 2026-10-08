@@ -26,22 +26,10 @@ export const routes: Routes = [
             .then(m => m.DashboardComponent)
       },
       {
-        path: 'inventory',
+        path: 'workforce',
         loadChildren: () =>
-          import('./pages/inventory/inventory.routes')
-            .then(m => m.INVENTORY_ROUTES)
-      },
-      {
-        path: 'parties',
-        loadChildren: () =>
-          import('./pages/parties/parties.routes')
-            .then(m => m.PARTIES_ROUTES)
-      },
-      {
-        path: 'warehouses',
-        loadChildren: () =>
-          import('./pages/warehouses/warehouses.routes')
-            .then(m => m.WAREHOUSES_ROUTES)
+          import('./pages/workforce/workforce.routes')
+            .then(m => m.WORKFORCE_ROUTES)
       },
     ]
   },

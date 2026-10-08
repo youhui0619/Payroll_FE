@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "warehouse-system": {
+    "payroll-system": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/warehouse-system",
+            "outputPath": "dist/payroll-system",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -72,10 +72,10 @@
           },
           "configurations": {
             "production": {
-              "buildTarget": "warehouse-system:build:production"
+              "buildTarget": "payroll-system:build:production"
             },
             "development": {
-              "buildTarget": "warehouse-system:build:development"
+              "buildTarget": "payroll-system:build:development"
             }
           },
           "defaultConfiguration": "development"
