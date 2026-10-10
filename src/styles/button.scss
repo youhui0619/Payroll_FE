@@ -144,3 +144,53 @@
     margin-right: 4px;
   }
 }
+
+
+//toggle button
+.selection-group {
+  display: flex;
+  width: 100%;
+  gap: 12px;
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: visible;
+}
+
+.selection-group mat-button-toggle {
+  flex: 1;
+  min-width: 0;
+  border: 0 !important;
+  background: transparent;
+  color: var(--text);
+}
+
+.selection-group .mat-button-toggle-button {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--light-disabled) !important;
+  border-radius: 4px !important;
+  background: #fff;
+  overflow: hidden;
+}
+
+.selection-group .mat-button-toggle-label-content {
+  padding: 0 12px;
+  line-height: 58px;
+  font-size: 13px;
+}
+
+.selection-group .mat-button-toggle-checked {
+  color: var(--primary);
+}
+
+.selection-group .mat-button-toggle-checked .mat-button-toggle-button {
+  border-color: var(--primary) !important;
+  color: var(--primary);
+  background: var(--light-primary);
+}
+
+.selection-group mat-button-toggle:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}

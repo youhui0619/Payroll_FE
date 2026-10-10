@@ -43,6 +43,11 @@
     opacity: 1 !important;
   }
 
+  .mat-mdc-select-placeholder {
+    color: var(--placeholder);
+    opacity: 1;
+}
+
   /* Outlined */
   .mdc-text-field--outlined {
     --mdc-outlined-text-field-container-shape: 8px;

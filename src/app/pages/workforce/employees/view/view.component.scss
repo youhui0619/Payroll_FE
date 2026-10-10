@@ -1,0 +1,70 @@
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--light-primary);
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.salary-box{
+    border-radius: 8px;
+    padding: 16px;
+    border: 1px solid var(--primary);
+    background: var(--light-primary);
+}
+
+.balance-wrapper{
+    h4{
+        font-size: 20px;
+    }
+
+    h2{
+        font-size: 32px;
+        font-weight: 700
+    }
+}
+
+.transaction-list{
+    padding: 10px 0;
+    color: #d7d8d8;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #2d343c;
+
+    .transaction-timedate{
+        font-size: 10px
+    }
+}
+
+.btn-transaction{
+    width: 44px;
+}
+
+
+
+.no-border-calendar {
+  /* Remove all borders from day cells */
+.fc .fc-daygrid-day, 
+.fc .fc-daygrid-day-top {
+  border: none !important;
+}
+
+/* Optional: remove border between weeks */
+.fc .fc-daygrid-body {
+  border-collapse: collapse !important;
+}
+
+/* Remove event borders just in case */
+.fc-event {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+}

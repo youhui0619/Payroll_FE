@@ -15,6 +15,8 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { FileInputDirective } from '@ngx-dropzone/cdk';
 import { MatDropzone } from '@ngx-dropzone/material';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+
 
 import { TablerIconComponent } from 'angular-tabler-icons';
 import { provideTablerIcons } from 'angular-tabler-icons';
@@ -37,7 +39,8 @@ export const MaterialImports = [
   FileInputDirective,
   MatDropzone,
   TablerIconComponent,
-  MatStepperModule
+  MatStepperModule,
+  MatButtonToggleModule
 ];
 
 export const MaterialProviders = [
