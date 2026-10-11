@@ -258,7 +258,8 @@
 }
 
 <div class="row mb-4">
-        <div class="px-2" [ngClass]="isWideTab ? 'col-sm-12' : 'col-sm-8'">
+        <!-- <div class="px-2" [ngClass]="isWideTab ? 'col-sm-12' : 'col-sm-8'"> -->
+        <div class="px-2 col-sm-12">
         <mat-tab-group
             mat-stretch-tabs="false"
             mat-align-tabs="start"
@@ -482,8 +483,25 @@
             <mat-tab label="Claim">
                 <div class="px-2 mt-3">
                    <div class="row mx-0">
-                        <div class="col-sm-7 px-2">
+                        <div class="col-sm-12 px-2 mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4 class="text-primary my-0">Employee claims</h4>
+                                <button mat-flat-button color="primary" class="ms-2">
+                                    <i-tabler name="plus"></i-tabler>
+                                    New Claim
+                                </button>
+                            </div>
+                        </div>
+                        <!-- <div class="col-sm-7 px-2">
                             <h4 class="text-primary my-0">Employee claims</h4>
+                            <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+                                <mat-date-range-input [rangePicker]="rangePicker">
+                                    <input matStartDate placeholder="Start date">
+                                    <input matEndDate placeholder="End date">
+                                </mat-date-range-input>
+                                <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+                                <mat-date-range-picker #rangePicker></mat-date-range-picker>
+                            </mat-form-field>
                         </div>
 
                         <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
@@ -491,36 +509,84 @@
                                 <i-tabler name="plus"></i-tabler>
                                 New Claim
                             </button>
+                        </div> -->
+                    </div>
+                   <div class="row mx-0">
+                    <div class="col-sm-12 px-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="claim-box d-flex align-items-center justify-content-between py-3">
+                                    <div class="d-flex align-items-center">
+                                        <span class="icon bg-light-primary text-primary">
+                                            <i-tabler name="burger"></i-tabler>
+                                        </span>
+                                        <div class="ms-3">
+                                            <h4 class="my-0">Meals </h4>
+                                            <p class="text-muted my-0 fs-12">Client lunch · 12/12/2024</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="chip bg-light-info text-info">Pending</span>
+                                        <div class="d-flex align-items-center mt-2">
+                                        <h4 class="my-0">RM 120.00</h4>
+                                            <button class="text-muted action-btn mt-0" mat-icon-button>
+                                                <i-tabler name="download"></i-tabler>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="claim-box d-flex align-items-center justify-content-between py-3">
+                                    <div class="d-flex align-items-center">
+                                        <span class="icon bg-light-primary text-primary">
+                                            <i-tabler name="burger"></i-tabler>
+                                        </span>
+                                        <div class="ms-3">
+                                            <h4 class="my-0">Meals </h4>
+                                            <p class="text-muted my-0 fs-12">Client lunch · 12/12/2024</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="chip bg-light-info text-info">Pending</span>
+                                        <div class="d-flex align-items-center mt-2">
+                                        <h4 class="my-0">RM 120.00</h4>
+                                            <button class="text-muted action-btn mt-0" mat-icon-button>
+                                                <i-tabler name="download"></i-tabler>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
             </div>
             </mat-tab>
 
             <mat-tab label="Documentations">
                 <div class="px-2 mt-3">
                    <div class="row mx-0">
-                        <div class="col-sm-7 px-2">
-                            <h4 class="text-primary my-0">Documentations</h4>
-                        </div>
-
-                        <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
-                            <button mat-flat-button color="primary" class="ms-2">
-                                <i-tabler name="plus"></i-tabler>
-                                New Claim
-                            </button>
+                        <div class="col-sm-12 px-2">
+                            <div class="d-flex justify-content-between">
+                                <h4 class="text-primary my-0">Documentations</h4>
+                                <button mat-flat-button color="primary" class="ms-2">
+                                    <i-tabler name="plus"></i-tabler>
+                                    New Claim
+                                </button>
+                            </div>
                         </div>
                     </div>
-            </div>
+                </div>
             </mat-tab>
         </mat-tab-group>
     </div>
 
-    <div class="col-sm-4 px-2" [hidden]="isWideTab">
+    <!-- <div class="col-sm-4 px-2" [hidden]="isWideTab">
         <h4 class="text-primary">Recent activity</h4>
         <div class="card">
             <div class="card-body">
                 123
             </div>
         </div>
-    </div>
+    </div> -->
 </div>

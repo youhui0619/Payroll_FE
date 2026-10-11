@@ -68,3 +68,14 @@
 }
 
 }
+
+.claim-box{
+    border-bottom: 1px solid var(--border)
+}
+
+.claim-box:last-child {
+  border-bottom: none;
+}
+.claim-box:first-child {
+  padding-top: 5px!important;
+}
