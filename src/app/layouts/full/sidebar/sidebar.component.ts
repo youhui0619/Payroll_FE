@@ -50,12 +50,12 @@ export class SidebarComponent implements OnInit, OnChanges {
     
     { header: 'Time & Leave' },
     { label: 'Attendance', icon: 'akar-icons:shipping-box-01', children: [
-        { label: 'Overview', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
+        { label: 'Overview', icon: 'codex:dot-circle', route: '/time-leave/leave/overview' },
         { label: 'Attendance Adjustments', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
        ]
     },
     { label: 'Leave', icon: 'akar-icons:shipping-box-01', children: [
-        { label: 'Overview', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
+        { label: 'Overview', icon: 'codex:dot-circle', route: '/time-leave/leave/overview' },
         { label: 'Leave Applications', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
         { label: 'Leave Approvals', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
       ]

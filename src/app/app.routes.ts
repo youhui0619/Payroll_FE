@@ -36,6 +36,12 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./pages/payroll/payroll.routes')
             .then(m => m.PAYROLL_ROUTES)
+      },
+      {
+        path: 'time-leave',
+        loadChildren: () =>
+          import('./pages/time-leave/time-leave.routes')
+            .then(m => m.TIME_LEAVE_ROUTES)
       }
     ]
   },
