@@ -31,6 +31,12 @@ export const routes: Routes = [
           import('./pages/workforce/workforce.routes')
             .then(m => m.WORKFORCE_ROUTES)
       },
+      {
+        path: 'payroll',
+        loadChildren: () =>
+          import('./pages/payroll/payroll.routes')
+            .then(m => m.PAYROLL_ROUTES)
+      }
     ]
   },
 

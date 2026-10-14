@@ -69,10 +69,8 @@ export class SidebarComponent implements OnInit, OnChanges {
     
     { header: 'Payroll' },
     { label: 'Payroll', icon: 'akar-icons:shipping-box-01', children: [
-        { label: 'Overview', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
-        { label: 'Payroll Adjustments', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
-        { label: 'Payroll History', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
-      ]
+        { label: 'Overview', icon: 'codex:dot-circle', route: '/payroll/overview' },
+       ]
     },
     { label: 'Payslips List', icon: 'ant-design:shop-outlined', route: '/warehouses/list' },
     { label: 'Tax & PCB', icon: 'akar-icons:shipping-box-01', children: [

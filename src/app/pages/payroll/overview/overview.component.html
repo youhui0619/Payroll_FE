@@ -1,0 +1,245 @@
+<div class="row justify-content-between my-4">
+    <div class="col-sm-7">
+        <h3 class="text-dark my-0">Employee List</h3>
+        <p class="fw-300 text-muted mb-0">Manage your employees, employment details and payroll information.</p>
+    </div>
+
+    <div class="col-sm-5 d-flex align-items-center justify-content-end">
+        <button mat-flat-button color="primary" class="ms-2" routerLink="/workforce/employees/create">
+            <i-tabler name="plus"></i-tabler>
+            Create Employee
+        </button>
+    </div>
+</div>
+
+<div class="row my-4">
+    <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <div  class="d-flex align-items-center justify-content-between">
+                    <div class="summary-info">
+                        <p class="f-s-12 text-muted">Total employees
+                        </p>
+                        <h3 class="mb-0">128</h3>
+                    </div>
+                    <div class="text-primary bg-light-primary text-end icon">
+                        <i-tabler name="users"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <div  class="d-flex align-items-center justify-content-between">
+                    <div class="summary-info">
+                        <p class="f-s-12 text-muted">Completed Payslips
+                        </p>
+                        <h3 class="mb-0">112</h3>
+                    </div>
+                    <div class="text-primary bg-light-primary text-end icon">
+                        <i-tabler name="user-check"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+                <div  class="d-flex align-items-center justify-content-between">
+                    <div class="summary-info">
+                        <p class="f-s-12 text-muted">Pending Payslips
+                        </p>
+                        <h3 class="mb-0">10</h3>
+                    </div>
+                    <div class="text-primary bg-light-primary text-end icon">
+                        <i-tabler name="hourglass-empty"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row mt-4">
+    <div class="d-flex align-items-center flex-wrap gap-2">
+        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+            <input type="text" matInput placeholder="Search..." >
+            <span matTextPrefix class="text-muted me-2">
+                <i-tabler name="search" class="icon-16"></i-tabler>
+            </span>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+            <mat-select placeholder="Select Department" multiple>
+                <mat-option value="active">Active</mat-option>
+                <mat-option value="inactive">Inactive</mat-option>
+            </mat-select>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+            <mat-select placeholder="Select Month">
+                <mat-option *ngFor="let month of months" [value]="month.value">{{ month.label }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+            <mat-select placeholder="Select Year">
+                <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</div>
+
+
+<div class="row mt-4">
+    <div class="col-sm-12 px-2">
+        <div class="card payroll-table-card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All (100)</span></h6>
+                    <div>
+                         <mat-form-field appearance="outline" class="form-input column-picker" subscriptSizing="dynamic">
+                                <mat-select [(ngModel)]="selectedColumns" (selectionChange)="ensureRequiredColumns($event.value)" multiple placeholder="Select columns">
+                                <mat-select-trigger>{{ selectedColumns.length }} columns selected</mat-select-trigger>
+                                <mat-option *ngFor="let column of columnOptions" [value]="column.id" [disabled]="isRequiredColumn(column.id)">
+                                    {{ column.label }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
+                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
+                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <i-tabler name="download" class="icon-16"></i-tabler> Export</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="material-datatables table-responsive">
+                    <table matSort class="mat-sort table no-wrap w-100 text-left" matSort>
+                        <colgroup>
+                            <ng-container *ngFor="let column of columnOptions">
+                                <col *ngIf="isColumnVisible(column.id)" [style.width.px]="columnWidth(column.id)">
+                            </ng-container>
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th *ngIf="isColumnVisible('employee')" class="text-dark text-nowrap text-center sticky-col sticky-col-employee">Employee</th>
+                                <th *ngIf="isColumnVisible('employeeId')" class="text-dark text-nowrap text-center sticky-col" [class.sticky-col-id]="isColumnVisible('employee')" [class.sticky-col-id-alone]="!isColumnVisible('employee')">Employee ID</th>
+                                <th *ngIf="isColumnVisible('basicPay')" class="text-dark text-nowrap text-center">Basic Pay<br/>(RM)</th>
+                                <th *ngIf="isColumnVisible('overtime')" class="text-dark text-nowrap text-center">Overtime<br/>(RM)</th>
+                                <th *ngIf="isColumnVisible('deduction')" class="text-dark text-nowrap text-center">Deduction<br/>(RM)</th>
+                                <th *ngIf="isColumnVisible('allowance')" class="text-dark text-nowrap text-center">Allowance<br/>(RM)</th>
+                                <th *ngIf="isColumnVisible('bonus')" class="text-dark text-nowrap text-center">Bonus<br/>(RM)</th>
+                                <th *ngIf="isColumnVisible('grossPay')" class="text-dark text-nowrap text-center">Gross pay<br/>(RM)</th>
+                                <th *ngIf="visibleGroupCount('epf')" class="text-dark text-nowrap text-center epf-heading" [attr.colspan]="visibleGroupCount('epf')">
+                                    <span>EPF Contribution</span>
+                                    <span class="epf-subheading" [style.grid-template-columns]="groupGridColumns('epf')">
+                                        <span *ngIf="isColumnVisible('epfEmployer')">13%/12%</span>
+                                        <span *ngIf="isColumnVisible('epfEmployee')">11%</span>
+                                        <span *ngIf="isColumnVisible('epfTotal')">Total</span>
+                                    </span>
+                                </th>
+                                <th *ngIf="visibleGroupCount('socso')" class="text-dark text-nowrap text-center epf-heading" [attr.colspan]="visibleGroupCount('socso')">
+                                    <span>SOCSO Contribution</span>
+                                    <span class="socso-subheading" [style.grid-template-columns]="groupGridColumns('socso')">
+                                        <span *ngIf="isColumnVisible('socsoEmployer')">Employer</span>
+                                        <span *ngIf="isColumnVisible('socsoEmployee')">Employee</span>
+                                        <span *ngIf="isColumnVisible('socsoLindungan')">Lindungan 24 jam</span>
+                                        <span *ngIf="isColumnVisible('socsoTotal')">Total</span>
+                                    </span>
+                                </th>
+                                <th *ngIf="visibleGroupCount('eis')" class="text-dark text-nowrap text-center epf-heading" [attr.colspan]="visibleGroupCount('eis')">
+                                    <span>EIS Contribution</span>
+                                    <span class="epf-subheading" [style.grid-template-columns]="groupGridColumns('eis')">
+                                        <span *ngIf="isColumnVisible('eisEmployer')">Employer</span>
+                                        <span *ngIf="isColumnVisible('eisEmployee')">Employee</span>
+                                        <span *ngIf="isColumnVisible('eisTotal')">Total</span>
+                                    </span>
+                                </th>
+                                <th *ngIf="isColumnVisible('pcb')" class="text-dark text-nowrap text-center">PCB</th>
+                                <th *ngIf="isColumnVisible('advance')" class="text-dark text-nowrap text-center">Advance</th>
+                                <th *ngIf="isColumnVisible('netPay')" class="text-dark text-nowrap text-center">Net pay<br/>(RM)</th>
+                                <th *ngIf="isColumnVisible('status')" class="text-dark text-nowrap text-center">Status</th>
+                                <th *ngIf="isColumnVisible('action')" class="text-dark text-nowrap text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let row of payrollList">
+                                <td *ngIf="isColumnVisible('employee')" class="text-muted text-nowrap sticky-col sticky-col-employee">
+                                    <div class="d-flex align-items-center justify-content-start">
+                                        <div class="avatar me-3">{{ row.initials }}</div>
+                                        <div><p class="text-dark my-0">{{ row.employee }}</p><p class="fs-10 fw-300 text-muted my-0">{{ row.department }} · {{ row.position }}</p></div>
+                                    </div>
+                                </td>
+                                <td *ngIf="isColumnVisible('employeeId')" class="text-muted text-nowrap sticky-col" [class.sticky-col-id]="isColumnVisible('employee')" [class.sticky-col-id-alone]="!isColumnVisible('employee')"><a href="javascript:void(0)" routerLink="/workforce/employees/view">{{ row.employeeId }}</a></td>
+                                <td *ngIf="isColumnVisible('basicPay')" class="text-muted text-nowrap text-center">{{ row.basicPay | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('overtime')" class="text-muted text-nowrap text-center">{{ row.overtime | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('deduction')" class="text-muted text-nowrap text-center">{{ row.deduction | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('allowance')" class="text-muted text-nowrap text-center">{{ row.allowance | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('bonus')" class="text-muted text-nowrap text-center">{{ row.bonus | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('grossPay')" class="text-muted text-nowrap text-center">{{ row.grossPay | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('epfEmployer')" class="text-muted text-nowrap text-center">{{ row.epf.employer | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('epfEmployee')" class="text-muted text-nowrap text-center">{{ row.epf.employee | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('epfTotal')" class="text-muted text-nowrap text-center">{{ row.epf.total | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('socsoEmployer')" class="text-muted text-nowrap text-center">{{ row.socso.employer | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('socsoEmployee')" class="text-muted text-nowrap text-center">{{ row.socso.employee | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('socsoLindungan')" class="text-muted text-nowrap text-center">{{ row.socso.lindungan24Jam | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('socsoTotal')" class="text-muted text-nowrap text-center">{{ row.socso.total | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('eisEmployer')" class="text-muted text-nowrap text-center">{{ row.eis.employer | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('eisEmployee')" class="text-muted text-nowrap text-center">{{ row.eis.employee | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('eisTotal')" class="text-muted text-nowrap text-center">{{ row.eis.total | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('pcb')" class="text-muted text-nowrap text-center">{{ row.pcb | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('advance')" class="text-muted text-nowrap text-center">{{ row.advance | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('netPay')" class="text-muted text-nowrap text-center">{{ row.netPay | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('status')"><span class="chip bg-light-primary text-primary">Paid</span></td>
+                                <td *ngIf="isColumnVisible('action')" class="text-nowrap">
+                                    <button class="text-muted action-btn" mat-icon-button aria-label="View payroll details" (click)="openPayrollDetails(row)"><i-tabler name="eye"></i-tabler></button>
+                                    <button class="text-muted action-btn" mat-icon-button aria-label="Edit payroll"><i-tabler name="edit"></i-tabler></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="payroll-total-row">
+                                <td *ngIf="isColumnVisible('employee')" class="text-dark text-nowrap fw-bold sticky-col sticky-col-employee">Total</td>
+                                <td *ngIf="isColumnVisible('employeeId')" class="text-dark text-nowrap fw-bold sticky-col" [class.sticky-col-id]="isColumnVisible('employee')" [class.sticky-col-id-alone]="!isColumnVisible('employee')"></td>
+                                <td *ngIf="isColumnVisible('basicPay')" class="text-dark text-nowrap fw-bold text-center">{{ totals.basicPay | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('overtime')" class="text-dark text-nowrap fw-bold text-center">{{ totals.overtime | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('deduction')" class="text-dark text-nowrap fw-bold text-center">{{ totals.deduction | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('allowance')" class="text-dark text-nowrap fw-bold text-center">{{ totals.allowance | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('bonus')" class="text-dark text-nowrap fw-bold text-center">{{ totals.bonus | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('grossPay')" class="text-dark text-nowrap fw-bold text-center">{{ totals.grossPay | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('epfEmployer')" class="text-dark text-nowrap fw-bold text-center">{{ totals.epf.employer | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('epfEmployee')" class="text-dark text-nowrap fw-bold text-center">{{ totals.epf.employee | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('epfTotal')" class="text-dark text-nowrap fw-bold text-center">{{ totals.epf.total | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('socsoEmployer')" class="text-dark text-nowrap fw-bold text-center">{{ totals.socso.employer | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('socsoEmployee')" class="text-dark text-nowrap fw-bold text-center">{{ totals.socso.employee | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('socsoLindungan')" class="text-dark text-nowrap fw-bold text-center">{{ totals.socso.lindungan24Jam | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('socsoTotal')" class="text-dark text-nowrap fw-bold text-center">{{ totals.socso.total | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('eisEmployer')" class="text-dark text-nowrap fw-bold text-center">{{ totals.eis.employer | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('eisEmployee')" class="text-dark text-nowrap fw-bold text-center">{{ totals.eis.employee | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('eisTotal')" class="text-dark text-nowrap fw-bold text-center">{{ totals.eis.total | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('pcb')" class="text-dark text-nowrap fw-bold text-center">{{ totals.pcb | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('advance')" class="text-dark text-nowrap fw-bold text-center">{{ totals.advance | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('netPay')" class="text-dark text-nowrap fw-bold text-center">{{ totals.netPay | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('status')"></td>
+                                <td *ngIf="isColumnVisible('action')"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <mat-paginator [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-payroll-detail-dialog
+    *ngIf="selectedPayroll as payroll"
+    [payroll]="payroll"
+    (closed)="selectedPayroll = null">
+</app-payroll-detail-dialog>

@@ -1,0 +1,230 @@
+<div class="dialog-backdrop" (click)="close()">
+  <section class="dialog-panel" role="dialog" aria-modal="true" aria-labelledby="payroll-dialog-title" (click)="$event.stopPropagation()">
+    <header class="dialog-header">
+      <div class="dialog-heading">
+        <div class="title-line">
+          <h2>Payslip</h2>
+          <span class="chip text-primary bg-light-primary me-2">{{ payslip.period }}</span>
+          <span class="chip text-primary bg-light-primary">{{ payslip.status }}</span>
+        </div>
+        <p class="company-name">{{ payslip.company.name }}</p>
+        <p class="company-meta">{{ payslip.company.registrationNumber }} · {{ payslip.company.llpNumber }}</p>
+        <p class="company-meta">{{ payslip.company.address }}</p>
+      </div>
+      <button type="button" class="close-button" aria-label="Close dialog" (click)="close()">&times;</button>
+    </header>
+
+    <div class="dialog-content">
+      <section class="section-block">
+        <div class="section-heading">
+          <h4 class="text-primary mb-0">Employee information</h4>
+          <span>Salary advice · {{ payslip.period }}</span>
+        </div>
+        <div class="info-grid">
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">Name</p>
+            <p class="text-dark my-0 fw-500">{{ payslip.employee.name }}</p>
+          </div>
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">Employee ID</p>
+            <p class="text-dark my-0 fw-500">{{ payslip.employee.id }}</p>
+          </div>
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">Position</p>
+            <p class="text-dark my-0 fw-500">{{ payslip.employee.position }}</p>
+          </div>
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">EPF membership no.</p>
+            <p class="text-dark my-0 fw-500">{{ payslip.employee.epfMembershipNumber }}</p>
+          </div>
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">Department</p>
+            <p class="text-dark my-0 fw-500">{{ payslip.employee.department }}</p>
+          </div>
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">Gender</p>
+            <p class="text-dark my-0 fw-500">{{ payslip.employee.gender }}</p></div>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading">
+           <h4 class="text-primary mb-0">Leave balances</h4>
+        </div>
+        <div class="cards-grid">
+          <div class="detail-card">
+            <h4 class="fs-14 fw-600 mb-3">Annual leave</h4>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <p class="my-0 text-muted">Available c/f</p>
+              <p class="my-0 text-dark">{{ payslip.leaveBalances.annual.available | number:'1.1-1' }}</p>
+            </div>
+            <hr class="my-2"/>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <p class="my-0 text-muted">Granted</p>
+              <p class="my-0 text-dark">{{ (payslip.leaveBalances.annual.granted | number:'1.1-1') }} </p>
+            </div>
+            <hr class="my-2"/>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <p class="my-0 text-muted">Leave taken</p>
+              <p class="my-0 text-dark">{{ payslip.leaveBalances.annual.taken | number:'1.1-1' }}</p>
+            </div>
+            <hr class="my-2"/>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <p class="my-0 text-muted">Available balance b/f</p>
+              <p class="my-0 text-dark"><strong>{{ payslip.leaveBalances.annual.carriedForward | number:'1.1-1' }}</strong></p>
+            </div>
+          </div>
+          <div class="detail-card">
+            <h4 class="fs-14 fw-600 mb-3">Medical leave</h4>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <p class="my-0 text-muted">Available for 2026</p>
+              <p class="my-0 text-dark">{{ payslip.leaveBalances.medical.available | number:'1.1-1' }}</p>
+            </div>
+            <hr class="my-2"/>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <p class="my-0 text-muted">Granted</p>
+              <p class="my-0 text-dark">{{ payslip.leaveBalances.medical.granted | number:'1.1-1' }}</p>
+            </div>
+            <hr class="my-2"/>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <p class="my-0 text-muted">Leave taken</p>
+              <p class="my-0 text-dark">{{ payslip.leaveBalances.medical.taken | number:'1.1-1' }}</p>
+            </div>
+            <hr class="my-2"/>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <p class="my-0 text-muted">Available balance b/f</p>
+              <p class="my-0 text-dark"><strong>{{ payslip.leaveBalances.medical.carriedForward | number:'1.1-1' }}</strong></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading">
+          <h4 class="text-primary mb-0">Payroll breakdown</h4>
+          <span>RM</span>
+        </div>
+        <div class="cards-grid">
+          <div class="detail-card">
+            <h4 class="fs-14 fw-600 mb-3">Earnings</h4>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <p class="my-0 text-muted">Basic pay</p>
+              <p class="my-0 text-dark">{{ payslip.earnings.basicPay | number:'1.2-2' }}</p>
+            </div>
+            <hr class="my-2"/>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <p class="my-0 text-muted">Less (-): Unpaid leave</p>
+              <p class="my-0 text-dark">{{ payslip.earnings.unpaidLeave | number:'1.2-2' }}</p>
+            </div>
+            <hr class="my-2"/>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <p class="my-0 text-muted">Add (+): Overtime</p>
+              <p class="my-0 text-dark">{{ payslip.earnings.overtime | number:'1.2-2' }}</p>
+            </div>
+            <hr class="my-2"/>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <p class="my-0 text-muted">Allowance</p>
+              <p class="my-0 text-dark">{{ payslip.earnings.allowance | number:'1.2-2' }}</p>
+            </div>
+            <hr class="my-2"/>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <p class="my-0 text-muted">Bonus</p>
+              <p class="my-0 text-dark">{{ payslip.earnings.bonus | number:'1.2-2' }}</p>
+            </div>
+            <div class="d-flex justify-content-between align-items-center gap-3 subtotal">
+              <p class="my-0 text-dark"><strong>Gross pay</strong></p>
+              <p class="my-0 text-dark"><strong>{{ payslip.earnings.grossPay | number:'1.2-2' }}</strong></p>
+            </div>
+          </div>
+          <div class="detail-card">
+            <h4 class="fs-14 fw-600 mb-3">Employee deductions</h4>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <p class="my-0 text-muted">EPF (11%)</p>
+              <p class="my-0 text-dark">{{ payslip.deductions.epf | number:'1.2-2' }}</p>
+            </div>
+            <hr class="my-2"/>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <p class="my-0 text-muted">SOCSO</p>
+              <p class="my-0 text-dark">{{ payslip.deductions.socso | number:'1.2-2' }}</p>
+            </div>
+            <hr class="my-2"/>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <p class="my-0 text-muted">Lindungan 24 jam</p>
+              <p class="my-0 text-dark">{{ payslip.deductions.lindungan24Jam | number:'1.2-2' }}</p>
+            </div>
+              <hr class="my-2"/>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <p class="my-0 text-muted">EIS</p>
+              <p class="my-0 text-dark">{{ payslip.deductions.eis | number:'1.2-2' }}</p>
+            </div>
+            <hr class="my-2"/>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <p class="my-0 text-muted">PCB</p>
+              <p class="my-0 text-dark">{{ payslip.deductions.pcb | number:'1.2-2' }}</p>
+            </div>
+            <hr class="my-2"/>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <p class="my-0 text-muted">Advance</p>
+              <p class="my-0 text-dark">{{ payslip.deductions.advance | number:'1.2-2' }}</p>
+            </div>
+            <hr class="my-2"/>
+            <div class="d-flex justify-content-between align-items-center gap-3">
+              <p class="my-0 text-muted">Other deductions</p>
+              <p class="my-0 text-dark">{{ payslip.deductions.other | number:'1.2-2' }}</p>
+            </div>
+            <div class="d-flex justify-content-between align-items-center gap-3 subtotal">
+              <p class="my-0 text-dark"><strong>Total deductions</strong></p>
+              <p class="my-0 text-dark"><strong>{{ payslip.deductions.total | number:'1.2-2' }}</strong></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading">
+          <h4 class="text-primary mb-0">Employer contributions</h4>
+          <span>RM</span>
+        </div>
+        <div class="detail-card">
+          <div class="row mx-0">
+            <div class="col-6">
+              <div class="d-flex justify-content-between align-items-center gap-3">
+                <p class="text-muted my-0">EPF (13%/12%)</p>
+                <p class="my-0 text-dark">{{ payslip.employerContributions.epf | number:'1.2-2' }}</p>
+              </div>
+              <hr class="my-2"/>
+              <div class="d-flex justify-content-between align-items-center gap-3">
+                <p class="text-muted my-0">SOCSO</p>
+                <p class="my-0 text-dark">{{ payslip.employerContributions.socso | number:'1.2-2' }}</p>
+              </div>
+              <hr class="my-2"/>
+              <div class="d-flex justify-content-between align-items-center gap-3">
+                <p class="text-muted my-0">EIS</p>
+                <p class="my-0 text-dark">{{ payslip.employerContributions.eis | number:'1.2-2' }}</p>
+              </div>
+            </div>
+            <div class="col-6 mt-auto">
+              <div class="text-end">
+                <p class="text-muted fs-10 fw-300 my-0">Subject to EPF: RM {{ payslip.contributionBases.epf | number:'1.2-2' }}</p>
+                <p class="text-muted fs-10 fw-300 my-0">Subject to PERKESO: RM {{ payslip.contributionBases.perkeso | number:'1.2-2' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-4">
+        <div class="d-flex justify-content-between align-items-center">
+         <div>
+           <p class="my-0 text-muted fs-12 fw-300">Net pay (RM)</p>
+            <h2>{{ payslip.netPay | number:'1.2-2' }} <span class="text-primary ms-2 fs-12 fw-400">{{ payslip.paymentMethod }}</span></h2>
+          </div>
+          <button type="button" mat-flat-button color="primary" class="download-button">
+            <i-tabler name="download"></i-tabler>
+            Download payslip
+          </button>
+        </div>
+      </section>
+    </div>
+  </section>
+</div>
