@@ -1,152 +1,3 @@
-.calendar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.calendar-header h3 {
-  margin: 0 0 6px;
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.calendar-header p {
-  margin: 0;
-  color: #6b7280;
-}
-
-.calendar-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.calendar-actions button {
-  padding: 8px 12px;
-  border: 1px solid #d1d5db;
-  background: #fff;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.leave-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 16px;
-  font-size: 12px;
-  color: #4b5563;
-}
-
-.leave-legend span {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-}
-
-.table-wrapper {
-  overflow: auto;
-}
-
-.leave-table {
-  border-collapse: separate;
-  border-spacing: 0;
-  width: max-content;
-  min-width: 100%;
-  table-layout: fixed;
-}
-
-.leave-table th{
-  color: var(--header);
-  background: #fafbfd;
-  font-weight: 400;
-  padding: 14px 10px;
-  border-bottom: 1px solid #eaeaea;
-  position: sticky;
-  top: 0;
-  background: #f8fafc;
-}
-
-.leave-table td {
-  color: var(--header);
-  border-bottom: 1px solid #eaeaea;
-  vertical-align: middle;
-}
-
-.leave-table .sticky-col-employee .avatar {
-  flex: 0 0 36px;
-}
-
-.employee-info small {
-  color: var(--text);
-}
-
-.day-column {
-  width: 68px;
-  text-align: center;
-  color: var(--header);
-}
-.leave-cell {
-  height: 68px;
-  width: 68px;
-}
-
-.weekend {
-  background: var(--light-disabled) !important;
-}
-
-.today {
-  background: var(--light-warning)
-}
-
-.leave-badge {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  font-size: 14px;
-
-}
-
-.annual {
-  background: #dcfce7;
-  color: #166534;
-}
-
-.medical {
-  background: #dbeafe;
-  color: #1d4ed8;
-}
-
-.emergency {
-  background: #fef3c7;
-  color: #92400e;
-}
-
-.unpaid {
-  background: #f3e8ff;
-  color: #7e22ce;
-}
-
-@media (max-width: 768px) {
-  .leave-calendar {
-    padding: 12px;
-  }
-
-  .calendar-header {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-}
-
 .avatar {
   width: 36px;
   height: 36px;
@@ -160,6 +11,21 @@
   font-weight: 600;
 }
 
+.epf-heading {
+  text-align: center;
+  padding-left: 0;
+  padding-right: 0;
+  vertical-align: middle;
+}
+
+.epf-subheading {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+  gap: 0;
+  margin-top: 0.5rem;
+  text-align: center;
+}
 
 .sticky-col {
   position: sticky;

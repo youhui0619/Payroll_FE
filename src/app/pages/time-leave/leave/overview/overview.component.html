@@ -111,64 +111,117 @@
         </div>
     </div>
 
-    <div class="row mt-4">
-        <div class="col-sm-12 px-2">
-            <div class="card">
-                <div class="card-body">
-                    <div class="leave-calendar">
-                        <div class="calendar-header">
-                            <p>{{ monthLabel }}</p>
-                            <div class="calendar-actions">
-                                <button type="button" aria-label="Previous month" (click)="changeMonth(-1)">&lt;</button>
-                                <button type="button" (click)="goToToday()">Today</button>
-                                <button type="button" aria-label="Next month" (click)="changeMonth(1)">&gt;</button>
-                            </div>
-                        </div>
-
-                        <div class="leave-legend" aria-label="Leave type legend">
-                            <span><i class="dot medical"></i>Medical leave</span>
-                            <span><i class="dot annual"></i>Annual leave</span>
-                            <span><i class="dot emergency"></i>Emergency leave</span>
-                            <span><i class="dot unpaid"></i>Unpaid leave</span>
-                        </div>
-
-                        <div class="table-wrapper">
-                            <table class="leave-table">
-                                <thead>
-                                    <tr>
-                                        <th class="text-dark text-nowrap sticky-col sticky-col-employee">Employee</th>
-                                        <th class="text-dark text-nowrap sticky-col sticky-col-id">Employee ID</th>
-                                        <th *ngFor="let day of days" class="day-column" [class.weekend]="day.isWeekend" [class.today]="day.isToday">
-                                            {{ day.date }}
-                                            <small>{{ day.dayName }}</small>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let employee of employees">
-                                        <td class="text-muted text-nowrap sticky-col sticky-col-employee">
-                                            <div class="d-flex align-items-center justify-content-start">
-                                                <div class="avatar me-3">{{ getInitials(employee.name) }}</div>
-                                                <div><p class="text-dark my-0">{{ employee.name }}</p><p class="fs-10 fw-300 text-muted my-0">Department · Position</p></div>
-                                            </div>
-                                        </td>
-                                        <td class="text-muted text-nowrap sticky-col sticky-col-id">
-                                            <a href="javascript:void(0)" routerLink="/workforce/employees/view">{{ employee.employeeId }}</a>
-                                        </td>
-                                        <td *ngFor="let day of days" class="leave-cell" [class.weekend]="day.isWeekend" [class.today]="day.isToday">
-                                            <span *ngIf="getLeave(employee.employeeId, day.dateKey) as leave"
-                                                class="leave-badge" [ngClass]="leave.typeClass" [title]="leave.leaveType">
-                                                {{ leave.code }}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    <tr *ngIf="employees.length === 0">
-                                        <td class="empty-state" [attr.colspan]="days.length + 2">No employees to display.</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+<div class="row mt-4">
+    <div class="col-sm-12 px-2">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All (100)</span>  |  Active (12)  |  Probation (10)  |  Inactive (6)</h6>
+                    <div class="d-flex align-items-center flex-wrap gap-2">
+                        <mat-form-field appearance="outline" class="form-input column-picker" subscriptSizing="dynamic">
+                            <mat-select [(ngModel)]="selectedLeaveColumns" multiple placeholder="Select leave columns">
+                                <mat-select-trigger>{{ selectedLeaveColumns.length }} leave types selected</mat-select-trigger>
+                                <mat-option *ngFor="let column of leaveColumnOptions" [value]="column.id">
+                                    {{ column.label }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
+                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
+                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <i-tabler name="download" class="icon-16"></i-tabler> Export</button>
                     </div>
                 </div>
             </div>
+            <div class="card-body">
+                <div class="material-datatables table-responsive">
+                    <table matSort class="mat-sort table no-wrap w-100 text-left leave-balance-table" matSort>
+                        <thead>
+                            <tr>
+                                <th class="text-dark sticky-col sticky-col-employee" mat-sort-header="assigned">Employee</th>
+                                <th class="text-dark sticky-col sticky-col-id" mat-sort-header="assigned">Employee ID</th>
+                                <th *ngIf="isLeaveColumnVisible('annual')" class="text-dark text-nowrap text-center epf-heading leave-group-header" colspan="3">
+                                    <span>Annual Leave</span>
+                                    <span class="epf-subheading">
+                                        <span>Entitled</span>
+                                        <span>Taken</span>
+                                        <span>Balance</span>
+                                    </span>
+                                </th>
+                                <th *ngIf="isLeaveColumnVisible('medical')" class="text-dark text-nowrap text-center epf-heading leave-group-header" colspan="3">
+                                    <span>Medical Leave</span>
+                                    <span class="epf-subheading">
+                                        <span>Entitled</span>
+                                        <span>Taken</span>
+                                        <span>Balance</span>
+                                    </span>
+                                </th>
+                                <th class="text-dark as-at-cell">As At</th>
+                                <th class="text-dark action-cell">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-muted sticky-col sticky-col-employee">
+                                    <div class="d-flex align-items-center justify-content-start">
+                                        <div class="avatar me-3">AN</div>
+                                        <div>
+                                            <p class="text-dark my-0">Aisyah Nur Abdullah</p>
+                                            <p class="fs-10 fw-300 text-muted my-0">Finance · Finance Executive</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-muted sticky-col sticky-col-id"><a href="#">EMP-0042</a></td>
+                                <ng-container *ngIf="isLeaveColumnVisible('annual')">
+                                    <td class="text-muted text-center leave-value-cell">8.0</td>
+                                    <td class="text-muted text-center leave-value-cell">2.5</td>
+                                    <td class="text-muted text-center leave-value-cell"><span class="chip bg-light-primary text-primary">5.5</span></td>
+                                </ng-container>
+                                <ng-container *ngIf="isLeaveColumnVisible('medical')">
+                                    <td class="text-muted text-center leave-value-cell">14.0</td>
+                                    <td class="text-muted text-center leave-value-cell">1.0</td>
+                                    <td class="text-muted text-center leave-value-cell"><span class="chip bg-light-primary text-primary">13.0</span></td>
+                                </ng-container>
+                                <td class="text-muted as-at-cell">30 Sep 2026</td>
+                                <td class="action-cell">
+                                    <button class="text-muted action-btn" mat-icon-button>
+                                        <i-tabler name="eye"></i-tabler>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="text-muted sticky-col sticky-col-employee">
+                                    <div class="d-flex align-items-center justify-content-start">
+                                        <div class="avatar me-3">AN</div>
+                                        <div>
+                                            <p class="text-dark my-0">Aisyah Nur Abdullah</p>
+                                            <p class="fs-10 fw-300 text-muted my-0">Finance · Finance Executive</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-muted sticky-col sticky-col-id"><a href="javascript:void(0)" routerLink="/workforce/employees/view">EMP-0042</a></td>
+                                <ng-container *ngIf="isLeaveColumnVisible('annual')">
+                                    <td class="text-muted text-center leave-value-cell">8.0</td>
+                                    <td class="text-muted text-center leave-value-cell">5.5</td>
+                                    <td class="text-muted text-center leave-value-cell"><span class="chip bg-light-danger text-danger">2.5</span></td>
+                                </ng-container>
+                                <ng-container *ngIf="isLeaveColumnVisible('medical')">
+                                    <td class="text-muted text-center leave-value-cell">14.0</td>
+                                    <td class="text-muted text-center leave-value-cell">8.0</td>
+                                    <td class="text-muted text-center leave-value-cell"><span class="chip bg-light-warning text-warning">6.0</span></td>
+                                </ng-container>
+                                <td class="text-muted as-at-cell">30 Sep 2026</td>
+                                <td class="action-cell">
+                                    <button class="text-muted action-btn" mat-icon-button>
+                                        <i-tabler name="eye"></i-tabler>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <mat-paginator [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>
+                </div>
+            </div>
         </div>
+    </div>
+</div>

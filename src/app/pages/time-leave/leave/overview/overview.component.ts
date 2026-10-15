@@ -14,6 +14,11 @@ import { CalendarDay, Employee, LeaveRecord } from '../../../../models/leave.mod
   styleUrl: './overview.component.scss'
 })
 export class OverviewComponent {
+  readonly leaveColumnOptions = [
+    { id: 'annual', label: 'Annual Leave' },
+    { id: 'medical', label: 'Medical Leave' }
+  ];
+  selectedLeaveColumns = this.leaveColumnOptions.map(column => column.id);
   
   constructor() {
     this.generateCalendar();
@@ -133,6 +138,10 @@ export class OverviewComponent {
       .slice(0, 2)
       .map(part => part.charAt(0).toUpperCase())
       .join('');
+  }
+
+  isLeaveColumnVisible(id: string): boolean {
+    return this.selectedLeaveColumns.includes(id);
   }
 
   changeMonth(offset: number): void {
