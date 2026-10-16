@@ -7,9 +7,9 @@
                 <div class="row mx-0">
                     <div *ngFor="let field of section.fields" [ngClass]="field.size" class="px-2">
                         <div [ngSwitch]="field.type">
-                            <mat-label class="form-label">{{ field.name }}
+                            <label class="form-label" [attr.for]="field.type === 'date' ? field.formControlName : null">{{ field.name }}
                                 <span class="text-danger" *ngIf="field.required">*</span>
-                            </mat-label>
+                            </label>
                             <ng-container *ngSwitchCase="'text'">
                                 <mat-form-field appearance="outline" class="form-input w-100">
                                     <input [type]="field.type" matInput [placeholder]="field.placeholder" [formControlName]="field.formControlName">
@@ -58,6 +58,17 @@
                                 </mat-form-field>
                             </ng-container>
 
+                            <ng-container *ngSwitchCase="'date'">
+                                <mat-form-field appearance="outline" class="form-input w-100">
+                                    <input matInput [id]="field.formControlName" [matDatepicker]="datePicker" [placeholder]="field.placeholder" [formControlName]="field.formControlName">
+                                    <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+                                    <mat-datepicker #datePicker></mat-datepicker>
+                                    <mat-error class="text-danger" *ngIf="field.validation && form.get(field.formControlName)?.invalid && (form.get(field.formControlName)?.touched || form.get(field.formControlName)?.dirty)">
+                                        {{ field.errorMessage }}
+                                    </mat-error>
+                                </mat-form-field>
+                            </ng-container>
+
 
                             <!-- textarea -->
                             <ng-container *ngSwitchCase="'textarea'">
@@ -78,7 +89,6 @@
                                     [description]="field.placeholder || ''">
                                 </app-dropzone>
                             </ng-container>
-
 
 
                             <ng-container *ngSwitchCase="'image'">

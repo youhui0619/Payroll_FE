@@ -42,6 +42,12 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./pages/time-leave/time-leave.routes')
             .then(m => m.TIME_LEAVE_ROUTES)
+      },
+      {
+        path: 'organization',
+        loadChildren: () =>
+          import('./pages/organization/organization.routes')
+            .then(m => m.ORGANIZATION_ROUTES)
       }
     ]
   },
