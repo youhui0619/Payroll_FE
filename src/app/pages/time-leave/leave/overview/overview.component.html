@@ -116,7 +116,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All (100)</span>  |  Active (12)  |  Probation (10)  |  Inactive (6)</h6>
+                    <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All (100)</span></h6>
                     <div class="d-flex align-items-center flex-wrap gap-2">
                         <mat-form-field appearance="outline" class="form-input column-picker" subscriptSizing="dynamic">
                             <mat-select [(ngModel)]="selectedLeaveColumns" multiple placeholder="Select leave columns">
@@ -139,7 +139,7 @@
                             <tr>
                                 <th class="text-dark sticky-col sticky-col-employee" mat-sort-header="assigned">Employee</th>
                                 <th class="text-dark sticky-col sticky-col-id" mat-sort-header="assigned">Employee ID</th>
-                                <th *ngIf="isLeaveColumnVisible('annual')" class="text-dark text-nowrap text-center epf-heading leave-group-header" colspan="3">
+                                <th *ngIf="isLeaveColumnVisible('annual')" class="text-dark text-nowrap text-center epf-heading leave-group-header border-right" colspan="3">
                                     <span>Annual Leave</span>
                                     <span class="epf-subheading">
                                         <span>Entitled</span>
@@ -147,7 +147,7 @@
                                         <span>Balance</span>
                                     </span>
                                 </th>
-                                <th *ngIf="isLeaveColumnVisible('medical')" class="text-dark text-nowrap text-center epf-heading leave-group-header" colspan="3">
+                                <th *ngIf="isLeaveColumnVisible('medical')" class="text-dark text-nowrap text-center epf-heading leave-group-header border-right" colspan="3">
                                     <span>Medical Leave</span>
                                     <span class="epf-subheading">
                                         <span>Entitled</span>
@@ -163,27 +163,27 @@
                             <tr>
                                 <td class="text-muted sticky-col sticky-col-employee">
                                     <div class="d-flex align-items-center justify-content-start">
-                                        <div class="avatar me-3">AN</div>
+                                        <div class="avatar me-3">{{ employees[0].initials }}</div>
                                         <div>
-                                            <p class="text-dark my-0">Aisyah Nur Abdullah</p>
-                                            <p class="fs-10 fw-300 text-muted my-0">Finance · Finance Executive</p>
+                                            <p class="text-dark my-0">{{ employees[0].employeeName }}</p>
+                                            <p class="fs-10 fw-300 text-muted my-0">{{ employees[0].department }} · {{ employees[0].position }}</p>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="text-muted sticky-col sticky-col-id"><a href="#">EMP-0042</a></td>
+                                <td class="text-muted sticky-col sticky-col-id"><a href="javascript:void(0)" routerLink="/workforce/employees/view">{{ employees[0].employeeId }}</a></td>
                                 <ng-container *ngIf="isLeaveColumnVisible('annual')">
-                                    <td class="text-muted text-center leave-value-cell">8.0</td>
-                                    <td class="text-muted text-center leave-value-cell">2.5</td>
-                                    <td class="text-muted text-center leave-value-cell"><span class="chip bg-light-primary text-primary">5.5</span></td>
+                                    <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employees[0].employeeId).annual.entitled | number:'1.1-1' }}</td>
+                                    <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employees[0].employeeId).annual.taken | number:'1.1-1' }}</td>
+                                    <td class="text-muted text-center leave-value-cell border-right"><span class="chip bg-light-primary text-primary">{{ leaveBalancesFor(employees[0].employeeId).annual.balance | number:'1.1-1' }}</span></td>
                                 </ng-container>
                                 <ng-container *ngIf="isLeaveColumnVisible('medical')">
-                                    <td class="text-muted text-center leave-value-cell">14.0</td>
-                                    <td class="text-muted text-center leave-value-cell">1.0</td>
-                                    <td class="text-muted text-center leave-value-cell"><span class="chip bg-light-primary text-primary">13.0</span></td>
+                                    <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employees[0].employeeId).medical.entitled | number:'1.1-1' }}</td>
+                                    <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employees[0].employeeId).medical.taken | number:'1.1-1' }}</td>
+                                    <td class="text-muted text-center leave-value-cell border-right"><span class="chip bg-light-primary text-primary">{{ leaveBalancesFor(employees[0].employeeId).medical.balance | number:'1.1-1' }}</span></td>
                                 </ng-container>
                                 <td class="text-muted as-at-cell">30 Sep 2026</td>
                                 <td class="action-cell">
-                                    <button class="text-muted action-btn" mat-icon-button>
+                                    <button class="text-muted action-btn" mat-icon-button routerLink="/time-leave/leave/1/view">
                                         <i-tabler name="eye"></i-tabler>
                                     </button>
                                 </td>
@@ -192,27 +192,27 @@
                             <tr>
                                 <td class="text-muted sticky-col sticky-col-employee">
                                     <div class="d-flex align-items-center justify-content-start">
-                                        <div class="avatar me-3">AN</div>
+                                        <div class="avatar me-3">{{ employees[1].initials }}</div>
                                         <div>
-                                            <p class="text-dark my-0">Aisyah Nur Abdullah</p>
-                                            <p class="fs-10 fw-300 text-muted my-0">Finance · Finance Executive</p>
+                                            <p class="text-dark my-0">{{ employees[1].employeeName }}</p>
+                                            <p class="fs-10 fw-300 text-muted my-0">{{ employees[1].department }} · {{ employees[1].position }}</p>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="text-muted sticky-col sticky-col-id"><a href="javascript:void(0)" routerLink="/workforce/employees/view">EMP-0042</a></td>
+                                <td class="text-muted sticky-col sticky-col-id"><a href="javascript:void(0)" routerLink="/workforce/employees/view">{{ employees[1].employeeId }}</a></td>
                                 <ng-container *ngIf="isLeaveColumnVisible('annual')">
-                                    <td class="text-muted text-center leave-value-cell">8.0</td>
-                                    <td class="text-muted text-center leave-value-cell">5.5</td>
-                                    <td class="text-muted text-center leave-value-cell"><span class="chip bg-light-danger text-danger">2.5</span></td>
+                                    <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employees[1].employeeId).annual.entitled | number:'1.1-1' }}</td>
+                                    <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employees[1].employeeId).annual.taken | number:'1.1-1' }}</td>
+                                    <td class="text-muted text-center leave-value-cell border-right"><span class="chip bg-light-danger text-danger">{{ leaveBalancesFor(employees[1].employeeId).annual.balance | number:'1.1-1' }}</span></td>
                                 </ng-container>
                                 <ng-container *ngIf="isLeaveColumnVisible('medical')">
-                                    <td class="text-muted text-center leave-value-cell">14.0</td>
-                                    <td class="text-muted text-center leave-value-cell">8.0</td>
-                                    <td class="text-muted text-center leave-value-cell"><span class="chip bg-light-warning text-warning">6.0</span></td>
+                                    <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employees[1].employeeId).medical.entitled | number:'1.1-1' }}</td>
+                                    <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employees[1].employeeId).medical.taken | number:'1.1-1' }}</td>
+                                    <td class="text-muted text-center leave-value-cell border-right"><span class="chip bg-light-warning text-warning">{{ leaveBalancesFor(employees[1].employeeId).medical.balance | number:'1.1-1' }}</span></td>
                                 </ng-container>
                                 <td class="text-muted as-at-cell">30 Sep 2026</td>
                                 <td class="action-cell">
-                                    <button class="text-muted action-btn" mat-icon-button>
+                                    <button class="text-muted action-btn" mat-icon-button routerLink="/time-leave/leave/1/view">
                                         <i-tabler name="eye"></i-tabler>
                                     </button>
                                 </td>

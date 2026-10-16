@@ -5,7 +5,7 @@ import { MaterialImports, MaterialProviders } from '../../../shared/material-imp
 import { RouterLink } from '@angular/router';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { payrollList } from '../../../data/payroll';
-import { PayrollDetailDialogComponent } from './payroll-detail-dialog.component';
+import { PayrollDetailDialogComponent } from '../../../shared/dialog/payroll-detail-dialog/payroll-detail-dialog.component';
 
 @Component({
   selector: 'app-overview',

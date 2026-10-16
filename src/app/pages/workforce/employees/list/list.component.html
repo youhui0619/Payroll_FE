@@ -137,46 +137,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr *ngFor="let employee of employees">
                                 <td class="text-muted">
                                     <div class="d-flex align-items-center justify-content-start">
-                                        <div class="avatar me-3">AN</div>
+                                        <div class="avatar me-3">{{ employee.initials }}</div>
                                         <div>
-                                            <p class="text-dark my-0">Aisyah Nur Abdullah</p>
-                                            <p class="fs-10 fw-300 text-muted my-0">Finance · Finance Executive</p>
+                                            <p class="text-dark my-0">{{ employee.employeeName }}</p>
+                                            <p class="fs-10 fw-300 text-muted my-0">{{ employee.department }} · {{ employee.position }}</p>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="text-muted"><a href="#">EMP-0042</a></td>
-                                <td class="text-muted">Permanent</td>
-                                <td class="text-muted">IG58660031000</td>
-                                <td class="text-muted">21454610</td>
-                                <td><span class="chip bg-light-primary text-primary">Active</span></td>
-                                <td>
-                                    <button class="text-muted action-btn" mat-icon-button>
-                                        <i-tabler name="eye"></i-tabler>
-                                    </button>
-                                    <button class="text-muted action-btn" mat-icon-button>
-                                        <i-tabler name="edit"></i-tabler>
-                                    </button>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td class="text-muted">
-                                    <div class="d-flex align-items-center justify-content-start">
-                                        <div class="avatar me-3">AN</div>
-                                        <div>
-                                            <p class="text-dark my-0">Aisyah Nur Abdullah</p>
-                                            <p class="fs-10 fw-300 text-muted my-0">Finance · Finance Executive</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-muted"><a href="javascript:void(0)" routerLink="/workforce/employees/view">EMP-0042</a></td>
-                                <td class="text-muted">Permanent</td>
-                                <td class="text-muted">IG5530939090</td>
-                                <td class="text-muted">12016768</td>
-                                <td><span class="chip bg-light-primary text-primary">Active</span></td>
+                                <td class="text-muted"><a href="javascript:void(0)" routerLink="/workforce/employees/view">{{ employee.employeeId }}</a></td>
+                                <td class="text-muted">{{ employee.employmentType }}</td>
+                                <td class="text-muted">{{ employee.tin }}</td>
+                                <td class="text-muted">{{ employee.kwspNo }}</td>
+                                <td><span class="chip bg-light-primary text-primary">{{ employee.employmentStatus }}</span></td>
                                 <td>
                                     <button class="text-muted action-btn" mat-icon-button>
                                         <i-tabler name="eye"></i-tabler>

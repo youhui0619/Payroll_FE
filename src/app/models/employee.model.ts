@@ -1,3 +1,42 @@
+export interface EmployeeRecord {
+  employeeId: string;
+  employeeName: string;
+  initials: string;
+  nricPassportNo: string;
+  dateOfBirth: string;
+  gender: string;
+  nationality: string;
+  race: string;
+  religion: string;
+  maritalStatus: string;
+  tin: string;
+  email: string;
+  contactNo: string;
+  address: string;
+  department: string;
+  position: string;
+  reportingManager: string;
+  workLocation: string;
+  employmentStatus: string;
+  employmentType: string;
+  joinedDate: string;
+  confirmationDate: string;
+  resignationDate: string | null;
+  basicSalary: number;
+  salaryType: string;
+  paymentMethod: string;
+  bank: string;
+  bankAccount: string;
+  epfEmployeeNo: string;
+  epfEmployerNo: string;
+  kwspNo: string;
+  socsoNo: string;
+  eisStatus: string;
+  emergencyContactName: string;
+  emergencyContactRelationship: string;
+  emergencyContactNo: string;
+}
+
 export interface EmployeePersonalInfo {
   employeeId: string | null;
   employeeName: string | null;

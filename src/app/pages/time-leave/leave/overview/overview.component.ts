@@ -4,7 +4,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { RouterLink } from '@angular/router';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
-import { CalendarDay, Employee, LeaveRecord } from '../../../../models/leave.model';
+import { CalendarDay, LeaveRecord } from '../../../../models/leave.model';
+import type { EmployeeRecord } from '../../../../models/employee.model';
+import { employees as employeeDirectory } from '../../../../data/employees';
+import { getEmployeeLeaveBalances } from '../../../../data/leave-balances';
 
 @Component({
   selector: 'app-overview',
@@ -28,40 +31,45 @@ export class OverviewComponent {
   days: CalendarDay[] = [];
   monthLabel = '';
 
-  employees: Employee[] = [
-    { employeeId: 'EMP001', name: 'Amir Hassan' },
-    { employeeId: 'EMP002', name: 'Siti Aminah' },
-    { employeeId: 'EMP003', name: 'Daniel Lim' },
-    { employeeId: 'EMP004', name: 'Mei Ling' }
-  ];
+  employees: EmployeeRecord[] = employeeDirectory;
+
+  leaveBalancesFor(employeeId: string) {
+    return getEmployeeLeaveBalances(employeeId);
+  }
 
   leaveRecords: LeaveRecord[] = [
     {
-      employeeId: 'EMP001',
+      employeeId: 'EMP-0042',
       startDate: '2026-10-14',
       endDate: '2026-10-14',
       leaveType: 'Medical Leave',
       code: 'MC',
       typeClass: 'medical',
-      status: 'Approved'
+      status: 'Approved',
+      reason: 'Recovering from a seasonal illness.',
+      approval: { approver: 'Farah Rahman', status: 'Approved', comments: 'Medical certificate received and verified.', approvedDate: '2026-10-13' }
     },
     {
-      employeeId: 'EMP002',
+      employeeId: 'EMP-0043',
       startDate: '2026-10-15',
       endDate: '2026-10-16',
       leaveType: 'Annual Leave',
       code: 'AL',
       typeClass: 'annual',
-      status: 'Approved'
+      status: 'Approved',
+      reason: 'Family vacation.',
+      approval: { approver: 'Farah Rahman', status: 'Approved', comments: 'Approved as requested.', approvedDate: '2026-10-10' }
     },
     {
-      employeeId: 'EMP003',
+      employeeId: 'EMP-0042',
       startDate: '2026-10-16',
       endDate: '2026-10-16',
       leaveType: 'Emergency Leave',
       code: 'EL',
       typeClass: 'emergency',
-      status: 'Pending'
+      status: 'Pending',
+      reason: 'Urgent family matter.',
+      approval: { approver: 'Pending assignment', status: 'Pending', comments: 'Awaiting manager review.', approvedDate: null }
     }
   ];
 

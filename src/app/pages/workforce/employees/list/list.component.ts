@@ -5,6 +5,7 @@ import { MaterialImports, MaterialProviders } from '../../../../shared/material-
 import { RouterLink } from '@angular/router';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
+import { employees } from '../../../../data/employees';
 
 @Component({
   selector: 'app-list',
@@ -14,5 +15,5 @@ import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.componen
   styleUrl: './list.component.scss'
 })
 export class ListComponent {
-
+  readonly employees = employees;
 }

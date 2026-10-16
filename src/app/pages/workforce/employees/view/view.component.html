@@ -17,11 +17,11 @@
                 <div class="row mx-0">
                     <div class="col-sm-7 px-2">
                         <div class="d-flex align-items-center">
-                            <div class="avatar me-4">AJ</div>
+                            <div class="avatar me-4">{{ employee.initials }}</div>
                             <div>
-                                <h4 class="my-0">Employee Name</h4>
-                                <p class="fs-10 fw-300 text-muted mt-0 mb-2">EMP-001 · Department · Position</p>
-                                <span class="chip bg-light-primary text-primary me-2">Active</span> <span class="chip bg-light-secondary text-secondary me-2">Permament</span>
+                                <h4 class="my-0">{{ employee.employeeName }}</h4>
+                                <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
+                                <span class="chip bg-light-primary text-primary me-2">{{ employee.employmentStatus }}</span> <span class="chip bg-light-secondary text-secondary me-2">{{ employee.employmentType }}</span>
                             </div>
                         </div>
                     </div>
@@ -273,39 +273,39 @@
                             <div class="row mx-0">
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">Employee ID</label>
-                                    <p class="text-muted">EMP-001</p>
+                                    <p class="text-muted">{{ employee.employeeId }}</p>
                                 </div>
                                 <div class="col-sm-8 px-2 mb-3">
                                     <label class="text-dark fw-500">Employee Name</label>
-                                    <p class="text-muted">Alex Tan</p>
+                                    <p class="text-muted">{{ employee.employeeName }}</p>
                                 </div>
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">NRIC / Passport No.</label>
-                                    <p class="text-muted">900101-01-5555</p>
+                                    <p class="text-muted">{{ employee.nricPassportNo }}</p>
                                 </div>
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">Date of Birth</label>
-                                    <p class="text-muted">01/01/2000</p>
+                                    <p class="text-muted">{{ employee.dateOfBirth | date:'dd/MM/yyyy' }}</p>
                                 </div>
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">Gender</label>
-                                    <p class="text-muted">Male</p>
+                                    <p class="text-muted">{{ employee.gender }}</p>
                                 </div>
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">Nationality</label>
-                                    <p class="text-muted">Malaysian</p>
+                                    <p class="text-muted">{{ employee.nationality }}</p>
                                 </div>
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">Race</label>
-                                    <p class="text-muted">Buddist</p>
+                                    <p class="text-muted">{{ employee.race }}</p>
                                 </div>
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">Religion</label>
-                                    <p class="text-muted">Chinese</p>
+                                    <p class="text-muted">{{ employee.religion }}</p>
                                 </div>
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">Marital Status</label>
-                                    <p class="text-muted">Single</p>
+                                    <p class="text-muted">{{ employee.maritalStatus }}</p>
                                 </div>
                             </div>
                         </div>
@@ -318,15 +318,15 @@
                             <div class="row mx-0">
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">Email Address</label>
-                                    <p class="text-muted">test&#64;test.com</p>
+                                    <p class="text-muted">{{ employee.email }}</p>
                                 </div>
                                 <div class="col-sm-8 px-2 mb-3">
                                     <label class="text-dark fw-500">Contact No</label>
-                                    <p class="text-muted">+6012-345 6789</p>
+                                    <p class="text-muted">{{ employee.contactNo }}</p>
                                 </div>
                                 <div class="col-sm-12 px-2 mb-3">
                                     <label class="text-dark fw-500">Address</label>
-                                    <p class="text-muted">8, jalan abc 1, taman </p>
+                                    <p class="text-muted">{{ employee.address }}</p>
                                 </div>
                             </div>
                         </div>
@@ -338,19 +338,19 @@
                             <div class="row mx-0">
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">Contact Name</label>
-                                    <p class="text-muted">Test</p>
+                                    <p class="text-muted">{{ employee.emergencyContactName }}</p>
                                 </div>
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">Relationship</label>
-                                    <p class="text-muted">Wife</p>
+                                    <p class="text-muted">{{ employee.emergencyContactRelationship }}</p>
                                 </div>
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">Contact No.</label>
-                                    <p class="text-muted">+6012-345 6789</p>
+                                    <p class="text-muted">{{ employee.emergencyContactNo }}</p>
                                 </div>
                                 <div class="col-sm-12 px-2 mb-3">
                                     <label class="text-dark fw-500">Address</label>
-                                    <p class="text-muted">8, jalan abc 1, taman </p>
+                                    <p class="text-muted">{{ employee.address }}</p>
                                 </div>
                             </div>
                         </div>
@@ -365,23 +365,23 @@
                             <div class="row mx-0">
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">Department</label>
-                                    <p class="text-muted">IT</p>
+                                    <p class="text-muted">{{ employee.department }}</p>
                                 </div>
                                 <div class="col-sm-8 px-2 mb-3">
                                     <label class="text-dark fw-500">Position</label>
-                                    <p class="text-muted">Manager</p>
+                                    <p class="text-muted">{{ employee.position }}</p>
                                 </div>
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">Reporting Manager</label>
-                                    <p class="text-muted">-</p>
+                                    <p class="text-muted">{{ employee.reportingManager }}</p>
                                 </div>
                                 <div class="col-sm-12 px-2 mb-3">
                                     <label class="text-dark fw-500">Work Location</label>
-                                    <p class="text-muted">Johor Bahru Office</p>
+                                    <p class="text-muted">{{ employee.workLocation }}</p>
                                 </div>
                                 <div class="col-sm-12 px-2 mb-3">
                                     <label class="text-dark fw-500">Basic salary</label>
-                                    <p class="text-muted">RM 4,500.00 / month</p>
+                                    <p class="text-muted">{{ employee.basicSalary | currency:'MYR':'symbol':'1.2-2' }} / month</p>
                                 </div>
                                 
                             </div>
@@ -395,15 +395,15 @@
                             <div class="row mx-0">
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">Joined Date</label>
-                                    <p class="text-muted">01/01/2020</p>
+                                    <p class="text-muted">{{ employee.joinedDate | date:'dd/MM/yyyy' }}</p>
                                 </div>
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">Confirmation Date</label>
-                                    <p class="text-muted">01/04/2020</p>
+                                    <p class="text-muted">{{ employee.confirmationDate | date:'dd/MM/yyyy' }}</p>
                                 </div>
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">Resignation Date</label>
-                                    <p class="text-muted">-</p>
+                                    <p class="text-muted">{{ employee.resignationDate ? (employee.resignationDate | date:'dd/MM/yyyy') : '-' }}</p>
                                 </div>
                             </div>
                         </div>
@@ -415,35 +415,35 @@
                     <h4 class="text-primary">Employment Information</h4>
                     <div class="w-100 salary-box mb-4">
                         <p class="fs-10 text-muted my-0 fw-300">Basic salary</p>
-                        <h3 class="my-1">RM 4,500.00</h3>
-                        <p class="fs-10 text-muted mb-0">Monthly · Bank transfer</p>
+                        <h3 class="my-1">{{ employee.basicSalary | currency:'MYR':'symbol':'1.2-2' }}</h3>
+                        <p class="fs-10 text-muted mb-0">{{ employee.salaryType }} · {{ employee.paymentMethod }}</p>
                     </div>
                     <div class="card">
                         <div class="card-body">
                             <div class="row mx-0">
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">Bank</label>
-                                    <p class="text-muted">Maybank</p>
+                                    <p class="text-muted">{{ employee.bank }}</p>
                                 </div>
                                 <div class="col-sm-8 px-2 mb-3">
                                     <label class="text-dark fw-500">Bank account</label>
-                                    <p class="text-muted">111111111</p>
+                                    <p class="text-muted">{{ employee.bankAccount }}</p>
                                 </div>
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">EPF employee no.</label>
-                                    <p class="text-muted">1111111111</p>
+                                    <p class="text-muted">{{ employee.epfEmployeeNo }}</p>
                                 </div>
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">EPF employer no.</label>
-                                    <p class="text-muted">222222222</p>
+                                    <p class="text-muted">{{ employee.epfEmployerNo }}</p>
                                 </div>
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">SOCSO number</label>
-                                    <p class="text-muted">3333333333</p>
+                                    <p class="text-muted">{{ employee.socsoNo }}</p>
                                 </div>
                                 <div class="col-sm-4 px-2 mb-3">
                                     <label class="text-dark fw-500">EIS status</label>
-                                    <p class="text-muted">Applicable</p>
+                                    <p class="text-muted">{{ employee.eisStatus }}</p>
                                 </div>
                             </div>
                         </div>
@@ -468,7 +468,7 @@
                    <div class="row mx-0">
                             <div class="col-sm-7 px-2">
                                 <h4 class="text-primary my-0">Leave Application</h4>
-                                <p class="fs-10 fw-300 text-muted mt-0 mb-2">EMP-001 · Department · Position</p>
+                                <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
                             </div>
 
                             <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">

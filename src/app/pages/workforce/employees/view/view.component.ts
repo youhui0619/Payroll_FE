@@ -9,6 +9,7 @@ import { FullCalendarModule, CalendarOptions } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/angular/daygrid';
 import interactionPlugin from '@fullcalendar/angular/interaction';
 import themePlugin from "@fullcalendar/angular/themes/monarch"; 
+import { getEmployee } from '../../../../data/employees';
 
 @Component({
   selector: 'app-view',
@@ -18,6 +19,7 @@ import themePlugin from "@fullcalendar/angular/themes/monarch";
   styleUrl: './view.component.scss'
 })
 export class ViewComponent {
+  readonly employee = getEmployee('EMP-0042');
   selectedTabIndex = 0;
 
   get isWideTab(): boolean {

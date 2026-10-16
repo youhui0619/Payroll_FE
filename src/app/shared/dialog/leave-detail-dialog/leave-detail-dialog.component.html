@@ -1,0 +1,96 @@
+<div class="dialog-backdrop" (click)="close()">
+  <section class="dialog-panel" role="dialog" aria-modal="true" aria-labelledby="leave-dialog-title" (click)="$event.stopPropagation()">
+    <header class="dialog-header">
+      <div class="dialog-heading">
+        <div class="title-line">
+          <h2 id="leave-dialog-title">{{ data.title }}</h2>
+          <span class="chip" [ngClass]="data.statusClass">{{ data.status }}</span>
+        </div>
+        <p class="company-name">{{ data.subtitle }}</p>
+      </div>
+      <button type="button" class="close-button" aria-label="Close dialog" (click)="close()">&times;</button>
+    </header>
+
+    <div class="dialog-content">
+      <section class="section-block">
+        <div class="section-heading">
+          <h4 class="text-primary mb-0">Employee information</h4>
+        </div>
+        <div class="info-grid">
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">Name</p>
+            <p class="text-dark my-0 fw-500">{{ data.employeeInformation.name }}</p>
+          </div>
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">Employee ID</p>
+            <p class="text-dark my-0 fw-500">{{ data.employeeInformation.employeeId }}</p>
+          </div>
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">Department</p>
+            <p class="text-dark my-0 fw-500">{{ data.employeeInformation.department }}</p>
+          </div>
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">Position</p>
+            <p class="text-dark my-0 fw-500">{{ data.employeeInformation.position }}</p>
+          </div>
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">Contact No.</p>
+            <p class="text-dark my-0 fw-500">{{ data.employeeInformation.contactNo }}</p>
+          </div>
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">NRIC No.</p>
+            <p class="text-dark my-0 fw-500">{{ data.employeeInformation.nricNo }}</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading">
+          <h4 class="text-primary mb-0">Leave details</h4>
+        </div>
+        <div class="detail-grid">
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">Leave type</p>
+            <p class="text-dark my-0 fw-500">{{ data.details.leaveType }}</p>
+          </div>
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">Date</p>
+            <p class="text-dark my-0 fw-500">{{ data.details.date }}</p>
+          </div>
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">Duration</p>
+            <p class="text-dark my-0 fw-500">{{ data.details.duration }}</p>
+          </div>
+          <div class="detail-full-width">
+            <p class="text-muted fs-10 fs-300 my-0">Reason for leave</p>
+            <p class="text-dark my-0 fw-500">{{ data.details.reason  || '-' }}</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading">
+          <h4 class="text-primary mb-0">Approval</h4>
+        </div>
+        <div class="detail-grid">
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">Approved by</p>
+            <p class="text-dark my-0 fw-500">{{ data.approval.approver }}</p>
+          </div>
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">Status</p>
+            <p class="text-dark my-0 fw-500">{{ data.approval.status }}</p>
+          </div>
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">Approved date</p>
+            <p class="text-dark my-0 fw-500">{{ data.approval.approvedDate ? (data.approval.approvedDate | date:'dd/MM/yyyy') : '-' }}</p>
+          </div>
+          <div class="detail-full-width">
+            <p class="text-muted fs-10 fs-300 my-0">Comments</p>
+            <p class="text-dark my-0 fw-500">{{ data.approval.comments || '-' }}</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+</div>

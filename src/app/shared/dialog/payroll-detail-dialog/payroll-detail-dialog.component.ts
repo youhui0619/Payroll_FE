@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { payrollList } from '../../../data/payroll';
-import { MaterialImports, MaterialProviders } from '../../../shared/material-imports';
+import { MaterialImports, MaterialProviders } from '../../material-imports';
 import { payslips } from '../../../data/payslips';
 import type { Payslip } from '../../../models/payslip.model';
 

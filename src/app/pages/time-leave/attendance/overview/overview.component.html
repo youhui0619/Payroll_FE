@@ -106,7 +106,7 @@
                 <div class="card-body">
                     <div class="leave-calendar">
                         <div class="calendar-header">
-                            <p>{{ monthLabel }}</p>
+                            <h4 class="my-0">{{ monthLabel }}</h4>
                             <div class="calendar-actions">
                                 <button type="button" aria-label="Previous month" (click)="changeMonth(-1)">&lt;</button>
                                 <button type="button" (click)="goToToday()">Today</button>
@@ -117,8 +117,7 @@
                         <div class="leave-legend" aria-label="Leave type legend">
                             <span><i class="dot medical"></i>Medical leave</span>
                             <span><i class="dot annual"></i>Annual leave</span>
-                            <span><i class="dot emergency"></i>Emergency leave</span>
-                            <span><i class="dot unpaid"></i>Unpaid leave</span>
+                            <span><i class="dot weekend"></i>Weekend / Holiday</span>
                         </div>
 
                         <div class="table-wrapper">
@@ -137,18 +136,26 @@
                                     <tr *ngFor="let employee of employees">
                                         <td class="text-muted text-nowrap sticky-col sticky-col-employee">
                                             <div class="d-flex align-items-center justify-content-start">
-                                                <div class="avatar me-3">{{ getInitials(employee.name) }}</div>
-                                                <div><p class="text-dark my-0">{{ employee.name }}</p><p class="fs-10 fw-300 text-muted my-0">Department · Position</p></div>
+                                                <div class="avatar me-3">{{ employee.initials }}</div>
+                                                <div><p class="text-dark my-0">{{ employee.employeeName }}</p><p class="fs-10 fw-300 text-muted my-0">{{ employee.department }} · {{ employee.position }}</p></div>
                                             </div>
                                         </td>
                                         <td class="text-muted text-nowrap sticky-col sticky-col-id">
                                             <a href="javascript:void(0)" routerLink="/workforce/employees/view">{{ employee.employeeId }}</a>
                                         </td>
                                         <td *ngFor="let day of days" class="leave-cell" [class.weekend]="day.isWeekend" [class.today]="day.isToday">
-                                            <span *ngIf="getLeave(employee.employeeId, day.dateKey) as leave"
-                                                class="leave-badge" [ngClass]="leave.typeClass" [title]="leave.leaveType">
+                                            <button *ngIf="getLeave(employee.employeeId, day.dateKey) as leave; else attended"
+                                                type="button"
+                                                class="leave-badge"
+                                                [ngClass]="leave.typeClass"
+                                                [attr.aria-label]="'View ' + leave.leaveType + ' details for ' + employee.employeeName"
+                                                [title]="leave.leaveType"
+                                                (click)="openLeaveDetails(employee, day, leave)">
                                                 {{ leave.code }}
-                                            </span>
+                                            </button>
+                                            <ng-template #attended>
+                                                <span class="attendance-badge"></span>
+                                            </ng-template>
                                         </td>
                                     </tr>
                                     <tr *ngIf="employees.length === 0">
@@ -161,3 +168,10 @@
                 </div>
             </div>
         </div>
+    </div>
+
+<app-leave-detail-dialog
+    *ngIf="selectedLeave as detail"
+    [data]="detail"
+    (closed)="selectedLeave = null">
+</app-leave-detail-dialog>
