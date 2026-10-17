@@ -8,6 +8,24 @@ export const routes: Routes = [
         .then(m => m.LoginComponent)
   },
   {
+    path: 'forgot-password',
+    loadComponent: () =>
+      import('./pages/auth/forgot-password/forgot-password.component')
+        .then(m => m.ForgotPasswordComponent)
+  },
+  {
+    path: 'verify-code',
+    loadComponent: () =>
+      import('./pages/auth/verify-code/verify-code.component')
+        .then(m => m.VerifyCodeComponent)
+  },
+  {
+    path: 'reset-password',
+    loadComponent: () =>
+      import('./pages/auth/reset-password/reset-password.component')
+        .then(m => m.ResetPasswordComponent)
+  },
+  {
     path: '',
     loadComponent: () =>
       import('./layouts/full/full.component')
