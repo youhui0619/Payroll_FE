@@ -1,0 +1,222 @@
+<div class="row justify-content-between mb-3">
+    <div class="col-sm-12">
+        <div class="d-flex align-items-center gap-2">
+            <a mat-icon-button class="d-flex justify-content-center w-auto mb-0" routerLink="/organization/departments/overview">
+                <i-tabler name="chevron-left" class="text-dark icon-16 d-flex"></i-tabler>
+            </a>
+            <p class="text-muted mb-0">Back to department overview</p>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row mx-0">
+                    <div class="col-sm-7 px-2">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-light-primary text-primary icon me-3">
+                                <i-tabler name="users"></i-tabler>
+                            </div>
+                            <div>
+                                <h4 class="my-0">{{ department.name }}</h4>
+                                <p class="fs-10 fw-300 text-muted my-2 ">{{ department.code }} . <span class="ms-2 chip bg-light-primary text-primary me-2">{{ department.status }}</span></p>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-3 px-2">
+        <div class="card">
+            <div class="card-body">
+                <div  class="d-flex align-items-center justify-content-between">
+                    <div class="summary-info">
+                        <p class="f-s-12 text-muted">Total Employees
+                        </p>
+                        <h3 class="mb-0">{{ employees.length }}</h3>
+                    </div>
+                    <div class="text-primary bg-light-primary text-end icon">
+                        <i-tabler name="users"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-3 px-2">
+        <div class="card">
+            <div class="card-body">
+                <div  class="d-flex align-items-center justify-content-between">
+                    <div class="summary-info">
+                        <p class="f-s-12 text-muted">Sub Departments
+                        </p>
+                        <h3 class="mb-0">2</h3>
+                    </div>
+                    <div class="text-primary bg-light-primary text-end icon">
+                        <i-tabler name="user-check"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-sm-12 px-2">
+         <mat-tab-group
+            mat-stretch-tabs="false"
+            mat-align-tabs="start"
+            animationDuration="0ms">
+            <mat-tab label="Details">
+                <div class="px-2 mt-3">
+                    <h4 class="text-primary">General Information</h4>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row mx-0">
+                                <div class="col-sm-4 px-2 mb-3">
+                                    <label class="text-dark fw-500">Department Code</label>
+                                    <p class="text-muted">{{ department.code }}</p>
+                                </div>
+                                <div class="col-sm-8 px-2 mb-3">
+                                    <label class="text-dark fw-500">Department Name</label>
+                                    <p class="text-muted">{{ department.name }}</p>
+                                </div>
+                                <div class="col-sm-4 px-2 mb-3">
+                                    <label class="text-dark fw-500">Head of Department</label>
+                                    <p class="text-muted">{{ departmentHeadName() }}</p>
+                                </div>
+                                <div class="col-sm-4 px-2 mb-3">
+                                    <label class="text-dark fw-500">Parent Department</label>
+                                    <p class="text-muted">{{ parentDepartmentName() }}</p>
+                                </div>
+                                <div class="col-sm-12 px-2 mb-3">
+                                    <label class="text-dark fw-500">Description</label>
+                                    <p class="text-muted">{{ department.remark }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <h4 class="text-primary">Effective Period</h4>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row mx-0">
+                                <div class="col-sm-6 px-2 mb-3">
+                                    <label class="text-dark fw-500">Effective From</label>
+                                    <p class="text-muted">{{ department.effectiveFrom | date:'d MMM y' }}</p>
+                                </div>
+                                <div class="col-sm-6 px-2 mb-3">
+                                    <label class="text-dark fw-500">Effective To</label>
+                                    <p class="text-muted">{{ department.effectiveTo ? (department.effectiveTo | date:'d MMM y') : 'No end date' }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Structure">
+                <div class="px-2 mt-3">
+                    <h4 class="text-primary">Effective Period</h4>
+                    <div class="card">
+                        <div class="card-body">
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Employees">
+                <div class="px-2 mt-3">
+                    <h4 class="text-primary">Employee List</h4>
+                    <div class="row mt-4">
+                        <div class="d-flex align-items-center flex-wrap gap-2">
+                            <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+                                <input type="text" matInput placeholder="Search..." >
+                                <span matTextPrefix class="text-muted me-2">
+                                    <i-tabler name="search" class="icon-16"></i-tabler>
+                                </span>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+                                <mat-select placeholder="Select Department" multiple>
+                                    <mat-option value="active">Active</mat-option>
+                                    <mat-option value="inactive">Inactive</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            
+                            <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+                                <mat-select placeholder="Select Status" multiple>
+                                    <mat-option value="active">Active</mat-option>
+                                    <mat-option value="inactive">Inactive</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All (100)</span>  |  Active (12)  |  Probation (10)  |  Inactive (6)</h6>
+                                <div>
+                                    <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
+                                    <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
+                                    <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <i-tabler name="download" class="icon-16"></i-tabler> Export</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="material-datatables table-responsive">
+                                <table matSort class="mat-sort table no-wrap w-100 text-left" matSort>
+                                    <thead>
+                                        <tr>
+                                            <th class="text-dark" mat-sort-header="assigned">Employee</th>
+                                            <th class="text-dark" mat-sort-header="assigned">Employee ID</th>
+                                            <th class="text-dark" mat-sort-header="status">Type</th>
+                                            <th class="text-dark" mat-sort-header="tin">TIN</th>
+                                            <th class="text-dark" mat-sort-header="kwsp">KWSP</th>
+                                            <th class="text-dark" mat-sort-header="budget">Status</th>
+                                            <th class="text-dark">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let employee of employees">
+                                            <td class="text-muted">
+                                                <div class="d-flex align-items-center justify-content-start">
+                                                    <div class="avatar me-3">{{ employee.initials }}</div>
+                                                    <div>
+                                                        <p class="text-dark my-0">{{ employee.employeeName }}</p>
+                                                        <p class="fs-10 fw-300 text-muted my-0">{{ employee.department }} · {{ employee.position }}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-muted"><a href="javascript:void(0)" routerLink="/workforce/employees/view">{{ employee.employeeId }}</a></td>
+                                            <td class="text-muted">{{ employee.employmentType }}</td>
+                                            <td class="text-muted">{{ employee.tin }}</td>
+                                            <td class="text-muted">{{ employee.kwspNo }}</td>
+                                            <td><span class="chip bg-light-primary text-primary">{{ employee.employmentStatus }}</span></td>
+                                            <td>
+                                                <button class="text-muted action-btn" mat-icon-button>
+                                                    <i-tabler name="eye"></i-tabler>
+                                                </button>
+                                                <button class="text-muted action-btn" mat-icon-button>
+                                                    <i-tabler name="edit"></i-tabler>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <mat-paginator [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>

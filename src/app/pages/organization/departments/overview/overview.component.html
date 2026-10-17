@@ -131,7 +131,7 @@
                 <td class="text-muted">{{ department.effectiveFrom | date:'dd/MM/yyyy' }}</td>
                 <td><span class="chip bg-light-primary text-primary">{{ department.status }}</span></td>
                 <td>
-                    <button class="text-muted action-btn" mat-icon-button>
+                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/organization/departments', department.id, 'view']" aria-label="View department">
                         <i-tabler name="eye"></i-tabler>
                     </button>
                     <button class="text-muted action-btn" mat-icon-button>

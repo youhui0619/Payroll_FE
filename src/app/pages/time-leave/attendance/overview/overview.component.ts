@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { RouterLink } from '@angular/router';
@@ -16,11 +16,16 @@ import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../sh
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
-export class OverviewComponent {
+export class OverviewComponent implements AfterViewInit {
   selectedLeave: LeaveDialogData | null = null;
+  @ViewChild('calendarScroller') private calendarScroller?: ElementRef<HTMLDivElement>;
   
-  constructor() {
+  constructor(private readonly changeDetector: ChangeDetectorRef) {
     this.generateCalendar();
+  }
+
+  ngAfterViewInit(): void {
+    requestAnimationFrame(() => this.scrollToTodayColumn());
   }
   currentDate = new Date();
 
@@ -179,6 +184,8 @@ export class OverviewComponent {
     );
 
     this.generateCalendar();
+    this.changeDetector.detectChanges();
+    requestAnimationFrame(() => this.scrollToFirstDayColumn());
   }
 
   setMonth(month: number): void {
@@ -188,6 +195,8 @@ export class OverviewComponent {
       1
     );
     this.generateCalendar();
+    this.changeDetector.detectChanges();
+    requestAnimationFrame(() => this.scrollToFirstDayColumn());
   }
 
   setYear(year: number): void {
@@ -197,10 +206,43 @@ export class OverviewComponent {
       1
     );
     this.generateCalendar();
+    this.changeDetector.detectChanges();
+    requestAnimationFrame(() => this.scrollToFirstDayColumn());
   }
 
   goToToday(): void {
     this.currentDate = new Date();
     this.generateCalendar();
+    this.changeDetector.detectChanges();
+    requestAnimationFrame(() => this.scrollToTodayColumn());
+  }
+
+  private scrollToTodayColumn(): void {
+    this.scrollToColumn('[data-today-column]');
+  }
+
+  private scrollToFirstDayColumn(): void {
+    this.scrollToColumn('[data-first-day-column]');
+  }
+
+  private scrollToColumn(selector: string): void {
+    const wrapper = this.calendarScroller?.nativeElement;
+    const column = wrapper?.querySelector<HTMLElement>(selector);
+    if (!wrapper || !column) return;
+
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const columnRect = column.getBoundingClientRect();
+    const stickyColumn = wrapper.querySelector<HTMLElement>('.sticky-col-id');
+    const stickyWidth = stickyColumn
+      ? stickyColumn.getBoundingClientRect().right - wrapperRect.left
+      : 370;
+    const columnContentLeft = columnRect.left - wrapperRect.left + wrapper.scrollLeft;
+    const targetScrollLeft = columnContentLeft - stickyWidth;
+    const maxScrollLeft = wrapper.scrollWidth - wrapper.clientWidth;
+
+    wrapper.scrollTo({
+      left: Math.max(0, Math.min(targetScrollLeft, maxScrollLeft)),
+      behavior: 'smooth'
+    });
   }
 }

@@ -9,7 +9,7 @@ export const departments: Department[] = [
     remark: 'Company-wide administration and leadership.',
     parentDepartmentId: null,
     headOfDepartmentId: null,
-    totalEmployees: 5,
+    totalEmployees: 1,
     effectiveFrom: '2020-01-01',
     effectiveTo: null,
     status: 'Active'
@@ -22,7 +22,7 @@ export const departments: Department[] = [
     remark: 'Accounting, payroll, and financial reporting.',
     parentDepartmentId: 'DEP-0001',
     headOfDepartmentId: 'EMP-0042',
-    totalEmployees: 18,
+    totalEmployees: 1,
     effectiveFrom: '2020-01-01',
     effectiveTo: null,
     status: 'Active'
@@ -35,7 +35,7 @@ export const departments: Department[] = [
     remark: 'Daily business and service operations.',
     parentDepartmentId: 'DEP-0001',
     headOfDepartmentId: 'EMP-0043',
-    totalEmployees: 35,
+    totalEmployees: 1,
     effectiveFrom: '2020-01-01',
     effectiveTo: null,
     status: 'Active'
@@ -48,7 +48,7 @@ export const departments: Department[] = [
     remark: 'People operations, hiring, and employee support.',
     parentDepartmentId: 'DEP-0001',
     headOfDepartmentId: 'EMP-0042',
-    totalEmployees: 8,
+    totalEmployees: 1,
     effectiveFrom: '2021-01-01',
     effectiveTo: null,
     status: 'Active'
@@ -61,7 +61,7 @@ export const departments: Department[] = [
     remark: 'Internal systems and technical support.',
     parentDepartmentId: 'DEP-0003',
     headOfDepartmentId: 'EMP-0043',
-    totalEmployees: 12,
+    totalEmployees: 1,
     effectiveFrom: '2021-01-01',
     effectiveTo: null,
     status: 'Active'
@@ -74,7 +74,7 @@ export const departments: Department[] = [
     remark: 'Customer acquisition and account management.',
     parentDepartmentId: 'DEP-0001',
     headOfDepartmentId: 'EMP-0043',
-    totalEmployees: 20,
+    totalEmployees: 1,
     effectiveFrom: '2021-01-01',
     effectiveTo: null,
     status: 'Active'
@@ -87,7 +87,7 @@ export const departments: Department[] = [
     remark: 'Brand, communications, and marketing campaigns.',
     parentDepartmentId: 'DEP-0001',
     headOfDepartmentId: 'EMP-0042',
-    totalEmployees: 12,
+    totalEmployees: 1,
     effectiveFrom: '2021-04-01',
     effectiveTo: null,
     status: 'Active'
@@ -100,7 +100,7 @@ export const departments: Department[] = [
     remark: 'Customer enquiries and after-sales support.',
     parentDepartmentId: 'DEP-0003',
     headOfDepartmentId: 'EMP-0043',
-    totalEmployees: 24,
+    totalEmployees: 1,
     effectiveFrom: '2022-01-01',
     effectiveTo: null,
     status: 'Active'
@@ -113,7 +113,7 @@ export const departments: Department[] = [
     remark: 'Supplier sourcing and purchasing operations.',
     parentDepartmentId: 'DEP-0003',
     headOfDepartmentId: 'EMP-0043',
-    totalEmployees: 9,
+    totalEmployees: 1,
     effectiveFrom: '2022-01-01',
     effectiveTo: null,
     status: 'Active'
@@ -126,7 +126,7 @@ export const departments: Department[] = [
     remark: 'Legal affairs, governance, and regulatory compliance.',
     parentDepartmentId: 'DEP-0001',
     headOfDepartmentId: 'EMP-0042',
-    totalEmployees: 4,
+    totalEmployees: 1,
     effectiveFrom: '2022-06-01',
     effectiveTo: null,
     status: 'Active'

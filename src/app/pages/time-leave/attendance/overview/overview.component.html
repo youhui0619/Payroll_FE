@@ -120,13 +120,13 @@
                             <span><i class="dot weekend"></i>Weekend / Holiday</span>
                         </div>
 
-                        <div class="table-wrapper">
+                        <div class="table-wrapper" #calendarScroller>
                             <table class="leave-table">
                                 <thead>
                                     <tr>
                                         <th class="text-dark text-nowrap sticky-col sticky-col-employee">Employee</th>
                                         <th class="text-dark text-nowrap sticky-col sticky-col-id">Employee ID</th>
-                                        <th *ngFor="let day of days" class="day-column" [class.weekend]="day.isWeekend" [class.today]="day.isToday">
+                                        <th *ngFor="let day of days" class="day-column" [class.weekend]="day.isWeekend" [class.today]="day.isToday" [attr.data-today-column]="day.isToday ? '' : null" [attr.data-first-day-column]="day.date === 1 ? '' : null">
                                             {{ day.date }}
                                             <small>{{ day.dayName }}</small>
                                         </th>
