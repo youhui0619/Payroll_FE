@@ -1,15 +1,54 @@
-<div class="container">
-    <div class="row">
-        <div class="col-sm-8">
-            
-        </div>
-        <div class="col-sm-4 my-auto">
-            <div class="card">
-                <div class="card-body">
-                    <h3>Login</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-                </div>
-            </div>
-        </div>
+<div class="login-page">
+  <div class="login-intro">
+    <div class="brand-mark">P</div>
+    <div>
+      <p class="eyebrow">HR & PAYROLL MANAGEMENT</p>
+      <h1>Your people. Your business. In sync.</h1>
+      <p class="intro-copy">Manage your workforce, streamline payroll, and keep every employee moving forward.</p>
     </div>
+    <span class="intro-footer">A clearer view of your people and payroll.</span>
+  </div>
+
+  <div class="login-content">
+    <div class="login-card">
+      <div class="card-body">
+        <p class="welcome-label">WELCOME BACK</p>
+        <h2>Welcome to your workspace</h2>
+        <p class="login-description">Sign in to manage your employees, payroll, leave, and HR operations.</p>
+
+        <form class="login-form">
+          <mat-label class="form-label" for="email">Email address <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input login-field">
+            <input matInput id="email" name="email" type="email" placeholder="Enter email address" required>
+          </mat-form-field>
+
+          <mat-label class="form-label" for="password">Password <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input login-field">
+            <input matInput id="password" name="password" [type]="hidePassword ? 'password' : 'text'" placeholder="Enter password" autocomplete="current-password" required>
+            <button
+              type="button"
+              mat-icon-button
+              matSuffix
+              class="toggle-password"
+              (click)="togglePasswordVisibility()"
+              [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
+              [attr.aria-pressed]="!hidePassword">
+              <i-tabler [name]="hidePassword ? 'eye' : 'eye-off'"></i-tabler>
+            </button>
+          </mat-form-field>
+
+          <div class="form-options">
+            <label class="remember-option">
+              <input type="checkbox" name="remember">
+              <span>Remember me</span>
+            </label>
+            <a href="#" (click)="$event.preventDefault()">Forgot password?</a>
+          </div>
+
+          <button mat-flat-button color="primary" class="sign-in-button" type="submit">Sign in</button>
+        </form>
+      </div>
+    </div>
+    <p class="support-copy">Need help signing in? Contact your administrator.</p>
+  </div>
 </div>
