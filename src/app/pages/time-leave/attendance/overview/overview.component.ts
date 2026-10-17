@@ -7,6 +7,7 @@ import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { CalendarDay, LeaveRecord } from '../../../../models/leave.model';
 import type { EmployeeRecord } from '../../../../models/employee.model';
 import { employees as employeeDirectory } from '../../../../data/employees';
+import { attendanceRecords } from '../../../../data/attendance';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
 
 @Component({
@@ -34,41 +35,7 @@ export class OverviewComponent implements AfterViewInit {
 
   employees: EmployeeRecord[] = employeeDirectory;
 
-  leaveRecords: LeaveRecord[] = [
-    {
-      employeeId: 'EMP-0042',
-      startDate: '2026-10-14',
-      endDate: '2026-10-14',
-      leaveType: 'Medical Leave',
-      code: 'MC',
-      typeClass: 'medical',
-      status: 'Approved',
-      reason: 'Recovering from a seasonal illness.',
-      approval: { approver: 'Farah Rahman', status: 'Approved', comments: 'Medical certificate received and verified.', approvedDate: '2026-10-13' }
-    },
-    {
-      employeeId: 'EMP-0043',
-      startDate: '2026-10-15',
-      endDate: '2026-10-16',
-      leaveType: 'Annual Leave',
-      code: 'AL',
-      typeClass: 'annual',
-      status: 'Approved',
-      reason: 'Family vacation.',
-      approval: { approver: 'Farah Rahman', status: 'Approved', comments: 'Approved as requested.', approvedDate: '2026-10-10' }
-    },
-    {
-      employeeId: 'EMP-0042',
-      startDate: '2026-10-16',
-      endDate: '2026-10-16',
-      leaveType: 'Emergency Leave',
-      code: 'EL',
-      typeClass: 'emergency',
-      status: 'Pending',
-      reason: 'Urgent family matter.',
-      approval: { approver: 'Pending assignment', status: 'Pending', comments: 'Awaiting manager review.', approvedDate: null }
-    }
-  ];
+  readonly leaveRecords: LeaveRecord[] = attendanceRecords;
 
   readonly months = [
     { value: 1, label: 'January' },

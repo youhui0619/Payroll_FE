@@ -1,0 +1,89 @@
+.fc-monarch,
+:root {
+  --fc-monarch-primary: var(--primary);
+  --fc-monarch-primary-foreground: #ffffff;
+  --fc-monarch-primary-over: #066b65;
+  --fc-monarch-primary-down: #055852;
+  --fc-monarch-event: var(--primary);
+  --fc-monarch-event-contrast: #ffffff;
+  --fc-monarch-highlight: var(--light-primary);
+  --fc-monarch-selected: var(--primary);
+  --fc-monarch-selected-foreground: #ffffff;
+  --fc-monarch-selected-over: #066b65;
+  --fc-monarch-selected-down: #055852;
+  --fc-monarch-tertiary: var(--primary);
+  --fc-monarch-tertiary-foreground: #ffffff;
+  --fc-monarch-tertiary-over: #066b65;
+  --fc-monarch-tertiary-down: #055852;
+  --fc-monarch-outline: var(--primary);
+}
+
+.fc-monarch-4os {
+  background-color: var(--primary) !important;
+}
+
+.employee-calendar {
+  --fc-button-bg-color: var(--primary);
+  --fc-button-border-color: var(--primary);
+  --fc-button-hover-bg-color: #066b65;
+  --fc-button-hover-border-color: #066b65;
+  --fc-button-active-bg-color: #066b65;
+  --fc-button-active-border-color: #066b65;
+  --fc-event-bg-color: var(--primary);
+  --fc-event-border-color: var(--primary);
+  --fc-event-text-color: #ffffff;
+  --fc-today-bg-color: var(--light-primary);
+}
+
+.employee-calendar .fc-button-primary {
+  background-color: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+.employee-calendar .fc-button-primary:hover,
+.employee-calendar .fc-button-primary:focus,
+.employee-calendar .fc-button-primary:not(:disabled).fc-button-active {
+  background-color: #066b65 !important;
+  border-color: #066b65 !important;
+}
+
+
+.employee-calendar .fc-event.leave-annual {
+  background-color: var(--light-warning) !important;
+  border-color: var(--light-warning) !important;
+  color: var(--warning) !important;
+}
+
+.employee-calendar .fc-event.leave-annual .fc-event-main {
+  color: var(--warning) !important;
+}
+
+.employee-calendar .fc-event.leave-medical {
+  background-color: var(--light-danger) !important;
+  border-color: var(--light-danger) !important;
+  color: var(--danger) !important;
+}
+
+.employee-calendar .fc-event.leave-medical .fc-event-main {
+  color: var(--danger) !important;
+}
+
+.employee-calendar .fc-event.leave-emergency {
+  background-color: #fef3c7 !important;
+  border-color: #fef3c7 !important;
+  color: #92400e !important;
+}
+
+.employee-calendar .fc-event.leave-emergency .fc-event-main {
+  color: #92400e !important;
+}
+
+.employee-calendar .fc-event.leave-unpaid {
+  background-color: var(--light-secondary) !important;
+  border-color: var(--light-secondary) !important;
+  color: var(--secondary) !important;
+}
+
+.employee-calendar .fc-event.leave-unpaid .fc-event-main {
+  color: var(--secondary) !important;
+}

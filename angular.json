@@ -38,9 +38,10 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/ngx-toastr/toastr.css",
               "src/styles/color.scss",
-              "src/styles.scss",
               "src/styles/input.scss",
-              "src/styles/button.scss"
+              "src/styles/button.scss",
+              "src/styles.scss",
+              "src/styles/fullCalendar.scss"
             ],
             "scripts": []
           },
@@ -107,7 +108,8 @@
               "src/styles/color.scss",
               "src/styles.scss",
               "src/styles/input.scss",
-              "src/styles/button.scss"
+              "src/styles/button.scss",
+              "src/styles/fullCalendar.scss"
             ],
             "scripts": []
           }

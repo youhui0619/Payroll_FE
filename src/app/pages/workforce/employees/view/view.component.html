@@ -8,8 +8,6 @@
         </div>
     </div>
 </div>
-
-
 <div class="row">
     <div class="col-sm-12">
         <div class="card">
@@ -37,6 +35,11 @@
         </div>
     </div>
 </div>
+<app-leave-detail-dialog
+    *ngIf="selectedLeave as leave"
+    [data]="leave"
+    (closed)="selectedLeave = null">
+</app-leave-detail-dialog>
 
 @if(selectedTabIndex === 3){
     <div class="row">
@@ -465,102 +468,148 @@
             </mat-tab>
             <mat-tab label="Leave">
                 <div class="px-2 mt-3">
-                   <div class="row mx-0">
-                            <div class="col-sm-7 px-2">
-                                <h4 class="text-primary my-0">Leave Application</h4>
-                                <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
-                            </div>
-
-                            <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
-                                <button mat-flat-button color="primary" class="ms-2">
-                                    <i-tabler name="edit"></i-tabler>
-                                    Edit
-                                </button>
+                    <div class="row mx-0 mb-3">
+                        <div class="col-sm-7 px-2">
+                            <h4 class="text-primary my-0">Leave Records</h4>
+                            <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
+                        </div>
+                        <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
+                            <button mat-flat-button color="primary" class="ms-2">
+                                <i-tabler name="plus"></i-tabler>
+                                Add Leave
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row mx-0">
+                        <div class="col-sm-12 px-2">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                        <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All ({{ leaveRequests.length }})</span>  |  Annual Leave ({{ leaveCount('Annual Leave') }})  |  Medical Leave ({{ leaveCount('Medical Leave') }})  |  Unpaid Leave ({{ leaveCount('Unpaid Leave') }})</h6>
+                                        <div>
+                                            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
+                                            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
+                                            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="download" class="icon-16"></i-tabler> Export</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="material-datatables table-responsive">
+                                        <table matSort class="mat-sort table no-wrap w-100 text-left leave-balance-table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-dark">Leave Type / Ref</th>
+                                                    <th class="text-dark">Date</th>
+                                                    <th class="text-dark">Days Taken</th>
+                                                    <th class="text-dark">Status</th>
+                                                    <th class="text-dark">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let leave of leaveRequests">
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <div [class]="leave.iconClass + ' text-end icon me-3'">
+                                                                <i-tabler name="transfer"></i-tabler>
+                                                            </div>
+                                                            <div>
+                                                                <p class="text-dark fw-500 my-0">{{ leave.leaveType }}</p>
+                                                                <p class="fs-10 fw-300 text-muted my-0">{{ leave.reference }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-muted">{{ leave.dateRange }}</td>
+                                                    <td class="text-muted">{{ leave.daysTaken }}</td>
+                                                    <td class="text-muted"><span class="chip" [ngClass]="leave.statusClass">{{ leave.status }}</span></td>
+                                                    <td class="text-muted">
+                                                        <button type="button" class="text-muted action-btn" mat-icon-button (click)="openLeaveRequestDetails(leave)">
+                                                            <i-tabler name="eye"></i-tabler>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    </div>
                 </div>
             </mat-tab>
             <mat-tab label="Claim">
                 <div class="px-2 mt-3">
-                   <div class="row mx-0">
-                        <div class="col-sm-12 px-2 mb-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h4 class="text-primary my-0">Employee claims</h4>
-                                <button mat-flat-button color="primary" class="ms-2">
-                                    <i-tabler name="plus"></i-tabler>
-                                    New Claim
-                                </button>
-                            </div>
-                        </div>
-                        <!-- <div class="col-sm-7 px-2">
+                    <div class="row mx-0 mb-3">
+                        <div class="col-sm-7 px-2">
                             <h4 class="text-primary my-0">Employee claims</h4>
-                            <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
-                                <mat-date-range-input [rangePicker]="rangePicker">
-                                    <input matStartDate placeholder="Start date">
-                                    <input matEndDate placeholder="End date">
-                                </mat-date-range-input>
-                                <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
-                                <mat-date-range-picker #rangePicker></mat-date-range-picker>
-                            </mat-form-field>
+                            <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
                         </div>
-
                         <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
                             <button mat-flat-button color="primary" class="ms-2">
                                 <i-tabler name="plus"></i-tabler>
                                 New Claim
                             </button>
-                        </div> -->
+                        </div>
                     </div>
-                   <div class="row mx-0">
-                    <div class="col-sm-12 px-2">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="claim-box d-flex align-items-center justify-content-between py-3">
-                                    <div class="d-flex align-items-center">
-                                        <span class="icon bg-light-primary text-primary">
-                                            <i-tabler name="burger"></i-tabler>
-                                        </span>
-                                        <div class="ms-3">
-                                            <h4 class="my-0">Meals </h4>
-                                            <p class="text-muted my-0 fs-12">Client lunch · 12/12/2024</p>
-                                        </div>
-                                    </div>
-                                    <div class="text-end">
-                                        <span class="chip bg-light-info text-info">Pending</span>
-                                        <div class="d-flex align-items-center mt-2">
-                                        <h4 class="my-0">RM 120.00</h4>
-                                            <button class="text-muted action-btn mt-0" mat-icon-button>
-                                                <i-tabler name="download"></i-tabler>
-                                            </button>
+                    <div class="row mx-0">
+                        <div class="col-sm-12 px-2">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                        <h6 class="fs-14 fw-400 text-muted my-0">
+                                            <span class="fw-550 text-primary">All ({{ claimRequests.length }})</span>
+                                            | Approved ({{ claimCount('Approved') }})
+                                            | Pending ({{ claimCount('Pending') }})
+                                            | Rejected ({{ claimCount('Rejected') }})
+                                        </h6>
+                                        <div>
+                                            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
+                                            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
+                                            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="download" class="icon-16"></i-tabler> Export</button>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="claim-box d-flex align-items-center justify-content-between py-3">
-                                    <div class="d-flex align-items-center">
-                                        <span class="icon bg-light-primary text-primary">
-                                            <i-tabler name="burger"></i-tabler>
-                                        </span>
-                                        <div class="ms-3">
-                                            <h4 class="my-0">Meals </h4>
-                                            <p class="text-muted my-0 fs-12">Client lunch · 12/12/2024</p>
-                                        </div>
-                                    </div>
-                                    <div class="text-end">
-                                        <span class="chip bg-light-info text-info">Pending</span>
-                                        <div class="d-flex align-items-center mt-2">
-                                        <h4 class="my-0">RM 120.00</h4>
-                                            <button class="text-muted action-btn mt-0" mat-icon-button>
-                                                <i-tabler name="download"></i-tabler>
-                                            </button>
-                                        </div>
+                                <div class="card-body">
+                                    <div class="material-datatables table-responsive">
+                                        <table matSort class="mat-sort table no-wrap w-100 text-left leave-balance-table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-dark">Claim Type / Description</th>
+                                                    <th class="text-dark">Date</th>
+                                                    <th class="text-dark">Amount</th>
+                                                    <th class="text-dark">Status</th>
+                                                    <th class="text-dark">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let claim of claimRequests">
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="text-primary bg-light-primary text-end icon me-3">
+                                                                <i-tabler name="receipt"></i-tabler>
+                                                            </div>
+                                                            <div>
+                                                                <p class="text-dark fw-500 my-0">{{ claim.type }}</p>
+                                                                <p class="fs-10 fw-300 text-muted my-0">{{ claim.reference }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-muted">{{ claim.date }}</td>
+                                                    <td class="text-muted">RM {{ claim.amount | number:'1.2-2' }}</td>
+                                                    <td class="text-muted"><span class="chip" [ngClass]="claim.statusClass">{{ claim.status }}</span></td>
+                                                    <td class="text-muted">
+                                                        <button type="button" class="text-muted action-btn" mat-icon-button>
+                                                            <i-tabler name="eye"></i-tabler>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             </mat-tab>
 
             <mat-tab label="Documentations">

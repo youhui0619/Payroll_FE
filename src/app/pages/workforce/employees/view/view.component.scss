@@ -50,23 +50,21 @@
 
 .no-border-calendar {
   /* Remove all borders from day cells */
-.fc .fc-daygrid-day, 
-.fc .fc-daygrid-day-top {
-  border: none !important;
-}
+  .fc .fc-daygrid-day,
+  .fc .fc-daygrid-day-top {
+    border: none !important;
+  }
 
-/* Optional: remove border between weeks */
-.fc .fc-daygrid-body {
-  border-collapse: collapse !important;
-}
+  /* Optional: remove border between weeks */
+  .fc .fc-daygrid-body {
+    border-collapse: collapse !important;
+  }
 
-/* Remove event borders just in case */
-.fc-event {
-  border: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
+  /* Remove event borders just in case */
+  .fc-event {
+    border: none !important;
+    box-shadow: none !important;
+  }
 }
 
 .claim-box{
