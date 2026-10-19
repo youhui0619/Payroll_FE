@@ -86,7 +86,10 @@ export interface EmployeeTaxInformation {
 }
 
 export interface EmployeeLeaveInformation {
-  agreeWithTerms: boolean | null;
+  annualLeaveEntitlement: number | null;
+  annualLeavePeriod: 'month' | 'year';
+  medicalLeaveEntitlement: number | null;
+  medicalLeavePeriod: 'month' | 'year';
 }
 
 export interface EmployeeEmergencyContact {
@@ -156,7 +159,10 @@ export const EMPTY_EMPLOYEE_FORM_DATA: EmployeeFormData = {
     agreeWithTerms: false,
   },
   leave: {
-    agreeWithTerms: false,
+    annualLeaveEntitlement: null,
+    annualLeavePeriod: 'year',
+    medicalLeaveEntitlement: null,
+    medicalLeavePeriod: 'year',
   },
   emergencyContact: {
     contactName: '',

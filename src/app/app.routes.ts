@@ -66,6 +66,12 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./pages/organization/organization.routes')
             .then(m => m.ORGANIZATION_ROUTES)
+      },
+      {
+        path: 'settings',
+        loadChildren: () =>
+          import('./pages/settings/settings.routes')
+            .then(m => m.SETTINGS_ROUTES)
       }
     ]
   },

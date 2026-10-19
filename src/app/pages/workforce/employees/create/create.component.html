@@ -483,7 +483,6 @@
                                                                                             <div class="card">
                                                                                                 <div class="card-body">
                                                                                                     <div class="row">
-
                                                                                                         <div class="col-sm-6 px-2">
                                                                                                             <mat-label class="form-label">EPF Employee No.
                                                                                                                 <span class="text-danger">
@@ -563,14 +562,85 @@
                                                                                                 </mat-step>
                                                                                                 <mat-step formGroupName="leave">
                                                                                                     <ng-template matStepLabel>Leave</ng-template>
-                                                                                                    <h4 class="mat-headline-6 mt-6">Terms and condition</h4>
-                                                                                                    <p class="mt-2 text-sm">
-                                                                                                        Sard about this site or you have been to it, but you cannot figure out what it
-                                                                                                        is or what it can do. MTA web directory isSard about this site or you have been
-                                                                                                        to it, but you cannot figure out what it is or what it can do. MTA web directory
-                                                                                                        is
-                                                                                                    </p>
-                                                                                                    <mat-checkbox color="primary" formControlName="agreeWithTerms">Agree with terms?</mat-checkbox>
+                                                                                                     <h4 class="text-primary">Leave Entitlements</h4>
+                                                                                                    <div class="card">
+                                                                                                        <div class="card-body">
+                                                                                                            <div class="row">
+                                                                                                                <div class="col-sm-6 px-2">
+                                                                                                                    <mat-label class="form-label">Annual Leave Entitlement
+                                                                                                                        <span class="text-danger">
+                                                                                                                            *</span>
+                                                                                                                    </mat-label>
+                                                                                                                    <div class="d-flex gap-2">
+                                                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                            <input type="number" min="0" matInput placeholder="Enter Annual Leave Entitlement" formControlName="annualLeaveEntitlement">
+                                                                                                                            <mat-error class="text-danger">Annual Leave Entitlement No. is required</mat-error>
+                                                                                                                        </mat-form-field>
+                                                                                                                        <mat-form-field appearance="outline" class="form-input">
+                                                                                                                            <mat-select placeholder="Select period" formControlName="annualLeavePeriod">
+                                                                                                                                <mat-option value="month">per Month</mat-option>
+                                                                                                                                <mat-option value="year">per Year</mat-option>
+                                                                                                                            </mat-select>
+                                                                                                                        </mat-form-field>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <div class="col-sm-6 px-2">
+                                                                                                                    <mat-label class="form-label">Medical Leave Entitlement
+                                                                                                                        <span class="text-danger">
+                                                                                                                            *</span>
+                                                                                                                    </mat-label>
+                                                                                                                    <div class="d-flex gap-2">
+                                                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
+                                                                                                                            <input type="number" min="0" matInput placeholder="Enter Medical Leave Entitlement" formControlName="medicalLeaveEntitlement">
+                                                                                                                            <mat-error class="text-danger">Medical Leave Entitlement No. is required</mat-error>
+                                                                                                                        </mat-form-field>
+                                                                                                                        <mat-form-field appearance="outline" class="form-input">
+                                                                                                                            <mat-select placeholder="Select period" formControlName="medicalLeavePeriod">
+                                                                                                                                <mat-option value="month">per Month</mat-option>
+                                                                                                                                <mat-option value="year">per Year</mat-option>
+                                                                                                                            </mat-select>
+                                                                                                                        </mat-form-field>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                     <h4 class="text-primary">Leave Summary</h4>
+                                                                                                    <div class="card">
+                                                                                                        <div class="card-body">
+                                                                                                            <div class="row">
+                                                                                                                <div class="col-sm-12 px-2">
+                                                                                                                    <p class="mb-3">Leave year: {{ leaveYear }}</p>
+                                                                                                                     <div class="table-responsive">
+                                                                                                                        <table class="table no-wrap w-100 text-left">
+                                                                                                                            <thead>
+                                                                                                                            <tr>
+                                                                                                                                <th class="text-dark">Leave type</th>
+                                                                                                                                <th class="text-dark">Entitlement</th>
+                                                                                                                                <th class="text-dark">Total Balance</th>
+                                                                                                                            </tr>
+                                                                                                                            </thead>
+                                                                                                                            <tbody>
+                                                                                                                                <tr>
+                                                                                                                                    <td class="text-muted">Annual Leave</td>
+                                                                                                                                    <td class="text-muted">{{ employeeForm.controls.leave.controls.annualLeaveEntitlement.value ?? 0 }} days / {{ employeeForm.controls.leave.controls.annualLeavePeriod.value }}</td>
+                                                                                                                                    <td class="text-primary fw-550">{{ annualLeaveYearlyEntitlement }} days</td>
+                                                                                                                                </tr>
+
+                                                                                                                                <tr>
+                                                                                                                                    <td class="text-muted">Medical Leave</td>
+                                                                                                                                    <td class="text-muted">{{ employeeForm.controls.leave.controls.medicalLeaveEntitlement.value ?? 0 }} days / {{ employeeForm.controls.leave.controls.medicalLeavePeriod.value }}</td>
+                                                                                                                                    <td class="text-primary fw-550">{{ medicalLeaveYearlyEntitlement }} days</td>
+                                                                                                                                </tr>
+                                                                                                                            </tbody>
+                                                                                                                        </table>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+
                                                                                                     <div class="d-flex align-items-center justify-content-end gap-3">
                                                                                                         <button mat-flat-button color="primary-outline" type="button" matStepperPrevious>
                                                                                                             <i-tabler name="arrow-left"></i-tabler>Back

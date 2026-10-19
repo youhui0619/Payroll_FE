@@ -1,0 +1,144 @@
+<div class="row justify-content-between my-4">
+    <div class="col-sm-7">
+        <h3 class="text-dark my-0">Public Holidays</h3>
+        <p class="fw-300 text-muted mb-0">Manage company departments and organizational structure.</p>
+    </div>
+
+    <div class="col-sm-5 d-flex align-items-center justify-content-end">
+        <button mat-flat-button color="primary" class="ms-2" routerLink="/organization/departments/create">
+            <i-tabler name="plus"></i-tabler>
+            Create Holidays
+        </button>
+    </div>
+</div>
+
+<div class="row my-4">
+    <div class="col-sm-3 px-2">
+        <div class="card">
+            <div class="card-body">
+                <div  class="d-flex align-items-center justify-content-between">
+                    <div class="summary-info">
+                        <p class="f-s-12 text-muted">Total Holidays
+                        </p>
+                        <h3 class="mb-0">{{ holidays.length }}</h3>
+                    </div>
+                    <div class="text-primary bg-light-primary text-end icon">
+                        <i-tabler name="users"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-3 px-2">
+        <div class="card">
+            <div class="card-body">
+                <div  class="d-flex align-items-center justify-content-between">
+                    <div class="summary-info">
+                        <p class="f-s-12 text-muted">Upcoming
+                        </p>
+                        <h3 class="mb-0">{{ upcomingHolidayCount }}</h3>
+                    </div>
+                    <div class="text-primary bg-light-primary text-end icon">
+                        <i-tabler name="user-check"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row mt-4">
+    <div class="d-flex align-items-center flex-wrap gap-2">
+        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+            <input type="text" matInput placeholder="Search..." [value]="searchTerm" (input)="searchTerm = $any($event.target).value">
+            <span matTextPrefix class="text-muted me-2">
+                <i-tabler name="search" class="icon-16"></i-tabler>
+            </span>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+            <mat-select placeholder="Year" [value]="selectedYear" (selectionChange)="selectedYear = $event.value">
+                <mat-option value="">All years</mat-option>
+                <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+            <mat-select placeholder="Holiday Scope" [value]="selectedScope" (selectionChange)="selectedScope = $event.value">
+                <mat-option value="">All scopes</mat-option>
+                <mat-option value="National">National</mat-option>
+                <mat-option value="State">State</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+            <mat-select placeholder="Status" [value]="selectedStatus" (selectionChange)="selectedStatus = $event.value">
+                <mat-option value="">All statuses</mat-option>
+                <mat-option value="Active">Active</mat-option>
+                <mat-option value="Inactive">Inactive</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-sm-12 px-2">
+    <div class="card">
+        <div class="card-header">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+              <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All ({{ filteredHolidays.length }})</span>  |  Active ({{ activeHolidayCount }})  |  Inactive ({{ inactiveHolidayCount }})</h6>
+              <div>
+                  <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2" type="button" (click)="clearFilters()"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
+                  <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
+                  <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <i-tabler name="download" class="icon-16"></i-tabler> Export</button>
+              </div>
+          </div>
+        </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table no-wrap w-100 text-left">
+            <thead>
+              <tr>
+                
+                <th class="text-dark">Holiday Name</th>
+                <th class="text-dark">Date</th>
+                <th class="text-dark">Day</th>
+                <th class="text-dark">Scope</th>
+                <th class="text-dark">State / Region</th>
+                <th class="text-dark">Status</th>
+                <th class="text-dark">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let holiday of filteredHolidays">
+                    <td class="text-muted">
+                        <p>{{ holiday.name }}</p>
+                        <p class="fs-10 fw-300 my-0">{{ holiday.id }}</p>
+                    </td>
+                    <td class="text-muted">{{ holiday.date }}</td>
+                    <td class="text-muted">{{ holiday.day }}</td>
+                    <td class="text-muted">
+                        <span class="chip text-info bg-light-info">{{ holiday.scope }}</span>
+                    </td>
+                    <td class="text-muted" [attr.title]="getHolidayRegionTitle(holiday)">{{ getHolidayRegionLabel(holiday) }}</td>
+                    <td class="text-muted">
+                        <span class="chip" [ngClass]="holiday.status === 'Active' ? 'text-primary bg-light-primary' : 'text-muted bg-light-secondary'">{{ holiday.status }}</span>
+                    </td>
+                    <td>
+                        <button class="text-muted action-btn" mat-icon-button>
+                            <i-tabler name="eye"></i-tabler>
+                        </button>
+                        <button class="text-muted action-btn" mat-icon-button>
+                            <i-tabler name="edit"></i-tabler>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

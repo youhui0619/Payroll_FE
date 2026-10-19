@@ -44,6 +44,18 @@ export interface EmployeeLeaveBalance {
   balance: number;
 }
 
+export type LeaveEntitlementPeriod = 'month' | 'year';
+
+export interface LeaveEntitlement {
+  amount: number | null;
+  period: LeaveEntitlementPeriod;
+}
+
+export interface EmployeeLeaveEntitlements {
+  annual: LeaveEntitlement;
+  medical: LeaveEntitlement;
+}
+
 export interface EmployeeLeaveBalances {
   annual: EmployeeLeaveBalance;
   medical: EmployeeLeaveBalance;

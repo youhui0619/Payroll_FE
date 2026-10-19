@@ -36,7 +36,7 @@ export class SidebarComponent implements OnInit, OnChanges {
   openMap: Record<number, boolean> = {};
   private defaultMenu: MenuItem[] = [
     { header: 'Dashboard' },
-    { label: 'Dashboard', icon: 'ant-design:dashboard-outlined', route: '/dashboard', badge: 1 },
+    { label: 'Dashboard', icon: 'ant-design:dashboard-outlined', route: '/dashboard', badge: 10 },
     
     
     { header: 'Workforce' },
@@ -72,7 +72,7 @@ export class SidebarComponent implements OnInit, OnChanges {
         { label: 'Overview', icon: 'codex:dot-circle', route: '/payroll/overview' },
        ]
     },
-    { label: 'Payslips List', icon: 'ant-design:shop-outlined', route: '/warehouses/list' },
+    { label: 'Payslips List', icon: 'ant-design:shop-outlined', route: '/warehouses/list', badge: 10 },
     { label: 'Tax & PCB', icon: 'akar-icons:shipping-box-01', children: [
         { label: 'PCB Calculation', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
         { label: 'PCB Records', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
@@ -81,30 +81,30 @@ export class SidebarComponent implements OnInit, OnChanges {
     },
 
     { header: 'Statutory' },
-    { label: 'EPF', icon: 'ant-design:shop-outlined', route: '/warehouses/list' },
-    { label: 'SOCSO', icon: 'ant-design:shop-outlined', route: '/warehouses/list' },
-    { label: 'LHDN', icon: 'ant-design:shop-outlined', route: '/warehouses/list' },
+    { label: 'EPF', icon: 'ant-design:shop-outlined', route: '/warehouses/list', badge: 10 },
+    { label: 'SOCSO', icon: 'ant-design:shop-outlined', route: '/warehouses/list', badge: 10 },
+    { label: 'LHDN', icon: 'ant-design:shop-outlined', route: '/warehouses/list', badge: 10 },
     
     
     { header: 'Reports' },
-    { label: 'Payroll Reports', icon: 'ant-design:shop-outlined', route: '/warehouses/list' },
-    { label: 'Attendance Reports', icon: 'ant-design:shop-outlined', route: '/warehouses/list' },
-    { label: 'Leave Reports', icon: 'ant-design:shop-outlined', route: '/warehouses/list' },
-    { label: 'Statutory Reports', icon: 'ant-design:shop-outlined', route: '/warehouses/list' },
+    { label: 'Payroll Reports', icon: 'ant-design:shop-outlined', route: '/warehouses/list', badge: 10 },
+    { label: 'Attendance Reports', icon: 'ant-design:shop-outlined', route: '/warehouses/list', badge: 10},
+    { label: 'Leave Reports', icon: 'ant-design:shop-outlined', route: '/warehouses/list', badge: 10 },
+    { label: 'Statutory Reports', icon: 'ant-design:shop-outlined', route: '/warehouses/list', badge: 10 },
     
 
     { header: 'Setting' },
     { label: 'Company', icon: 'solar:magnifer-line-duotone', children: [
         { label: 'Company Profile', icon: 'codex:dot-circle', route: '/roles', badge: 10 },
-        { label: 'Work Schedule', icon: 'codex:dot-circle', route: '/roles/create' },
-        { label: 'Public Holidays', icon: 'codex:dot-circle', route: '/roles/create' },
-        { label: 'Leave Settings', icon: 'codex:dot-circle', route: '/roles/create' },
-        { label: 'Payroll Settings', icon: 'codex:dot-circle', route: '/roles/create' }
+        { label: 'Work Schedule', icon: 'codex:dot-circle', route: '/roles/create', badge: 10 },
+        { label: 'Public Holidays', icon: 'codex:dot-circle', route: '/settings/public-holidays/list' },
+        { label: 'Leave Settings', icon: 'codex:dot-circle', route: '/roles/create', badge: 10 },
+        { label: 'Payroll Settings', icon: 'codex:dot-circle', route: '/roles/create', badge: 10 }
       ] 
     },
     { label: 'Access Control', icon: 'solar:magnifer-line-duotone', children: [
         { label: 'Users', icon: 'codex:dot-circle', route: '/roles', badge: 10 },
-        { label: 'Roles & Permissions', icon: 'codex:dot-circle', route: '/roles/create' },
+        { label: 'Roles & Permissions', icon: 'codex:dot-circle', route: '/roles/create', badge: 10 },
       ] 
     }
   ];

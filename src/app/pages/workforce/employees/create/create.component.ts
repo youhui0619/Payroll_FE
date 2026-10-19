@@ -5,6 +5,8 @@ import { MaterialImports, MaterialProviders } from '../../../../shared/material-
 import { RouterLink } from '@angular/router';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
+import { defaultLeaveEntitlements } from '../../../../data/leave-balances';
+import type { LeaveEntitlementPeriod } from '../../../../models/leave.model';
 
 
 @Component({
@@ -62,7 +64,10 @@ export class CreateComponent {
       agreeWithTerms: new FormControl(false),
     }),
     leave: new FormGroup({
-      agreeWithTerms: new FormControl(false),
+      annualLeaveEntitlement: new FormControl<number | null>(defaultLeaveEntitlements.annual.amount),
+      annualLeavePeriod: new FormControl<LeaveEntitlementPeriod>(defaultLeaveEntitlements.annual.period, { nonNullable: true }),
+      medicalLeaveEntitlement: new FormControl<number | null>(defaultLeaveEntitlements.medical.amount),
+      medicalLeavePeriod: new FormControl<LeaveEntitlementPeriod>(defaultLeaveEntitlements.medical.period, { nonNullable: true }),
     }),
     emergencyContact: new FormGroup({
       contactName: new FormControl(''),
@@ -76,6 +81,27 @@ export class CreateComponent {
       country: new FormControl(''),
     }),
   });
+
+  readonly leaveYear = new Date().getFullYear();
+
+  get annualLeaveYearlyEntitlement(): number {
+    return this.toYearlyEntitlement(
+      this.employeeForm.controls.leave.controls.annualLeaveEntitlement.value,
+      this.employeeForm.controls.leave.controls.annualLeavePeriod.value
+    );
+  }
+
+  get medicalLeaveYearlyEntitlement(): number {
+    return this.toYearlyEntitlement(
+      this.employeeForm.controls.leave.controls.medicalLeaveEntitlement.value,
+      this.employeeForm.controls.leave.controls.medicalLeavePeriod.value
+    );
+  }
+
+  private toYearlyEntitlement(amount: number | null, period: LeaveEntitlementPeriod): number {
+    if (amount === null || !Number.isFinite(amount)) return 0;
+    return Math.max(0, amount) * (period === 'month' ? 12 : 1);
+  }
 
   onSubmit(): void {
     console.log('form.value', this.employeeForm.value);
