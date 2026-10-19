@@ -3,6 +3,8 @@ import { ListComponent as PublicHolidayListComponent } from './public-holidays/l
 import { CreateComponent as PublicHolidayCreateComponent } from './public-holidays/create/create.component';
 import { ProfileComponent as CompanyProfileComponent } from './company/profile/profile.component';
 import { ViewComponent as PublicHolidayViewComponent } from './public-holidays/view/view.component';
+import { OverviewComponent as LeaveOverviewComponent } from './leave/overview/overview.component';
+import { CreateComponent as LeaveCreateComponent } from './leave/create/create.component';
 
 
 export const SETTINGS_ROUTES: Routes = [
@@ -26,5 +28,16 @@ export const SETTINGS_ROUTES: Routes = [
     title: 'View Public Holiday',
     component: PublicHolidayViewComponent
   },
+  {
+    path: 'leave-settings/overview',
+    title: 'Leave Setting',
+    component: LeaveOverviewComponent
+  },
+  {
+    path: 'leave-settings/create',
+    title: 'CreateLeave Type',
+    component: LeaveCreateComponent
+  },
+
 
 ];

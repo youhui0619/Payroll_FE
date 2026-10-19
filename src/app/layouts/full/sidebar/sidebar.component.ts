@@ -98,7 +98,7 @@ export class SidebarComponent implements OnInit, OnChanges {
         { label: 'Company Profile', icon: 'codex:dot-circle', route: '/settings/company/profile' },
         { label: 'Work Schedule', icon: 'codex:dot-circle', route: '/roles/create', badge: 10 },
         { label: 'Public Holidays', icon: 'codex:dot-circle', route: '/settings/public-holidays/list' },
-        { label: 'Leave Settings', icon: 'codex:dot-circle', route: '/roles/create', badge: 10 },
+        { label: 'Leave Settings', icon: 'codex:dot-circle', route: '/settings/leave-settings/overview', badge: 10 },
         { label: 'Payroll Settings', icon: 'codex:dot-circle', route: '/roles/create', badge: 10 }
       ] 
     },

@@ -1,0 +1,239 @@
+<form [formGroup]="leaveForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+        <div class="col-sm-12">
+            <h4 class="text-primary">Leave Information</h4>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row mx-0">
+                        <div class="col-sm-4 px-2">
+                            <mat-label class="form-label">Leave Code <span class="text-danger">*</span></mat-label>
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <input matInput placeholder="Enter leave code" >
+                                <mat-error class="text-danger">Leave Code is required.</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-sm-8 px-2">
+                            <mat-label class="form-label">Leave Name <span class="text-danger">*</span></mat-label>
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <input matInput placeholder="Enter leave name">
+                                <mat-error class="text-danger">Leave name is required.</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-sm-4 px-2 mb-4">
+                            <mat-label class="form-label">Leave Status<span class="text-danger">
+                                *</span>
+                            </mat-label>
+                            <mat-button-toggle-group
+                                class="selection-group status-group"
+                                color="primary"
+                                hideSingleSelectionIndicator
+                                required>
+                                <mat-button-toggle value="active">Active</mat-button-toggle>
+                                <mat-button-toggle value="Inactive">Inactive</mat-button-toggle>
+                            </mat-button-toggle-group>
+                            <!-- <mat-error class="text-danger">Gender is required</mat-error> -->
+                        </div>
+
+                        <div class="col-sm-4 px-2 mb-4">
+                            <mat-label class="form-label">Entitlement Unit<span class="text-danger">
+                                *</span>
+                            </mat-label>
+                            <mat-button-toggle-group
+                                class="selection-group status-group"
+                                color="primary"
+                                hideSingleSelectionIndicator
+                                required>
+                                <mat-button-toggle value="daily">Daily</mat-button-toggle>
+                                <mat-button-toggle value="hourly">Hourly</mat-button-toggle>
+                            </mat-button-toggle-group>
+                            <!-- <mat-error class="text-danger">Gender is required</mat-error> -->
+                        </div>
+
+                        <div class="col-sm-4 px-2 mb-4">
+                            <mat-label class="form-label">Leave Type<span class="text-danger">
+                                *</span>
+                            </mat-label>
+                            <mat-button-toggle-group
+                                class="selection-group status-group"
+                                color="primary"
+                                hideSingleSelectionIndicator
+                                required>
+                                <mat-button-toggle value="paid">Paid</mat-button-toggle>
+                                <mat-button-toggle value="unpaid">Unpaid</mat-button-toggle>
+                            </mat-button-toggle-group>
+                            <!-- <mat-error class="text-danger">Gender is required</mat-error> -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="text-primary">Entitlement Rules</h4>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row mx-0">
+                        <div class="col-sm-12 px-2 mb-4">
+                            <mat-label class="form-label">Entitlement Grant Method <span class="text-danger">*</span></mat-label>
+                            <mat-radio-group class="form-radio-group row mx-0" >
+                                <div class="col-sm-6 px-2">
+                                    <mat-radio-button class="form-radio" color="primary" value="National">
+                                        Annual grant - <span class="text-muted">credit at the start of the leave year</span>
+                                    </mat-radio-button>
+                                </div>
+                                <div class="col-sm-6 px-2">
+                                    <mat-radio-button class="form-radio" color="primary" value="National">
+                                        Monthly accrual - <span class="text-muted">accumulate each month</span>
+                                    </mat-radio-button>
+                                </div>
+                                <div class="col-sm-6 px-2">
+                                    <mat-radio-button class="form-radio" color="primary" value="National">
+                                        Service anniversary - <span class="text-muted">credit on anniversary date</span>
+                                    </mat-radio-button>
+                                </div>
+                                <div class="col-sm-6 px-2">
+                                    <mat-radio-button class="form-radio" color="primary" value="National">
+                                        Manual grant - <span class="text-muted">HR assigns entitlement</span>
+                                    </mat-radio-button>
+                                </div>
+                            </mat-radio-group>
+                        </div>
+
+                        <div class="col-sm-6 px-2">
+                            <mat-label class="form-label">Default Entitlement <span class="text-danger">*</span></mat-label>
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <input type="number" matInput placeholder="Enter Entitlement days">
+                                <span matTextSurfix class="text-muted ms-2">Days</span>
+                                <mat-error class="text-danger">Leave name is required.</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-6 px-2">
+                            <mat-label class="form-label">Eligibility <span class="text-danger">*</span></mat-label>
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <mat-select placeholder="Select status" formControlName="status">
+                                    <mat-option value="ACTIVE">All Employees</mat-option>
+                                    <mat-option value="INACTIVE">Inactive</mat-option>
+                                </mat-select>
+                                <mat-error class="text-danger">Status is required</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-12 px-2 mb-4">
+                            <mat-label class="form-label">Leave Year <span class="text-danger">*</span></mat-label>
+                            <mat-radio-group class="form-radio-group row mx-0" >
+                                <div class="col-sm-6 px-2">
+                                    <mat-radio-button class="form-radio" color="primary" value="National">
+                                        Calendar year (January–December)
+                                    </mat-radio-button>
+                                </div>
+                                <div class="col-sm-6 px-2">
+                                    <mat-radio-button class="form-radio" color="primary" value="National">
+                                        Employee's employment anniversary
+                                    </mat-radio-button>
+                                </div>
+                                <div class="col-sm-6 px-2">
+                                    <mat-radio-button class="form-radio" color="primary" value="National">
+                                        Company financial year
+                                    </mat-radio-button>
+                                </div>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="text-primary">Carry Forward Rules</h4>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row mx-0">
+                        <div class="col-sm-12 px-2 mb-4">
+                            <mat-label class="form-label">Unuse Leave Policy <span class="text-danger">*</span></mat-label>
+                            <mat-radio-group class="form-radio-group row mx-0" formControlName="carryForwardPolicy">
+                                <div class="col-sm-6 px-2">
+                                    <mat-radio-button class="form-radio" color="primary" value="NONE">
+                                        Do not allow carry forward
+                                    </mat-radio-button>
+                                </div>
+                                <div class="col-sm-6 px-2">
+                                    <mat-radio-button class="form-radio" color="primary" value="LIMITED">
+                                        Allow carry forward up to a limit
+                                    </mat-radio-button>
+                                </div>
+                                <div class="col-sm-6 px-2">
+                                    <mat-radio-button class="form-radio" color="primary" value="UNLIMITED">
+                                        Allow unlimited carry forward
+                                    </mat-radio-button>
+                                </div>
+                                <div class="col-sm-6 px-2">
+                                    <mat-radio-button class="form-radio" color="primary" value="HR_REVIEW">
+                                        Require HR review
+                                    </mat-radio-button>
+                                </div>
+                            </mat-radio-group>
+                        </div>
+
+                        <div class="col-sm-6 px-2" *ngIf="showMaximumCarryForward">
+                            <mat-label class="form-label">Maximum Carry Forward <span class="text-danger">*</span></mat-label>
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <input type="number" min="0" matInput placeholder="Enter carry forward limit" formControlName="maximumCarryForward">
+                                <span matTextSurfix class="text-muted ms-2">Days</span>
+                                <mat-error *ngIf="leaveForm.controls.maximumCarryForward.hasError('required')">Maximum carry forward is required.</mat-error>
+                                <mat-error *ngIf="leaveForm.controls.maximumCarryForward.hasError('min')">Enter zero or more days.</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="text-primary">Approval Rules</h4>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row mx-0">
+                        <div class="col-sm-12 px-2 mb-4">
+                            <mat-label class="form-label">Approval Overflow <span class="text-danger">*</span></mat-label>
+                            <mat-radio-group class="form-radio-group row mx-0" formControlName="carryForwardPolicy">
+                                <div class="col-sm-6 px-2">
+                                    <mat-radio-button class="form-radio" color="primary" value="NONE">
+                                        Reporting Manager
+                                    </mat-radio-button>
+                                </div>
+                                <div class="col-sm-6 px-2">
+                                    <mat-radio-button class="form-radio" color="primary" value="LIMITED">
+                                        Reporting Manager → HR
+                                    </mat-radio-button>
+                                </div>
+                                <div class="col-sm-6 px-2">
+                                    <mat-radio-button class="form-radio" color="primary" value="UNLIMITED">
+                                        HR Only
+                                    </mat-radio-button>
+                                </div>
+                                <div class="col-sm-6 px-2">
+                                    <mat-radio-button class="form-radio" color="primary" value="HR_REVIEW">
+                                        No approval required
+                                    </mat-radio-button>
+                                </div>
+                            </mat-radio-group>
+                        </div>
+
+                        <div class="col-sm-6 px-2">
+                            <mat-label class="form-label">Minimum Advance Notice <span class="text-danger">*</span></mat-label>
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <input type="number" min="0" matInput placeholder="Enter Minimum Advance Notice">
+                                <span matTextSurfix class="text-muted ms-2">Days</span>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-sm-12 px-2">
+                            <mat-checkbox checked color="primary">Allow half-day leave applications</mat-checkbox>
+                            <mat-checkbox checked color="primary">Require supporting documents</mat-checkbox>
+                             
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex align-items-center justify-content-end gap-3">
+        <button type="submit" mat-flat-button color="primary"><i-tabler name="check"></i-tabler>Submit</button>
+    </div>
+</form>
