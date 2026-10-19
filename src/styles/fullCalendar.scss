@@ -87,3 +87,13 @@
 .employee-calendar .fc-event.leave-unpaid .fc-event-main {
   color: var(--secondary) !important;
 }
+
+.employee-calendar .fc-event.public-holiday-event {
+  background-color: var(--light-info) !important;
+  border-color: var(--light-info) !important;
+  color: var(--info) !important;
+}
+
+.employee-calendar .fc-event.public-holiday-event .fc-event-main {
+  color: var(--info) !important;
+}

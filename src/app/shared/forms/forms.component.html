@@ -7,9 +7,21 @@
                 <div class="row mx-0">
                     <div *ngFor="let field of section.fields" [ngClass]="field.size" class="px-2">
                         <div [ngSwitch]="field.type">
-                            <label class="form-label" [attr.for]="field.type === 'date' ? field.formControlName : null">{{ field.name }}
+                            <label *ngIf="field.type !== 'checkbox'" class="form-label" [attr.for]="field.type === 'date' ? field.formControlName : null">{{ field.name }}
                                 <span class="text-danger" *ngIf="field.required">*</span>
                             </label>
+                            <ng-container *ngSwitchCase="'checkbox'">
+                                <div class="form-check-field">
+                                    <mat-checkbox class="form-checkbox" color="primary" [formControlName]="field.formControlName">
+                                        {{ field.name }}<span class="text-danger" *ngIf="field.required"> *</span>
+                                    </mat-checkbox>
+                                    <div class="text-danger" *ngIf="field.validation && form.get(field.formControlName)?.invalid && (form.get(field.formControlName)?.touched || form.get(field.formControlName)?.dirty)">
+                                        {{ field.errorMessage || field.name + ' is required' }}
+                                    </div>
+                                    <small class="text-muted" *ngIf="field.description">{{ field.description }}</small>
+                                </div>
+                            </ng-container>
+
                             <ng-container *ngSwitchCase="'text'">
                                 <mat-form-field appearance="outline" class="form-input w-100">
                                     <input [type]="field.type" matInput [placeholder]="field.placeholder" [formControlName]="field.formControlName">

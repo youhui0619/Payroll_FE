@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { ListComponent as PublicHolidayListComponent } from './public-holidays/list/list.component';
 import { CreateComponent as PublicHolidayCreateComponent } from './public-holidays/create/create.component';
 import { ProfileComponent as CompanyProfileComponent } from './company/profile/profile.component';
+import { ViewComponent as PublicHolidayViewComponent } from './public-holidays/view/view.component';
 
 
 export const SETTINGS_ROUTES: Routes = [
@@ -19,6 +20,11 @@ export const SETTINGS_ROUTES: Routes = [
     path: 'public-holidays/create',
     title: 'Create Public Holidays',
     component: PublicHolidayCreateComponent
+  },
+  {
+    path: 'public-holidays/view/:id',
+    title: 'View Public Holiday',
+    component: PublicHolidayViewComponent
   },
 
 ];

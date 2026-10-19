@@ -20,15 +20,19 @@ export class ListComponent {
   selectedStatus = '';
 
   get years(): string[] {
-    return [...new Set(this.holidays.map(holiday => holiday.date.slice(0, 4)))].sort();
+    return [...new Set(this.holidays.flatMap(holiday => {
+      const startYear = Number(holiday.startDate.slice(0, 4));
+      const endYear = Number(holiday.endDate.slice(0, 4));
+      return Array.from({ length: endYear - startYear + 1 }, (_, index) => String(startYear + index));
+    }))].sort();
   }
 
   get filteredHolidays(): PublicHolidayRecord[] {
     const query = this.searchTerm.trim().toLowerCase();
     return this.holidays.filter(holiday => {
-      const matchesSearch = !query || [holiday.name, holiday.id, holiday.date, holiday.day, holiday.scope, ...holiday.regions]
+      const matchesSearch = !query || [holiday.name, holiday.id, holiday.description, holiday.startDate, holiday.endDate, holiday.scope, ...holiday.regions]
         .some(value => value.toLowerCase().includes(query));
-      const matchesYear = !this.selectedYear || holiday.date.startsWith(this.selectedYear);
+      const matchesYear = !this.selectedYear || holiday.startDate.slice(0, 4) <= this.selectedYear && holiday.endDate.slice(0, 4) >= this.selectedYear;
       const matchesScope = !this.selectedScope || holiday.scope === this.selectedScope;
       const matchesStatus = !this.selectedStatus || holiday.status === this.selectedStatus;
       return matchesSearch && matchesYear && matchesScope && matchesStatus;
@@ -36,25 +40,38 @@ export class ListComponent {
   }
 
   get activeHolidayCount(): number {
-    return this.holidays.filter(holiday => holiday.status === 'Active').length;
+    return this.holidays.filter(holiday => holiday.status === 'ACTIVE').length;
   }
 
   get inactiveHolidayCount(): number {
-    return this.holidays.filter(holiday => holiday.status === 'Inactive').length;
+    return this.holidays.filter(holiday => holiday.status === 'INACTIVE').length;
   }
 
   get upcomingHolidayCount(): number {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    return this.holidays.filter(holiday => holiday.status === 'Active' && new Date(`${holiday.date}T00:00:00`) >= today).length;
+    return this.holidays.filter(holiday => holiday.status === 'ACTIVE' && new Date(`${holiday.endDate}T00:00:00`) >= today).length;
+  }
+
+  getHolidayDateLabel(holiday: PublicHolidayRecord): string {
+    return holiday.startDate === holiday.endDate
+      ? holiday.startDate
+      : `${holiday.startDate} – ${holiday.endDate}`;
+  }
+
+  getHolidayDayLabel(holiday: PublicHolidayRecord): string {
+    const startDay = new Date(`${holiday.startDate}T00:00:00`).toLocaleDateString('en-MY', { weekday: 'long' });
+    if (holiday.startDate === holiday.endDate) return startDay;
+    const endDay = new Date(`${holiday.endDate}T00:00:00`).toLocaleDateString('en-MY', { weekday: 'long' });
+    return `${startDay} – ${endDay}`;
   }
 
   getHolidayRegionTitle(holiday: PublicHolidayRecord): string {
-    return holiday.regions.join(', ');
+    return holiday.scope === 'National' ? 'All States' : holiday.regions.join(', ');
   }
 
   getHolidayRegionLabel(holiday: PublicHolidayRecord): string {
-    return holiday.regions.includes('All States')
+    return holiday.scope === 'National'
       ? 'All states'
       : `${holiday.regions.length} states`;
   }

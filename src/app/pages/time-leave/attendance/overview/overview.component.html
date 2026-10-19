@@ -11,28 +11,11 @@
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="summary-info">
-                        <p class="f-s-12 text-muted">Total employees
-                        </p>
-                        <h3 class="mb-0">128</h3>
-                    </div>
-                    <div class="text-primary bg-light-primary text-end icon">
-                        <i-tabler name="users"></i-tabler>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-3 px-2">
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="summary-info">
-                        <p class="f-s-12 text-muted">Completed Payslips
+                        <p class="f-s-12 text-muted">Present Today
                         </p>
                         <h3 class="mb-0">112</h3>
                     </div>
-                    <div class="text-primary bg-light-primary text-end icon">
+                    <div class="text-success bg-light-success text-end icon">
                         <i-tabler name="user-check"></i-tabler>
                     </div>
                 </div>
@@ -45,12 +28,46 @@
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="summary-info">
-                        <p class="f-s-12 text-muted">Pending Payslips
+                        <p class="f-s-12 text-muted">Medical Leave
+                        </p>
+                        <h3 class="mb-0">8</h3>
+                    </div>
+                    <div class="text-danger bg-light-danger text-end icon">
+                        <i-tabler name="medical-cross"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-3 px-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="summary-info">
+                        <p class="f-s-12 text-muted">Annual Leave
                         </p>
                         <h3 class="mb-0">10</h3>
                     </div>
-                    <div class="text-primary bg-light-primary text-end icon">
-                        <i-tabler name="hourglass-empty"></i-tabler>
+                    <div class="text-warning bg-light-warning text-end icon">
+                        <i-tabler name="calendar-event"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-3 px-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="summary-info">
+                        <p class="f-s-12 text-muted">Unpaid Leave
+                        </p>
+                        <h3 class="mb-0">0</h3>
+                    </div>
+                    <div class="text-secondary bg-light-secondary text-end icon">
+                        <i-tabler name="wallet-off"></i-tabler>
                     </div>
                 </div>
             </div>
@@ -155,7 +172,7 @@
                                                 {{ leave.code }}
                                             </button>
                                             <ng-template #attended>
-                                                <span *ngIf="getPublicHoliday(employee, day.dateKey) as holiday; else attendanceMark" class="holiday-badge" [title]="holiday.name" [attr.aria-label]="holiday.name">PH</span>
+                                                <span *ngIf="getPublicHoliday(employee, day.dateKey) as holiday; else attendanceMark" class="holiday-badge bg-light-info text-info" [title]="holiday.name" [attr.aria-label]="holiday.name">PH</span>
                                                 <ng-template #attendanceMark>
                                                 <span class="attendance-badge"></span>
                                                 </ng-template>

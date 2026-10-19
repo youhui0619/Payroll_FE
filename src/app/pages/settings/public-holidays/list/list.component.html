@@ -5,7 +5,7 @@
     </div>
 
     <div class="col-sm-5 d-flex align-items-center justify-content-end">
-        <button mat-flat-button color="primary" class="ms-2" routerLink="/organization/departments/create">
+        <button mat-flat-button color="primary" class="ms-2" routerLink="/settings/public-holidays/create">
             <i-tabler name="plus"></i-tabler>
             Create Holidays
         </button>
@@ -76,8 +76,8 @@
         <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
             <mat-select placeholder="Status" [value]="selectedStatus" (selectionChange)="selectedStatus = $event.value">
                 <mat-option value="">All statuses</mat-option>
-                <mat-option value="Active">Active</mat-option>
-                <mat-option value="Inactive">Inactive</mat-option>
+                <mat-option value="ACTIVE">Active</mat-option>
+                <mat-option value="INACTIVE">Inactive</mat-option>
             </mat-select>
         </mat-form-field>
     </div>
@@ -117,17 +117,17 @@
                         <p>{{ holiday.name }}</p>
                         <p class="fs-10 fw-300 my-0">{{ holiday.id }}</p>
                     </td>
-                    <td class="text-muted">{{ holiday.date }}</td>
-                    <td class="text-muted">{{ holiday.day }}</td>
+                    <td class="text-muted">{{ getHolidayDateLabel(holiday) }}</td>
+                    <td class="text-muted">{{ getHolidayDayLabel(holiday) }}</td>
                     <td class="text-muted">
                         <span class="chip text-info bg-light-info">{{ holiday.scope }}</span>
                     </td>
                     <td class="text-muted" [attr.title]="getHolidayRegionTitle(holiday)">{{ getHolidayRegionLabel(holiday) }}</td>
                     <td class="text-muted">
-                        <span class="chip" [ngClass]="holiday.status === 'Active' ? 'text-primary bg-light-primary' : 'text-muted bg-light-secondary'">{{ holiday.status }}</span>
+                        <span class="chip" [ngClass]="holiday.status === 'ACTIVE' ? 'text-primary bg-light-primary' : 'text-muted bg-light-secondary'">{{ holiday.status === 'ACTIVE' ? 'Active' : 'Inactive' }}</span>
                     </td>
                     <td>
-                        <button class="text-muted action-btn" mat-icon-button>
+                        <button class="text-muted action-btn" mat-icon-button [routerLink]="['/settings/public-holidays/view', holiday.id]">
                             <i-tabler name="eye"></i-tabler>
                         </button>
                         <button class="text-muted action-btn" mat-icon-button>

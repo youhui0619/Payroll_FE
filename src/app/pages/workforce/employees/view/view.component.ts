@@ -114,12 +114,13 @@ export class ViewComponent {
   readonly publicHolidayEvents = getPublicHolidaysForLocation(`${this.employee.address} ${this.employee.workLocation}`).map(holiday => ({
     id: holiday.id,
     title: holiday.name,
-    start: holiday.date,
+    start: holiday.startDate,
+    end: dayAfter(holiday.endDate),
     allDay: true,
-    classNames: ['public-holiday-event'],
-    backgroundColor: '#e8f5e9',
-    borderColor: '#e8f5e9',
-    textColor: '#2e7d32',
+    classNames: ['public-holiday-event', 'bg-light-info', 'text-info'],
+    backgroundColor: 'var(--light-info)',
+    borderColor: 'var(--light-info)',
+    textColor: 'var(--info)',
     extendedProps: { eventType: 'public-holiday', holidayName: holiday.name }
   }));
   selectedTabIndex = 0;
@@ -154,6 +155,15 @@ export class ViewComponent {
     eventDidMount: (info) => {
       if (info.event.extendedProps['eventType'] === 'public-holiday') {
         info.el.title = info.event.extendedProps['holidayName'];
+        info.el.style.setProperty('--fc-event-bg-color', 'var(--light-info)', 'important');
+        info.el.style.setProperty('--fc-event-border-color', 'var(--light-info)', 'important');
+        info.el.style.setProperty('--fc-event-text-color', 'var(--info)', 'important');
+        info.el.style.setProperty('background-color', 'var(--light-info)', 'important');
+        info.el.style.setProperty('border-color', 'var(--light-info)', 'important');
+        info.el.style.setProperty('color', 'var(--info)', 'important');
+        info.el.querySelectorAll<HTMLElement>('*').forEach(element => {
+          element.style.setProperty('color', 'var(--info)', 'important');
+        });
         return;
       }
       const colors = leaveEventColors[info.event.extendedProps['typeClass']] ?? leaveEventColors['annual'];
