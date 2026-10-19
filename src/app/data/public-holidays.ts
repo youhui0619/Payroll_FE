@@ -12,3 +12,16 @@ export const publicHolidays: PublicHolidayRecord[] = [
   { id: 'PH-2026-009', name: 'Malaysia Day', date: '2026-09-16', day: 'Wednesday', scope: 'National', regions: ['All States'], status: 'Active' },
   { id: 'PH-2026-010', name: 'Christmas Day', date: '2026-12-25', day: 'Friday', scope: 'National', regions: ['All States'], status: 'Active' }
 ];
+
+export function getPublicHolidaysForDate(date: string, location: string): PublicHolidayRecord[] {
+  return getPublicHolidaysForLocation(location).filter(holiday => holiday.date === date);
+}
+
+export function getPublicHolidaysForLocation(location: string): PublicHolidayRecord[] {
+  const normalizedLocation = location.toLowerCase();
+  return publicHolidays.filter(holiday => {
+    if (holiday.status !== 'Active') return false;
+    if (holiday.regions.includes('All States')) return true;
+    return holiday.regions.some(region => normalizedLocation.includes(region.toLowerCase()));
+  });
+}

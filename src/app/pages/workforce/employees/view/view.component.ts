@@ -11,6 +11,7 @@ import interactionPlugin from '@fullcalendar/angular/interaction';
 import themePlugin from "@fullcalendar/angular/themes/monarch"; 
 import { getEmployee } from '../../../../data/employees';
 import { attendanceRecords } from '../../../../data/attendance';
+import { getPublicHolidaysForLocation } from '../../../../data/public-holidays';
 import { LeaveApplication } from '../../../../models/leave.model';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
 
@@ -110,6 +111,17 @@ export class ViewComponent {
         }
       };
     });
+  readonly publicHolidayEvents = getPublicHolidaysForLocation(`${this.employee.address} ${this.employee.workLocation}`).map(holiday => ({
+    id: holiday.id,
+    title: holiday.name,
+    start: holiday.date,
+    allDay: true,
+    classNames: ['public-holiday-event'],
+    backgroundColor: '#e8f5e9',
+    borderColor: '#e8f5e9',
+    textColor: '#2e7d32',
+    extendedProps: { eventType: 'public-holiday', holidayName: holiday.name }
+  }));
   selectedTabIndex = 0;
   selectedLeave: LeaveDialogData | null = null;
 
@@ -137,9 +149,13 @@ export class ViewComponent {
     fixedWeekCount: false,
     height: 'auto',
     contentHeight: 'auto',
-    events: this.attendanceEvents,
+    events: [...this.attendanceEvents, ...this.publicHolidayEvents],
     eventClick: (info) => this.openLeaveDetails(info.event.id),
     eventDidMount: (info) => {
+      if (info.event.extendedProps['eventType'] === 'public-holiday') {
+        info.el.title = info.event.extendedProps['holidayName'];
+        return;
+      }
       const colors = leaveEventColors[info.event.extendedProps['typeClass']] ?? leaveEventColors['annual'];
       info.el.style.setProperty('--fc-event-bg-color', colors.background, 'important');
       info.el.style.setProperty('--fc-event-border-color', colors.background, 'important');

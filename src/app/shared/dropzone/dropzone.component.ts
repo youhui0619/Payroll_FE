@@ -5,6 +5,8 @@ import { NgxDropzoneChangeEvent, NgxDropzoneModule } from 'ngx-dropzone';
 import { TablerIconComponent, provideTablerIcons } from 'angular-tabler-icons';
 import * as TablerIcons from 'angular-tabler-icons/icons';
 
+type DropzoneValue = File | string | Array<File | string>;
+
 @Component({
   selector: 'app-dropzone',
   standalone: true,
@@ -22,19 +24,22 @@ export class DropzoneComponent implements ControlValueAccessor, OnDestroy {
   @Input() description = 'Drop files here or click to';
   @Output() change = new EventEmitter<NgxDropzoneChangeEvent>();
   value: File[] = [];
+  existingPaths: string[] = [];
   disabled = false;
   previewUrls = new Map<File, string>();
   limitError = '';
 
-  private onChange: (files: File[]) => void = () => {};
+  private onChange: (value: DropzoneValue) => void = () => {};
   private onTouched: () => void = () => {};
 
-  writeValue(files: File[] | null): void {
-    this.value = files ?? [];
+  writeValue(value: DropzoneValue | null): void {
+    const items = Array.isArray(value) ? value : value ? [value] : [];
+    this.existingPaths = items.filter((item): item is string => typeof item === 'string');
+    this.value = items.filter((item): item is File => this.isFile(item));
     this.syncPreviewUrls();
   }
 
-  registerOnChange(fn: (files: File[]) => void): void {
+  registerOnChange(fn: (value: DropzoneValue) => void): void {
     this.onChange = fn;
   }
 
@@ -49,7 +54,7 @@ export class DropzoneComponent implements ControlValueAccessor, OnDestroy {
   onFilesChanged(event: NgxDropzoneChangeEvent): void {
     const candidates = event.addedFiles.filter(file => !this.value.includes(file));
     const availableCount = this.maxLength > 0
-      ? Math.max(this.maxLength - (this.multiple ? this.value.length : 0), 0)
+      ? Math.max(this.maxLength - (this.multiple ? this.value.length + this.existingPaths.length : 0), 0)
       : candidates.length;
     const acceptedFiles = candidates.slice(0, availableCount);
     this.limitError = acceptedFiles.length < candidates.length
@@ -58,8 +63,9 @@ export class DropzoneComponent implements ControlValueAccessor, OnDestroy {
     this.value = this.multiple
       ? [...this.value, ...acceptedFiles]
       : acceptedFiles.slice(0, 1);
+    if (!this.multiple && acceptedFiles.length) this.existingPaths = [];
     this.syncPreviewUrls();
-    this.onChange(this.value);
+    this.emitValue();
     this.onTouched();
     this.change.emit(event);
   }
@@ -67,7 +73,13 @@ export class DropzoneComponent implements ControlValueAccessor, OnDestroy {
   removeFile(file: File): void {
     this.value = this.value.filter(item => item !== file);
     this.syncPreviewUrls();
-    this.onChange(this.value);
+    this.emitValue();
+    this.onTouched();
+  }
+
+  removeExistingPath(path: string): void {
+    this.existingPaths = this.existingPaths.filter(item => item !== path);
+    this.emitValue();
     this.onTouched();
   }
 
@@ -91,7 +103,34 @@ export class DropzoneComponent implements ControlValueAccessor, OnDestroy {
       }
     }
     for (const file of this.value) {
-      if (!this.previewUrls.has(file)) this.previewUrls.set(file, URL.createObjectURL(file));
+      if (this.isFile(file) && !this.previewUrls.has(file)) {
+        const previewUrl = this.createPreviewUrl(file);
+        if (previewUrl) this.previewUrls.set(file, previewUrl);
+      }
     }
+  }
+
+  private isFile(value: unknown): value is File {
+    return typeof File !== 'undefined'
+      && typeof Blob !== 'undefined'
+      && value instanceof File
+      && value instanceof Blob;
+  }
+
+  private createPreviewUrl(file: File): string | undefined {
+    try {
+      return URL.createObjectURL(file);
+    } catch {
+      return undefined;
+    }
+  }
+
+  private emitValue(): void {
+    if (this.multiple) {
+      this.onChange([...this.existingPaths, ...this.value]);
+      return;
+    }
+
+    this.onChange(this.value[0] ?? this.existingPaths[0] ?? '');
   }
 }

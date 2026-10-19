@@ -16,6 +16,23 @@
   </ngx-dropzone-label>
 </ngx-dropzone>
 
+<div class="mt-4" *ngIf="existingPaths.length">
+  <div class="file-item d-flex align-items-center gap-3 w-100 mb-4" *ngFor="let path of existingPaths">
+    <div class="file-img flex-shrink-0 d-flex justify-content-center align-items-center">
+      <img *ngIf="accept.includes('image'); else existingFileIcon" [src]="path" [alt]="path.split('/').pop() || 'Uploaded image'" class="file-preview">
+      <ng-template #existingFileIcon>
+        <i-tabler name="file" class="text-muted" [attr.aria-label]="'File: ' + path.split('/').pop()"></i-tabler>
+      </ng-template>
+    </div>
+    <div class="file-info flex-grow-1">
+      <div class="file-name">{{ path.split('/').pop() }}</div>
+    </div>
+    <button type="button" class="btn btn-link p-0 cursor-pointer" (click)="removeExistingPath(path)" aria-label="Remove saved file">
+      <i-tabler name="x" class="icon-16 text-muted"></i-tabler>
+    </button>
+  </div>
+</div>
+
 <div class="mt-4" *ngIf="value.length">
   <div class="file-item d-flex align-items-center gap-3 w-100 mb-4" *ngFor="let file of value">
     <div class="file-img flex-shrink-0 d-flex justify-content-center align-items-center">

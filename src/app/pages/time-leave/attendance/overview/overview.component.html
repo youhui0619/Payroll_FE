@@ -144,7 +144,7 @@
                                         <td class="text-muted text-nowrap sticky-col sticky-col-id">
                                             <a href="javascript:void(0)" routerLink="/workforce/employees/view">{{ employee.employeeId }}</a>
                                         </td>
-                                        <td *ngFor="let day of days" class="leave-cell" [class.weekend]="day.isWeekend" [class.today]="day.isToday">
+                                        <td *ngFor="let day of days" class="leave-cell" [class.weekend]="day.isWeekend" [class.today]="day.isToday" [class.public-holiday]="getPublicHoliday(employee, day.dateKey)">
                                             <button *ngIf="getLeave(employee.employeeId, day.dateKey) as leave; else attended"
                                                 type="button"
                                                 class="leave-badge"
@@ -155,7 +155,10 @@
                                                 {{ leave.code }}
                                             </button>
                                             <ng-template #attended>
+                                                <span *ngIf="getPublicHoliday(employee, day.dateKey) as holiday; else attendanceMark" class="holiday-badge" [title]="holiday.name" [attr.aria-label]="holiday.name">PH</span>
+                                                <ng-template #attendanceMark>
                                                 <span class="attendance-badge"></span>
+                                                </ng-template>
                                             </ng-template>
                                         </td>
                                     </tr>

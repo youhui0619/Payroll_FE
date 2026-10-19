@@ -8,6 +8,7 @@ import { CalendarDay, LeaveRecord } from '../../../../models/leave.model';
 import type { EmployeeRecord } from '../../../../models/employee.model';
 import { employees as employeeDirectory } from '../../../../data/employees';
 import { attendanceRecords } from '../../../../data/attendance';
+import { getPublicHolidaysForDate } from '../../../../data/public-holidays';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
 
 @Component({
@@ -101,6 +102,10 @@ export class OverviewComponent implements AfterViewInit {
       leave.endDate >= dateKey &&
       leave.status === 'Approved'
     );
+  }
+
+  getPublicHoliday(employee: EmployeeRecord, dateKey: string) {
+    return getPublicHolidaysForDate(dateKey, `${employee.address} ${employee.workLocation}`)[0];
   }
 
   getInitials(name: string): string {
