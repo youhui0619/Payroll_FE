@@ -562,45 +562,36 @@
                                                                                                 </mat-step>
                                                                                                 <mat-step formGroupName="leave">
                                                                                                     <ng-template matStepLabel>Leave</ng-template>
-                                                                                                     <h4 class="text-primary">Leave Entitlements</h4>
-                                                                                                    <div class="card">
+                                                                                                    <h4 class="text-primary">Leave Entitlements</h4>
+                                                                                                    <div class="card mb-3">
                                                                                                         <div class="card-body">
                                                                                                             <div class="row">
-                                                                                                                <div class="col-sm-6 px-2">
-                                                                                                                    <mat-label class="form-label">Annual Leave Entitlement
-                                                                                                                        <span class="text-danger">
-                                                                                                                            *</span>
-                                                                                                                    </mat-label>
-                                                                                                                    <div class="d-flex gap-2">
-                                                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
-                                                                                                                            <input type="number" min="0" matInput placeholder="Enter Annual Leave Entitlement" formControlName="annualLeaveEntitlement">
-                                                                                                                            <mat-error class="text-danger">Annual Leave Entitlement No. is required</mat-error>
-                                                                                                                        </mat-form-field>
-                                                                                                                        <mat-form-field appearance="outline" class="form-input">
-                                                                                                                            <mat-select placeholder="Select period" formControlName="annualLeavePeriod">
-                                                                                                                                <mat-option value="month">per Month</mat-option>
-                                                                                                                                <mat-option value="year">per Year</mat-option>
-                                                                                                                            </mat-select>
-                                                                                                                        </mat-form-field>
+                                                                                                                <div class="col-sm-12 px-2">
+                                                                                                                    <div *ngFor="let policy of leavePolicies; let last = last"
+                                                                                                                        class="d-flex justify-content-between align-items-center gap-3 py-3"
+                                                                                                                        [class.border-bottom]="!last">
+                                                                                                                        <div class="d-flex align-items-center gap-3">
+                                                                                                                            <div class="icon bg-light-primary text-primary flex-shrink-0">
+                                                                                                                                <i-tabler name="calendar"></i-tabler>
+                                                                                                                            </div>
+                                                                                                                            <div>
+                                                                                                                                <div class="d-flex align-items-center gap-2">
+                                                                                                                                    <label class="text-dark my-0">{{ policy.leaveName }}</label>
+                                                                                                                                    <span [ngClass]="policy.leaveType === 'PAID' ? 'badge bg-light-primary text-primary' : 'badge bg-light-danger text-danger'">{{ policy.leaveType }}</span>
+                                                                                                                                </div>
+                                                                                                                                <p class="text-muted mb-0">{{ entitlementLabel(policy) }}</p>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                        <mat-slide-toggle
+                                                                                                                            color="primary"
+                                                                                                                            [checked]="isLeavePolicySelected(policy.leaveCode)"
+                                                                                                                            [aria-label]="'Enable ' + policy.leaveName"
+                                                                                                                            (change)="setLeavePolicySelected(policy.leaveCode, $event.checked)">
+                                                                                                                        </mat-slide-toggle>
                                                                                                                     </div>
-                                                                                                                </div>
-                                                                                                                <div class="col-sm-6 px-2">
-                                                                                                                    <mat-label class="form-label">Medical Leave Entitlement
-                                                                                                                        <span class="text-danger">
-                                                                                                                            *</span>
-                                                                                                                    </mat-label>
-                                                                                                                    <div class="d-flex gap-2">
-                                                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
-                                                                                                                            <input type="number" min="0" matInput placeholder="Enter Medical Leave Entitlement" formControlName="medicalLeaveEntitlement">
-                                                                                                                            <mat-error class="text-danger">Medical Leave Entitlement No. is required</mat-error>
-                                                                                                                        </mat-form-field>
-                                                                                                                        <mat-form-field appearance="outline" class="form-input">
-                                                                                                                            <mat-select placeholder="Select period" formControlName="medicalLeavePeriod">
-                                                                                                                                <mat-option value="month">per Month</mat-option>
-                                                                                                                                <mat-option value="year">per Year</mat-option>
-                                                                                                                            </mat-select>
-                                                                                                                        </mat-form-field>
-                                                                                                                    </div>
+                                                                                                                    <p *ngIf="leavePolicies.length === 0" class="text-muted mb-0 py-3">
+                                                                                                                        No active leave policies are available.
+                                                                                                                    </p>
                                                                                                                 </div>
                                                                                                             </div>
                                                                                                         </div>
@@ -622,16 +613,13 @@
                                                                                                                             </tr>
                                                                                                                             </thead>
                                                                                                                             <tbody>
-                                                                                                                                <tr>
-                                                                                                                                    <td class="text-muted">Annual Leave</td>
-                                                                                                                                    <td class="text-muted">{{ employeeForm.controls.leave.controls.annualLeaveEntitlement.value ?? 0 }} days / {{ employeeForm.controls.leave.controls.annualLeavePeriod.value }}</td>
-                                                                                                                                    <td class="text-primary fw-550">{{ annualLeaveYearlyEntitlement }} days</td>
+                                                                                                                                <tr *ngFor="let policy of selectedLeavePolicies">
+                                                                                                                                    <td class="text-muted">{{ policy.leaveName }}</td>
+                                                                                                                                    <td class="text-muted">{{ entitlementLabel(policy) }}</td>
+                                                                                                                                    <td class="text-primary fw-550">{{ leaveBalanceLabel(policy) }}</td>
                                                                                                                                 </tr>
-
-                                                                                                                                <tr>
-                                                                                                                                    <td class="text-muted">Medical Leave</td>
-                                                                                                                                    <td class="text-muted">{{ employeeForm.controls.leave.controls.medicalLeaveEntitlement.value ?? 0 }} days / {{ employeeForm.controls.leave.controls.medicalLeavePeriod.value }}</td>
-                                                                                                                                    <td class="text-primary fw-550">{{ medicalLeaveYearlyEntitlement }} days</td>
+                                                                                                                                <tr *ngIf="selectedLeavePolicies.length === 0">
+                                                                                                                                    <td colspan="3" class="text-muted text-center py-3">Select a leave entitlement to see it in the summary.</td>
                                                                                                                                 </tr>
                                                                                                                             </tbody>
                                                                                                                         </table>

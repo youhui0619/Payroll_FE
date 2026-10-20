@@ -1,0 +1,185 @@
+
+<div class="row justify-content-between my-4">
+    <div class="col-sm-7">
+        <h3 class="text-dark my-0">Leave Applications</h3>
+        <p class="fw-300 text-muted mb-0">Manage your employees, employment details and payroll information.</p>
+    </div>
+</div>
+
+<div class="row my-4">
+    <div class="col-sm-3 px-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="summary-info">
+                        <p class="f-s-12 text-muted">Leave Requests
+                        </p>
+                        <h3 class="mb-0">112</h3>
+                    </div>
+                    <div class="text-success bg-light-success text-end icon">
+                        <i-tabler name="user-check"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-3 px-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="summary-info">
+                        <p class="f-s-12 text-muted">Approved
+                        </p>
+                        <h3 class="mb-0">8</h3>
+                    </div>
+                    <div class="text-danger bg-light-danger text-end icon">
+                        <i-tabler name="medical-cross"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-3 px-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="summary-info">
+                        <p class="f-s-12 text-muted">Rejected
+                        </p>
+                        <h3 class="mb-0">10</h3>
+                    </div>
+                    <div class="text-warning bg-light-warning text-end icon">
+                        <i-tabler name="calendar-event"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-3 px-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="summary-info">
+                        <p class="f-s-12 text-muted">Awaiting Review
+                        </p>
+                        <h3 class="mb-0">0</h3>
+                    </div>
+                    <div class="text-secondary bg-light-secondary text-end icon">
+                        <i-tabler name="wallet-off"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row mt-4">
+    <div class="d-flex align-items-center flex-wrap gap-2">
+        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+            <input type="text" matInput placeholder="Search..." >
+            <span matTextPrefix class="text-muted me-2">
+                <i-tabler name="search" class="icon-16"></i-tabler>
+            </span>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+            <mat-select placeholder="Select Department" multiple>
+                <mat-option value="active">Active</mat-option>
+                <mat-option value="inactive">Inactive</mat-option>
+            </mat-select>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+            <mat-select placeholder="Select Month">
+                <mat-option *ngFor="let month of months" [value]="month.value">{{ month.label }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+            <mat-select placeholder="Select Year">
+                <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</div>
+
+
+<div class="row mt-4">
+    <div class="col-sm-12 px-2">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">Pending ({{ leaveRequests.length }})</span>  |  Annual Leave ({{ leaveCount('Annual Leave') }})  |  Medical Leave ({{ leaveCount('Medical Leave') }})  |  Unpaid Leave ({{ leaveCount('Unpaid Leave') }})  |  Emergency Leave ({{ leaveCount('Emergency Leave') }})</h6>
+                    <div>
+                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
+                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
+                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <i-tabler name="download" class="icon-16"></i-tabler> Export</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row mx-0">
+                    <div class="col-sm-12 px-2">
+                         <div class="material-datatables table-responsive">
+                            <table matSort class="mat-sort table no-wrap w-100 text-left leave-balance-table" matSort>
+                                <thead>
+                                    <tr>
+                                        <th class="text-dark">Leave Type / Ref</th>
+                                        <th class="text-dark">Employee</th>
+                                        <th class="text-dark">Date</th>
+                                        <th class="text-dark">Days Taken</th>
+                                        <th class="text-dark">Status</th>
+                                        <th class="text-dark">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let leave of leaveRequests">
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div [class]="leave.iconClass + ' text-end icon me-3'">
+                                                    <i-tabler name="calendar"></i-tabler>
+                                                </div>
+                                                <div>
+                                                    <p class="text-dark fw-500 my-0">{{ leave.leaveType }}</p>
+                                                    <p class="fs-10 fw-300 text-muted my-0">{{ leave.reference }}</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <p class="text-dark fw-500 my-0">{{ employeeName(leave.employeeId) }}</p>
+                                            <p class="fs-10 fw-300 text-muted my-0">{{ leave.employeeId }}</p>
+                                        </td>
+                                        <td class="text-muted">{{ leave.dateRange }}</td>
+                                        <td class="text-muted">{{ leave.daysTaken }}</td>
+                                        <td class="text-muted"><span class="chip" [ngClass]="leave.statusClass">{{ leave.status }}</span></td>
+                                        <td class="text-muted">
+                                            <button
+                                                type="button"
+                                                class="text-muted action-btn"
+                                                mat-icon-button
+                                                (click)="openLeaveDetails(leave)">
+                                                <i-tabler name="eye"></i-tabler>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-leave-detail-dialog
+    *ngIf="selectedLeave as leave"
+    [data]="leave"
+    [showDecisionActions]="leave.status === 'Pending'"
+    (decisionMade)="decideLeave($event)"
+    (closed)="closeLeaveDialog()">
+</app-leave-detail-dialog>

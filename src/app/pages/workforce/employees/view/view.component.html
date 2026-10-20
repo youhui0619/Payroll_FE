@@ -38,6 +38,7 @@
 <app-leave-detail-dialog
     *ngIf="selectedLeave as leave"
     [data]="leave"
+    [showDecisionActions]="leave.status === 'Pending'"
     (closed)="selectedLeave = null">
 </app-leave-detail-dialog>
 
@@ -469,6 +470,37 @@
             <mat-tab label="Leave">
                 <div class="px-2 mt-3">
                     <div class="row mx-0 mb-3">
+                        <div class="col-sm-12 px-2">
+                            <h4 class="text-primary my-0">Leave Summary</h4>
+                            <div class="card mt-2">
+                                <div class="card-body">
+                                    <p class="mb-3">Leave year: {{ leaveYear }}</p>
+                                    <div class="table-responsive">
+                                        <table class="table no-wrap w-100 text-left">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-dark">Leave type</th>
+                                                    <th class="text-dark">Entitlement</th>
+                                                    <th class="text-dark">Total Balance</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let policy of leavePolicies">
+                                                    <td class="text-muted">{{ policy.leaveName }}</td>
+                                                    <td class="text-muted">{{ leaveEntitlementLabel(policy) }}</td>
+                                                    <td class="text-primary fw-550">{{ leaveBalanceLabel(policy) }}</td>
+                                                </tr>
+                                                <tr *ngIf="leavePolicies.length === 0">
+                                                    <td colspan="3" class="text-muted text-center py-3">No active leave policies are available.</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mx-0 mb-3">
                         <div class="col-sm-7 px-2">
                             <h4 class="text-primary my-0">Leave Records</h4>
                             <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
@@ -510,7 +542,7 @@
                                                     <td>
                                                         <div class="d-flex align-items-center">
                                                             <div [class]="leave.iconClass + ' text-end icon me-3'">
-                                                                <i-tabler name="transfer"></i-tabler>
+                                                                <i-tabler name="calendar"></i-tabler>
                                                             </div>
                                                             <div>
                                                                 <p class="text-dark fw-500 my-0">{{ leave.leaveType }}</p>

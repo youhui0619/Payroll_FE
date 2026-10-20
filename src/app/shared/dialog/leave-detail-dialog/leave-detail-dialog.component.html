@@ -92,5 +92,14 @@
         </div>
       </section>
     </div>
+
+    <footer class="dialog-actions" *ngIf="showDecisionActions">
+      <button type="button" class="decision-button reject-button" (click)="decide('Rejected')">
+        <i-tabler name="x" class="icon-16"></i-tabler>
+        Rejected</button>
+      <button type="button" class="decision-button approve-button" (click)="decide('Approved')">
+        <i-tabler name="check" class="icon-16"></i-tabler>
+        Approved</button>
+    </footer>
   </section>
 </div>

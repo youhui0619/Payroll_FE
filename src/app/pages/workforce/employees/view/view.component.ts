@@ -12,7 +12,10 @@ import themePlugin from "@fullcalendar/angular/themes/monarch";
 import { getEmployee } from '../../../../data/employees';
 import { attendanceRecords } from '../../../../data/attendance';
 import { getPublicHolidaysForLocation } from '../../../../data/public-holidays';
+import { getEmployeeLeaveBalances } from '../../../../data/leave-balances';
+import { leavePolicies } from '../../../../data/leave-policies';
 import { LeaveApplication } from '../../../../models/leave.model';
+import type { LeavePolicy } from '../../../../models/leave-policy.model';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
 
 function dayAfter(dateString: string): string {
@@ -36,6 +39,9 @@ const leaveEventColors: Record<string, { background: string; text: string }> = {
 })
 export class ViewComponent {
   readonly employee = getEmployee('EMP-0042');
+  readonly leaveYear = new Date().getFullYear();
+  readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');
+  readonly employeeLeaveBalances = getEmployeeLeaveBalances(this.employee.employeeId);
   readonly claimRequests = [
     {
       type: 'Meals',
@@ -132,6 +138,46 @@ export class ViewComponent {
 
   leaveCount(leaveType: string): number {
     return this.leaveRequests.filter(leave => leave.leaveType === leaveType).length;
+  }
+
+  leaveEntitlementLabel(policy: LeavePolicy): string {
+    if (policy.entitlementCalculationMethod === 'SERVICE') {
+      return policy.serviceEntitlementTiers
+        .filter(tier => tier.serviceFrom !== null && tier.daysPerYear !== null)
+        .map(tier => {
+          const serviceRange = tier.serviceTo === null
+            ? `${tier.serviceFrom}+ years`
+            : `${tier.serviceFrom}–${tier.serviceTo} years`;
+          return `${serviceRange}: ${tier.daysPerYear} ${this.leaveUnit(policy)} per year`;
+        })
+        .join(' · ') || 'Based on length of service';
+    }
+
+    const actualEntitlement = this.policyBalance(policy)?.entitled;
+    if (actualEntitlement !== undefined) {
+      return `${actualEntitlement} ${this.leaveUnit(policy)} per year`;
+    }
+
+    return policy.entitlementGrantMethod === 'MANUAL'
+      ? 'Set manually'
+      : `${policy.defaultEntitlement ?? 0} ${this.leaveUnit(policy)} per year`;
+  }
+
+  leaveBalanceLabel(policy: LeavePolicy): string {
+    const balance = this.policyBalance(policy)?.balance;
+    if (balance !== undefined) return `${balance} ${this.leaveUnit(policy)}`;
+    if (policy.entitlementGrantMethod === 'MANUAL' && policy.defaultEntitlement === null) return '—';
+    return `${policy.defaultEntitlement ?? 0} ${this.leaveUnit(policy)}`;
+  }
+
+  private policyBalance(policy: LeavePolicy): { entitled: number; balance: number } | undefined {
+    if (policy.leaveCode === 'AL') return this.employeeLeaveBalances.annual;
+    if (policy.leaveCode === 'ML') return this.employeeLeaveBalances.medical;
+    return undefined;
+  }
+
+  private leaveUnit(policy: LeavePolicy): string {
+    return policy.entitlementUnit === 'DAILY' ? 'days' : 'hours';
   }
 
   claimCount(status: string): number {

@@ -56,8 +56,8 @@ export class SidebarComponent implements OnInit, OnChanges {
     },
     { label: 'Leave', icon: 'akar-icons:shipping-box-01', children: [
         { label: 'Overview', icon: 'codex:dot-circle', route: '/time-leave/leave/overview' },
-        { label: 'Leave Applications', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
-        { label: 'Leave Approvals', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
+        { label: 'Leave Applications', icon: 'codex:dot-circle', route: '/time-leave/leave/applications' },
+        { label: 'Leave Approvals', icon: 'codex:dot-circle', route: '/time-leave/leave/approval' },
       ]
     },
     { label: 'Overtime', icon: 'akar-icons:shipping-box-01', children: [
@@ -72,7 +72,6 @@ export class SidebarComponent implements OnInit, OnChanges {
         { label: 'Overview', icon: 'codex:dot-circle', route: '/payroll/overview' },
        ]
     },
-    { label: 'Payslips List', icon: 'ant-design:shop-outlined', route: '/warehouses/list', badge: 10 },
     { label: 'Tax & PCB', icon: 'akar-icons:shipping-box-01', children: [
         { label: 'PCB Calculation', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
         { label: 'PCB Records', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },

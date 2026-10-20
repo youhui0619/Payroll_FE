@@ -82,6 +82,34 @@
   padding: 24px 28px 28px;
 }
 
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 28px;
+  border-top: 1px solid var(--light-disabled);
+}
+
+.decision-button {
+  min-width: 100px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.reject-button {
+  background: var(--light-danger);
+  color: var(--danger);
+}
+
+.approve-button {
+  background: var(--primary);
+  color: #fff;
+}
+
 .section-block + .section-block {
   margin-top: 24px;
 }
@@ -126,7 +154,8 @@
   }
 
   .dialog-header,
-  .dialog-content {
+  .dialog-content,
+  .dialog-actions {
     padding-left: 18px;
     padding-right: 18px;
   }

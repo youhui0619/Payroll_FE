@@ -16,8 +16,8 @@ import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../sh
 @Component({
   selector: 'app-view',
   imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, FullCalendarModule, RouterLink, LeaveDetailDialogComponent],
-    providers: [...MaterialProviders, ToastrService],
-    templateUrl: './view.component.html',
+  providers: [...MaterialProviders, ToastrService],
+  templateUrl: './view.component.html',
   styleUrl: './view.component.scss'
 })
 export class ViewComponent {

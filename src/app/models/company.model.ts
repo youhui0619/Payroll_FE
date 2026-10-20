@@ -1,3 +1,17 @@
+export type CompanyFinancialYearStartMonth =
+  | 'JANUARY'
+  | 'FEBRUARY'
+  | 'MARCH'
+  | 'APRIL'
+  | 'MAY'
+  | 'JUNE'
+  | 'JULY'
+  | 'AUGUST'
+  | 'SEPTEMBER'
+  | 'OCTOBER'
+  | 'NOVEMBER'
+  | 'DECEMBER';
+
 export interface Company {
   id: string;
   name: string;
@@ -8,6 +22,7 @@ export interface Company {
   taxNo?: string;
   website?: string;
   logo?: string;
+  financialStartingMonth: CompanyFinancialYearStartMonth;
   businessAddressLine1: string;
   businessAddressLine2: string;
   businessCity: string;

@@ -130,7 +130,33 @@ readonly companyProfile: Company = COMPANY_PROFILE;
           size: 'col-sm-4',
           surfix: '',
           prefix: '',
-        }
+        },
+        {
+          name: 'Company Financial Starting Month',
+          type: 'select',
+          required: true, 
+          validation: true,
+          formControlName: 'financialStartingMonth',
+          options: [
+            { value: 'JANUARY', label: 'January' },
+            { value: 'FEBRUARY', label: 'February' },
+            { value: 'MARCH', label: 'March' },
+            { value: 'APRIL', label: 'April' },
+            { value: 'MAY', label: 'May' },
+            { value: 'JUNE', label: 'June' },
+            { value: 'JULY', label: 'July' },
+            { value: 'AUGUST', label: 'August' },
+            { value: 'SEPTEMBER', label: 'September' },
+            { value: 'OCTOBER', label: 'October' },
+            { value: 'NOVEMBER', label: 'November' },
+            { value: 'DECEMBER', label: 'December' }
+          ],
+          errorMessage: "Financial Year is required",
+          placeholder: "Enter Financial Year",
+          size: 'col-sm-4',
+          surfix: '',
+          prefix: '',
+        },
       ]
     },
     {

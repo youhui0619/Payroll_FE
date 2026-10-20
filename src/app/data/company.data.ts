@@ -1,4 +1,4 @@
-import { Company } from '../models/company.model';
+import type { Company } from '../models/company.model';
 
 export const COMPANY_PROFILE: Company = {
   id: 'company-0001',
@@ -10,6 +10,7 @@ export const COMPANY_PROFILE: Company = {
   taxNo: 'C202401012345',
   website: 'https://nusadigital.example',
   logo: 'images/company-logo.svg',
+  financialStartingMonth: 'JANUARY',
   businessAddressLine1: '22 Jalan Sutera Tanjung 8/4',
   businessAddressLine2: 'Taman Sutera Utama',
   businessCity: 'Skudai',

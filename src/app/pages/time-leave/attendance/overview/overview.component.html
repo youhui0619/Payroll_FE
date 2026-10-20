@@ -193,6 +193,7 @@
 
 <app-leave-detail-dialog
     *ngIf="selectedLeave as detail"
+    [showDecisionActions]="selectedLeave.status === 'Pending'"
     [data]="detail"
     (closed)="selectedLeave = null">
 </app-leave-detail-dialog>
