@@ -5,6 +5,7 @@ import { ProfileComponent as CompanyProfileComponent } from './company/profile/p
 import { ViewComponent as PublicHolidayViewComponent } from './public-holidays/view/view.component';
 import { OverviewComponent as LeaveOverviewComponent } from './leave/overview/overview.component';
 import { CreateComponent as LeaveCreateComponent } from './leave/create/create.component';
+import { EditComponent as LeaveEditComponent } from './leave/edit/edit.component';
 
 
 export const SETTINGS_ROUTES: Routes = [
@@ -35,8 +36,13 @@ export const SETTINGS_ROUTES: Routes = [
   },
   {
     path: 'leave-settings/create',
-    title: 'CreateLeave Type',
+    title: 'Create Leave Setting',
     component: LeaveCreateComponent
+  },
+  {
+    path: 'leave-settings/edit/:leaveCode',
+    title: 'Edit Leave Setting',
+    component: LeaveEditComponent
   },
 
 
