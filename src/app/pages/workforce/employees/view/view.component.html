@@ -383,11 +383,6 @@
                                     <label class="text-dark fw-500">Work Location</label>
                                     <p class="text-muted">{{ employee.workLocation }}</p>
                                 </div>
-                                <div class="col-sm-12 px-2 mb-3">
-                                    <label class="text-dark fw-500">Basic salary</label>
-                                    <p class="text-muted">{{ employee.basicSalary | currency:'MYR':'symbol':'1.2-2' }} / month</p>
-                                </div>
-                                
                             </div>
                         </div>
                     </div>
@@ -416,7 +411,7 @@
             </mat-tab>
             <mat-tab label="Payroll & Tax">
                 <div class="px-2 mt-3">
-                    <h4 class="text-primary">Employment Information</h4>
+                    <h4 class="text-primary">Salary Information</h4>
                     <div class="w-100 salary-box mb-4">
                         <p class="fs-10 text-muted my-0 fw-300">Basic salary</p>
                         <h3 class="my-1">{{ employee.basicSalary | currency:'MYR':'symbol':'1.2-2' }}</h3>

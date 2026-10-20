@@ -86,6 +86,7 @@ export interface EmployeeTaxInformation {
 }
 
 export interface EmployeeLeaveInformation {
+  leavePolicyCodes: string[];
   annualLeaveEntitlement: number | null;
   annualLeavePeriod: 'month' | 'year';
   medicalLeaveEntitlement: number | null;
@@ -159,6 +160,7 @@ export const EMPTY_EMPLOYEE_FORM_DATA: EmployeeFormData = {
     agreeWithTerms: false,
   },
   leave: {
+    leavePolicyCodes: ['AL', 'ML'],
     annualLeaveEntitlement: null,
     annualLeavePeriod: 'year',
     medicalLeaveEntitlement: null,

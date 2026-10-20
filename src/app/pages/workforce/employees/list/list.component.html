@@ -147,16 +147,16 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="text-muted"><a href="javascript:void(0)" routerLink="/workforce/employees/view">{{ employee.employeeId }}</a></td>
+                                <td class="text-muted"><a href="javascript:void(0)" [routerLink]="['/workforce/employees/view', employee.employeeId]">{{ employee.employeeId }}</a></td>
                                 <td class="text-muted">{{ employee.employmentType }}</td>
                                 <td class="text-muted">{{ employee.tin }}</td>
                                 <td class="text-muted">{{ employee.kwspNo }}</td>
                                 <td><span class="chip bg-light-primary text-primary">{{ employee.employmentStatus }}</span></td>
                                 <td>
-                                    <button class="text-muted action-btn" mat-icon-button>
+                                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/workforce/employees/view', employee.employeeId]">
                                         <i-tabler name="eye"></i-tabler>
                                     </button>
-                                    <button class="text-muted action-btn" mat-icon-button>
+                                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/workforce/employees/edit', employee.employeeId]">
                                         <i-tabler name="edit"></i-tabler>
                                     </button>
                                 </td>

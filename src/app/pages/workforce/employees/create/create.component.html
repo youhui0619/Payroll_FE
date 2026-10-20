@@ -100,8 +100,9 @@
                                                         </mat-label>
                                                         <mat-form-field appearance="outline" class="form-input w-100">
                                                             <mat-select placeholder="Select nationality" formControlName="nationality">
-                                                                <mat-option value="MALAYSIAN">Malaysian</mat-option>
-                                                                <mat-option value="SINGAPOREAN">Singaporean</mat-option>
+                                                                <mat-option value="Malaysian">Malaysian</mat-option>
+                                                                <mat-option value="Singaporean">Singaporean</mat-option>
+                                                                <mat-option value="Other">Other</mat-option>
                                                             </mat-select>
                                                             <mat-error class="text-danger">Nationality is required</mat-error>
                                                         </mat-form-field>
@@ -113,8 +114,10 @@
                                                         </mat-label>
                                                         <mat-form-field appearance="outline" class="form-input w-100">
                                                             <mat-select placeholder="Select race" formControlName="race">
-                                                                <mat-option value="MALAYSIAN">Malaysian</mat-option>
-                                                                <mat-option value="SINGAPOREAN">Singaporean</mat-option>
+                                                                <mat-option value="Malay">Malay</mat-option>
+                                                                <mat-option value="Chinese">Chinese</mat-option>
+                                                                <mat-option value="Indian">Indian</mat-option>
+                                                                <mat-option value="Other">Other</mat-option>
                                                             </mat-select>
                                                             <mat-error class="text-danger">Race is required</mat-error>
                                                         </mat-form-field>
@@ -126,8 +129,11 @@
                                                         </mat-label>
                                                         <mat-form-field appearance="outline" class="form-input w-100">
                                                             <mat-select placeholder="Select religion" formControlName="religion">
-                                                                <mat-option value="MALAYSIAN">Malaysian</mat-option>
-                                                                <mat-option value="SINGAPOREAN">Singaporean</mat-option>
+                                                                <mat-option value="Islam">Islam</mat-option>
+                                                                <mat-option value="Buddhism">Buddhism</mat-option>
+                                                                <mat-option value="Christianity">Christianity</mat-option>
+                                                                <mat-option value="Hinduism">Hinduism</mat-option>
+                                                                <mat-option value="Other">Other</mat-option>
                                                             </mat-select>
                                                             <mat-error class="text-danger">Religion is required</mat-error>
                                                         </mat-form-field>
@@ -138,8 +144,10 @@
                                                         </mat-label>
                                                         <mat-form-field appearance="outline" class="form-input w-100">
                                                             <mat-select placeholder="Select marital status" formControlName="maritalStatus">
-                                                                <mat-option value="MALAYSIAN">Malaysian</mat-option>
-                                                                <mat-option value="SINGAPOREAN">Singaporean</mat-option>
+                                                                <mat-option value="Single">Single</mat-option>
+                                                                <mat-option value="Married">Married</mat-option>
+                                                                <mat-option value="Divorced">Divorced</mat-option>
+                                                                <mat-option value="Widowed">Widowed</mat-option>
                                                             </mat-select>
                                                             <mat-error class="text-danger">Marital Status is required</mat-error>
                                                         </mat-form-field>
@@ -266,10 +274,10 @@
                                                                                     hideSingleSelectionIndicator
                                                                                     required
                                                                                  formControlName="employmentStatus">
-                                                                                    <mat-button-toggle value="active">Active</mat-button-toggle>
-                                                                                    <mat-button-toggle value="probation">Probation</mat-button-toggle>
-                                                                                    <mat-button-toggle value="resigned">Resigned</mat-button-toggle>
-                                                                                    <mat-button-toggle value="terminated">Terminated</mat-button-toggle>
+                                                                                    <mat-button-toggle value="Active">Active</mat-button-toggle>
+                                                                                    <mat-button-toggle value="Probation">Probation</mat-button-toggle>
+                                                                                    <mat-button-toggle value="Resigned">Resigned</mat-button-toggle>
+                                                                                    <mat-button-toggle value="Terminated">Terminated</mat-button-toggle>
                                                                                 </mat-button-toggle-group>
                                                                                 <!-- <mat-error class="text-danger">Gender is required</mat-error> -->
                                                                             </div>
@@ -285,9 +293,9 @@
                                                                                         hideSingleSelectionIndicator
                                                                                         required
                                                                                      formControlName="employmentType">
-                                                                                        <mat-button-toggle value="permament">Permament</mat-button-toggle>
-                                                                                        <mat-button-toggle value="contract">Contract</mat-button-toggle>
-                                                                                        <mat-button-toggle value="part-time">Part-time</mat-button-toggle>
+                                                                                        <mat-button-toggle value="Permanent">Permanent</mat-button-toggle>
+                                                                                        <mat-button-toggle value="Contract">Contract</mat-button-toggle>
+                                                                                        <mat-button-toggle value="Part-time">Part-time</mat-button-toggle>
                                                                                     </mat-button-toggle-group>
                                                                                     </div>
 
@@ -296,37 +304,22 @@
                                                                                             <span class="text-danger">*</span>
                                                                                         </mat-label>
                                                                                         <mat-form-field appearance="outline" class="form-input w-100">
-                                                                                            <mat-select placeholder="Select state" formControlName="department">
-                                                                                                <mat-option value="MALE">Male</mat-option>
-                                                                                                <mat-option value="FEMALE">Female</mat-option>
+                                                                                            <mat-select placeholder="Select department" formControlName="department" (selectionChange)="onDepartmentChange()">
+                                                                                                <mat-option *ngFor="let department of departments" [value]="department.name">{{ department.name }}</mat-option>
                                                                                             </mat-select>
-                                                                                            <mat-error class="text-danger">Gender is required</mat-error>
+                                                                                            <mat-error class="text-danger">Department is required</mat-error>
                                                                                         </mat-form-field>
                                                                                     </div>
 
-                                                                                    <div class="col-sm-4 px-2">
+                                                                                    <div class="col-sm-4 px-2" *ngIf="hasAvailablePositions">
                                                                                         <mat-label class="form-label">Position
                                                                                             <span class="text-danger">*</span>
                                                                                         </mat-label>
                                                                                         <mat-form-field appearance="outline" class="form-input w-100">
-                                                                                            <mat-select placeholder="Select state" formControlName="position">
-                                                                                                <mat-option value="MALE">Male</mat-option>
-                                                                                                <mat-option value="FEMALE">Female</mat-option>
+                                                                                            <mat-select placeholder="Select position" formControlName="position" [disabled]="!employeeForm.controls.employment.controls.department.value">
+                                                                                                <mat-option *ngFor="let position of availablePositions" [value]="position.title">{{ position.title }}</mat-option>
                                                                                             </mat-select>
-                                                                                            <mat-error class="text-danger">Gender is required</mat-error>
-                                                                                        </mat-form-field>
-                                                                                    </div>
-
-                                                                                    <div class="col-sm-4 px-2">
-                                                                                        <mat-label class="form-label">Reporting Manager
-                                                                                            <span class="text-danger">*</span>
-                                                                                        </mat-label>
-                                                                                        <mat-form-field appearance="outline" class="form-input w-100">
-                                                                                            <mat-select placeholder="Select state" formControlName="reportingManager">
-                                                                                                <mat-option value="MALE">Male</mat-option>
-                                                                                                <mat-option value="FEMALE">Female</mat-option>
-                                                                                            </mat-select>
-                                                                                            <mat-error class="text-danger">Gender is required</mat-error>
+                                                                                            <mat-error class="text-danger">Position is required</mat-error>
                                                                                         </mat-form-field>
                                                                                     </div>
 
@@ -442,9 +435,9 @@
                                                                                                         </mat-label>
                                                                                                         <mat-form-field appearance="outline" class="form-input w-100">
                                                                                                             <mat-select placeholder="Select payment method" formControlName="paymentMethod">
-                                                                                                                <mat-option value="Monthly">Monthly</mat-option>
-                                                                                                                <mat-option value="Daily">Daily</mat-option>
-                                                                                                                <mat-option value="Hourly">Hourly</mat-option>
+                                                                                                                <mat-option value="Transfer by bank">Transfer by bank</mat-option>
+                                                                                                                <mat-option value="Cash">Cash</mat-option>
+                                                                                                                <mat-option value="Cheque">Cheque</mat-option>
                                                                                                             </mat-select>
                                                                                                             <mat-error class="text-danger">Payment Method is required</mat-error>
                                                                                                         </mat-form-field>
@@ -457,9 +450,13 @@
                                                                                                         </mat-label>
                                                                                                         <mat-form-field appearance="outline" class="form-input w-100">
                                                                                                             <mat-select placeholder="Select bank" formControlName="bank">
-                                                                                                                <mat-option value="Monthly">Monthly</mat-option>
-                                                                                                                <mat-option value="Daily">Daily</mat-option>
-                                                                                                                <mat-option value="Hourly">Hourly</mat-option>
+                                                                                                                <mat-option value="Maybank">Maybank</mat-option>
+                                                                                                                <mat-option value="CIMB">CIMB</mat-option>
+                                                                                                                <mat-option value="Public Bank">Public Bank</mat-option>
+                                                                                                                <mat-option value="RHB">RHB</mat-option>
+                                                                                                                <mat-option value="Hong Leong Bank">Hong Leong Bank</mat-option>
+                                                                                                                <mat-option value="AmBank">AmBank</mat-option>
+                                                                                                                <mat-option value="Bank Islam">Bank Islam</mat-option>
                                                                                                             </mat-select>
                                                                                                             <mat-error class="text-danger">Bank is required</mat-error>
                                                                                                         </mat-form-field>
@@ -660,8 +657,15 @@
                                                                                                                             </mat-label>
                                                                                                                             <mat-form-field appearance="outline" class="form-input w-100">
                                                                                                                                 <mat-select placeholder="Select relationship" formControlName="relationship">
-                                                                                                                                    <mat-option value="MALE">Male</mat-option>
-                                                                                                                                    <mat-option value="FEMALE">Female</mat-option>
+                                                                                                                                    <mat-option value="Spouse">Spouse</mat-option>
+                                                                                                                                    <mat-option value="Child">Child</mat-option>
+                                                                                                                                    <mat-option value="Parent">Parent</mat-option>
+                                                                                                                                    <mat-option value="Sibling">Sibling</mat-option>
+                                                                                                                                    <mat-option value="Guardian">Guardian</mat-option>
+                                                                                                                                    <mat-option value="Relative">Relative</mat-option>
+                                                                                                                                    <mat-option value="Family member">Family member</mat-option>
+                                                                                                                                    <mat-option value="Friend">Friend</mat-option>
+                                                                                                                                    <mat-option value="Other">Other</mat-option>
                                                                                                                                 </mat-select>
                                                                                                                                 <mat-error class="text-danger">Relationship is required</mat-error>
                                                                                                                             </mat-form-field>

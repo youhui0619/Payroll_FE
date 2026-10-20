@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { RouterLink } from '@angular/router';
@@ -9,6 +9,10 @@ import { defaultLeaveEntitlements } from '../../../../data/leave-balances';
 import { leavePolicies } from '../../../../data/leave-policies';
 import type { LeaveEntitlementPeriod } from '../../../../models/leave.model';
 import type { LeavePolicy } from '../../../../models/leave-policy.model';
+import { departments } from '../../../../data/departments';
+import { positions } from '../../../../data/positions';
+import type { Department } from '../../../../models/department.model';
+import type { Position } from '../../../../models/position.model';
 
 
 @Component({
@@ -20,6 +24,8 @@ import type { LeavePolicy } from '../../../../models/leave-policy.model';
 })
 export class CreateComponent {
 
+  readonly departments: Department[] = departments.filter(department => department.status === 'Active');
+  readonly positions: Position[] = positions;
   readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');
 
   employeeForm = new FormGroup({
@@ -68,7 +74,7 @@ export class CreateComponent {
       agreeWithTerms: new FormControl(false),
     }),
     leave: new FormGroup({
-      leavePolicyCodes: new FormControl<string[]>([], { nonNullable: true }),
+      leavePolicyCodes: new FormControl<string[]>(['AL', 'ML'], { nonNullable: true }),
       annualLeaveEntitlement: new FormControl<number | null>(defaultLeaveEntitlements.annual.amount),
       annualLeavePeriod: new FormControl<LeaveEntitlementPeriod>(defaultLeaveEntitlements.annual.period, { nonNullable: true }),
       medicalLeaveEntitlement: new FormControl<number | null>(defaultLeaveEntitlements.medical.amount),
@@ -86,6 +92,29 @@ export class CreateComponent {
       country: new FormControl(''),
     }),
   });
+
+  get availablePositions(): Position[] {
+    const departmentName = this.employeeForm.controls.employment.controls.department.value;
+    const department = this.departments.find(item => item.name === departmentName);
+    if (!department) return [];
+
+    return this.positions.filter(position =>
+      position.departmentId === department.id && this.isEffective(position.effectiveFrom, position.effectiveTo)
+    );
+  }
+
+  get hasAvailablePositions(): boolean {
+    return this.availablePositions.length > 0;
+  }
+
+  onDepartmentChange(): void {
+    this.employeeForm.controls.employment.controls.position.setValue('');
+  }
+
+  private isEffective(effectiveFrom: string | null, effectiveTo: string | null): boolean {
+    const today = new Date().toISOString().slice(0, 10);
+    return (!effectiveFrom || effectiveFrom <= today) && (!effectiveTo || effectiveTo >= today);
+  }
 
   readonly leaveYear = new Date().getFullYear();
 

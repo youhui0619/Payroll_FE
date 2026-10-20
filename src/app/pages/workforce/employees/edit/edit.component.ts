@@ -1,0 +1,285 @@
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ToastrService, ToastrModule } from 'ngx-toastr';
+import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
+import { defaultLeaveEntitlements } from '../../../../data/leave-balances';
+import { leavePolicies } from '../../../../data/leave-policies';
+import type { LeaveEntitlementPeriod } from '../../../../models/leave.model';
+import type { LeavePolicy } from '../../../../models/leave-policy.model';
+import { departments } from '../../../../data/departments';
+import { positions } from '../../../../data/positions';
+import type { Department } from '../../../../models/department.model';
+import type { Position } from '../../../../models/position.model';
+import { getEmployee } from '../../../../data/employees';
+import { getEmployeeLeaveBalances } from '../../../../data/leave-balances';
+
+@Component({
+  selector: 'app-edit',
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule,  ToastrModule, DropzoneComponent, RouterLink],
+  providers: [...MaterialProviders, ToastrService],
+  templateUrl: './edit.component.html',
+  styleUrl: './edit.component.scss'
+})
+export class EditComponent implements OnInit {
+
+  constructor(private readonly route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    const employeeId = this.route.snapshot.paramMap.get('id');
+    if (employeeId) this.patchEmployeeForm(employeeId);
+  }
+
+  readonly departments: Department[] = departments.filter(department => department.status === 'Active');
+  readonly positions: Position[] = positions;
+  readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');
+
+  employeeForm = new FormGroup({
+    personal: new FormGroup({
+      employeeId: new FormControl(''),
+      employeeName: new FormControl(''),
+      nricPassportNo: new FormControl(''),
+      dateOfBirth: new FormControl<Date | null>(null),
+      gender: new FormControl(''),
+      nationality: new FormControl(''),
+      race: new FormControl(''),
+      religion: new FormControl(''),
+      maritalStatus: new FormControl(''),
+      email: new FormControl(''),
+      contactNo: new FormControl(''),
+      addressLine1: new FormControl(''),
+      addressLine2: new FormControl(''),
+      city: new FormControl(''),
+      postcode: new FormControl(''),
+      state: new FormControl(''),
+      country: new FormControl(''),
+    }),
+    employment: new FormGroup({
+      employmentStatus: new FormControl(''),
+      employmentType: new FormControl(''),
+      department: new FormControl(''),
+      position: new FormControl(''),
+      reportingManager: new FormControl(''),
+      workLocation: new FormControl(''),
+      joinedDate: new FormControl<Date | null>(null),
+      confirmationDate: new FormControl<Date | null>(null),
+      resignationDate: new FormControl<Date | null>(null),
+    }),
+    payroll: new FormGroup({
+      basicSalary: new FormControl<number | null>(null),
+      salaryType: new FormControl(''),
+      paymentMethod: new FormControl(''),
+      bank: new FormControl(''),
+      bankAccount: new FormControl(''),
+      epfEmployeeNo: new FormControl(''),
+      epfEmployerNo: new FormControl(''),
+      socsoNo: new FormControl(''),
+      eisStatus: new FormControl(''),
+    }),
+    taxInformation: new FormGroup({
+      agreeWithTerms: new FormControl(false),
+    }),
+    leave: new FormGroup({
+      leavePolicyCodes: new FormControl<string[]>(['AL', 'ML'], { nonNullable: true }),
+      annualLeaveEntitlement: new FormControl<number | null>(defaultLeaveEntitlements.annual.amount),
+      annualLeavePeriod: new FormControl<LeaveEntitlementPeriod>(defaultLeaveEntitlements.annual.period, { nonNullable: true }),
+      medicalLeaveEntitlement: new FormControl<number | null>(defaultLeaveEntitlements.medical.amount),
+      medicalLeavePeriod: new FormControl<LeaveEntitlementPeriod>(defaultLeaveEntitlements.medical.period, { nonNullable: true }),
+    }),
+    emergencyContact: new FormGroup({
+      contactName: new FormControl(''),
+      relationship: new FormControl(''),
+      contactNo: new FormControl(''),
+      addressLine1: new FormControl(''),
+      addressLine2: new FormControl(''),
+      city: new FormControl(''),
+      postcode: new FormControl(''),
+      state: new FormControl(''),
+      country: new FormControl(''),
+    }),
+  });
+
+  get availablePositions(): Position[] {
+    const departmentName = this.employeeForm.controls.employment.controls.department.value;
+    const department = this.departments.find(item => item.name === departmentName);
+    if (!department) return [];
+
+    return this.positions.filter(position =>
+      position.departmentId === department.id && this.isEffective(position.effectiveFrom, position.effectiveTo)
+    );
+  }
+
+  get hasAvailablePositions(): boolean {
+    return this.availablePositions.length > 0;
+  }
+
+  onDepartmentChange(): void {
+    this.employeeForm.controls.employment.controls.position.setValue('');
+  }
+
+  private isEffective(effectiveFrom: string | null, effectiveTo: string | null): boolean {
+    const today = new Date().toISOString().slice(0, 10);
+    return (!effectiveFrom || effectiveFrom <= today) && (!effectiveTo || effectiveTo >= today);
+  }
+
+  private patchEmployeeForm(employeeId: string): void {
+    const employee = getEmployee(employeeId);
+    const leaveBalances = getEmployeeLeaveBalances(employeeId);
+    const [addressLine1 = '', ...addressLine2] = employee.address.split(', ');
+
+    this.employeeForm.patchValue({
+      personal: {
+        employeeId: employee.employeeId,
+        employeeName: employee.employeeName,
+        nricPassportNo: employee.nricPassportNo,
+        dateOfBirth: employee.dateOfBirth ? new Date(`${employee.dateOfBirth}T00:00:00`) : null,
+        gender: employee.gender.toUpperCase(),
+        nationality: employee.nationality,
+        race: employee.race,
+        religion: employee.religion,
+        maritalStatus: employee.maritalStatus,
+        email: employee.email,
+        contactNo: employee.contactNo,
+        addressLine1,
+        addressLine2: addressLine2.join(', '),
+      },
+      employment: {
+        employmentStatus: this.matchOption(employee.employmentStatus, ['Active', 'Probation', 'Resigned', 'Terminated']),
+        employmentType: this.matchOption(employee.employmentType, ['Permanent', 'Contract', 'Part-time']),
+        department: employee.department,
+        position: employee.position,
+        reportingManager: employee.reportingManager,
+        workLocation: employee.workLocation,
+        joinedDate: employee.joinedDate ? new Date(`${employee.joinedDate}T00:00:00`) : null,
+        confirmationDate: employee.confirmationDate ? new Date(`${employee.confirmationDate}T00:00:00`) : null,
+        resignationDate: employee.resignationDate ? new Date(`${employee.resignationDate}T00:00:00`) : null,
+      },
+      payroll: {
+        basicSalary: employee.basicSalary,
+        salaryType: employee.salaryType,
+        paymentMethod: employee.paymentMethod,
+        bank: employee.bank,
+        bankAccount: employee.bankAccount,
+        epfEmployeeNo: employee.epfEmployeeNo,
+        epfEmployerNo: employee.epfEmployerNo,
+        socsoNo: employee.socsoNo,
+        eisStatus: employee.eisStatus,
+      },
+      leave: {
+        leavePolicyCodes: ['AL', 'ML'],
+        annualLeaveEntitlement: leaveBalances.annual.entitled,
+        annualLeavePeriod: 'year',
+        medicalLeaveEntitlement: leaveBalances.medical.entitled,
+        medicalLeavePeriod: 'year',
+      },
+      emergencyContact: {
+        contactName: employee.emergencyContactName,
+        relationship: employee.emergencyContactRelationship,
+        contactNo: employee.emergencyContactNo,
+      },
+    });
+  }
+
+  private matchOption(value: string, options: string[]): string {
+    return options.find(option => option.toLowerCase() === value.trim().toLowerCase()) ?? value;
+  }
+
+  readonly leaveYear = new Date().getFullYear();
+
+  get selectedLeavePolicies(): LeavePolicy[] {
+    const selectedCodes = new Set(this.employeeForm.controls.leave.controls.leavePolicyCodes.value);
+    return this.leavePolicies.filter(policy => selectedCodes.has(policy.leaveCode));
+  }
+
+  get annualLeaveYearlyEntitlement(): number {
+    return this.toYearlyEntitlement(
+      this.employeeForm.controls.leave.controls.annualLeaveEntitlement.value,
+      this.employeeForm.controls.leave.controls.annualLeavePeriod.value
+    );
+  }
+
+  get medicalLeaveYearlyEntitlement(): number {
+    return this.toYearlyEntitlement(
+      this.employeeForm.controls.leave.controls.medicalLeaveEntitlement.value,
+      this.employeeForm.controls.leave.controls.medicalLeavePeriod.value
+    );
+  }
+
+  private toYearlyEntitlement(amount: number | null, period: LeaveEntitlementPeriod): number {
+    if (amount === null || !Number.isFinite(amount)) return 0;
+    return Math.max(0, amount) * (period === 'month' ? 12 : 1);
+  }
+
+  isLeavePolicySelected(leaveCode: string): boolean {
+    return this.employeeForm.controls.leave.controls.leavePolicyCodes.value.includes(leaveCode);
+  }
+
+  setLeavePolicySelected(leaveCode: string, selected: boolean): void {
+    const codes = this.employeeForm.controls.leave.controls.leavePolicyCodes;
+    const selectedCodes = new Set(codes.value);
+
+    if (selected) selectedCodes.add(leaveCode);
+    else selectedCodes.delete(leaveCode);
+
+    codes.setValue([...selectedCodes]);
+  }
+
+  onSubmit(): void {
+    console.log('form.value', this.employeeForm.value);
+  }
+
+  entitlementLabel(policy: LeavePolicy): string {
+    if (policy.entitlementCalculationMethod === 'SERVICE') {
+      const tiers = policy.serviceEntitlementTiers
+        .filter(tier => tier.serviceFrom !== null && tier.daysPerYear !== null)
+        .map(tier => {
+          const yearRange = tier.serviceTo === null
+            ? `${tier.serviceFrom}+ years`
+            : `${tier.serviceFrom}–${tier.serviceTo} years`;
+          return `${yearRange}: ${tier.daysPerYear} ${this.entitlementUnitLabel(policy)} per year`;
+        });
+      return tiers.length > 0 ? tiers.join(' · ') : 'Based on length of service';
+    }
+
+    if (policy.entitlementGrantMethod === 'MANUAL') return 'Set manually';
+    return `${policy.defaultEntitlement ?? 0} ${this.entitlementUnitLabel(policy)} per year`;
+  }
+
+  leaveBalanceLabel(policy: LeavePolicy): string {
+    const isServiceBased = policy.entitlementCalculationMethod === 'SERVICE';
+    const entitlement = isServiceBased ? this.serviceBasedEntitlement(policy) : policy.defaultEntitlement;
+
+    if (isServiceBased && entitlement === null) return 'Enter joined date';
+    if (entitlement === null || (policy.entitlementGrantMethod === 'MANUAL' && policy.defaultEntitlement === null)) {
+      return '—';
+    }
+
+    return `${entitlement} ${this.entitlementUnitLabel(policy)}`;
+  }
+
+  private serviceBasedEntitlement(policy: LeavePolicy): number | null {
+    const joinedDate = this.employeeForm.controls.employment.controls.joinedDate.value;
+    if (!joinedDate || Number.isNaN(joinedDate.getTime())) return null;
+
+    const today = new Date();
+    let yearsOfService = today.getFullYear() - joinedDate.getFullYear();
+    const beforeAnniversary = today.getMonth() < joinedDate.getMonth()
+      || (today.getMonth() === joinedDate.getMonth() && today.getDate() < joinedDate.getDate());
+    if (beforeAnniversary) yearsOfService--;
+    yearsOfService = Math.max(0, yearsOfService);
+
+    const tier = policy.serviceEntitlementTiers.find(item =>
+      item.serviceFrom !== null
+      && yearsOfService >= item.serviceFrom
+      && (item.serviceTo === null || yearsOfService < item.serviceTo)
+    );
+    return tier?.daysPerYear ?? null;
+  }
+
+  private entitlementUnitLabel(policy: LeavePolicy): string {
+    return policy.entitlementUnit === 'DAILY' ? 'days' : 'hours';
+  }
+}
+
