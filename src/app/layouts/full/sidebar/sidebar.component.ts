@@ -36,11 +36,11 @@ export class SidebarComponent implements OnInit, OnChanges {
   openMap: Record<number, boolean> = {};
   private defaultMenu: MenuItem[] = [
     { header: 'Dashboard' },
-    { label: 'Dashboard', icon: 'ant-design:dashboard-outlined', route: '/dashboard', badge: 10 },
+    { label: 'Dashboard', icon: 'solar:widget-2-outline', route: '/dashboard', badge: 10 },
     
     
     { header: 'Workforce' },
-    { label: 'Employees', icon: 'ci:users', route: '/workforce/employees/list' },
+    { label: 'Employees', icon: 'solar:buildings-2-outline', route: '/workforce/employees/list' },
     { label: 'Organization', icon: 'akar-icons:shipping-box-01', children: [
         { label: 'Departments', icon: 'codex:dot-circle', route: '/organization/departments/overview' },
         { label: 'Positions', icon: 'codex:dot-circle', route: '/organization/positions/overview' },
@@ -49,12 +49,12 @@ export class SidebarComponent implements OnInit, OnChanges {
     },
     
     { header: 'Time & Leave' },
-    { label: 'Attendance', icon: 'akar-icons:shipping-box-01', children: [
+    { label: 'Attendance', icon: 'solar:calendar-mark-outline', children: [
         { label: 'Overview', icon: 'codex:dot-circle', route: '/time-leave/attendance/overview' },
         { label: 'Attendance Adjustments', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
        ]
     },
-    { label: 'Leave', icon: 'akar-icons:shipping-box-01', children: [
+    { label: 'Leave', icon: 'solar:calendar-date-outline', children: [
         { label: 'Overview', icon: 'codex:dot-circle', route: '/time-leave/leave/overview' },
         { label: 'Leave Applications', icon: 'codex:dot-circle', route: '/time-leave/leave/applications' },
         { label: 'Leave Approvals', icon: 'codex:dot-circle', route: '/time-leave/leave/approval' },
@@ -66,13 +66,22 @@ export class SidebarComponent implements OnInit, OnChanges {
         { label: 'OT History', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
       ]
     },
-    
+
+    { header: 'Expenses & Claims' },
+    { label: 'Claims', icon: 'solar:clock-circle-outline', children: [
+        { label: 'Overview', icon: 'codex:dot-circle', route: '/time-leave/leave/overview' },
+        { label: 'Claim Applications', icon: 'codex:dot-circle', route: '/time-leave/leave/applications' },
+        { label: 'Claim Approvals', icon: 'codex:dot-circle', route: '/time-leave/leave/approval' },
+        { label: 'Claim Types', icon: 'codex:dot-circle', route: '/time-leave/leave/approval' },
+      ]
+    },
+
     { header: 'Payroll' },
-    { label: 'Payroll', icon: 'akar-icons:shipping-box-01', children: [
+    { label: 'Payroll', icon: 'solar:card-2-outline', children: [
         { label: 'Overview', icon: 'codex:dot-circle', route: '/payroll/overview' },
        ]
     },
-    { label: 'Tax & PCB', icon: 'akar-icons:shipping-box-01', children: [
+    { label: 'Tax & PCB', icon: 'solar:calculator-minimalistic-outline', children: [
         { label: 'PCB Calculation', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
         { label: 'PCB Records', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
         { label: 'Tax', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
@@ -80,20 +89,20 @@ export class SidebarComponent implements OnInit, OnChanges {
     },
 
     { header: 'Statutory' },
-    { label: 'EPF', icon: 'ant-design:shop-outlined', route: '/warehouses/list', badge: 10 },
+    { label: 'EPF', icon: 'solar:shield-check-outline', route: '/warehouses/list', badge: 10 },
     { label: 'SOCSO', icon: 'ant-design:shop-outlined', route: '/warehouses/list', badge: 10 },
     { label: 'LHDN', icon: 'ant-design:shop-outlined', route: '/warehouses/list', badge: 10 },
     
     
     { header: 'Reports' },
-    { label: 'Payroll Reports', icon: 'ant-design:shop-outlined', route: '/warehouses/list', badge: 10 },
-    { label: 'Attendance Reports', icon: 'ant-design:shop-outlined', route: '/warehouses/list', badge: 10},
-    { label: 'Leave Reports', icon: 'ant-design:shop-outlined', route: '/warehouses/list', badge: 10 },
-    { label: 'Statutory Reports', icon: 'ant-design:shop-outlined', route: '/warehouses/list', badge: 10 },
+    { label: 'Payroll Reports', icon: 'solar:chart-square-outline', route: '/warehouses/list', badge: 10 },
+    { label: 'Attendance Reports', icon: 'solar:chart-2-outline', route: '/warehouses/list', badge: 10},
+    { label: 'Leave Reports', icon: 'solar:clipboard-list-outline', route: '/warehouses/list', badge: 10 },
+    { label: 'Statutory Reports', icon: 'solar:document-text-outline', route: '/warehouses/list', badge: 10 },
     
 
     { header: 'Setting' },
-    { label: 'Company', icon: 'solar:magnifer-line-duotone', children: [
+    { label: 'Company', icon: 'solar:settings-outline', children: [
         { label: 'Company Profile', icon: 'codex:dot-circle', route: '/settings/company/profile' },
         { label: 'Work Schedule', icon: 'codex:dot-circle', route: '/roles/create', badge: 10 },
         { label: 'Public Holidays', icon: 'codex:dot-circle', route: '/settings/public-holidays/list' },
@@ -101,7 +110,7 @@ export class SidebarComponent implements OnInit, OnChanges {
         { label: 'Payroll Settings', icon: 'codex:dot-circle', route: '/roles/create', badge: 10 }
       ] 
     },
-    { label: 'Access Control', icon: 'solar:magnifer-line-duotone', children: [
+    { label: 'Access Control', icon: 'solar:lock-keyhole-outline', children: [
         { label: 'Users', icon: 'codex:dot-circle', route: '/roles', badge: 10 },
         { label: 'Roles & Permissions', icon: 'codex:dot-circle', route: '/roles/create', badge: 10 },
       ] 
