@@ -20,7 +20,7 @@
                     <div class="summary-info">
                         <p class="f-s-12 text-muted">Total Departments
                         </p>
-                        <h3 class="mb-0">128</h3>
+                        <h3 class="mb-0">{{ departments.length }}</h3>
                     </div>
                     <div class="text-primary bg-light-primary text-end icon">
                         <i-tabler name="users"></i-tabler>
@@ -37,7 +37,7 @@
                     <div class="summary-info">
                         <p class="f-s-12 text-muted">Active
                         </p>
-                        <h3 class="mb-0">112</h3>
+                        <h3 class="mb-0">{{ activeDepartmentCount }}</h3>
                     </div>
                     <div class="text-primary bg-light-primary text-end icon">
                         <i-tabler name="user-check"></i-tabler>
@@ -54,10 +54,26 @@
                     <div class="summary-info">
                         <p class="f-s-12 text-muted">Inactive
                         </p>
-                        <h3 class="mb-0">6</h3>
+                        <h3 class="mb-0">{{ inactiveDepartmentCount }}</h3>
                     </div>
                     <div class="text-primary bg-light-primary text-end icon">
                         <i-tabler name="user-off"></i-tabler>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-3 px-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="summary-info">
+                        <p class="f-s-12 text-muted">Draft</p>
+                        <h3 class="mb-0">{{ draftDepartmentCount }}</h3>
+                    </div>
+                    <div class="text-warning bg-light-warning text-end icon">
+                        <i-tabler name="file-text"></i-tabler>
                     </div>
                 </div>
             </div>
@@ -69,23 +85,21 @@
 <div class="row mt-4">
     <div class="d-flex align-items-center flex-wrap gap-2">
         <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
-            <input type="text" matInput placeholder="Search..." >
+            <input type="text" matInput placeholder="Search..." [(ngModel)]="searchTerm">
             <span matTextPrefix class="text-muted me-2">
                 <i-tabler name="search" class="icon-16"></i-tabler>
             </span>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
-            <mat-select placeholder="Select Department" multiple>
-                <mat-option value="active">Active</mat-option>
-                <mat-option value="inactive">Inactive</mat-option>
+            <mat-select placeholder="Select Department" multiple [(ngModel)]="selectedDepartmentIds">
+                <mat-option *ngFor="let department of departments" [value]="department.id">{{ department.name }}</mat-option>
             </mat-select>
         </mat-form-field>
         
         <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
-            <mat-select placeholder="Select Status" multiple>
-                <mat-option value="active">Active</mat-option>
-                <mat-option value="inactive">Inactive</mat-option>
+            <mat-select placeholder="Select Status" multiple [(ngModel)]="selectedStatuses">
+                <mat-option *ngFor="let status of statuses" [value]="status">{{ status }}</mat-option>
             </mat-select>
         </mat-form-field>
     </div>
@@ -96,9 +110,12 @@
     <div class="card">
         <div class="card-header">
           <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-              <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All (100)</span>  |  Active (12)  |  Inactive (6)</h6>
+              <h6 class="fs-14 fw-400 text-muted my-0">
+                  <span class="fw-550 text-primary">All ({{ filteredDepartments.length }})</span>
+                  | Active ({{ filteredCountByStatus('Active') }}) | Inactive ({{ filteredCountByStatus('Inactive') }}) | Draft ({{ filteredCountByStatus('Draft') }})
+              </h6>
               <div>
-                  <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
+                  <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2" type="button" (click)="clearFilters()"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
                   <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
                   <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <i-tabler name="download" class="icon-16"></i-tabler> Export</button>
               </div>
@@ -120,18 +137,18 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let department of departments">
+              <tr *ngFor="let department of filteredDepartments">
                 <td class="text-muted">
                   <p class="text-dark my-0">{{ department.name }}</p>
                   <p class="text-muted fw-300 fs-10 my-0">{{ department.code }}</p>
                 </td>
                 <td class="text-muted">{{ departmentName(department.parentDepartmentId) }}</td>
                 <td class="text-muted">{{ departmentHead(department.headOfDepartmentId) }}</td>
-                <td class="text-muted text-center">{{ department.totalEmployees }}</td>
+                <td class="text-muted text-center">{{ departmentEmployeeCount(department) }}</td>
                 <td class="text-muted">{{ department.effectiveFrom | date:'dd/MM/yyyy' }}</td>
-                <td><span class="chip bg-light-primary text-primary">{{ department.status }}</span></td>
+                <td><span class="chip" [ngClass]="statusClass(department.status)">{{ department.status }}</span></td>
                 <td>
-                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/organization/departments', department.id, 'view']" aria-label="View department">
+                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/organization/departments/view', department.id]">
                         <i-tabler name="eye"></i-tabler>
                     </button>
                     <button class="text-muted action-btn" mat-icon-button>
@@ -139,6 +156,9 @@
                     </button>
                 </td>
             </tr>
+              <tr *ngIf="filteredDepartments.length === 0">
+                  <td colspan="7" class="text-muted text-center py-4">No departments match your search or filters.</td>
+              </tr>
             </tbody>
           </table>
         </div>

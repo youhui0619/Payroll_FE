@@ -43,7 +43,7 @@ export class SidebarComponent implements OnInit, OnChanges {
     { label: 'Employees', icon: 'ci:users', route: '/workforce/employees/list' },
     { label: 'Organization', icon: 'akar-icons:shipping-box-01', children: [
         { label: 'Departments', icon: 'codex:dot-circle', route: '/organization/departments/overview' },
-        { label: 'Positions', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
+        { label: 'Positions', icon: 'codex:dot-circle', route: '/organization/positions/overview' },
         { label: 'Work Locations', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
        ]
     },

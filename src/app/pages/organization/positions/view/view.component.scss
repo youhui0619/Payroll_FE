@@ -1,0 +1,134 @@
+.position-chart-scroll {
+  overflow: auto;
+  padding: 12px 8px 20px;
+}
+
+.position-chart-tree,
+.position-chart-tree ul {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  width: max-content;
+  min-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.position-chart-tree ul {
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 28px;
+}
+
+.position-chart-tree li {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  padding-bottom: 16px;
+  list-style: none;
+}
+
+.position-chart-tree > li {
+  padding: 0;
+}
+
+.position-chart-tree ul::before,
+.position-chart-tree li::before,
+.position-chart-tree li::after {
+  position: absolute;
+  border-color: var(--light-disabled);
+  border-style: solid;
+  content: '';
+}
+
+.position-chart-tree ul::before {
+  top: 0;
+  bottom: 16px;
+  left: -14px;
+  border-width: 0 0 0 1px;
+}
+
+.position-chart-tree li::before {
+  top: 32px;
+  left: -14px;
+  width: 14px;
+  border-width: 1px 0 0;
+}
+
+.position-chart-tree li::after {
+  top: 0;
+  bottom: 0;
+  left: -14px;
+  border-width: 0 0 0 1px;
+}
+
+.position-chart-tree li:first-child::after {
+  top: 32px;
+}
+
+.position-chart-tree li:last-child::after {
+  bottom: calc(100% - 32px);
+}
+
+.position-chart-tree li:only-child::after {
+  display: none;
+}
+
+.position-chart-tree > li::before,
+.position-chart-tree > li::after {
+  display: none;
+}
+
+.position-chart-node {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  flex: 0 0 220px;
+  width: 220px;
+  min-width: 220px;
+  max-width: 220px;
+  padding: 12px 14px;
+  border: 1px solid var(--light-disabled);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgb(15 23 42 / 5%);
+  text-align: left;
+  cursor: pointer;
+}
+
+.position-chart-node h5 {
+  margin: 9px 0 5px;
+  color: var(--header);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.position-chart-node small,
+.position-code {
+  color: var(--text);
+  font-size: 12px;
+}
+
+.position-code {
+  font-weight: 600;
+}
+
+.current-position > .position-chart-node {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+  background: var(--light-primary);
+}
+
+.avatar {
+  display: flex;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--light-primary);
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+}

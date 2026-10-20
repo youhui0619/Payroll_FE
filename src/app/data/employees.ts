@@ -2,7 +2,9 @@ import type { EmployeeRecord } from '../models/employee.model';
 
 type SampleEmployeeInput = Pick<EmployeeRecord,
   'employeeId' | 'employeeName' | 'nricPassportNo' | 'gender' | 'race' |
-  'religion' | 'department' | 'position' | 'basicSalary' | 'contactNo'>;
+  'religion' | 'department' | 'position' | 'basicSalary' | 'contactNo'> & {
+    reportingManager?: string;
+  };
 
 function createSampleEmployee(input: SampleEmployeeInput): EmployeeRecord {
   const employeeNumber = input.employeeId.slice(-4);
@@ -21,7 +23,7 @@ function createSampleEmployee(input: SampleEmployeeInput): EmployeeRecord {
     tin: `IG${employeeNumber}001000`,
     email: `${input.employeeName.toLowerCase().replace(/\s+/g, '.')}@example.com`,
     address: '12, Jalan Bukit Kempas, 81200 Johor Bahru, Johor',
-    reportingManager: `${input.department} Manager`,
+    reportingManager: input.reportingManager ?? `${input.department} Manager`,
     workLocation: 'Johor Bahru Office',
     employmentStatus: 'Active',
     employmentType: 'Permanent',
@@ -159,6 +161,26 @@ export const employees: EmployeeRecord[] = [
     employeeId: 'EMP-0051', employeeName: 'Jason Lee Wei Ming', nricPassportNo: '911102-14-2345',
     gender: 'Male', race: 'Chinese', religion: 'Buddhism', department: 'Corporate',
     position: 'Administrative Executive', basicSalary: 3800, contactNo: '+60 12-444 0008'
+  }),
+  createSampleEmployee({
+    employeeId: 'EMP-0052', employeeName: 'Marcus Tan', nricPassportNo: '870312-10-3456',
+    gender: 'Male', race: 'Chinese', religion: 'Christianity', department: 'Information Technology',
+    position: 'IT Manager', basicSalary: 8500, contactNo: '+60 12-444 0009', reportingManager: 'Operations Manager'
+  }),
+  createSampleEmployee({
+    employeeId: 'EMP-0053', employeeName: 'Siti Amina Hassan', nricPassportNo: '950624-01-4567',
+    gender: 'Female', race: 'Malay', religion: 'Islam', department: 'Information Technology',
+    position: 'Software Developer', basicSalary: 6200, contactNo: '+60 12-444 0010', reportingManager: 'IT Manager'
+  }),
+  createSampleEmployee({
+    employeeId: 'EMP-0054', employeeName: 'Arjun Menon', nricPassportNo: '920815-08-5678',
+    gender: 'Male', race: 'Indian', religion: 'Hinduism', department: 'Information Technology',
+    position: 'Systems Administrator', basicSalary: 5800, contactNo: '+60 12-444 0011', reportingManager: 'IT Manager'
+  }),
+  createSampleEmployee({
+    employeeId: 'EMP-0055', employeeName: 'Ethan Chua', nricPassportNo: '900927-10-6789',
+    gender: 'Male', race: 'Chinese', religion: 'Buddhism', department: 'Information Technology',
+    position: 'Network Engineer', basicSalary: 7000, contactNo: '+60 12-444 0012', reportingManager: 'IT Manager'
   })
 ];
 

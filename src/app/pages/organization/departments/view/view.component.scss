@@ -1,0 +1,137 @@
+.organization-chart-scroll {
+  overflow: auto;
+  padding: 12px 8px 20px;
+}
+
+.organization-chart-tree,
+.organization-chart-tree ul {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  width: max-content;
+  min-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.organization-chart-tree ul {
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 28px;
+}
+
+.organization-chart-tree li {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  padding-bottom: 16px;
+  list-style: none;
+}
+
+.organization-chart-tree > li {
+  padding: 0;
+}
+
+/* The vertical branch sits beside the stacked child departments. */
+.organization-chart-tree ul::before,
+.organization-chart-tree li::before,
+.organization-chart-tree li::after {
+  position: absolute;
+  border-color: var(--light-disabled);
+  border-style: solid;
+  content: '';
+}
+
+.organization-chart-tree ul::before {
+  top: 0;
+  bottom: 0;
+  left: -14px;
+  border-width: 0 0 0 1px;
+}
+
+.organization-chart-tree li::before {
+  top: 50%;
+  left: -14px;
+  width: 14px;
+  border-width: 1px 0 0;
+}
+
+.organization-chart-tree li::after {
+  top: 0;
+  bottom: 0;
+  left: -14px;
+  border-width: 0 0 0 1px;
+}
+
+.organization-chart-tree li:first-child::after {
+  top: 50%;
+}
+
+.organization-chart-tree li:last-child::after {
+  bottom: 50%;
+}
+
+.organization-chart-tree li:only-child::after {
+  display: none;
+}
+
+.organization-chart-tree > li::before,
+.organization-chart-tree > li::after {
+  display: none;
+}
+
+.organization-chart-node {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+  flex: 0 0 220px;
+  width: 220px;
+  min-width: 220px;
+  max-width: 220px;
+  padding: 12px 14px;
+  border: 1px solid var(--light-disabled);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgb(15 23 42 / 5%);
+  text-align: left;
+  cursor: pointer;
+}
+
+.organization-chart-node h5 {
+  margin: 9px 0 5px;
+  color: var(--header);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.organization-chart-node small,
+.chart-head,
+.department-code {
+  color: var(--text);
+  font-size: 12px;
+}
+
+.department-code {
+  font-weight: 600;
+}
+
+.current-department > .organization-chart-node {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+  background: var(--light-primary);
+}
+
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--light-primary);
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+}

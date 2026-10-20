@@ -123,38 +123,69 @@
                     </div>
                 </div>
             </mat-tab>
-            <mat-tab label="Structure">
+            <!-- <mat-tab label="Structure">
                 <div class="px-2 mt-3">
-                    <h4 class="text-primary">Effective Period</h4>
+                    <h4 class="text-primary">Organization Chart</h4>
+                    <p class="text-muted">Showing {{ department.name }}, its parent departments, and its direct sub-departments.</p>
                     <div class="card">
                         <div class="card-body">
+                            <div class="organization-chart-scroll">
+                                <ul class="organization-chart-tree">
+                                    <ng-container *ngFor="let node of organizationTree">
+                                        <ng-container *ngTemplateOutlet="departmentNode; context: { $implicit: node }"></ng-container>
+                                    </ng-container>
+                                </ul>
+                            </div>
+
+                            <ng-template #departmentNode let-node>
+                                <li [class.current-department]="node.department.id === department.id">
+                                    <article
+                                        class="organization-chart-node"
+                                        [routerLink]="['/organization/departments/view', node.department.id]"
+                                        role="link"
+                                        tabindex="0">
+                                        <div class="d-flex justify-content-between align-items-start gap-2">
+                                            <span class="department-code">{{ node.department.code }}</span>
+                                            <span class="chip" [ngClass]="node.department.status === 'Active' ? 'bg-light-primary text-primary' : node.department.status === 'Inactive' ? 'bg-light-secondary text-secondary' : 'bg-light-warning text-warning'">
+                                                {{ node.department.status }}
+                                            </span>
+                                        </div>
+                                        <h5>{{ node.department.name }}</h5>
+                                        <p class="chart-head mb-1">{{ departmentHead(node.department) }}</p>
+                                        <small>{{ departmentEmployeeCount(node.department) }} employees</small>
+                                    </article>
+                                    <ul *ngIf="node.children.length > 0">
+                                        <ng-container *ngFor="let child of node.children">
+                                            <ng-container *ngTemplateOutlet="departmentNode; context: { $implicit: child }"></ng-container>
+                                        </ng-container>
+                                    </ul>
+                                </li>
+                            </ng-template>
                         </div>
                     </div>
                 </div>
-            </mat-tab>
+            </mat-tab> -->
             <mat-tab label="Employees">
                 <div class="px-2 mt-3">
                     <h4 class="text-primary">Employee List</h4>
                     <div class="row mt-4">
                         <div class="d-flex align-items-center flex-wrap gap-2">
                             <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
-                                <input type="text" matInput placeholder="Search..." >
+                                <input type="text" matInput placeholder="Search employees..." [(ngModel)]="searchTerm">
                                 <span matTextPrefix class="text-muted me-2">
                                     <i-tabler name="search" class="icon-16"></i-tabler>
                                 </span>
                             </mat-form-field>
 
                             <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
-                                <mat-select placeholder="Select Department" multiple>
-                                    <mat-option value="active">Active</mat-option>
-                                    <mat-option value="inactive">Inactive</mat-option>
+                                <mat-select placeholder="Employment Type" multiple [(ngModel)]="selectedEmploymentTypes">
+                                    <mat-option *ngFor="let type of employmentTypes" [value]="type">{{ type }}</mat-option>
                                 </mat-select>
                             </mat-form-field>
                             
                             <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
-                                <mat-select placeholder="Select Status" multiple>
-                                    <mat-option value="active">Active</mat-option>
-                                    <mat-option value="inactive">Inactive</mat-option>
+                                <mat-select placeholder="Employment Status" multiple [(ngModel)]="selectedEmploymentStatuses">
+                                    <mat-option *ngFor="let status of employmentStatuses" [value]="status">{{ status }}</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
@@ -162,9 +193,12 @@
                     <div class="card mt-4">
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                                <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All (100)</span>  |  Active (12)  |  Probation (10)  |  Inactive (6)</h6>
+                                <h6 class="fs-14 fw-400 text-muted my-0">
+                                    <span class="fw-550 text-primary">All ({{ filteredEmployees.length }})</span>
+                                    <span *ngFor="let status of employmentStatuses"> | {{ status }} ({{ employeeStatusCount(status) }})</span>
+                                </h6>
                                 <div>
-                                    <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
+                                    <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2" (click)="clearEmployeeFilters()"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
                                     <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
                                     <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <i-tabler name="download" class="icon-16"></i-tabler> Export</button>
                                 </div>
@@ -185,7 +219,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let employee of employees">
+                                        <tr *ngFor="let employee of filteredEmployees">
                                             <td class="text-muted">
                                                 <div class="d-flex align-items-center justify-content-start">
                                                     <div class="avatar me-3">{{ employee.initials }}</div>
@@ -199,7 +233,7 @@
                                             <td class="text-muted">{{ employee.employmentType }}</td>
                                             <td class="text-muted">{{ employee.tin }}</td>
                                             <td class="text-muted">{{ employee.kwspNo }}</td>
-                                            <td><span class="chip bg-light-primary text-primary">{{ employee.employmentStatus }}</span></td>
+                                            <td><span class="chip" [ngClass]="employeeStatusClass(employee.employmentStatus)">{{ employee.employmentStatus }}</span></td>
                                             <td>
                                                 <button class="text-muted action-btn" mat-icon-button>
                                                     <i-tabler name="eye"></i-tabler>
@@ -211,6 +245,9 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                                <div *ngIf="filteredEmployees.length === 0" class="text-center text-muted py-4">
+                                    No employees match the selected filters.
+                                </div>
                                 <mat-paginator [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>
                             </div>
                         </div>

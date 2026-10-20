@@ -10,6 +10,11 @@ import { employees as employeeRecords } from '../../../../data/employees';
 import type { Department } from '../../../../models/department.model';
 import type { EmployeeRecord } from '../../../../models/employee.model';
 
+interface DepartmentTreeNode {
+  department: Department;
+  children: DepartmentTreeNode[];
+}
+
 @Component({
   selector: 'app-view',
   imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, FullCalendarModule, RouterLink],
@@ -20,11 +25,60 @@ import type { EmployeeRecord } from '../../../../models/employee.model';
 export class ViewComponent {
   readonly department: Department;
   readonly employees: EmployeeRecord[];
+  readonly organizationTree: DepartmentTreeNode[];
+  searchTerm = '';
+  selectedEmploymentTypes: string[] = [];
+  selectedEmploymentStatuses: string[] = [];
 
   constructor(route: ActivatedRoute) {
     const departmentId = route.snapshot.paramMap.get('id');
     this.department = departments.find(item => item.id === departmentId) ?? departments[0];
     this.employees = employeeRecords.filter(employee => employee.department === this.department.name);
+    this.organizationTree = this.buildOrganizationTree();
+  }
+
+  get employmentTypes(): string[] {
+    return [...new Set(this.employees.map(employee => employee.employmentType).filter(Boolean))].sort();
+  }
+
+  get employmentStatuses(): string[] {
+    return [...new Set(this.employees.map(employee => employee.employmentStatus).filter(Boolean))].sort();
+  }
+
+  get filteredEmployees(): EmployeeRecord[] {
+    const query = this.searchTerm.trim().toLocaleLowerCase();
+
+    return this.employees.filter(employee => {
+      const matchesSearch = !query || [
+        employee.employeeName,
+        employee.employeeId,
+        employee.position,
+        employee.tin,
+        employee.kwspNo
+      ].some(value => value?.toLocaleLowerCase().includes(query));
+      const matchesType = !this.selectedEmploymentTypes.length || this.selectedEmploymentTypes.includes(employee.employmentType);
+      const matchesStatus = !this.selectedEmploymentStatuses.length || this.selectedEmploymentStatuses.includes(employee.employmentStatus);
+
+      return matchesSearch && matchesType && matchesStatus;
+    });
+  }
+
+  employeeStatusCount(status: string): number {
+    return this.filteredEmployees.filter(employee => employee.employmentStatus === status).length;
+  }
+
+  employeeStatusClass(status: string): string {
+    switch (status.toLocaleLowerCase()) {
+      case 'active': return 'bg-light-primary text-primary';
+      case 'probation': return 'bg-light-warning text-warning';
+      default: return 'bg-light-secondary text-secondary';
+    }
+  }
+
+  clearEmployeeFilters(): void {
+    this.searchTerm = '';
+    this.selectedEmploymentTypes = [];
+    this.selectedEmploymentStatuses = [];
   }
 
   parentDepartmentName(): string {
@@ -33,5 +87,47 @@ export class ViewComponent {
 
   departmentHeadName(): string {
     return employeeRecords.find(item => item.employeeId === this.department.headOfDepartmentId)?.employeeName ?? '—';
+  }
+
+  departmentHead(department: Department): string {
+    return employeeRecords.find(employee => employee.employeeId === department.headOfDepartmentId)?.employeeName ?? 'No department head assigned';
+  }
+
+  departmentEmployeeCount(department: Department): number {
+    return employeeRecords.filter(employee => employee.department === department.name).length;
+  }
+
+  private buildOrganizationTree(): DepartmentTreeNode[] {
+    const nodes = new Map<string, DepartmentTreeNode>();
+
+    for (const department of departments) {
+      nodes.set(department.id, { department, children: [] });
+    }
+
+    for (const node of nodes.values()) {
+      const parentId = node.department.parentDepartmentId;
+      const parent = parentId ? nodes.get(parentId) : undefined;
+      if (parent && parent.department.id !== node.department.id) parent.children.push(node);
+    }
+
+    const selectedNode = nodes.get(this.department.id);
+    if (!selectedNode) return [];
+
+    let branch: DepartmentTreeNode = {
+      department: selectedNode.department,
+      children: selectedNode.children.map(child => ({ department: child.department, children: [] }))
+    };
+    let currentNode = selectedNode;
+    const visited = new Set<string>([currentNode.department.id]);
+
+    while (currentNode.department.parentDepartmentId) {
+      const parent = nodes.get(currentNode.department.parentDepartmentId);
+      if (!parent || visited.has(parent.department.id)) break;
+      visited.add(parent.department.id);
+      branch = { department: parent.department, children: [branch] };
+      currentNode = parent;
+    }
+
+    return [branch];
   }
 }

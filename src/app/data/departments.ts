@@ -60,8 +60,8 @@ export const departments: Department[] = [
     shortName: 'IT',
     remark: 'Internal systems and technical support.',
     parentDepartmentId: 'DEP-0003',
-    headOfDepartmentId: 'EMP-0043',
-    totalEmployees: 1,
+    headOfDepartmentId: 'EMP-0052',
+    totalEmployees: 5,
     effectiveFrom: '2021-01-01',
     effectiveTo: null,
     status: 'Active'
