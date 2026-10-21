@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { departments } from '../../../../data/departments';
 import { employees } from '../../../../data/employees';
@@ -21,17 +22,22 @@ interface PositionTreeNode {
   styleUrl: './view.component.scss'
 })
 export class ViewComponent {
-  readonly position: Position;
-  readonly departmentName: string;
-  readonly employees: EmployeeRecord[];
-  readonly organizationTree: PositionTreeNode[];
+  position!: Position;
+  departmentName = '—';
+  employees: EmployeeRecord[] = [];
+  organizationTree: PositionTreeNode[] = [];
 
   constructor(route: ActivatedRoute) {
-    const positionId = route.snapshot.paramMap.get('id');
-    this.position = positions.find(item => item.id === positionId) ?? positions[0];
-    this.departmentName = departments.find(item => item.id === this.position.departmentId)?.name ?? '—';
-    this.employees = employees.filter(employee => employee.position === this.position.title);
-    this.organizationTree = this.buildOrganizationTree();
+    route.paramMap.pipe(takeUntilDestroyed()).subscribe(params => {
+      const positionId = params.get('id');
+      const position = positions.find(item => item.id === positionId) ?? positions[0];
+      if (!position) return;
+
+      this.position = position;
+      this.departmentName = departments.find(item => item.id === position.departmentId)?.name ?? '—';
+      this.employees = employees.filter(employee => employee.position === position.title);
+      this.organizationTree = this.buildOrganizationTree();
+    });
   }
 
   get status(): 'Active' | 'Inactive' {

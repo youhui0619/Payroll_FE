@@ -1,10 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component } from '@angular/core';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { RouterLink } from '@angular/router';
-import { ToastrService, ToastrModule } from 'ngx-toastr';
-import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FullCalendarModule, CalendarOptions } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/angular/daygrid';
 import interactionPlugin from '@fullcalendar/angular/interaction';
@@ -14,9 +12,13 @@ import { attendanceRecords } from '../../../../data/attendance';
 import { getPublicHolidaysForLocation } from '../../../../data/public-holidays';
 import { getEmployeeLeaveBalances } from '../../../../data/leave-balances';
 import { leavePolicies } from '../../../../data/leave-policies';
+import { claims } from '../../../../data/claims';
 import { LeaveApplication } from '../../../../models/leave.model';
+import type { ClaimStatus, ClaimType, ExpenseClaimRecord } from '../../../../models/claim.model';
 import type { LeavePolicy } from '../../../../models/leave-policy.model';
+import type { EmployeeRecord } from '../../../../models/employee.model';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
+import { ClaimDetailDialogComponent } from '../../../../shared/dialog/claim-detail-dialog/claim-detail-dialog.component';
 
 function dayAfter(dateString: string): string {
   const [year, month, day] = dateString.split('-').map(Number);
@@ -32,37 +34,38 @@ const leaveEventColors: Record<string, { background: string; text: string }> = {
 
 @Component({
   selector: 'app-view',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, FullCalendarModule, LeaveDetailDialogComponent],
-  providers: [...MaterialProviders, ToastrService],
+  imports: [...MaterialImports, CommonModule, FullCalendarModule, RouterLink, LeaveDetailDialogComponent, ClaimDetailDialogComponent],
+  providers: [...MaterialProviders],
   templateUrl: './view.component.html',
   styleUrl: './view.component.scss'
 })
 export class ViewComponent {
-  readonly employee = getEmployee('EMP-0042');
+  employee!: EmployeeRecord;
   readonly leaveYear = new Date().getFullYear();
   readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');
-  readonly employeeLeaveBalances = getEmployeeLeaveBalances(this.employee.employeeId);
-  readonly claimRequests = [
-    {
-      type: 'Meals',
-      reference: 'Client lunch',
-      date: '12/10/2026',
-      amount: 120,
-      status: 'Pending',
-      statusClass: 'bg-light-info text-info'
-    },
-    {
-      type: 'Transportation',
-      reference: 'Client site visit',
-      date: '15/10/2026',
-      amount: 45,
-      status: 'Pending',
-      statusClass: 'bg-light-info text-info'
-    }
-  ];
-  readonly leaveRequests: LeaveApplication[] = attendanceRecords
-    .filter(record => record.employeeId === this.employee.employeeId)
-    .map(record => {
+  employeeLeaveBalances!: ReturnType<typeof getEmployeeLeaveBalances>;
+  claimRequests: ExpenseClaimRecord[] = [];
+  leaveRequests: LeaveApplication[] = [];
+  attendanceEvents: CalendarOptions['events'] = [];
+  publicHolidayEvents: CalendarOptions['events'] = [];
+  selectedTabIndex = 0;
+  selectedLeave: LeaveDialogData | null = null;
+  selectedClaim: ExpenseClaimRecord | null = null;
+
+  constructor(route: ActivatedRoute) {
+    route.paramMap.pipe(takeUntilDestroyed()).subscribe(params => {
+      const employeeId = params.get('id');
+      if (employeeId) this.loadEmployeeData(employeeId);
+    });
+  }
+
+  private loadEmployeeData(employeeId: string): void {
+    this.employee = getEmployee(employeeId);
+    this.employeeLeaveBalances = getEmployeeLeaveBalances(employeeId);
+    this.claimRequests = claims.filter(claim => claim.employeeId === employeeId);
+    this.leaveRequests = attendanceRecords
+      .filter(record => record.employeeId === employeeId)
+      .map(record => {
       const days = Math.round((new Date(`${record.endDate}T00:00:00`).getTime() - new Date(`${record.startDate}T00:00:00`).getTime()) / 86400000) + 1;
       const formatDate = (date: string) => {
         const [year, month, day] = date.split('-');
@@ -96,9 +99,9 @@ export class ViewComponent {
         approval: record.approval
       };
     });
-  readonly attendanceEvents = attendanceRecords
-    .filter(record => record.employeeId === this.employee.employeeId && record.status === 'Approved')
-    .map(record => {
+    this.attendanceEvents = attendanceRecords
+      .filter(record => record.employeeId === employeeId && record.status === 'Approved')
+      .map(record => {
       const colors = leaveEventColors[record.typeClass] ?? leaveEventColors['annual'];
       return {
         id: `${record.code}-${record.startDate}`,
@@ -117,20 +120,25 @@ export class ViewComponent {
         }
       };
     });
-  readonly publicHolidayEvents = getPublicHolidaysForLocation(`${this.employee.address} ${this.employee.workLocation}`).map(holiday => ({
-    id: holiday.id,
-    title: holiday.name,
-    start: holiday.startDate,
-    end: dayAfter(holiday.endDate),
-    allDay: true,
-    classNames: ['public-holiday-event', 'bg-light-info', 'text-info'],
-    backgroundColor: 'var(--light-info)',
-    borderColor: 'var(--light-info)',
-    textColor: 'var(--info)',
-    extendedProps: { eventType: 'public-holiday', holidayName: holiday.name }
-  }));
-  selectedTabIndex = 0;
-  selectedLeave: LeaveDialogData | null = null;
+    this.publicHolidayEvents = getPublicHolidaysForLocation(`${this.employee.address} ${this.employee.workLocation}`).map(holiday => ({
+      id: holiday.id,
+      title: holiday.name,
+      start: holiday.startDate,
+      end: dayAfter(holiday.endDate),
+      allDay: true,
+      classNames: ['public-holiday-event', 'bg-light-info', 'text-info'],
+      backgroundColor: 'var(--light-info)',
+      borderColor: 'var(--light-info)',
+      textColor: 'var(--info)',
+      extendedProps: { eventType: 'public-holiday', holidayName: holiday.name }
+    }));
+    this.selectedLeave = null;
+    this.selectedClaim = null;
+    this.calendarOptions = {
+      ...this.calendarOptions,
+      events: [...this.attendanceEvents, ...this.publicHolidayEvents]
+    };
+  }
 
   get isWideTab(): boolean {
     return this.selectedTabIndex >= 3 && this.selectedTabIndex <= 5;
@@ -180,8 +188,48 @@ export class ViewComponent {
     return policy.entitlementUnit === 'DAILY' ? 'days' : 'hours';
   }
 
-  claimCount(status: string): number {
+  claimCount(status: ClaimStatus): number {
     return this.claimRequests.filter(claim => claim.status === status).length;
+  }
+
+  claimTypeLabel(type: ClaimType): string {
+    const labels: Record<ClaimType, string> = {
+      TRAVEL: 'Travel',
+      MEALS: 'Meals',
+      ACCOMMODATION: 'Accommodation',
+      TRANSPORTATION: 'Transportation',
+      MEDICAL: 'Medical',
+      COMMUNICATION: 'Communication',
+      OTHER: 'Other'
+    };
+    return labels[type];
+  }
+
+  claimStatusClass(status: ClaimStatus): string {
+    switch (status) {
+      case 'Pending': return 'bg-light-warning text-warning';
+      case 'Approved': return 'bg-light-primary text-primary';
+      case 'Rejected': return 'bg-light-danger text-danger';
+      case 'Paid': return 'bg-light-success text-success';
+    }
+  }
+
+  openClaimDetails(claim: ExpenseClaimRecord): void {
+    this.selectedClaim = claim;
+  }
+
+  decideClaim(decision: { status: 'Approved' | 'Rejected'; comment: string }): void {
+    const claim = this.selectedClaim;
+    if (!claim) return;
+
+    const today = new Date();
+    claim.status = decision.status;
+    claim.approval = {
+      approver: 'Sarah Lim',
+      approvedDate: [today.getFullYear(), String(today.getMonth() + 1).padStart(2, '0'), String(today.getDate()).padStart(2, '0')].join('-'),
+      comments: decision.comment || 'Rejected during claim review.'
+    };
+    this.selectedClaim = null;
   }
 
   calendarOptions: CalendarOptions = {

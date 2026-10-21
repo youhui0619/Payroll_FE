@@ -10,6 +10,12 @@ export type ClaimType =
 export type ClaimPaymentMethod = 'PAYROLL' | 'BANK_TRANSFER' | 'CASH';
 export type ClaimStatus = 'Pending' | 'Approved' | 'Rejected' | 'Paid';
 
+export interface ClaimApproval {
+  approver: string;
+  approvedDate: string | null;
+  comments: string;
+}
+
 export interface ExpenseClaimRecord {
   id: string;
   claimDate: string;
@@ -25,4 +31,5 @@ export interface ExpenseClaimRecord {
   supportingDocuments: string[];
   status: ClaimStatus;
   submittedAt: string;
+  approval: ClaimApproval;
 }

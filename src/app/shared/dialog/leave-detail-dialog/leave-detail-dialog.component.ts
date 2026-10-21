@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../material-imports';
 
 export interface LeaveDialogData {
@@ -33,7 +34,7 @@ export interface LeaveDialogData {
 @Component({
   selector: 'app-leave-detail-dialog',
   standalone: true,
-  imports: [...MaterialImports, CommonModule],
+  imports: [...MaterialImports, CommonModule, FormsModule],
   providers: [...MaterialProviders],
   templateUrl: './leave-detail-dialog.component.html',
   styleUrl: './leave-detail-dialog.component.scss'
@@ -42,14 +43,15 @@ export class LeaveDetailDialogComponent {
   @Input({ required: true }) data!: LeaveDialogData;
   @Input() showDecisionActions = false;
   @Output() closed = new EventEmitter<void>();
-  @Output() decisionMade = new EventEmitter<'Approved' | 'Rejected'>();
+  @Output() decisionMade = new EventEmitter<{ status: 'Approved' | 'Rejected'; comment: string }>();
+  decisionComment = '';
 
   close(): void {
     this.closed.emit();
   }
 
   decide(status: 'Approved' | 'Rejected'): void {
-    this.decisionMade.emit(status);
+    this.decisionMade.emit({ status, comment: this.decisionComment.trim() });
   }
 
   @HostListener('document:keydown.escape')

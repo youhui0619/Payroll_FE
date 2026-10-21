@@ -83,7 +83,7 @@ export class ApplicationsComponent {
     this.activeLeave = null;
   }
 
-  decideLeave(status: 'Approved' | 'Rejected'): void {
+  decideLeave(decision: { status: 'Approved' | 'Rejected'; comment: string }): void {
     const leave = this.activeLeave;
     if (!leave) return;
 
@@ -94,10 +94,10 @@ export class ApplicationsComponent {
       String(decisionDate.getDate()).padStart(2, '0')
     ].join('-');
 
-    leave.status = status;
-    leave.statusClass = status === 'Approved' ? 'bg-light-primary text-primary' : 'bg-light-danger text-danger';
-    leave.approval.status = status;
-    leave.approval.comments = status === 'Approved' ? 'Approved during leave review.' : 'Rejected during leave review.';
+    leave.status = decision.status;
+    leave.statusClass = decision.status === 'Approved' ? 'bg-light-primary text-primary' : 'bg-light-danger text-danger';
+    leave.approval.status = decision.status;
+    leave.approval.comments = decision.comment || 'Rejected during leave review.';
     leave.approval.approvedDate = date;
 
     const pendingIndex = this.leaveRequests.indexOf(leave);

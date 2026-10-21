@@ -129,7 +129,8 @@ export class CreateComponent {
         typeof document === 'string' ? document : document.name
       ),
       status: 'Pending',
-      submittedAt: new Date().toISOString()
+      submittedAt: new Date().toISOString(),
+      approval: { approver: '-', approvedDate: null, comments: '' }
     };
     console.log('data', data);
   }

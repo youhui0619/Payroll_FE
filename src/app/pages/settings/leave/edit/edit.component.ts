@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -48,7 +48,7 @@ export class EditComponent implements OnInit {
 
   submitted = false;
 
-  constructor(private readonly route: ActivatedRoute, private readonly router: Router) {
+  constructor(private readonly route: ActivatedRoute, private readonly router: Router, private readonly destroyRef: DestroyRef) {
     this.leaveForm.controls.serviceEntitlementTiers.disable({ emitEvent: false });
     this.leaveForm.controls.carryForwardPolicy.valueChanges
       .pipe(takeUntilDestroyed())
@@ -59,15 +59,17 @@ export class EditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const leaveCode = this.route.snapshot.paramMap.get('leaveCode');
-    this.leavePolicy = this.leavePolicies.find(policy => policy.leaveCode === leaveCode);
+    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
+      const leaveCode = params.get('leaveCode');
+      this.leavePolicy = this.leavePolicies.find(policy => policy.leaveCode === leaveCode);
 
-    if (!this.leavePolicy) {
-      void this.router.navigateByUrl('/settings/leave-settings/overview');
-      return;
-    }
+      if (!this.leavePolicy) {
+        void this.router.navigateByUrl('/settings/leave-settings/overview');
+        return;
+      }
 
-    this.patchLeaveForm(this.leavePolicy);
+      this.patchLeaveForm(this.leavePolicy);
+    });
   }
 
   get showMaximumCarryForward(): boolean {

@@ -14,18 +14,6 @@ export const leaveApplications: LeaveApplication[] = [
     approval: { approver: 'Farah Rahman', status: 'Pending', comments: 'Awaiting manager review.', approvedDate: null }
   },
   {
-    employeeId: 'EMP-0043',
-    leaveType: 'Medical Leave',
-    reference: 'ML-2026-102',
-    dateRange: '04/11/2026',
-    daysTaken: '1 Day',
-    status: 'Pending',
-    statusClass: 'bg-light-info text-info',
-    iconClass: 'text-warning bg-light-warning',
-    reason: 'Medical appointment and recovery.',
-    approval: { approver: 'Daniel Lim', status: 'Pending', comments: 'Awaiting supporting document.', approvedDate: null }
-  },
-  {
     employeeId: 'EMP-0044',
     leaveType: 'Annual Leave',
     reference: 'AL-2026-103',
@@ -120,5 +108,65 @@ export const leaveApplications: LeaveApplication[] = [
     iconClass: 'text-secondary bg-light-secondary',
     reason: 'Personal commitment.',
     approval: { approver: 'Farah Rahman', status: 'Rejected', comments: 'Please use available annual leave.', approvedDate: '2026-10-21' }
-  }
+  },
+  {
+    employeeId: 'EMP-0042',
+    leaveType: 'Annual Leave',
+    reference: 'AL-2026-090',
+    dateRange: '14/09/2026',
+    daysTaken: '1 Day',
+    status: 'Approved',
+    statusClass: 'bg-light-primary text-primary',
+    iconClass: 'text-danger bg-light-danger',
+    reason: 'Personal appointment.',
+    approval: { approver: 'Farah Rahman', status: 'Approved', comments: 'Approved as requested.', approvedDate: '2026-09-10' }
+  },
+  {
+    employeeId: 'EMP-0042',
+    leaveType: 'Medical Leave',
+    reference: 'ML-2026-092',
+    dateRange: '21/09/2026',
+    daysTaken: '1 Day',
+    status: 'Approved',
+    statusClass: 'bg-light-primary text-primary',
+    iconClass: 'text-warning bg-light-warning',
+    reason: 'Medical appointment.',
+    approval: { approver: 'Daniel Lim', status: 'Approved', comments: 'Medical leave approved.', approvedDate: '2026-09-20' }
+  },
+  {
+    employeeId: 'EMP-0042',
+    leaveType: 'Annual Leave',
+    reference: 'AL-2026-093',
+    dateRange: '28/09/2026 ~ 29/09/2026',
+    daysTaken: '2 Days',
+    status: 'Pending',
+    statusClass: 'bg-light-info text-info',
+    iconClass: 'text-danger bg-light-danger',
+    reason: 'Personal travel.',
+    approval: { approver: 'Farah Rahman', status: 'Pending', comments: 'Awaiting manager review.', approvedDate: null }
+  },
+  {
+    employeeId: 'EMP-0042',
+    leaveType: 'Medical Leave',
+    reference: 'ML-2026-089',
+    dateRange: '18/08/2026',
+    daysTaken: '1 Day',
+    status: 'Approved',
+    statusClass: 'bg-light-primary text-primary',
+    iconClass: 'text-warning bg-light-warning',
+    reason: 'Medical appointment.',
+    approval: { approver: 'Daniel Lim', status: 'Approved', comments: 'Medical leave approved.', approvedDate: '2026-08-17' }
+  },
+  {
+    employeeId: 'EMP-0042',
+    leaveType: 'Annual Leave',
+    reference: 'AL-2026-112',
+    dateRange: '02/12/2026 ~ 04/12/2026',
+    daysTaken: '3 Days',
+    status: 'Pending',
+    statusClass: 'bg-light-info text-info',
+    iconClass: 'text-danger bg-light-danger',
+    reason: 'Family trip.',
+    approval: { approver: 'Farah Rahman', status: 'Pending', comments: 'Awaiting manager review.', approvedDate: null }
+  },
 ];

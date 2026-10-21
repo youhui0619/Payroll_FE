@@ -41,6 +41,13 @@
     [showDecisionActions]="leave.status === 'Pending'"
     (closed)="selectedLeave = null">
 </app-leave-detail-dialog>
+<app-claim-detail-dialog
+    *ngIf="selectedClaim as claim"
+    [claim]="claim"
+    [showDecisionActions]="claim.status === 'Pending'"
+    (decisionMade)="decideClaim($event)"
+    (closed)="selectedClaim = null">
+</app-claim-detail-dialog>
 
 @if(selectedTabIndex === 3){
     <div class="row">
@@ -571,7 +578,7 @@
                             <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
                         </div>
                         <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
-                            <button mat-flat-button color="primary" class="ms-2">
+                            <button mat-flat-button color="primary" class="ms-2" routerLink="/expenses-claims/claims/create">
                                 <i-tabler name="plus"></i-tabler>
                                 New Claim
                             </button>
@@ -587,6 +594,7 @@
                                             | Approved ({{ claimCount('Approved') }})
                                             | Pending ({{ claimCount('Pending') }})
                                             | Rejected ({{ claimCount('Rejected') }})
+                                            | Paid ({{ claimCount('Paid') }})
                                         </h6>
                                         <div>
                                             <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
@@ -615,19 +623,22 @@
                                                                 <i-tabler name="receipt"></i-tabler>
                                                             </div>
                                                             <div>
-                                                                <p class="text-dark fw-500 my-0">{{ claim.type }}</p>
-                                                                <p class="fs-10 fw-300 text-muted my-0">{{ claim.reference }}</p>
+                                                                <p class="text-dark fw-500 my-0">{{ claimTypeLabel(claim.claimType) }}</p>
+                                                                <p class="fs-10 fw-300 text-muted my-0">{{ claim.id }} · {{ claim.description }}</p>
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td class="text-muted">{{ claim.date }}</td>
-                                                    <td class="text-muted">RM {{ claim.amount | number:'1.2-2' }}</td>
-                                                    <td class="text-muted"><span class="chip" [ngClass]="claim.statusClass">{{ claim.status }}</span></td>
+                                                    <td class="text-muted">{{ claim.claimDate | date:'d MMM y' }}</td>
+                                                    <td class="text-muted">{{ claim.currency }} {{ claim.amount | number:'1.2-2' }}</td>
+                                                    <td class="text-muted"><span class="chip" [ngClass]="claimStatusClass(claim.status)">{{ claim.status }}</span></td>
                                                     <td class="text-muted">
-                                                        <button type="button" class="text-muted action-btn" mat-icon-button>
+                                                        <button type="button" class="text-muted action-btn" mat-icon-button (click)="openClaimDetails(claim)" [attr.aria-label]="'View claim ' + claim.id">
                                                             <i-tabler name="eye"></i-tabler>
                                                         </button>
                                                     </td>
+                                                </tr>
+                                                <tr *ngIf="claimRequests.length === 0">
+                                                    <td colspan="5" class="text-muted text-center py-3">No claims found for this employee.</td>
                                                 </tr>
                                             </tbody>
                                         </table>

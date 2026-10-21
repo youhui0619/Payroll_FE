@@ -1,14 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { payrollList } from '../../../data/payroll';
 import { MaterialImports, MaterialProviders } from '../../material-imports';
 import { payslips } from '../../../data/payslips';
 import type { Payslip } from '../../../models/payslip.model';
+import { leaveApplications } from '../../../data/leave-applications';
+import { claims } from '../../../data/claims';
+import { getEmployee } from '../../../data/employees';
+import type { LeaveApplication } from '../../../models/leave.model';
+import type { ClaimStatus, ClaimType, ExpenseClaimRecord } from '../../../models/claim.model';
+import { LeaveDetailDialogComponent, type LeaveDialogData } from '../leave-detail-dialog/leave-detail-dialog.component';
+import { ClaimDetailDialogComponent } from '../claim-detail-dialog/claim-detail-dialog.component';
 
 @Component({
   selector: 'app-payroll-detail-dialog',
   standalone: true,
-  imports: [...MaterialImports, CommonModule],
+  imports: [...MaterialImports, CommonModule, MatSidenavModule, LeaveDetailDialogComponent, ClaimDetailDialogComponent],
   providers: [...MaterialProviders],
   templateUrl: './payroll-detail-dialog.component.html',
   styleUrl: './payroll-detail-dialog.component.scss'
@@ -16,6 +24,18 @@ import type { Payslip } from '../../../models/payslip.model';
 export class PayrollDetailDialogComponent {
   @Input({ required: true }) payroll!: typeof payrollList[number];
   @Output() closed = new EventEmitter<void>();
+  selectedLeave: LeaveDialogData | null = null;
+  selectedClaim: ExpenseClaimRecord | null = null;
+  showReferenceDrawer = false;
+  private readonly claimTypeLabels: Record<ClaimType, string> = {
+    TRAVEL: 'Travel',
+    MEALS: 'Meals',
+    ACCOMMODATION: 'Accommodation',
+    TRANSPORTATION: 'Transportation',
+    MEDICAL: 'Medical',
+    COMMUNICATION: 'Communication',
+    OTHER: 'Other'
+  };
 
   get payslip(): Payslip {
     const record = payslips.find(item => item.employeeId === this.payroll.employeeId);
@@ -25,12 +45,75 @@ export class PayrollDetailDialogComponent {
     return record;
   }
 
+  get leaveReferenceRecords(): LeaveApplication[] {
+    return leaveApplications.filter(item =>
+      this.payslip.leaveReferences.includes(item.reference) && item.status === 'Approved'
+    );
+  }
+
+  get claimReferenceRecords(): ExpenseClaimRecord[] {
+    return claims.filter(item => this.payslip.claimReferences.includes(item.id));
+  }
+
+  claimTypeLabel(type: ClaimType): string {
+    return this.claimTypeLabels[type];
+  }
+
+  claimStatusClass(status: ClaimStatus): string {
+    switch (status) {
+      case 'Pending': return 'bg-light-warning text-warning';
+      case 'Approved': return 'bg-light-primary text-primary';
+      case 'Rejected': return 'bg-light-danger text-danger';
+      case 'Paid': return 'bg-light-success text-success';
+    }
+  }
+
+  openReferenceDrawer(): void {
+    this.showReferenceDrawer = true;
+  }
+
+  closeReferenceDrawer(): void {
+    this.showReferenceDrawer = false;
+  }
+
+  openLeaveReference(leave: LeaveApplication): void {
+    this.closeReferenceDrawer();
+    const employee = getEmployee(leave.employeeId);
+    this.selectedLeave = {
+      title: leave.leaveType,
+      subtitle: `Leave request · ${leave.reference}`,
+      status: leave.status,
+      statusClass: leave.statusClass,
+      employeeInformation: {
+        name: employee.employeeName,
+        employeeId: employee.employeeId,
+        department: employee.department,
+        position: employee.position,
+        contactNo: employee.contactNo,
+        nricNo: employee.nricPassportNo
+      },
+      details: {
+        leaveType: leave.leaveType,
+        reference: leave.reference,
+        date: leave.dateRange,
+        duration: leave.daysTaken,
+        reason: leave.reason
+      },
+      approval: leave.approval
+    };
+  }
+
+  openClaimReference(claim: ExpenseClaimRecord): void {
+    this.closeReferenceDrawer();
+    this.selectedClaim = claim;
+  }
+
   close(): void {
     this.closed.emit();
   }
 
   @HostListener('document:keydown.escape')
   onEscape(): void {
-    this.close();
+    if (!this.showReferenceDrawer && !this.selectedLeave && !this.selectedClaim) this.close();
   }
 }

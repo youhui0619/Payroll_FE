@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { publicHolidays } from '../../../../data/public-holidays';
 import type { PublicHolidayRecord } from '../../../../models/public-holiday.model';
@@ -14,11 +15,13 @@ import type { PublicHolidayRecord } from '../../../../models/public-holiday.mode
   styleUrl: './view.component.scss'
 })
 export class ViewComponent {
-  readonly holiday: PublicHolidayRecord | undefined;
+  holiday: PublicHolidayRecord | undefined;
 
   constructor(route: ActivatedRoute) {
-    const holidayId = route.snapshot.paramMap.get('id');
-    this.holiday = publicHolidays.find(item => item.id === holidayId);
+    route.paramMap.pipe(takeUntilDestroyed()).subscribe(params => {
+      const holidayId = params.get('id');
+      this.holiday = publicHolidays.find(item => item.id === holidayId);
+    });
   }
 
   get holidayRegions(): string {

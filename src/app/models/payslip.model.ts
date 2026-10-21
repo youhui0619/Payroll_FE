@@ -9,6 +9,8 @@ export interface Payslip {
   employeeId: string;
   period: string;
   status: string;
+  leaveReferences: string[];
+  claimReferences: string[];
   company: {
     name: string;
     registrationNumber: string;

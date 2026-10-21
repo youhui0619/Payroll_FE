@@ -101,6 +101,52 @@
 
       <section class="section-block">
         <div class="section-heading">
+          <h4 class="text-primary mb-0">Related references</h4>
+          <span>{{ payslip.period }}</span>
+        </div>
+        <div class="reference-grid">
+          <div class="reference-card mb-3">
+            <h4 class="fs-14 fw-600 my-0">Leave</h4>
+            <div *ngIf="leaveReferenceRecords.length > 0; else noLeaveReferences" class="reference-list">
+              <div *ngFor="let leave of leaveReferenceRecords" class="reference-row py-3">
+                <div class="d-flex align-items-center ">
+                  <div class="icon bg-light-primary text-primary me-3">
+                    <i-tabler name="calendar"></i-tabler>
+                  </div>
+                  <div>
+                    <p class="text-dark fw-500 my-0">{{ leave.leaveType }}</p>
+                  <p class="text-muted fs-10 fw-300 my-0">{{ leave.dateRange }} · <span class="badge fs-10 fw-400" [ngClass]="leave.statusClass">{{ leave.status }}</span></p>
+                  </div>
+                </div>
+                <button type="button" class="reference-link" (click)="openLeaveReference(leave)">{{ leave.reference }}</button>
+              </div>
+            </div>
+            <ng-template #noLeaveReferences><p class="text-muted my-0">No leave references for this period.</p></ng-template>
+          </div>
+
+          <div class="reference-card">
+            <h4 class="fs-14 fw-600  my-0">Claims</h4>
+            <div *ngIf="claimReferenceRecords.length > 0; else noClaimReferences" class="reference-list">
+              <div *ngFor="let claim of claimReferenceRecords"  class="reference-row py-3">
+                <div class="d-flex align-items-center ">
+                  <div class="icon bg-light-primary text-primary me-3">
+                    <i-tabler name="calendar"></i-tabler>
+                  </div>
+                  <div>
+                    <p class="text-dark fw-500 my-0">{{ claimTypeLabel(claim.claimType) }}</p>
+                  <p class="text-muted fs-10 fw-300 my-0">{{ claim.claimDate | date:'d MMM y' }} · <span class="badge fs-10 fw-400" [ngClass]="claimStatusClass(claim.status)">{{ claim.status }}</span></p>
+                  </div>
+                </div>
+                <button type="button" class="reference-link" (click)="openClaimReference(claim)">{{ claim.id }}</button>
+              </div>
+            </div>
+            <ng-template #noClaimReferences><p class="text-muted my-0">No claim references for this period.</p></ng-template>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading">
           <h4 class="text-primary mb-0">Payroll breakdown</h4>
           <span>RM</span>
         </div>
@@ -228,3 +274,6 @@
     </div>
   </section>
 </div>
+
+<app-leave-detail-dialog *ngIf="selectedLeave as leave" [data]="leave" (closed)="selectedLeave = null"></app-leave-detail-dialog>
+<app-claim-detail-dialog *ngIf="selectedClaim as claim" [claim]="claim" (closed)="selectedClaim = null"></app-claim-detail-dialog>

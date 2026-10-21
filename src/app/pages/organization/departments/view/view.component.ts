@@ -3,6 +3,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { FullCalendarModule, CalendarOptions } from '@fullcalendar/angular';
 import { departments } from '../../../../data/departments';
@@ -23,18 +24,24 @@ interface DepartmentTreeNode {
   styleUrl: './view.component.scss'
 })
 export class ViewComponent {
-  readonly department: Department;
-  readonly employees: EmployeeRecord[];
-  readonly organizationTree: DepartmentTreeNode[];
+  department!: Department;
+  employees: EmployeeRecord[] = [];
+  organizationTree: DepartmentTreeNode[] = [];
   searchTerm = '';
   selectedEmploymentTypes: string[] = [];
   selectedEmploymentStatuses: string[] = [];
 
   constructor(route: ActivatedRoute) {
-    const departmentId = route.snapshot.paramMap.get('id');
-    this.department = departments.find(item => item.id === departmentId) ?? departments[0];
-    this.employees = employeeRecords.filter(employee => employee.department === this.department.name);
-    this.organizationTree = this.buildOrganizationTree();
+    route.paramMap.pipe(takeUntilDestroyed()).subscribe(params => {
+      const departmentId = params.get('id');
+      const department = departments.find(item => item.id === departmentId) ?? departments[0];
+      if (!department) return;
+
+      this.department = department;
+      this.employees = employeeRecords.filter(employee => employee.department === department.name);
+      this.organizationTree = this.buildOrganizationTree();
+      this.clearEmployeeFilters();
+    });
   }
 
   get employmentTypes(): string[] {

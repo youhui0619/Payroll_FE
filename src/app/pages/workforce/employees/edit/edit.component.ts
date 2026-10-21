@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
 import { defaultLeaveEntitlements } from '../../../../data/leave-balances';
@@ -25,11 +26,13 @@ import { getEmployeeLeaveBalances } from '../../../../data/leave-balances';
 })
 export class EditComponent implements OnInit {
 
-  constructor(private readonly route: ActivatedRoute) {}
+  constructor(private readonly route: ActivatedRoute, private readonly destroyRef: DestroyRef) {}
 
   ngOnInit(): void {
-    const employeeId = this.route.snapshot.paramMap.get('id');
-    if (employeeId) this.patchEmployeeForm(employeeId);
+    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
+      const employeeId = params.get('id');
+      if (employeeId) this.patchEmployeeForm(employeeId);
+    });
   }
 
   readonly departments: Department[] = departments.filter(department => department.status === 'Active');

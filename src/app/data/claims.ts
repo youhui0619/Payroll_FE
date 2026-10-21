@@ -15,23 +15,8 @@ export const claims: ExpenseClaimRecord[] = [
     paymentMethod: 'PAYROLL',
     supportingDocuments: ['taxi-receipt.pdf'],
     status: 'Pending',
-    submittedAt: '2026-10-03T09:15:00.000Z'
-  },
-  {
-    id: 'CLM-0002',
-    claimDate: '2026-10-05',
-    employeeId: 'EMP-0043',
-    employeeName: 'Daniel Lim Wei Jian',
-    departmentId: 'DEP-0003',
-    departmentName: 'Operations',
-    claimType: 'MEALS',
-    description: 'Meal during an approved site visit.',
-    amount: 32,
-    currency: 'MYR',
-    paymentMethod: 'BANK_TRANSFER',
-    supportingDocuments: ['meal-receipt.pdf'],
-    status: 'Approved',
-    submittedAt: '2026-10-06T03:40:00.000Z'
+    submittedAt: '2026-10-03T09:15:00.000Z',
+    approval: { approver: '-', approvedDate: null, comments: '' }
   },
   {
     id: 'CLM-0003',
@@ -47,6 +32,24 @@ export const claims: ExpenseClaimRecord[] = [
     paymentMethod: 'PAYROLL',
     supportingDocuments: ['mobile-bill.pdf'],
     status: 'Paid',
-    submittedAt: '2026-10-09T02:10:00.000Z'
-  }
+    submittedAt: '2026-10-09T02:10:00.000Z',
+    approval: { approver: 'Sarah Lim', approvedDate: '2026-10-10', comments: 'Approved and reimbursed through payroll.' }
+  },
+  {
+    id: 'CLM-0004',
+    claimDate: '2026-09-12',
+    employeeId: 'EMP-0042',
+    employeeName: 'Aisyah Nur Abdullah',
+    departmentId: 'DEP-0002',
+    departmentName: 'Finance',
+    claimType: 'TRAVEL',
+    description: 'Ride fare to the September client meeting.',
+    amount: 42.5,
+    currency: 'MYR',
+    paymentMethod: 'BANK_TRANSFER',
+    supportingDocuments: ['september-travel-receipt.pdf'],
+    status: 'Paid',
+    submittedAt: '2026-09-13T04:30:00.000Z',
+    approval: { approver: 'Sarah Lim', approvedDate: '2026-09-14', comments: 'Receipt verified and reimbursed.' }
+  },
 ];
