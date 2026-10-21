@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { departments } from '../../../../data/departments';
 import { claims } from '../../../../data/claims';
+import { getClaimTypeLabel } from '../../../../data/claim-types';
 import type { ClaimPaymentMethod, ClaimStatus, ClaimType, ExpenseClaimRecord } from '../../../../models/claim.model';
 import { ClaimDetailDialogComponent } from '../../../../shared/dialog/claim-detail-dialog/claim-detail-dialog.component';
 
@@ -32,15 +33,6 @@ export class OverviewComponent {
     new Date().getFullYear(),
     ...claims.map(claim => Number(claim.claimDate.slice(0, 4)))
   ])).sort((a, b) => b - a);
-  readonly claimTypeLabels: Record<ClaimType, string> = {
-    TRAVEL: 'Travel',
-    MEALS: 'Meals',
-    ACCOMMODATION: 'Accommodation',
-    TRANSPORTATION: 'Transportation',
-    MEDICAL: 'Medical',
-    COMMUNICATION: 'Communication',
-    OTHER: 'Other'
-  };
   readonly paymentMethodLabels: Record<ClaimPaymentMethod, string> = {
     PAYROLL: 'Payroll',
     BANK_TRANSFER: 'Bank Transfer',
@@ -60,7 +52,7 @@ export class OverviewComponent {
       const date = new Date(`${claim.claimDate}T00:00:00`);
       const matchesQuery = !query || [
         claim.id, claim.employeeName, claim.employeeId, claim.departmentName,
-        this.claimTypeLabels[claim.claimType], claim.description
+        getClaimTypeLabel(claim.claimType), claim.description
       ].some(value => value.toLowerCase().includes(query));
       const matchesDepartment = this.selectedDepartmentIds.length === 0
         || this.selectedDepartmentIds.includes(claim.departmentId);
@@ -89,7 +81,7 @@ export class OverviewComponent {
   }
 
   claimTypeLabel(type: ClaimType): string {
-    return this.claimTypeLabels[type];
+    return getClaimTypeLabel(type);
   }
 
   paymentMethodLabel(method: ClaimPaymentMethod): string {

@@ -1,0 +1,61 @@
+<div class="row justify-content-between my-4">
+  <div class="col-sm-7">
+    <h3 class="text-dark my-0">Claim Settings</h3>
+    <p class="fw-300 text-muted mb-0">Manage the claim types employees can select when submitting expenses.</p>
+  </div>
+  <div class="col-sm-5 d-flex align-items-center justify-content-end">
+    <button mat-flat-button color="primary" routerLink="/settings/claim-settings/create">
+      <i-tabler name="plus"></i-tabler>
+      Create Claim Type
+    </button>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-sm-12 px-2">
+    <div class="card">
+      <div class="card-header">
+        <h6 class="fs-14 fw-400 text-muted my-0">
+          <span class="fw-550 text-primary">All ({{ claimTypes.length }})</span>
+          | Active ({{ activeCount }})
+          | Inactive ({{ inactiveCount }})
+        </h6>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table no-wrap w-100 text-left">
+            <thead>
+              <tr>
+                <th class="text-dark">Claim Code</th>
+                <th class="text-dark">Claim Type</th>
+                <th class="text-dark">Description</th>
+                <th class="text-dark">Status</th>
+                <th class="text-dark">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let claimType of claimTypes">
+                <td class="text-muted">{{ claimType.code }}</td>
+                <td class="text-dark fw-500">{{ claimType.name }}</td>
+                <td class="text-muted">{{ claimType.description || '—' }}</td>
+                <td>
+                  <span class="chip" [ngClass]="claimType.status === 'ACTIVE' ? 'bg-light-primary text-primary' : 'bg-light-secondary text-secondary'">
+                    {{ claimType.status === 'ACTIVE' ? 'Active' : 'Inactive' }}
+                  </span>
+                </td>
+                <td>
+                  <button type="button" class="text-muted action-btn" mat-icon-button [routerLink]="['/settings/claim-settings/edit', claimType.code]" [attr.aria-label]="'Edit ' + claimType.name">
+                    <i-tabler name="edit"></i-tabler>
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="claimTypes.length === 0">
+                <td colspan="5" class="text-center text-muted py-4">No claim types have been created.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

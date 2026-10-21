@@ -70,8 +70,7 @@ export class SidebarComponent implements OnInit, OnChanges {
     { header: 'Expenses & Claims' },
     { label: 'Claims', icon: 'solar:clock-circle-outline', children: [
         { label: 'Overview', icon: 'codex:dot-circle', route: '/expenses-claims/claims/overview' },
-        { label: 'Claim Approvals', icon: 'codex:dot-circle', route: '/expenses-claims/claims/approval' },
-        { label: 'Claim Types', icon: 'codex:dot-circle', route: '/expenses-claims/claims/types' },
+        { label: 'Claim Approvals', icon: 'codex:dot-circle', route: '/expenses-claims/claims/approval' }
       ]
     },
 
@@ -106,6 +105,7 @@ export class SidebarComponent implements OnInit, OnChanges {
         { label: 'Work Schedule', icon: 'codex:dot-circle', route: '/roles/create', badge: 10 },
         { label: 'Public Holidays', icon: 'codex:dot-circle', route: '/settings/public-holidays/list' },
         { label: 'Leave Settings', icon: 'codex:dot-circle', route: '/settings/leave-settings/overview' },
+        { label: 'Claim Settings', icon: 'codex:dot-circle', route: '/settings/claim-settings/overview' },
         { label: 'Payroll Settings', icon: 'codex:dot-circle', route: '/roles/create', badge: 10 }
       ] 
     },

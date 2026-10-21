@@ -3,6 +3,7 @@ import { Component, EventEmitter, HostListener, Input, Output } from '@angular/c
 import { FormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../material-imports';
 import { getEmployee } from '../../../data/employees';
+import { getClaimTypeLabel } from '../../../data/claim-types';
 import type { ClaimPaymentMethod, ClaimType, ExpenseClaimRecord } from '../../../models/claim.model';
 import type { EmployeeRecord } from '../../../models/employee.model';
 
@@ -39,16 +40,7 @@ export class ClaimDetailDialogComponent {
   }
 
   claimTypeLabel(type: ClaimType): string {
-    const labels: Record<ClaimType, string> = {
-      TRAVEL: 'Travel',
-      MEALS: 'Meals',
-      ACCOMMODATION: 'Accommodation',
-      TRANSPORTATION: 'Transportation',
-      MEDICAL: 'Medical',
-      COMMUNICATION: 'Communication',
-      OTHER: 'Other'
-    };
-    return labels[type];
+    return getClaimTypeLabel(type);
   }
 
   paymentMethodLabel(method: ClaimPaymentMethod): string {

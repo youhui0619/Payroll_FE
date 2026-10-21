@@ -5,6 +5,7 @@ import { MaterialImports, MaterialProviders } from '../../../../shared/material-
 import { departments } from '../../../../data/departments';
 import { employees } from '../../../../data/employees';
 import { claims } from '../../../../data/claims';
+import { claimTypes as claimTypeSettings } from '../../../../data/claim-types';
 import type { ClaimPaymentMethod, ClaimType, ExpenseClaimRecord } from '../../../../models/claim.model';
 import type { EmployeeRecord } from '../../../../models/employee.model';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
@@ -20,15 +21,9 @@ import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.componen
 export class CreateComponent {
   readonly departments = departments.filter(department => department.status === 'Active');
   readonly employees = employees;
-  readonly claimTypes: { value: ClaimType; label: string }[] = [
-    { value: 'TRAVEL', label: 'Travel' },
-    { value: 'MEALS', label: 'Meals' },
-    { value: 'ACCOMMODATION', label: 'Accommodation' },
-    { value: 'TRANSPORTATION', label: 'Transportation' },
-    { value: 'MEDICAL', label: 'Medical' },
-    { value: 'COMMUNICATION', label: 'Communication' },
-    { value: 'OTHER', label: 'Other' }
-  ];
+  readonly claimTypes: { value: ClaimType; label: string }[] = claimTypeSettings
+    .filter(claimType => claimType.status === 'ACTIVE')
+    .map(claimType => ({ value: claimType.code, label: claimType.name }));
   readonly paymentMethods: { value: ClaimPaymentMethod; label: string }[] = [
     { value: 'PAYROLL', label: 'Payroll' },
     { value: 'BANK_TRANSFER', label: 'Bank Transfer' },
@@ -112,15 +107,19 @@ export class CreateComponent {
       return;
     }
 
-    const nextNumber = Math.max(0, ...claims.map(claim => Number(claim.id.replace('CLM-', '')))) + 1;
+    const nextNumber = claims.reduce((maximum, claim) => {
+      const numberSuffix = Number(claim.id.match(/-(\d+)$/)?.[1]);
+      return Number.isFinite(numberSuffix) ? Math.max(maximum, numberSuffix) : maximum;
+    }, 0) + 1;
+    const claimType = formValue.claimType as ClaimType;
     const data: ExpenseClaimRecord = {
-      id: `CLM-${String(nextNumber).padStart(4, '0')}`,
+      id: `CLM-${claimType}-${String(nextNumber).padStart(4, '0')}`,
       claimDate: this.dateKey(formValue.claimDate),
       employeeId: employee.employeeId,
       employeeName: employee.employeeName,
       departmentId: department.id,
       departmentName: department.name,
-      claimType: formValue.claimType!,
+      claimType,
       description: formValue.description.trim(),
       amount: formValue.amount!,
       currency: 'MYR',
@@ -132,7 +131,8 @@ export class CreateComponent {
       submittedAt: new Date().toISOString(),
       approval: { approver: '-', approvedDate: null, comments: '' }
     };
-    console.log('data', data);
+    claims.push(data);
+    this.createdClaim = data;
   }
 
   private dateKey(date: Date): string {

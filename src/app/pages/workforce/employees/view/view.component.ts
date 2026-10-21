@@ -4,6 +4,7 @@ import { MaterialImports, MaterialProviders } from '../../../../shared/material-
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FullCalendarModule, CalendarOptions } from '@fullcalendar/angular';
+import type { EventInput } from 'fullcalendar';
 import dayGridPlugin from '@fullcalendar/angular/daygrid';
 import interactionPlugin from '@fullcalendar/angular/interaction';
 import themePlugin from "@fullcalendar/angular/themes/monarch"; 
@@ -13,6 +14,7 @@ import { getPublicHolidaysForLocation } from '../../../../data/public-holidays';
 import { getEmployeeLeaveBalances } from '../../../../data/leave-balances';
 import { leavePolicies } from '../../../../data/leave-policies';
 import { claims } from '../../../../data/claims';
+import { getClaimTypeLabel } from '../../../../data/claim-types';
 import { LeaveApplication } from '../../../../models/leave.model';
 import type { ClaimStatus, ClaimType, ExpenseClaimRecord } from '../../../../models/claim.model';
 import type { LeavePolicy } from '../../../../models/leave-policy.model';
@@ -46,8 +48,8 @@ export class ViewComponent {
   employeeLeaveBalances!: ReturnType<typeof getEmployeeLeaveBalances>;
   claimRequests: ExpenseClaimRecord[] = [];
   leaveRequests: LeaveApplication[] = [];
-  attendanceEvents: CalendarOptions['events'] = [];
-  publicHolidayEvents: CalendarOptions['events'] = [];
+  attendanceEvents: EventInput[] = [];
+  publicHolidayEvents: EventInput[] = [];
   selectedTabIndex = 0;
   selectedLeave: LeaveDialogData | null = null;
   selectedClaim: ExpenseClaimRecord | null = null;
@@ -193,16 +195,7 @@ export class ViewComponent {
   }
 
   claimTypeLabel(type: ClaimType): string {
-    const labels: Record<ClaimType, string> = {
-      TRAVEL: 'Travel',
-      MEALS: 'Meals',
-      ACCOMMODATION: 'Accommodation',
-      TRANSPORTATION: 'Transportation',
-      MEDICAL: 'Medical',
-      COMMUNICATION: 'Communication',
-      OTHER: 'Other'
-    };
-    return labels[type];
+    return getClaimTypeLabel(type);
   }
 
   claimStatusClass(status: ClaimStatus): string {

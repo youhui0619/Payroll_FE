@@ -7,6 +7,7 @@ import { payslips } from '../../../data/payslips';
 import type { Payslip } from '../../../models/payslip.model';
 import { leaveApplications } from '../../../data/leave-applications';
 import { claims } from '../../../data/claims';
+import { getClaimTypeLabel } from '../../../data/claim-types';
 import { getEmployee } from '../../../data/employees';
 import type { LeaveApplication } from '../../../models/leave.model';
 import type { ClaimStatus, ClaimType, ExpenseClaimRecord } from '../../../models/claim.model';
@@ -27,15 +28,6 @@ export class PayrollDetailDialogComponent {
   selectedLeave: LeaveDialogData | null = null;
   selectedClaim: ExpenseClaimRecord | null = null;
   showReferenceDrawer = false;
-  private readonly claimTypeLabels: Record<ClaimType, string> = {
-    TRAVEL: 'Travel',
-    MEALS: 'Meals',
-    ACCOMMODATION: 'Accommodation',
-    TRANSPORTATION: 'Transportation',
-    MEDICAL: 'Medical',
-    COMMUNICATION: 'Communication',
-    OTHER: 'Other'
-  };
 
   get payslip(): Payslip {
     const record = payslips.find(item => item.employeeId === this.payroll.employeeId);
@@ -56,7 +48,7 @@ export class PayrollDetailDialogComponent {
   }
 
   claimTypeLabel(type: ClaimType): string {
-    return this.claimTypeLabels[type];
+    return getClaimTypeLabel(type);
   }
 
   claimStatusClass(status: ClaimStatus): string {

@@ -6,6 +6,9 @@ import { ViewComponent as PublicHolidayViewComponent } from './public-holidays/v
 import { OverviewComponent as LeaveOverviewComponent } from './leave/overview/overview.component';
 import { CreateComponent as LeaveCreateComponent } from './leave/create/create.component';
 import { EditComponent as LeaveEditComponent } from './leave/edit/edit.component';
+import { OverviewComponent as ClaimOverviewComponent } from './claim/overview/overview.component';
+import { CreateComponent as ClaimCreateComponent } from './claim/create/create.component';
+import { EditComponent as ClaimEditComponent } from './claim/edit/edit.component';
 
 
 export const SETTINGS_ROUTES: Routes = [
@@ -43,6 +46,22 @@ export const SETTINGS_ROUTES: Routes = [
     path: 'leave-settings/edit/:leaveCode',
     title: 'Edit Leave Setting',
     component: LeaveEditComponent
+  },
+
+  {
+    path: 'claim-settings/overview',
+    title: 'Claim Setting',
+    component: ClaimOverviewComponent
+  },
+  {
+    path: 'claim-settings/create',
+    title: 'Create Claim Setting',
+    component: ClaimCreateComponent
+  },
+  {
+    path: 'claim-settings/edit/:claimCode',
+    title: 'Edit Claim Setting',
+    component: ClaimEditComponent
   },
 
 

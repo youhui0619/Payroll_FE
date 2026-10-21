@@ -1,11 +1,12 @@
 export type ClaimType =
-  | 'TRAVEL'
-  | 'MEALS'
-  | 'ACCOMMODATION'
-  | 'TRANSPORTATION'
-  | 'MEDICAL'
-  | 'COMMUNICATION'
-  | 'OTHER';
+  | 'TRV'
+  | 'MEAL'
+  | 'ACCOM'
+  | 'TRANS'
+  | 'MED'
+  | 'COMM'
+  | 'OTH'
+  | (string & {});
 
 export type ClaimPaymentMethod = 'PAYROLL' | 'BANK_TRANSFER' | 'CASH';
 export type ClaimStatus = 'Pending' | 'Approved' | 'Rejected' | 'Paid';

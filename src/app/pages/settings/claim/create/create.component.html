@@ -1,0 +1,59 @@
+<div class="row justify-content-between my-4">
+  <div class="col-sm-7">
+    <h3 class="text-dark my-0">Create Claim Type</h3>
+    <p class="fw-300 text-muted mb-0">Add an expense category employees can select when submitting a claim.</p>
+  </div>
+  <div class="col-sm-5 d-flex align-items-center justify-content-end">
+    <button type="button" mat-flat-button color="primary-outline" routerLink="/settings/claim-settings/overview">
+      <i-tabler name="arrow-left"></i-tabler>
+      Back to claim settings
+    </button>
+  </div>
+</div>
+
+<form [formGroup]="claimForm" (ngSubmit)="onSubmit()">
+  <h4 class="text-primary">Claim Type Information</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Claim Code <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput formControlName="code" placeholder="e.g. WELLNESS">
+            <mat-error class="text-danger" *ngIf="claimForm.controls.code.hasError('required')">Claim code is required.</mat-error>
+            <mat-error class="text-danger" *ngIf="claimForm.controls.code.hasError('pattern')">Start with a letter; use letters, numbers, hyphens, or underscores.</mat-error>
+            <mat-error class="text-danger" *ngIf="claimForm.controls.code.hasError('maxlength')">Use no more than 20 characters.</mat-error>
+            <mat-error class="text-danger" *ngIf="claimForm.controls.code.hasError('duplicate')">This claim code already exists.</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-8 px-2">
+          <mat-label class="form-label">Claim Type Name <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput formControlName="name" placeholder="Enter claim type name">
+            <mat-error class="text-danger" *ngIf="claimForm.controls.name.hasError('required')">Claim type name is required.</mat-error>
+            <mat-error class="text-danger" *ngIf="claimForm.controls.name.hasError('maxlength')">Use no more than 60 characters.</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-12 px-2">
+          <mat-label class="form-label">Description</mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <textarea matInput rows="3" formControlName="description" placeholder="Describe the expenses covered by this claim type"></textarea>
+            <mat-error class="text-danger" *ngIf="claimForm.controls.description.hasError('maxlength')">Use no more than 250 characters.</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 px-2 mb-3">
+          <mat-label class="form-label">Status <span class="text-danger">*</span></mat-label>
+          <mat-button-toggle-group class="selection-group status-group" color="primary" hideSingleSelectionIndicator formControlName="status">
+            <mat-button-toggle value="ACTIVE">Active</mat-button-toggle>
+            <mat-button-toggle value="INACTIVE">Inactive</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex align-items-center justify-content-end gap-3">
+    <button type="button" mat-flat-button color="primary-outline" routerLink="/settings/claim-settings/overview">Cancel</button>
+    <button type="submit" mat-flat-button color="primary"><i-tabler name="check"></i-tabler>Save Claim Type</button>
+  </div>
+</form>

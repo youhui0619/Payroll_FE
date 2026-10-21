@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { claims } from '../../../../data/claims';
+import { getClaimTypeLabel } from '../../../../data/claim-types';
 import { getEmployee } from '../../../../data/employees';
 import type { ClaimStatus, ClaimType, ExpenseClaimRecord } from '../../../../models/claim.model';
 import { ClaimDetailDialogComponent } from '../../../../shared/dialog/claim-detail-dialog/claim-detail-dialog.component';
@@ -16,15 +17,6 @@ import { ClaimDetailDialogComponent } from '../../../../shared/dialog/claim-deta
 })
 export class ApprovalComponent {
   readonly claims = claims;
-  readonly claimTypeLabels: Record<ClaimType, string> = {
-    TRAVEL: 'Travel',
-    MEALS: 'Meals',
-    ACCOMMODATION: 'Accommodation',
-    TRANSPORTATION: 'Transportation',
-    MEDICAL: 'Medical',
-    COMMUNICATION: 'Communication',
-    OTHER: 'Other'
-  };
   selectedClaim: ExpenseClaimRecord | null = null;
 
   get pendingClaims(): ExpenseClaimRecord[] {
@@ -40,7 +32,7 @@ export class ApprovalComponent {
   }
 
   claimTypeLabel(type: ClaimType): string {
-    return this.claimTypeLabels[type];
+    return getClaimTypeLabel(type);
   }
 
   paymentMethodLabel(method: ExpenseClaimRecord['paymentMethod']): string {
