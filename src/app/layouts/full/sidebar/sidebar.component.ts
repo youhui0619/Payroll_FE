@@ -69,10 +69,9 @@ export class SidebarComponent implements OnInit, OnChanges {
 
     { header: 'Expenses & Claims' },
     { label: 'Claims', icon: 'solar:clock-circle-outline', children: [
-        { label: 'Overview', icon: 'codex:dot-circle', route: '/time-leave/leave/overview' },
-        { label: 'Claim Applications', icon: 'codex:dot-circle', route: '/time-leave/leave/applications' },
-        { label: 'Claim Approvals', icon: 'codex:dot-circle', route: '/time-leave/leave/approval' },
-        { label: 'Claim Types', icon: 'codex:dot-circle', route: '/time-leave/leave/approval' },
+        { label: 'Overview', icon: 'codex:dot-circle', route: '/expenses-claims/claims/overview', badge: 10 },
+        { label: 'Claim Approvals', icon: 'codex:dot-circle', route: '/expenses-claims/claims/approval', badge: 10 },
+        { label: 'Claim Types', icon: 'codex:dot-circle', route: '/expenses-claims/claims/types', badge: 10 },
       ]
     },
 

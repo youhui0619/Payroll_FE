@@ -62,6 +62,12 @@ export const routes: Routes = [
             .then(m => m.TIME_LEAVE_ROUTES)
       },
       {
+        path: 'expenses-claims',
+        loadChildren: () =>
+          import('./pages/expenses-claims/expenses-claims.routes')
+            .then(m => m.EXPENSES_CLAIMS_ROUTES)
+      },
+      {
         path: 'organization',
         loadChildren: () =>
           import('./pages/organization/organization.routes')

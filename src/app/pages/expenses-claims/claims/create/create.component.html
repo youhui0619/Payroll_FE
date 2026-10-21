@@ -1,0 +1,139 @@
+<form [formGroup]="claimForm" (ngSubmit)="onSubmit(claimForm)">
+    <h4 class="text-primary">Employee Information</h4>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row mx-0">
+                <div class="col-sm-4 px-2">
+                    <mat-label class="form-label">Claim Date <span class="text-danger">*</span></mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                        <input matInput [matDatepicker]="claimDate" placeholder="Select claim date" formControlName="claimDate">
+                        <mat-datepicker-toggle matSuffix [for]="claimDate"></mat-datepicker-toggle>
+                        <mat-datepicker #claimDate></mat-datepicker>
+                        <mat-error *ngIf="claimForm.controls.claimDate.hasError('required')">Claim date is required.</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-4 px-2">
+                    <mat-label class="form-label">Department <span class="text-danger">*</span></mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                        <mat-select placeholder="Select department" formControlName="departmentId" (selectionChange)="onDepartmentChange()">
+                            <mat-option *ngFor="let department of departments" [value]="department.id">{{ department.name }}</mat-option>
+                        </mat-select>
+                        <mat-error>Department is required.</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-12 px-2">
+                    <mat-label class="form-label">Employee <span class="text-danger">*</span></mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                        <input matInput type="text" placeholder="Select department first, then search employee"
+                            [formControl]="employeeSearch" [matAutocomplete]="employeeAuto"
+                            [disabled]="!claimForm.controls.departmentId.value" (input)="onEmployeeSearchInput()">
+                        <mat-autocomplete #employeeAuto="matAutocomplete" [displayWith]="employeeDisplayName"
+                            (optionSelected)="onEmployeeSelected($event.option.value)">
+                            <mat-option *ngFor="let employee of filteredEmployees" [value]="employee">
+                                {{ employee.employeeId }} - {{ employee.employeeName }}
+                            </mat-option>
+                            <mat-option *ngIf="claimForm.controls.departmentId.value && filteredEmployees.length === 0" disabled>
+                                No employees found in this department.
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="claimForm.controls.employeeId.hasError('required') || claimForm.controls.employeeId.hasError('selectionRequired')">
+                            Select an employee from the list.
+                        </mat-error>
+                    </mat-form-field>
+                    <div *ngIf="selectedEmployee as employee" class=" mt-2">
+                        <div class="row mx-0">
+                            <div class="col-sm-4 px-2 mb-3">
+                                <p class="text-dark fw-500">Employee ID</p>
+                                <p class="text-muted my-0">{{ employee.employeeId }}</p>
+                            </div>
+                            <div class="col-sm-8 px-2 mb-3">
+                                <p class="text-dark fw-500">Employee Name</p>
+                                <p class="text-muted my-0">{{ employee.employeeName }}</p>
+                            </div>
+                            <div class="col-sm-4 px-2 mb-3">
+                                <p class="text-dark fw-500">Department</p>
+                                <p class="text-muted my-0">{{ employee.department }}</p>
+                            </div>
+                            <div class="col-sm-8 px-2 mb-3">
+                                <p class="text-dark fw-500">Position</p>
+                                <p class="text-muted my-0">{{ employee.position }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="text-primary">Claim Details</h4>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row mx-0">
+                <div class="col-sm-4 px-2">
+                    <mat-label class="form-label">Claim Type <span class="text-danger">*</span></mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                        <mat-select placeholder="Select claim type" formControlName="claimType">
+                            <mat-option *ngFor="let claimType of claimTypes" [value]="claimType.value">{{ claimType.label }}</mat-option>
+                        </mat-select>
+                        <mat-error>Claim type is required.</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-12 px-2">
+                    <mat-label class="form-label">Description <span class="text-danger">*</span></mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                        <textarea matInput rows="4" placeholder="Enter claim description" formControlName="description"></textarea>
+                        <mat-error *ngIf="claimForm.controls.description.hasError('required')">Description is required.</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-6 px-2">
+                    <mat-label class="form-label">Amount <span class="text-danger">*</span></mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                        <span matTextPrefix class="text-muted me-2">MYR</span>
+                        <input type="number" min="0.01" step="0.01" matInput placeholder="Enter amount" formControlName="amount">
+                        <mat-error *ngIf="claimForm.controls.amount.hasError('required')">Amount is required.</mat-error>
+                        <mat-error *ngIf="claimForm.controls.amount.hasError('min')">Amount must be greater than zero.</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-6 px-2">
+                    <mat-label class="form-label">Payment Method <span class="text-danger">*</span></mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                        <mat-select placeholder="Select payment method" formControlName="paymentMethod">
+                            <mat-option *ngFor="let paymentMethod of paymentMethods" [value]="paymentMethod.value">{{ paymentMethod.label }}</mat-option>
+                        </mat-select>
+                        <mat-error>Payment method is required.</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="text-primary">Documentation</h4>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row mx-0">
+                <div class="col-sm-12 px-2">
+                    <mat-label class="form-label">Supporting Documents <span class="text-danger">*</span></mat-label>
+                    <app-dropzone formControlName="supportingDocuments"
+                        accept="application/pdf,image/jpeg,image/png"
+                        [multiple]="true"
+                        [maxSize]="10485760"
+                        [headline]="'Drag files here or browse to upload'"
+                        [description]="'PDF, JPG or PNG · Maximum 10 MB per file'"></app-dropzone>
+                    <div class="text-danger" *ngIf="submitted && claimForm.controls.supportingDocuments.hasError('minlength')">
+                        Upload at least one supporting document.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p *ngIf="createdClaim" class="text-success" role="status">Claim {{ createdClaim.id }} submitted for approval.</p>
+    <div class="d-flex align-items-center justify-content-end gap-3">
+        <button type="submit" mat-flat-button color="primary"><i-tabler name="check"></i-tabler>Submit</button>
+    </div>
+</form>
