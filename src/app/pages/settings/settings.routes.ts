@@ -9,6 +9,8 @@ import { EditComponent as LeaveEditComponent } from './leave/edit/edit.component
 import { OverviewComponent as ClaimOverviewComponent } from './claim/overview/overview.component';
 import { CreateComponent as ClaimCreateComponent } from './claim/create/create.component';
 import { EditComponent as ClaimEditComponent } from './claim/edit/edit.component';
+import { PayrollComponent } from './payroll/payroll.component';
+import { PayslipComponent } from './payslip/payslip.component';
 
 
 export const SETTINGS_ROUTES: Routes = [
@@ -62,6 +64,16 @@ export const SETTINGS_ROUTES: Routes = [
     path: 'claim-settings/edit/:claimCode',
     title: 'Edit Claim Setting',
     component: ClaimEditComponent
+  },
+  {
+    path: 'payroll',
+    title: 'Payroll Setting',
+    component: PayrollComponent
+  },
+  {
+    path: 'payslip',
+    title: 'Payslip Setting',
+    component: PayslipComponent
   },
 
 

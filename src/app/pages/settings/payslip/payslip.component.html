@@ -1,0 +1,219 @@
+<form [formGroup]="payslipForm" (ngSubmit)="onSubmit()">
+    <h4 class="text-primary">PDF & Numbering</h4>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row mx-0">
+                <div class="col-sm-6 px-2 mb-4">
+                    <mat-label class="form-label">Page size <span class="text-danger">*</span></mat-label>
+                    <mat-button-toggle-group
+                        class="selection-group status-group"
+                        color="primary"
+                        hideSingleSelectionIndicator
+                        formControlName="pageSize"
+                        required>
+                        <mat-button-toggle value="A4">A4</mat-button-toggle>
+                        <mat-button-toggle value="LETTER">Letter</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+                <div class="col-sm-6 px-2 mb-4">
+                    <mat-label class="form-label">Page orientation <span class="text-danger">*</span></mat-label>
+                    <mat-button-toggle-group
+                        class="selection-group status-group"
+                        color="primary"
+                        hideSingleSelectionIndicator
+                        formControlName="pageOrientation"
+                        required>
+                        <mat-button-toggle value="PORTRAIT">Portrait</mat-button-toggle>
+                        <mat-button-toggle value="LANDSCAPE">Landscape</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>
+                <div class="col-sm-6 px-2 mb-4">
+                    <mat-label class="form-label">Payslip number format <span class="text-danger">*</span></mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                        <input type="text" matInput placeholder="Enter Payslip number format" formControlName="payslipNumberFormat">
+                        <mat-hint class="fs-10 fw-300 text-muted">Example: PAY-2026-11-EMP001. Generate a unique reference for each payslip.</mat-hint>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6 px-2 mb-4">
+                    <mat-label class="form-label">PDF filename format <span class="text-danger">*</span></mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                        <input type="text" matInput placeholder="Enter PDF filename format" formControlName="pdfFilenameFormat">
+                        <mat-hint class="fs-10 fw-300 text-muted">Example: PAY-2026-11-EMP001. Generate a unique reference for each payslip.</mat-hint>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <div>
+                            <label class="text-dark my-0">Optional password-protected PDF</label>
+                            <p class="text-muted fs-10">if required by your security policy</p>
+                        </div>
+                        <mat-slide-toggle
+                            color="primary" formControlName="passwordProtectedPdf">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <h4 class="text-primary">Payslip Content - Company and employee information</h4>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row mx-0">
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Company logo</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="companyLogo">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Employee ID and name</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="employeeDetails">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Department and position</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="employmentType">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Employment type</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="departmentAndPosition">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Pay period and payment date</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="payPeriodAndPaymentDate">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="text-primary">Payslip Content - Salary and payroll details</h4>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row mx-0">
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Basic salary, allowances, overtime and bonus</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="salaryAndEarnings">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Itemized deductions, including applicable statutory deductions</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="itemizedDeductions">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Employer contributions: EPF, SOCSO and EIS</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="employerContributions">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Year-to-date earnings and deductions</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="yearToDateTotals">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Leave balance</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="leaveBalance">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Bank account details</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="bankAccountDetails">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Mask bank account number</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="maskBankAccountNumber">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Display remarks or footer message</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="displayFooterMessage">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-12 px-2">
+                    <mat-label class="form-label">Footer Text </mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                        <textarea matInput rows="3" placeholder="Enter footer text" formControlName="footerText"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="text-primary">Publishing</h4>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row mx-0">
+                <div class="col-sm-12 px-2 mb-4">
+                    <mat-label class="form-label">Publishing method <span class="text-danger">*</span></mat-label>
+                    <mat-radio-group class="form-radio-group row" formControlName="publishingMethod">
+                        <mat-radio-button class="col-sm-12 form-radio" value="MANUAL">Manual — HR publishes after review</mat-radio-button>
+                        <mat-radio-button class="col-sm-12 form-radio" value="AUTOMATIC">Automatic — publish after final payroll approval</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div class="col-sm-12 px-2 mb-4">
+                    <mat-label class="form-label">Employee visibility <span class="text-danger">*</span></mat-label>
+                    <mat-radio-group class="form-radio-group row" formControlName="employeeVisibility">
+                        <mat-radio-button class="col-sm-12 form-radio" value="EMPLOYEES_AND_ADMINS">Employees can view published payslips only</mat-radio-button>
+                        <mat-radio-button class="col-sm-12 form-radio" value="ADMINS_ONLY">HR and payroll administrators only</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Notify employees when a payslip is published</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="notifyEmployees">
+                        </mat-slide-toggle>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex align-items-center justify-content-end gap-3">
+        <button type="submit" mat-flat-button color="primary"><i-tabler name="check"></i-tabler>Submit</button>
+    </div>
+</form>

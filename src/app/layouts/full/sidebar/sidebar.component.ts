@@ -106,7 +106,8 @@ export class SidebarComponent implements OnInit, OnChanges {
         { label: 'Public Holidays', icon: 'codex:dot-circle', route: '/settings/public-holidays/list' },
         { label: 'Leave Settings', icon: 'codex:dot-circle', route: '/settings/leave-settings/overview' },
         { label: 'Claim Settings', icon: 'codex:dot-circle', route: '/settings/claim-settings/overview' },
-        { label: 'Payroll Settings', icon: 'codex:dot-circle', route: '/roles/create', badge: 10 }
+        { label: 'Payroll Settings', icon: 'codex:dot-circle', route: '/settings/payroll', badge: 10 },
+        { label: 'Payslip Settings', icon: 'codex:dot-circle', route: '/settings/payslip' }
       ] 
     },
     { label: 'Access Control', icon: 'solar:lock-keyhole-outline', children: [
