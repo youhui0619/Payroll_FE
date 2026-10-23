@@ -1,0 +1,27 @@
+import type { PayrollSettings } from '../models/payroll-settings.model';
+
+export const payrollSettings: PayrollSettings = {
+  payrollFrequency: 'MONTHLY',
+  payrollCutoffDay: 'LAST_DAY',
+  scheduledPayDate: 1,
+  currency: 'MYR',
+  salaryProrationMethod: 'CALENDAR_DAYS',
+  calculationPrecision: 2,
+  includeBasicSalary: true,
+  includeOvertime: true,
+  includeAllowances: true,
+  includeBonus: true,
+  includeCommissionAndIncentives: true,
+  deductionProrationMethod: 'FOLLOW_SALARY_PRORATION',
+  enableEpf: true,
+  enableSocso: true,
+  enableEis: true,
+  enablePcb: true,
+  enableHrdCorpLevy: false,
+  paymentMethod: 'BANK_TRANSFER',
+  automaticallyCalculatePayroll: true,
+  blockApprovalOnValidationErrors: true,
+  lockAfterFinalApproval: true,
+  notifyApprovers: true,
+  approvalWorkflow: 'ONE_APPROVER'
+};

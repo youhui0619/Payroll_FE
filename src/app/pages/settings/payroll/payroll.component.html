@@ -1,1 +1,258 @@
-<p>payroll works!</p>
+<form [formGroup]="payrollForm" (ngSubmit)="onSubmit()">
+    <h4 class="text-primary">General Payroll</h4>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row mx-0">
+                <div class="col-sm-4 px-2">
+                    <mat-label class="form-label">Payroll frequency <span class="text-danger">*</span></mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                        <mat-select placeholder="Select payroll frequency" formControlName="payrollFrequency">
+                            <mat-option value="WEEKLY">Weekly</mat-option>
+                            <mat-option value="BIWEEKLY">Every two weeks</mat-option>
+                            <mat-option value="SEMIMONTHLY">Twice a month</mat-option>
+                            <mat-option value="MONTHLY">Monthly</mat-option>
+                        </mat-select>
+                        <mat-error class="text-danger" class="text-danger">Status is required</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-4 px-2">
+                    <mat-label class="form-label">Payroll cut-off day <span class="text-danger">*</span></mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                        <mat-select placeholder="Select payroll cut-off day" formControlName="payrollCutoffDay">
+                            <mat-option *ngFor="let day of daysOfMonth" [value]="day">{{ day }}</mat-option>
+                            <mat-option value="LAST_DAY">Last day of the month</mat-option>
+                        </mat-select>
+                        <mat-error class="text-danger" class="text-danger">Status is required</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-4 px-2">
+                    <mat-label class="form-label">Scheduled pay date <span class="text-danger">*</span></mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                        <mat-select placeholder="Select scheduled pay date" formControlName="scheduledPayDate">
+                            <mat-option *ngFor="let day of daysOfMonth" [value]="day">{{ day }}{{ day === 1 ? 'st' : day === 2 ? 'nd' : day === 3 ? 'rd' : 'th' }} of each month</mat-option>
+                            <mat-option value="LAST_DAY">Last day of the month</mat-option>
+                        </mat-select>
+                        <mat-error class="text-danger" class="text-danger">Status is required</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-4 px-2">
+                    <mat-label class="form-label">Currency <span class="text-danger">*</span></mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                        <mat-select placeholder="Select currency" formControlName="currency">
+                            <mat-option value="MYR">RM — Malaysian Ringgit</mat-option>
+                        </mat-select>
+                        <mat-error class="text-danger" class="text-danger">Status is required</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-4 px-2">
+                    <mat-label class="form-label">Salary proration method <span class="text-danger">*</span></mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                        <mat-select placeholder="Select Salary proration method" formControlName="salaryProrationMethod">
+                            <mat-option value="CALENDAR_DAYS">Calendar days in month</mat-option>
+                            <mat-option value="FIXED_26_DAYS">Fixed 26-day basis</mat-option>
+                            <mat-option value="WORKING_DAYS">Working days in month</mat-option>
+                        </mat-select>
+                        <mat-error class="text-danger" class="text-danger">Status is required</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-sm-4 px-2">
+                    <mat-label class="form-label">Calculation precision <span class="text-danger">*</span></mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                        <mat-select placeholder="Select Calculation precision" formControlName="calculationPrecision">
+                            <mat-option [value]="2">2 decimal places</mat-option>
+                            <mat-option [value]="3">3 decimal places</mat-option>
+                        </mat-select>
+                        <mat-error class="text-danger" class="text-danger">Status is required</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="text-primary">Earnings</h4>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row mx-0">
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Basic salary</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="includeBasicSalary">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Overtime</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="includeOvertime">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Allowances</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="includeAllowances">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Bonus</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="includeBonus">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Commission and incentives</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="includeCommissionAndIncentives">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="text-primary">Deductions</h4>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row mx-0">
+                <div class="col-sm-4 px-2">
+                    <mat-label class="form-label">Deduction proration method <span class="text-danger">*</span></mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                        <mat-select placeholder="Select deduction proration method" formControlName="deductionProrationMethod">
+                            <mat-option value="CALENDAR_DAYS">Calendar-day basis</mat-option>
+                            <mat-option value="WORKING_DAYS">Working-day basis</mat-option>
+                            <mat-option value="FOLLOW_SALARY_PRORATION">Follow salary proration method</mat-option>
+                        </mat-select>
+                        <mat-error class="text-danger" class="text-danger">Status is required</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <h4 class="text-primary">Statutory & Tax</h4>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row mx-0">
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">EPF / KWSP</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="enableEpf">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">SOCSO / PERKESO</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="enableSocso">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">EIS / SIP</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="enableEis">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">PCB / MTD</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="enablePcb">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">HRD Corp levy</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="enableHrdCorpLevy">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="text-primary">Payment Settings</h4>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row mx-0">
+                <div class="col-sm-12 px-2 mb-4">
+                    <mat-label class="form-label">Payment method <span class="text-danger">*</span></mat-label>
+                    <mat-radio-group class="form-radio-group row" formControlName="paymentMethod">
+                        <mat-radio-button class="col-sm-12 form-radio" value="BANK_TRANSFER">Bank transfer</mat-radio-button>
+                        <mat-radio-button class="col-sm-12 form-radio" value="CASH">Cash</mat-radio-button>
+                        <mat-radio-button class="col-sm-12 form-radio" value="OTHER">Other</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="text-primary">Payroll Workflow & Approval</h4>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row mx-0">
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Automatically calculate payroll when required inputs are ready</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="automaticallyCalculatePayroll">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Block final approval while validation errors remain</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="blockApprovalOnValidationErrors">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Lock payroll after final approval</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="lockAfterFinalApproval">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Notify approvers when payroll is ready for review</label>
+                        <mat-slide-toggle
+                            color="primary" formControlName="notifyApprovers">
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-12 px-2 mb-4">
+                    <mat-label class="form-label">Approval workflow <span class="text-danger">*</span></mat-label>
+                    <mat-radio-group class="form-radio-group row" formControlName="approvalWorkflow">
+                        <mat-radio-button class="col-sm-12 form-radio" value="ONE_APPROVER">One approver</mat-radio-button>
+                        <mat-radio-button class="col-sm-12 form-radio" value="TWO_STEP">Two-step approval — reviewer and final approver</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex align-items-center justify-content-end gap-3">
+        <button type="submit" mat-flat-button color="primary"><i-tabler name="check"></i-tabler>Submit</button>
+    </div>
+</form>
