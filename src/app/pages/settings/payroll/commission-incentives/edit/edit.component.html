@@ -1,0 +1,168 @@
+<form [formGroup]="commissionForm" (ngSubmit)="onSubmit()" *ngIf="commissionSetting">
+  <h4 class="text-primary">Commission &amp; Incentive Information</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Commission Code <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput formControlName="code" placeholder="e.g. COMM-SALES">
+            <mat-error *ngIf="commissionForm.controls.code.hasError('required')">Commission code is required.</mat-error>
+            <mat-error *ngIf="commissionForm.controls.code.hasError('pattern')">Start with a letter; use letters, numbers, hyphens, or underscores.</mat-error>
+            <mat-error *ngIf="commissionForm.controls.code.hasError('maxlength')">Use no more than 20 characters.</mat-error>
+            <mat-error *ngIf="commissionForm.controls.code.hasError('duplicate')">This commission code already exists.</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-8 px-2">
+          <mat-label class="form-label">Commission Name <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput formControlName="name" placeholder="Enter commission or incentive name">
+            <mat-error class="text-danger" *ngIf="commissionForm.controls.name.hasError('required')">Commission name is required.</mat-error>
+            <mat-error class="text-danger" *ngIf="commissionForm.controls.name.hasError('maxlength')">Use no more than 60 characters.</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Commission type <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+              <mat-select placeholder="Select commission type" formControlName="commissionType">
+                  <mat-option *ngFor="let type of commissionTypes" [value]="type.value">{{ type.label }}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="commissionForm.controls.commissionType.hasError('required')">Commission type is required.</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Calculation Method <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+              <mat-select placeholder="Select calculation method" formControlName="calculationMethod">
+                  <mat-option *ngFor="let method of calculationMethods" [value]="method.value">{{ method.label }}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="commissionForm.controls.calculationMethod.hasError('required')">Calculation method is required.</mat-error>
+          </mat-form-field>
+        </div>
+
+
+        <div class="col-sm-4 px-2" *ngIf="usesPercentageCalculation">
+          <mat-label class="form-label">Rate <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input type="number" min="0" matInput placeholder="Enter rate" formControlName="rate">
+            <span matTextSurfix class="text-muted ms-2">%</span>
+            <mat-error *ngIf="commissionForm.controls.rate.hasError('required')">Rate is required.</mat-error>
+            <mat-error *ngIf="commissionForm.controls.rate.hasError('min')">Enter zero or more.</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-4 px-2" *ngIf="!usesPercentageCalculation">
+          <mat-label class="form-label">Amount <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input type="number" min="0" matInput placeholder="Enter amount" formControlName="amount">
+            <span matTextPrefix class="text-muted me-2">MYR</span>
+            <mat-error *ngIf="commissionForm.controls.amount.hasError('required')">Amount is required.</mat-error>
+            <mat-error *ngIf="commissionForm.controls.amount.hasError('min')">Enter zero or more.</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Calculation Frequency <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <mat-select placeholder="Select calculation frequency" formControlName="calculationFrequency">
+              <mat-option *ngFor="let frequency of calculationFrequencies" [value]="frequency.value">{{ frequency.label }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="commissionForm.controls.calculationFrequency.hasError('required')">Calculation frequency is required.</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Payout Timing <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <mat-select placeholder="Select payout timing" formControlName="payoutTiming">
+              <mat-option *ngFor="let timing of payoutTimings" [value]="timing.value">{{ timing.label }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="commissionForm.controls.payoutTiming.hasError('required')">Payout timing is required.</mat-error>
+          </mat-form-field>
+        </div>
+
+
+        <div class="col-sm-12 px-2">
+            <mat-label class="form-label">Description</mat-label>
+            <mat-form-field appearance="outline" class="form-input w-100">
+                <textarea matInput rows="3" placeholder="Describe when this commission applies" formControlName="description"></textarea>
+                <mat-error *ngIf="commissionForm.controls.description.hasError('maxlength')">Use no more than 250 characters.</mat-error>
+            </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4 class="text-primary">Eligibility and payroll</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Eligible employees <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+              <mat-select placeholder="Select eligible employees" formControlName="eligibleEmployees">
+                  <mat-option *ngFor="let option of employeeEligibilityOptions" [value]="option.value">{{ option.label }}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="commissionForm.controls.eligibleEmployees.hasError('required')">Employee eligibility is required.</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-4 px-2" *ngIf="showDepartmentSelection">
+          <mat-label class="form-label">Departments <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <mat-select multiple placeholder="Select departments" formControlName="eligibleDepartmentIds">
+              <mat-option *ngFor="let department of departments" [value]="department.id">{{ department.name }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="commissionForm.controls.eligibleDepartmentIds.hasError('required')">Select at least one department.</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-4 px-2" *ngIf="showPositionSelection">
+          <mat-label class="form-label">Positions <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <mat-select multiple placeholder="Select positions" formControlName="eligiblePositionIds">
+              <mat-option *ngFor="let position of positions" [value]="position.id">{{ position.title }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="commissionForm.controls.eligiblePositionIds.hasError('required')">Select at least one position.</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-4 px-2" *ngIf="showEmployeeSelection">
+          <mat-label class="form-label">Employees <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <mat-select multiple placeholder="Select employees" formControlName="eligibleEmployeeIds">
+              <mat-option *ngFor="let employee of employees" [value]="employee.employeeId">{{ employee.employeeName }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="commissionForm.controls.eligibleEmployeeIds.hasError('required')">Select at least one employee.</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Payroll earning code <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input type="text" matInput placeholder="COMM-SALES" formControlName="payrollEarningCode">
+            <mat-error *ngIf="commissionForm.controls.payrollEarningCode.hasError('required')">Payroll earning code is required.</mat-error>
+            <mat-error *ngIf="commissionForm.controls.payrollEarningCode.hasError('pattern')">Use letters, numbers, hyphens, or underscores.</mat-error>
+          </mat-form-field>
+        </div>
+
+
+        <div class="col-sm-6 px-2">
+            <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                <label class="text-dark my-0">Require approval before payroll</label>
+                <mat-slide-toggle
+                    color="primary" formControlName="requiresApproval">
+                </mat-slide-toggle>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex align-items-center justify-content-end gap-3">
+    <button type="button" mat-flat-button color="primary-outline" routerLink="/settings/payroll/commission-incentives/overview">Cancel</button>
+    <button type="submit" mat-flat-button color="primary"><i-tabler name="check"></i-tabler>Update Commission</button>
+  </div>
+</form>

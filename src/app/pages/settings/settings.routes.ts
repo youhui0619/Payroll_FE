@@ -11,6 +11,10 @@ import { CreateComponent as ClaimCreateComponent } from './claim/create/create.c
 import { EditComponent as ClaimEditComponent } from './claim/edit/edit.component';
 import { PayrollComponent } from './payroll/payroll.component';
 import { PayslipComponent } from './payslip/payslip.component';
+import { OverviewComponent as CommissionOverviewComponent } from './payroll/commission-incentives/overview/overview.component';
+import { CreateComponent as CommissionCreateComponent } from './payroll/commission-incentives/create/create.component';
+import { EditComponent as CommissionEditComponent } from './payroll/commission-incentives/edit/edit.component';
+
 
 
 export const SETTINGS_ROUTES: Routes = [
@@ -74,6 +78,21 @@ export const SETTINGS_ROUTES: Routes = [
     path: 'payslip',
     title: 'Payslip Setting',
     component: PayslipComponent
+  },
+  {
+    path: 'payroll/commission-incentives/overview',
+    title: 'Commission & Incentives List',
+    component: CommissionOverviewComponent
+  },
+  {
+    path: 'payroll/commission-incentives/create',
+    title: 'Commission & Incentives Create',
+    component: CommissionCreateComponent
+  },
+  {
+    path: 'payroll/commission-incentives/edit/:code',
+    title: 'Edit Commission & Incentives',
+    component: CommissionEditComponent
   },
 
 
