@@ -122,6 +122,87 @@
         </div>
     </div>
 
+    <ng-container *ngIf="payrollForm.controls.includeOvertime.value">
+    <h4 class="text-primary">Overtime Settings</h4>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row mx-0">
+                <div class="col-sm-12 px-2 mb-4">
+                    <mat-label class="form-label">Overtime calculation basis <span class="text-danger">*</span></mat-label>
+                    <mat-radio-group class="form-radio-group row" formControlName="overtimeCalculationBasis">
+                        <mat-radio-button class="col-sm-12 form-radio" value="HOURLY_RATE">Hourly rate</mat-radio-button>
+                        <mat-radio-button class="col-sm-12 form-radio" value="DAILY_RATE_CONVERTED">Daily rate converted to hourly</mat-radio-button>
+                        <mat-radio-button class="col-sm-12 form-radio" value="MONTHLY_SALARY_CONVERTED">Monthly salary converted to hourly</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div class="col-sm-9 px-2">
+                    <mat-label class="form-label">Standard working hours per day <span class="text-danger">*</span></mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                        <input type="number" min="0" matInput placeholder="Enter Standard working hours per day" formControlName="standardWorkingHoursPerDay">
+                        <span matTextSurfix class="text-muted ms-2">Days</span>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="text-primary">Overtime Rates</h4>
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row mx-0">
+                <div class="col-sm-12 px-2 mb-4">
+                    <mat-label class="form-label">Normal working day multiplier <span class="text-danger">*</span></mat-label>
+                    <div class="row">
+                        <div class="col-sm-6 px-2">
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <input type="number" min="0" matInput placeholder="Enter Normal working day multiplier" formControlName="normalWorkingDayMultiplier">
+                                <span matTextSurfix class="text-muted ms-2 text-nowrap">× hourly rate</span>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-sm-4 px-2">
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <input type="text" matInput placeholder="Enter Standard working earning code" formControlName="normalWorkingDayEarningCode">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-sm-12 px-2 mb-2">
+                            <mat-checkbox color="primary" class="form-checkbox" formControlName="configureRestDayRates">Configure rest day rates</mat-checkbox>
+                        </div>
+                        <ng-container *ngIf="payrollForm.controls.configureRestDayRates.value">
+                        <div class="col-sm-6 px-2">
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <input type="number" min="0" matInput placeholder="Enter Rest day working hours per day" formControlName="restDayWorkingHoursPerDay">
+                                <span matTextSurfix class="text-muted ms-2 text-nowrap">× hourly rate</span>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-sm-4 px-2">
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <input type="text" matInput placeholder="Enter Rest day earning code" formControlName="restDayEarningCode">
+                            </mat-form-field>
+                        </div>
+                        </ng-container>
+                        <div class="col-sm-12 px-2 mb-2">
+                            <mat-checkbox color="primary" class="form-checkbox" formControlName="configurePublicHolidayRates">Configure public holiday rates</mat-checkbox>
+                        </div>
+                        <ng-container *ngIf="payrollForm.controls.configurePublicHolidayRates.value">
+                        <div class="col-sm-6 px-2">
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <input type="number" min="0" matInput placeholder="Enter Public holiday working hours per day" formControlName="publicHolidayWorkingHoursPerDay">
+                                <span matTextSurfix class="text-muted ms-2 text-nowrap">× hourly rate</span>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-sm-4 px-2">
+                            <mat-form-field appearance="outline" class="form-input w-100">
+                                <input type="text" matInput placeholder="Enter Public holiday earning code" formControlName="publicHolidayEarningCode">
+                            </mat-form-field>
+                        </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </ng-container>
+
     <h4 class="text-primary">Deductions</h4>
     <div class="card mb-4">
         <div class="card-body">
@@ -195,12 +276,31 @@
         <div class="card-body">
             <div class="row mx-0">
                 <div class="col-sm-12 px-2 mb-4">
-                    <mat-label class="form-label">Payment method <span class="text-danger">*</span></mat-label>
+                    <mat-label class="form-label">Overtime calculation basis <span class="text-danger">*</span></mat-label>
                     <mat-radio-group class="form-radio-group row" formControlName="paymentMethod">
-                        <mat-radio-button class="col-sm-12 form-radio" value="BANK_TRANSFER">Bank transfer</mat-radio-button>
-                        <mat-radio-button class="col-sm-12 form-radio" value="CASH">Cash</mat-radio-button>
-                        <mat-radio-button class="col-sm-12 form-radio" value="OTHER">Other</mat-radio-button>
+                        <mat-radio-button class="col-sm-12 form-radio" value="BANK_TRANSFER">Hourly rate</mat-radio-button>
+                        <mat-radio-button class="col-sm-12 form-radio" value="CASH">Daily rate converted to hourly</mat-radio-button>
+                        <mat-radio-button class="col-sm-12 form-radio" value="OTHER">Monthly salary converted to hourly</mat-radio-button>
                     </mat-radio-group>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <mat-label class="form-label">Standard working hours per day <span class="text-danger">*</span></mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                        <input type="number" min="0" matInput placeholder="Enter Standard working hours per day">
+                        <span matTextSurfix class="text-muted ms-2">Hours</span>
+                    </mat-form-field>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <mat-label class="form-label">Minimum overtime duration <span class="text-danger">*</span></mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                        <mat-select placeholder="Select deduction proration method">
+                            <mat-option value="CALENDAR_DAYS">No minimium</mat-option>
+                            <mat-option value="CALENDAR_DAYS">15 Minutes</mat-option>
+                            <mat-option value="CALENDAR_DAYS">30 Minutes</mat-option>
+                            <mat-option value="CALENDAR_DAYS">60 Minutes</mat-option>
+                        </mat-select>
+                        <mat-error class="text-danger" class="text-danger">Status is required</mat-error>
+                    </mat-form-field>
                 </div>
             </div>
         </div>
