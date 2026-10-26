@@ -13,6 +13,12 @@ import { departments } from '../../../../data/departments';
 import { positions } from '../../../../data/positions';
 import type { Department } from '../../../../models/department.model';
 import type { Position } from '../../../../models/position.model';
+import { commissionIncentiveSettings } from '../../../../data/commission-incentive-settings';
+import type {
+  CommissionCalculationFrequency,
+  CommissionCalculationMethod,
+  CommissionIncentiveSetting
+} from '../../../../models/commission-incentive-setting.model';
 
 
 @Component({
@@ -27,6 +33,7 @@ export class CreateComponent {
   readonly departments: Department[] = departments.filter(department => department.status === 'Active');
   readonly positions: Position[] = positions;
   readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');
+  readonly commissionIncentiveSettings: CommissionIncentiveSetting[] = commissionIncentiveSettings;
 
   employeeForm = new FormGroup({
     personal: new FormGroup({
@@ -69,6 +76,7 @@ export class CreateComponent {
       epfEmployerNo: new FormControl(''),
       socsoNo: new FormControl(''),
       eisStatus: new FormControl(''),
+      commissionSettingCodes: new FormControl<string[]>([], { nonNullable: true }),
     }),
     taxInformation: new FormGroup({
       agreeWithTerms: new FormControl(false),
@@ -105,6 +113,70 @@ export class CreateComponent {
 
   get hasAvailablePositions(): boolean {
     return this.availablePositions.length > 0;
+  }
+
+  get availableCommissionSettings(): CommissionIncentiveSetting[] {
+    const employeeId = (this.employeeForm.controls.personal.controls.employeeId.value ?? '').trim();
+    const department = this.departments.find(item => item.name === this.employeeForm.controls.employment.controls.department.value);
+    const position = this.positions.find(item => item.title === this.employeeForm.controls.employment.controls.position.value);
+
+    return this.commissionIncentiveSettings.filter(setting => {
+      switch (setting.eligibleEmployees) {
+        case 'ALL_EMPLOYEES':
+          return true;
+        case 'SELECTED_DEPARTMENTS':
+          return !!department && setting.eligibleDepartmentIds.includes(department.id);
+        case 'SELECTED_POSITIONS':
+          return !!position && setting.eligiblePositionIds.includes(position.id);
+        case 'SELECTED_EMPLOYEES':
+          return !!employeeId && setting.eligibleEmployeeIds.includes(employeeId);
+      }
+    });
+  }
+
+  isCommissionSelected(code: string): boolean {
+    return this.employeeForm.controls.payroll.controls.commissionSettingCodes.value.includes(code);
+  }
+
+  setCommissionSelected(code: string, selected: boolean): void {
+    const codes = this.employeeForm.controls.payroll.controls.commissionSettingCodes;
+    const selectedCodes = new Set(codes.value);
+
+    if (selected) selectedCodes.add(code);
+    else selectedCodes.delete(code);
+
+    codes.setValue([...selectedCodes]);
+  }
+
+  commissionCalculationLabel(setting: CommissionIncentiveSetting): string {
+    if (setting.calculationMethod === 'PERCENTAGE_OF_REVENUE') return `${setting.rate ?? 0}% of revenue`;
+    if (setting.calculationMethod === 'PERCENTAGE_OF_PROFIT') return `${setting.rate ?? 0}% of profit`;
+    if (['PERCENTAGE_OF_SALES', 'TIERED_RATE'].includes(setting.calculationMethod)) return `${setting.rate ?? 0}% of sales`;
+    return `MYR ${setting.amount ?? 0}`;
+  }
+
+  commissionCalculationMethodLabel(method: CommissionCalculationMethod): string {
+    const labels: Record<CommissionCalculationMethod, string> = {
+      PERCENTAGE_OF_SALES: 'Percentage of Sales',
+      PERCENTAGE_OF_REVENUE: 'Percentage of Revenue',
+      PERCENTAGE_OF_PROFIT: 'Percentage of Profit',
+      FIXED_PER_TRANSACTION: 'Fixed Amount per Transaction',
+      TIERED_RATE: 'Tiered Rate',
+      TARGET_BASED: 'Target-Based Calculation',
+      FIXED_AMOUNT: 'Fixed Amount'
+    };
+    return labels[method];
+  }
+
+  commissionCalculationFrequencyLabel(frequency: CommissionCalculationFrequency): string {
+    const labels: Record<CommissionCalculationFrequency, string> = {
+      PER_TRANSACTION: 'Per transaction',
+      WEEKLY: 'Weekly',
+      BIWEEKLY: 'Every two weeks',
+      MONTHLY: 'Monthly',
+      QUARTERLY: 'Quarterly'
+    };
+    return labels[frequency];
   }
 
   onDepartmentChange(): void {
@@ -157,6 +229,9 @@ export class CreateComponent {
   }
 
   onSubmit(): void {
+    const availableCodes = new Set(this.availableCommissionSettings.map(setting => setting.code));
+    const selectedCodes = this.employeeForm.controls.payroll.controls.commissionSettingCodes;
+    selectedCodes.setValue(selectedCodes.value.filter(code => availableCodes.has(code)));
     console.log('form.value', this.employeeForm.value);
   }
 

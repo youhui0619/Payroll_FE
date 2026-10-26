@@ -4,6 +4,7 @@ type SampleEmployeeInput = Pick<EmployeeRecord,
   'employeeId' | 'employeeName' | 'nricPassportNo' | 'gender' | 'race' |
   'religion' | 'department' | 'position' | 'basicSalary' | 'contactNo'> & {
     reportingManager?: string;
+    commissionSettingCodes?: string[];
   };
 
 function createSampleEmployee(input: SampleEmployeeInput): EmployeeRecord {
@@ -39,6 +40,7 @@ function createSampleEmployee(input: SampleEmployeeInput): EmployeeRecord {
     kwspNo: `21${employeeNumber}4610`,
     socsoNo: `SOCSO-${employeeNumber}`,
     eisStatus: 'Active',
+    commissionSettingCodes: input.commissionSettingCodes ?? [],
     emergencyContactName: `Family of ${input.employeeName.split(' ')[0]}`,
     emergencyContactRelationship: 'Family member',
     emergencyContactNo: input.contactNo
@@ -80,6 +82,7 @@ export const employees: EmployeeRecord[] = [
     kwspNo: '21454610',
     socsoNo: 'SOCSO-0042',
     eisStatus: 'Active',
+    commissionSettingCodes: [],
     emergencyContactName: 'Nur Abdullah',
     emergencyContactRelationship: 'Parent',
     emergencyContactNo: '+60 12-111 2222'
@@ -118,6 +121,7 @@ export const employees: EmployeeRecord[] = [
     kwspNo: '12016768',
     socsoNo: 'SOCSO-0043',
     eisStatus: 'Active',
+    commissionSettingCodes: [],
     emergencyContactName: 'Lim Wei Ming',
     emergencyContactRelationship: 'Sibling',
     emergencyContactNo: '+60 16-222 3333'
@@ -135,7 +139,8 @@ export const employees: EmployeeRecord[] = [
   createSampleEmployee({
     employeeId: 'EMP-0046', employeeName: 'Hafiz Rahman', nricPassportNo: '920811-10-7890',
     gender: 'Male', race: 'Malay', religion: 'Islam', department: 'Sales',
-    position: 'Sales Executive', basicSalary: 4000, contactNo: '+60 12-444 0003'
+    position: 'Sales Executive', basicSalary: 4000, contactNo: '+60 12-444 0003',
+    commissionSettingCodes: ['SALES-COMM', 'NEW-CLIENT', 'QTR-PERF']
   }),
   createSampleEmployee({
     employeeId: 'EMP-0047', employeeName: 'Priya Nair', nricPassportNo: '930305-08-8901',

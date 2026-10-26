@@ -32,6 +32,7 @@ export interface EmployeeRecord {
   kwspNo: string;
   socsoNo: string;
   eisStatus: string;
+  commissionSettingCodes: string[];
   emergencyContactName: string;
   emergencyContactRelationship: string;
   emergencyContactNo: string;
@@ -79,6 +80,7 @@ export interface EmployeePayrollInfo {
   epfEmployerNo: string | null;
   socsoNo: string | null;
   eisStatus: string | null;
+  commissionSettingCodes: string[];
 }
 
 export interface EmployeeTaxInformation {
@@ -155,6 +157,7 @@ export const EMPTY_EMPLOYEE_FORM_DATA: EmployeeFormData = {
     epfEmployerNo: '',
     socsoNo: '',
     eisStatus: '',
+    commissionSettingCodes: [],
   },
   taxInformation: {
     agreeWithTerms: false,

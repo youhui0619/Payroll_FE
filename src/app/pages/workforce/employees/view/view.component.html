@@ -25,7 +25,7 @@
                     </div>
 
                     <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
-                        <button mat-flat-button color="primary" class="ms-2">
+                        <button mat-flat-button color="primary" class="ms-2" [routerLink]="['/workforce/employees/edit', employee.employeeId]">
                             <i-tabler name="edit"></i-tabler>
                             Edit
                         </button>
@@ -366,6 +366,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </mat-tab>
             <mat-tab label="Employment Information">
@@ -452,6 +453,31 @@
                                     <p class="text-muted">{{ employee.eisStatus }}</p>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <h4 class="text-primary mt-4">Commission &amp; incentives</h4>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div *ngFor="let setting of selectedCommissionSettings; let last = last"
+                                class="d-flex align-items-center justify-content-between gap-3 py-3"
+                                [class.border-bottom]="!last">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="icon bg-light-primary text-primary flex-shrink-0">
+                                        <i-tabler name="receipt"></i-tabler>
+                                    </div>
+                                    <div>
+                                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                                            <label class="text-dark my-0">{{ setting.name }}</label>
+                                            <span class="badge bg-light-primary text-primary">{{ commissionCalculationFrequencyLabel(setting.calculationFrequency) }}</span>
+                                        </div>
+                                        <p class="text-muted mb-0">{{ commissionCalculationMethodLabel(setting.calculationMethod) }} · {{ commissionCalculationLabel(setting) }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <p *ngIf="selectedCommissionSettings.length === 0" class="text-muted mb-0 py-3">
+                                No commission or incentive programs are assigned to this employee.
+                            </p>
                         </div>
                     </div>
                 </div>

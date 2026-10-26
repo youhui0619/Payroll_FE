@@ -15,10 +15,16 @@ import { getEmployeeLeaveBalances } from '../../../../data/leave-balances';
 import { leavePolicies } from '../../../../data/leave-policies';
 import { claims } from '../../../../data/claims';
 import { getClaimTypeLabel } from '../../../../data/claim-types';
+import { commissionIncentiveSettings } from '../../../../data/commission-incentive-settings';
 import { LeaveApplication } from '../../../../models/leave.model';
 import type { ClaimStatus, ClaimType, ExpenseClaimRecord } from '../../../../models/claim.model';
 import type { LeavePolicy } from '../../../../models/leave-policy.model';
 import type { EmployeeRecord } from '../../../../models/employee.model';
+import type {
+  CommissionCalculationFrequency,
+  CommissionCalculationMethod,
+  CommissionIncentiveSetting
+} from '../../../../models/commission-incentive-setting.model';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
 import { ClaimDetailDialogComponent } from '../../../../shared/dialog/claim-detail-dialog/claim-detail-dialog.component';
 
@@ -45,6 +51,7 @@ export class ViewComponent {
   employee!: EmployeeRecord;
   readonly leaveYear = new Date().getFullYear();
   readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');
+  readonly commissionIncentiveSettings = commissionIncentiveSettings;
   employeeLeaveBalances!: ReturnType<typeof getEmployeeLeaveBalances>;
   claimRequests: ExpenseClaimRecord[] = [];
   leaveRequests: LeaveApplication[] = [];
@@ -53,6 +60,42 @@ export class ViewComponent {
   selectedTabIndex = 0;
   selectedLeave: LeaveDialogData | null = null;
   selectedClaim: ExpenseClaimRecord | null = null;
+
+  get selectedCommissionSettings(): CommissionIncentiveSetting[] {
+    const selectedCodes = new Set(this.employee?.commissionSettingCodes ?? []);
+    return this.commissionIncentiveSettings.filter(setting => selectedCodes.has(setting.code));
+  }
+
+  commissionCalculationLabel(setting: CommissionIncentiveSetting): string {
+    if (setting.calculationMethod === 'PERCENTAGE_OF_REVENUE') return `${setting.rate ?? 0}% of revenue`;
+    if (setting.calculationMethod === 'PERCENTAGE_OF_PROFIT') return `${setting.rate ?? 0}% of profit`;
+    if (['PERCENTAGE_OF_SALES', 'TIERED_RATE'].includes(setting.calculationMethod)) return `${setting.rate ?? 0}% of sales`;
+    return `MYR ${setting.amount ?? 0}`;
+  }
+
+  commissionCalculationMethodLabel(method: CommissionCalculationMethod): string {
+    const labels: Record<CommissionCalculationMethod, string> = {
+      PERCENTAGE_OF_SALES: 'Percentage of Sales',
+      PERCENTAGE_OF_REVENUE: 'Percentage of Revenue',
+      PERCENTAGE_OF_PROFIT: 'Percentage of Profit',
+      FIXED_PER_TRANSACTION: 'Fixed Amount per Transaction',
+      TIERED_RATE: 'Tiered Rate',
+      TARGET_BASED: 'Target-Based Calculation',
+      FIXED_AMOUNT: 'Fixed Amount'
+    };
+    return labels[method];
+  }
+
+  commissionCalculationFrequencyLabel(frequency: CommissionCalculationFrequency): string {
+    const labels: Record<CommissionCalculationFrequency, string> = {
+      PER_TRANSACTION: 'Per transaction',
+      WEEKLY: 'Weekly',
+      BIWEEKLY: 'Every two weeks',
+      MONTHLY: 'Monthly',
+      QUARTERLY: 'Quarterly'
+    };
+    return labels[frequency];
+  }
 
   constructor(route: ActivatedRoute) {
     route.paramMap.pipe(takeUntilDestroyed()).subscribe(params => {

@@ -115,7 +115,7 @@ export class SidebarComponent implements OnInit, OnChanges {
 
     { label: 'Payroll', icon: 'solar:settings-outline', children: [
         { label: 'Payroll Settings', icon: 'codex:dot-circle', route: '/settings/payroll' },
-        { label: 'Commission and incentives', icon: 'codex:dot-circle', route: '/settings/payroll/commission-incentives/overview', badge: 10 }
+        { label: 'Commission and incentives', icon: 'codex:dot-circle', route: '/settings/payroll/commission-incentives/overview' }
       ] 
     },
 
