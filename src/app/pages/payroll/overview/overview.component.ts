@@ -5,6 +5,7 @@ import { MaterialImports, MaterialProviders } from '../../../shared/material-imp
 import { RouterLink } from '@angular/router';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { payrollList } from '../../../data/payroll';
+import { payslips } from '../../../data/payslips';
 import { PayrollDetailDialogComponent } from '../../../shared/dialog/payroll-detail-dialog/payroll-detail-dialog.component';
 
 @Component({
@@ -25,6 +26,7 @@ export class OverviewComponent {
     { id: 'deduction', label: 'Deduction' },
     { id: 'allowance', label: 'Allowance' },
     { id: 'bonus', label: 'Bonus' },
+    { id: 'commission', label: 'Commission' },
     { id: 'grossPay', label: 'Gross pay' },
     { id: 'epfEmployer', label: 'EPF · 13%/12%' },
     { id: 'epfEmployee', label: 'EPF · 11%' },
@@ -87,6 +89,7 @@ export class OverviewComponent {
       deduction: 110,
       allowance: 110,
       bonus: 110,
+      commission: 120,
       grossPay: 120,
       epfEmployer: 110,
       epfEmployee: 110,
@@ -110,6 +113,11 @@ export class OverviewComponent {
   openPayrollDetails(row: typeof payrollList[number]): void {
     this.selectedPayroll = row;
   }
+
+  commissionAmount(employeeId: string): number {
+    return payslips.find(payslip => payslip.employeeId === employeeId)?.earnings.commissions ?? 0;
+  }
+
   readonly months = [
     { value: 1, label: 'January' },
     { value: 2, label: 'February' },
@@ -133,6 +141,7 @@ export class OverviewComponent {
       totals.deduction += row.deduction;
       totals.allowance += row.allowance;
       totals.bonus += row.bonus;
+      totals.commission += this.commissionAmount(row.employeeId);
       totals.grossPay += row.grossPay;
       totals.epf.employer += row.epf.employer;
       totals.epf.employee += row.epf.employee;
@@ -154,6 +163,7 @@ export class OverviewComponent {
       deduction: 0,
       allowance: 0,
       bonus: 0,
+      commission: 0,
       grossPay: 0,
       epf: { employer: 0, employee: 0, total: 0 },
       socso: { employer: 0, employee: 0, lindungan24Jam: 0, total: 0 },

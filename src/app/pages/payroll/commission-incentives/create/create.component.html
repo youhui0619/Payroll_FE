@@ -1,0 +1,150 @@
+<form [formGroup]="assignmentForm" (ngSubmit)="onSubmit()">
+  <h4 class="text-primary">Employee Details</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-12 px-2">
+          <mat-label class="form-label">Employee <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput type="text" placeholder="Search employee ID or name"
+              [formControl]="employeeSearch" [matAutocomplete]="employeeAuto"
+              (input)="onEmployeeSearchInput()">
+            <mat-autocomplete #employeeAuto="matAutocomplete" [displayWith]="employeeDisplayName"
+              (optionSelected)="onEmployeeSelected($event.option.value)">
+              <mat-option *ngFor="let employee of filteredEmployees" [value]="employee">
+                {{ employee.employeeId }} - {{ employee.employeeName }}
+              </mat-option>
+              <mat-option *ngIf="filteredEmployees.length === 0" disabled>No employees found.</mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="employeeSearch.hasError('selectionRequired')">Select an employee from the list.</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div *ngIf="selectedEmployee as employee" class="row mx-0 mt-2">
+        <div class="col-sm-3 px-2 mb-2">
+          <p class="text-dark fw-500 mb-1">Employee ID</p>
+          <p class="text-muted my-0">{{ employee.employeeId }}</p>
+        </div>
+        <div class="col-sm-3 px-2 mb-2">
+          <p class="text-dark fw-500 mb-1">Employee Name</p>
+          <p class="text-muted my-0">{{ employee.employeeName }}</p>
+        </div>
+        <div class="col-sm-3 px-2 mb-2">
+          <p class="text-dark fw-500 mb-1">Department</p>
+          <p class="text-muted my-0">{{ employee.department }}</p>
+        </div>
+        <div class="col-sm-3 px-2 mb-2">
+          <p class="text-dark fw-500 mb-1">Position</p>
+          <p class="text-muted my-0">{{ employee.position }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="selectedEmployee">
+    <h4 class="text-primary">Commission Plans<span class="text-danger">*</span></h4>
+    <div class="card mb-4">
+      <div class="card-body">
+          <div class="row mx-0">
+            <div class="col-sm-12 px-2">
+              <p *ngIf="availableCommissionPlans.length === 0" class="text-muted mb-0">
+                No commission plans are configured for this employee's department, position, or employee eligibility.
+              </p>
+              <ng-container *ngIf="availableCommissionPlans.length > 0">
+                <mat-label class="form-label">Available plans <span class="text-danger">*</span></mat-label>
+                <mat-form-field appearance="outline" class="form-input w-100">
+                  <mat-select placeholder="Select a commission plan" formControlName="commissionSettingCode"
+                    (selectionChange)="onCommissionPlanChange()">
+                    <mat-option *ngFor="let plan of availableCommissionPlans" [value]="plan.code">
+                      {{ plan.name }} ({{ plan.code }})
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="assignmentForm.controls.commissionSettingCode.hasError('required')">
+                    Select an eligible commission plan.
+                  </mat-error>
+                </mat-form-field>
+              </ng-container>
+
+              <ng-container *ngIf="selectedCommissionPlan as plan">
+                <p class="text-muted mb-3">
+                  {{ calculationMethodLabel(plan.calculationMethod) }} · {{ calculationFrequencyLabel(plan.calculationFrequency) }}
+                </p>
+
+                <div class="row mx-0" *ngIf="usesPercentageCalculation">
+                  <div class="col-sm-6 px-2">
+                    <mat-label class="form-label">{{ calculationMethodLabel(plan.calculationMethod) }} basis <span class="text-danger">*</span></mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                      <span matTextPrefix class="text-muted me-2">MYR</span>
+                      <input type="number" min="0.01" matInput placeholder="Enter calculation basis" formControlName="calculationBasis">
+                      <mat-error *ngIf="assignmentForm.controls.calculationBasis.hasError('required')">Enter the calculation basis.</mat-error>
+                      <mat-error *ngIf="assignmentForm.controls.calculationBasis.hasError('min')">Enter an amount greater than zero.</mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-6 px-2">
+                    <mat-label class="form-label">Commission rate</mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                      <input type="number" matInput [value]="plan.rate ?? 0" readonly>
+                      <span matTextSuffix class="text-muted ms-2">%</span>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row mx-0" *ngIf="!usesPercentageCalculation">
+                  <div class="col-sm-6 px-2">
+                    <mat-label class="form-label">{{ plan.calculationMethod === 'FIXED_PER_TRANSACTION' ? 'Amount per transaction' : 'Commission amount' }}</mat-label>
+                    <mat-form-field appearance="outline" class="form-input w-100">
+                      <span matTextPrefix class="text-muted me-2">MYR</span>
+                      <input type="number" matInput [value]="plan.amount ?? 0" readonly>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </ng-container>
+
+              <p *ngIf="submitted && assignmentForm.valid" class="text-success mb-0">
+                Commission record saved for {{ selectedEmployee?.employeeName }}.
+              </p>
+            </div>
+          </div>
+      </div>
+    </div>
+
+      <div *ngIf="selectedCommissionPlan as selectedPlan">
+        <div *ngIf="estimatedCommissionAmount !== null" class="w-100 salary-box mb-4">
+          <p class="fs-10 text-muted my-0 fw-300">Estimated commission amount</p>
+          <h3 class="my-1">{{ estimatedCommissionAmount | currency:'MYR ':'symbol':'1.2-2' }}</h3>
+          <p *ngIf="usesPercentageCalculation" class="fs-10 text-muted mb-0">Calculation basis × {{ selectedPlan.rate }}% rate.</p>
+          <p *ngIf="!usesPercentageCalculation" class="fs-10 text-muted mb-0">Amount is set by the selected commission plan.</p>
+        </div>
+      </div>
+
+      <h4 class="text-primary">Other</h4>
+      <div class="card mb-4">
+        <div class="card-body">
+            <div class="row mx-0">
+            <div class="col-sm-4 px-2">
+              <mat-label class="form-label">Reference / transaction ID</mat-label>
+              <mat-form-field appearance="outline" class="form-input w-100">
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="Enter Reference / transaction ID"
+                    formControlName="referenceId">
+              </mat-form-field>
+            </div>
+
+            <div class="col-sm-12 px-2">
+                <mat-label class="form-label">Notes</mat-label>
+                <mat-form-field appearance="outline" class="form-input w-100">
+                    <textarea matInput rows="4" placeholder="Enter notes" formControlName="notes"></textarea>
+                </mat-form-field>
+            </div>
+          </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <div class="d-flex align-items-center justify-content-end gap-3">
+    <button type="submit" mat-flat-button color="primary">Save Commission Plans</button>
+  </div>
+</form>

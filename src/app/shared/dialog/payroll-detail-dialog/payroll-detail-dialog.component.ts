@@ -11,13 +11,15 @@ import { getClaimTypeLabel } from '../../../data/claim-types';
 import { getEmployee } from '../../../data/employees';
 import type { LeaveApplication } from '../../../models/leave.model';
 import type { ClaimStatus, ClaimType, ExpenseClaimRecord } from '../../../models/claim.model';
+import type { CommissionPayrollRecord } from '../../../models/commission-payroll-record.model';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../leave-detail-dialog/leave-detail-dialog.component';
 import { ClaimDetailDialogComponent } from '../claim-detail-dialog/claim-detail-dialog.component';
+import { CommissionDetailDialogComponent } from '../commission-detail-dialog/commission-detail-dialog.component';
 
 @Component({
   selector: 'app-payroll-detail-dialog',
   standalone: true,
-  imports: [...MaterialImports, CommonModule, MatSidenavModule, LeaveDetailDialogComponent, ClaimDetailDialogComponent],
+  imports: [...MaterialImports, CommonModule, MatSidenavModule, LeaveDetailDialogComponent, ClaimDetailDialogComponent, CommissionDetailDialogComponent],
   providers: [...MaterialProviders],
   templateUrl: './payroll-detail-dialog.component.html',
   styleUrl: './payroll-detail-dialog.component.scss'
@@ -27,6 +29,7 @@ export class PayrollDetailDialogComponent {
   @Output() closed = new EventEmitter<void>();
   selectedLeave: LeaveDialogData | null = null;
   selectedClaim: ExpenseClaimRecord | null = null;
+  selectedCommission: CommissionPayrollRecord | null = null;
   showReferenceDrawer = false;
 
   get payslip(): Payslip {
@@ -58,6 +61,24 @@ export class PayrollDetailDialogComponent {
       case 'Rejected': return 'bg-light-danger text-danger';
       case 'Paid': return 'bg-light-success text-success';
     }
+  }
+
+  commissionStatusLabel(status: CommissionPayrollRecord['status']): string {
+    const labels: Record<CommissionPayrollRecord['status'], string> = {
+      PENDING_APPROVAL: 'Pending approval',
+      READY_FOR_PAYROLL: 'Ready for payroll',
+      PAID: 'Paid'
+    };
+    return labels[status];
+  }
+
+  commissionStatusClass(status: CommissionPayrollRecord['status']): string {
+    const classes: Record<CommissionPayrollRecord['status'], string> = {
+      PENDING_APPROVAL: 'bg-light-warning text-warning',
+      READY_FOR_PAYROLL: 'bg-light-primary text-primary',
+      PAID: 'bg-light-success text-success'
+    };
+    return classes[status];
   }
 
   openReferenceDrawer(): void {
@@ -100,12 +121,17 @@ export class PayrollDetailDialogComponent {
     this.selectedClaim = claim;
   }
 
+  openCommissionReference(commission: CommissionPayrollRecord): void {
+    this.closeReferenceDrawer();
+    this.selectedCommission = commission;
+  }
+
   close(): void {
     this.closed.emit();
   }
 
   @HostListener('document:keydown.escape')
   onEscape(): void {
-    if (!this.showReferenceDrawer && !this.selectedLeave && !this.selectedClaim) this.close();
+    if (!this.showReferenceDrawer && !this.selectedLeave && !this.selectedClaim && !this.selectedCommission) this.close();
   }
 }

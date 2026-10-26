@@ -135,6 +135,7 @@
                                 <th *ngIf="isColumnVisible('deduction')" class="text-dark text-nowrap text-center">Deduction<br/>(RM)</th>
                                 <th *ngIf="isColumnVisible('allowance')" class="text-dark text-nowrap text-center">Allowance<br/>(RM)</th>
                                 <th *ngIf="isColumnVisible('bonus')" class="text-dark text-nowrap text-center">Bonus<br/>(RM)</th>
+                                <th *ngIf="isColumnVisible('commission')" class="text-dark text-nowrap text-center">Commission<br/>(RM)</th>
                                 <th *ngIf="isColumnVisible('grossPay')" class="text-dark text-nowrap text-center">Gross pay<br/>(RM)</th>
                                 <th *ngIf="visibleGroupCount('epf')" class="text-dark text-nowrap text-center epf-heading" [attr.colspan]="visibleGroupCount('epf')">
                                     <span>EPF Contribution</span>
@@ -182,6 +183,7 @@
                                 <td *ngIf="isColumnVisible('deduction')" class="text-muted text-nowrap text-center">{{ row.deduction | number:'1.2-2' }}</td>
                                 <td *ngIf="isColumnVisible('allowance')" class="text-muted text-nowrap text-center">{{ row.allowance | number:'1.2-2' }}</td>
                                 <td *ngIf="isColumnVisible('bonus')" class="text-muted text-nowrap text-center">{{ row.bonus | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('commission')" class="text-muted text-nowrap text-center">{{ commissionAmount(row.employeeId) | number:'1.2-2' }}</td>
                                 <td *ngIf="isColumnVisible('grossPay')" class="text-muted text-nowrap text-center">{{ row.grossPay | number:'1.2-2' }}</td>
                                 <td *ngIf="isColumnVisible('epfEmployer')" class="text-muted text-nowrap text-center">{{ row.epf.employer | number:'1.2-2' }}</td>
                                 <td *ngIf="isColumnVisible('epfEmployee')" class="text-muted text-nowrap text-center">{{ row.epf.employee | number:'1.2-2' }}</td>
@@ -212,6 +214,7 @@
                                 <td *ngIf="isColumnVisible('deduction')" class="text-dark text-nowrap fw-bold text-center">{{ totals.deduction | number:'1.2-2' }}</td>
                                 <td *ngIf="isColumnVisible('allowance')" class="text-dark text-nowrap fw-bold text-center">{{ totals.allowance | number:'1.2-2' }}</td>
                                 <td *ngIf="isColumnVisible('bonus')" class="text-dark text-nowrap fw-bold text-center">{{ totals.bonus | number:'1.2-2' }}</td>
+                                <td *ngIf="isColumnVisible('commission')" class="text-dark text-nowrap fw-bold text-center">{{ totals.commission | number:'1.2-2' }}</td>
                                 <td *ngIf="isColumnVisible('grossPay')" class="text-dark text-nowrap fw-bold text-center">{{ totals.grossPay | number:'1.2-2' }}</td>
                                 <td *ngIf="isColumnVisible('epfEmployer')" class="text-dark text-nowrap fw-bold text-center">{{ totals.epf.employer | number:'1.2-2' }}</td>
                                 <td *ngIf="isColumnVisible('epfEmployee')" class="text-dark text-nowrap fw-bold text-center">{{ totals.epf.employee | number:'1.2-2' }}</td>

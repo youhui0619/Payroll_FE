@@ -1,3 +1,5 @@
+import type { CommissionPayrollRecord } from './commission-payroll-record.model';
+
 export interface PayslipLeaveBalance {
   available: number;
   granted: number;
@@ -11,6 +13,7 @@ export interface Payslip {
   status: string;
   leaveReferences: string[];
   claimReferences: string[];
+  commissionReferences: string[];
   company: {
     name: string;
     registrationNumber: string;
@@ -35,6 +38,8 @@ export interface Payslip {
     overtime: number;
     allowance: number;
     bonus: number;
+    commissions: number;
+    commissionItems: CommissionPayrollRecord[];
     grossPay: number;
   };
   deductions: {

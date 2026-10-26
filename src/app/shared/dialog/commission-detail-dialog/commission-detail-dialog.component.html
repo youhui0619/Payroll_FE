@@ -1,0 +1,102 @@
+<div class="dialog-backdrop" (click)="close()">
+  <section class="dialog-panel" role="dialog" aria-modal="true" aria-labelledby="commission-dialog-title" (click)="$event.stopPropagation()">
+    <header class="dialog-header">
+      <div class="dialog-heading">
+        <div class="title-line">
+          <h2 id="commission-dialog-title">{{ record.planName }}</h2>
+          <span class="chip" [ngClass]="statusClass">{{ statusLabel }}</span>
+        </div>
+        <p class="dialog-subtitle my-0 fw-300 text-muted">Commission record · {{ record.id }}</p>
+      </div>
+      <button type="button" class="close-button" aria-label="Close dialog" (click)="close()">&times;</button>
+    </header>
+
+    <div class="dialog-content">
+      <section class="section-block">
+        <div class="section-heading"><h4 class="text-primary mb-0">Employee information</h4></div>
+        <div class="info-grid">
+          <div><p class="text-muted fs-10 fs-300 my-0">Name</p><p class="text-dark my-0 fw-500">{{ employee.employeeName }}</p></div>
+          <div><p class="text-muted fs-10 fs-300 my-0">Employee ID</p><p class="text-dark my-0 fw-500">{{ employee.employeeId }}</p></div>
+          <div><p class="text-muted fs-10 fs-300 my-0">Department</p><p class="text-dark my-0 fw-500">{{ employee.department }}</p></div>
+          <div><p class="text-muted fs-10 fs-300 my-0">Position</p><p class="text-dark my-0 fw-500">{{ employee.position }}</p></div>
+          <div><p class="text-muted fs-10 fs-300 my-0">Contact No.</p><p class="text-dark my-0 fw-500">{{ employee.contactNo || '-' }}</p></div>
+          <div><p class="text-muted fs-10 fs-300 my-0">NRIC No.</p><p class="text-dark my-0 fw-500">{{ employee.nricPassportNo || '-' }}</p></div>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading"><h4 class="text-primary mb-0">Commission details</h4></div>
+        <div class="detail-grid">
+          <div><p class="text-muted fs-10 fs-300 my-0">Record ID</p><p class="text-dark my-0 fw-500">{{ record.id }}</p></div>
+          <div><p class="text-muted fs-10 fs-300 my-0">Commission plan</p><p class="text-dark my-0 fw-500">{{ record.planName }}</p></div>
+          <div><p class="text-muted fs-10 fs-300 my-0">Payroll earning code</p><p class="text-dark my-0 fw-500">{{ record.payrollEarningCode }}</p></div>
+          <div><p class="text-muted fs-10 fs-300 my-0">Calculation method</p><p class="text-dark my-0 fw-500">{{ calculationMethodLabel }}</p></div>
+          <div><p class="text-muted fs-10 fs-300 my-0">Calculation frequency</p><p class="text-dark my-0 fw-500">{{ frequencyLabel }}</p></div>
+          <div><p class="text-muted fs-10 fs-300 my-0">Payout timing</p><p class="text-dark my-0 fw-500">{{ payoutTimingLabel }}</p></div>
+          <div><p class="text-muted fs-10 fs-300 my-0">Calculation basis</p><p class="text-dark my-0 fw-500">{{ calculationBasisLabel }}</p></div>
+          <div><p class="text-muted fs-10 fs-300 my-0">Reference</p><p class="text-dark my-0 fw-500">{{ record.referenceId || '-' }}</p></div>
+          <div class="detail-full-width"><p class="text-muted fs-10 fs-300 my-0">Notes</p><p class="text-dark my-0 fw-500">{{ record.notes || '-' }}</p></div>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading"><h4 class="text-primary mb-0">Approval</h4></div>
+        <div class="detail-grid">
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">Submitted at</p>
+            <p class="text-dark my-0 fw-500">{{ record.createdDate | date:'dd/MM/yyyy' }}</p>
+          </div>
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">Approved by</p>
+            <p class="text-dark my-0 fw-500">{{ record.approvedBy || '-' }}</p>
+          </div>
+          <div>
+            <p class="text-muted fs-10 fs-300 my-0">Approved at</p>
+            <p class="text-dark my-0 fw-500">{{ record.approvedAt ? (record.approvedAt | date:'dd/MM/yyyy, h:mm a') : '-' }}</p>
+          </div>
+          <div class="detail-full-width">
+            <p class="text-muted fs-10 fs-300 my-0">Comments</p>
+            <p class="text-dark my-0 fw-500">{{ record.approvalComment || '-' }}</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="decision-footer" *ngIf="showDecisionActions">
+        <div class="review-comment">
+          <mat-label for="commission-review-comment" class="form-label">Approval comment <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <textarea
+              matInput
+              id="commission-review-comment"
+              rows="1"
+              [(ngModel)]="decisionComment"
+              placeholder="Add a comment before reviewing this commission"
+              required></textarea>
+          </mat-form-field>
+        </div>
+        <div class="decision-actions">
+          <button type="button" class="decision-button reject-button" (click)="decide('Rejected')">
+            <i-tabler name="x" class="icon-16"></i-tabler>
+            Reject
+          </button>
+          <button type="button" class="decision-button approve-button" (click)="decide('Approved')" [disabled]="!decisionComment.trim()">
+            <i-tabler name="check" class="icon-16"></i-tabler>
+            Approve
+          </button>
+        </div>
+      </section>
+      <section class="py-4" *ngIf="!showDecisionActions">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <p class="my-0 text-muted fs-12 fw-300">Commission Amount (RM)</p>
+              <h2>{{ record.amount | number:'1.2-2' }}</h2>
+            </div>
+          <button type="button" mat-flat-button color="primary" class="download-button">
+            <i-tabler name="download"></i-tabler>
+            Download
+          </button>
+        </div>
+      </section>
+    </div>
+  </section>
+</div>

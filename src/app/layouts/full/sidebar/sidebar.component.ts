@@ -79,7 +79,7 @@ export class SidebarComponent implements OnInit, OnChanges {
         { label: 'Overview', icon: 'codex:dot-circle', route: '/payroll/overview' },
         { label: 'Allowances', icon: 'codex:dot-circle', route: '/payroll/overview', badge: 10 },
         { label: 'Bonus', icon: 'codex:dot-circle', route: '/payroll/overview', badge: 10 },
-        { label: 'Commission & Incentives', icon: 'codex:dot-circle', route: '/payroll/overview', badge: 10 },
+        { label: 'Commission & Incentives', icon: 'codex:dot-circle', route: '/payroll/commission-incentives/overview' },
        ]
     },
     { label: 'Tax & PCB', icon: 'solar:calculator-minimalistic-outline', children: [
