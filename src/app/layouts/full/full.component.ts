@@ -4,7 +4,6 @@ import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-full',
@@ -12,8 +11,7 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
   imports: [
     RouterOutlet,
     HeaderComponent,
-    SidebarComponent,
-    BreadcrumbComponent
+    SidebarComponent
 ],
   templateUrl: './full.component.html',
   styleUrl: './full.component.scss'

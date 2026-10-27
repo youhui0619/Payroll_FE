@@ -2,12 +2,11 @@ import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren } fro
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TablerIconComponent } from '@tabler/icons-angular';
 
 
 @Component({
   selector: 'app-verify-code',
-  imports: [MatButtonModule, MatFormFieldModule, MatInputModule, TablerIconComponent],
+  imports: [MatButtonModule, MatFormFieldModule, MatInputModule],
   templateUrl: './verify-code.component.html',
   styleUrl: './verify-code.component.scss'
 })
