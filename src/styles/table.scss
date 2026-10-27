@@ -68,9 +68,9 @@
   // Page size select
   .mat-mdc-paginator-page-size {
      .mdc-text-field--outlined {
-      --mdc-outlined-text-field-outline-color: var(--border);
-      --mdc-outlined-text-field-hover-outline-color: var(--primary);
-      --mdc-outlined-text-field-container-shape: 8px;
+      --mat-form-field-outlined-outline-color: var(--border);
+      --mat-form-field-outlined-hover-outline-color: var(--primary);
+      --mat-form-field-outlined-container-shape: 8px;
     }
     
     .mat-mdc-text-field-wrapper {

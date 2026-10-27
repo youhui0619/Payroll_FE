@@ -50,10 +50,10 @@
 
   /* Outlined */
   .mdc-text-field--outlined {
-    --mdc-outlined-text-field-container-shape: 8px;
-    --mdc-outlined-text-field-outline-color: var(--light-disabled);
-    --mdc-outlined-text-field-hover-outline-color: var(--primary);
-    --mdc-outlined-text-field-focus-outline-color: var(--primary);
+    --mat-form-field-outlined-container-shape: 8px;
+    --mat-form-field-outlined-outline-color: var(--light-disabled);
+    --mat-form-field-outlined-hover-outline-color: var(--primary);
+    --mat-form-field-outlined-focus-outline-color: var(--primary);
   }
 
   /* Normal border */
@@ -183,7 +183,7 @@
   color: var(--primary) !important;
 
   .mat-pseudo-checkbox {
-    --mat-minimal-pseudo-checkbox-selected-checkmark-color: var(--primary);
+    --mat-pseudo-checkbox-minimal-selected-checkmark-color: var(--primary);
   }
 }
 
@@ -226,16 +226,16 @@
    ========================================= */
 
 .form-checkbox {
-  --mdc-checkbox-selected-icon-color: var(--primary);
-  --mdc-checkbox-selected-hover-icon-color: var(--primary);
-  --mdc-checkbox-selected-focus-icon-color: var(--primary);
-  --mdc-checkbox-selected-pressed-icon-color: var(--primary);
+  --mat-checkbox-selected-icon-color: var(--primary);
+  --mat-checkbox-selected-hover-icon-color: var(--primary);
+  --mat-checkbox-selected-focus-icon-color: var(--primary);
+  --mat-checkbox-selected-pressed-icon-color: var(--primary);
 
-  --mdc-checkbox-unselected-icon-color: var(--light-disabled);
-  --mdc-checkbox-unselected-hover-icon-color: var(--primary);
-  --mdc-checkbox-unselected-focus-icon-color:var(--primary);
-  --mdc-checkbox-unselected-pressed-icon-color: var(--primary);
-  --mdc-checkbox-selected-checkmark-color: var(--white);
+  --mat-checkbox-unselected-icon-color: var(--light-disabled);
+  --mat-checkbox-unselected-hover-icon-color: var(--primary);
+  --mat-checkbox-unselected-focus-icon-color:var(--primary);
+  --mat-checkbox-unselected-pressed-icon-color: var(--primary);
+  --mat-checkbox-selected-checkmark-color: var(--white);
 }
 
 /* =========================================
@@ -381,36 +381,36 @@
 
 .mat-mdc-slide-toggle {
   .mdc-switch {
-    --mdc-switch-track-width: 52px;
-    --mdc-switch-track-height: 32px;
+    --mat-slide-toggle-track-width: 52px;
+    --mat-slide-toggle-track-height: 32px;
 
-    --mdc-switch-unselected-handle-width: 16px;
-    --mdc-switch-unselected-handle-height: 16px;
+    --mat-slide-toggle-unselected-handle-width: 16px;
+    --mat-slide-toggle-unselected-handle-height: 16px;
 
-    --mdc-switch-selected-handle-width: 16px;
-    --mdc-switch-selected-handle-height: 16px;
+    --mat-slide-toggle-selected-handle-width: 16px;
+    --mat-slide-toggle-selected-handle-height: 16px;
 
     /* Same track */
-    --mdc-switch-unselected-track-color: var(--light-disabled);
-    --mdc-switch-unselected-hover-track-color: var(--light-disabled);
-    --mdc-switch-unselected-focus-track-color: var(--light-disabled);
-    --mdc-switch-unselected-pressed-track-color: var(--light-disabled);
+    --mat-slide-toggle-unselected-track-color: var(--light-disabled);
+    --mat-slide-toggle-unselected-hover-track-color: var(--light-disabled);
+    --mat-slide-toggle-unselected-focus-track-color: var(--light-disabled);
+    --mat-slide-toggle-unselected-pressed-track-color: var(--light-disabled);
 
-    --mdc-switch-selected-track-color: var(--primary);
-    --mdc-switch-selected-hover-track-color: var(--primary);
-    --mdc-switch-selected-focus-track-color: var(--primary);
-    --mdc-switch-selected-pressed-track-color: var(--primary);
+    --mat-slide-toggle-selected-track-color: var(--primary);
+    --mat-slide-toggle-selected-hover-track-color: var(--primary);
+    --mat-slide-toggle-selected-focus-track-color: var(--primary);
+    --mat-slide-toggle-selected-pressed-track-color: var(--primary);
 
     /* Same thumb */
-    --mdc-switch-unselected-handle-color: var(--dark);
-    --mdc-switch-unselected-hover-handle-color: var(--dark);
-    --mdc-switch-unselected-focus-handle-color: var(--dark);
-    --mdc-switch-unselected-pressed-handle-color: var(--dark);
+    --mat-slide-toggle-unselected-handle-color: var(--dark);
+    --mat-slide-toggle-unselected-hover-handle-color: var(--dark);
+    --mat-slide-toggle-unselected-focus-handle-color: var(--dark);
+    --mat-slide-toggle-unselected-pressed-handle-color: var(--dark);
 
-    --mdc-switch-selected-handle-color: var(--light-primary);
-    --mdc-switch-selected-hover-handle-color: var(--light-primary);
-    --mdc-switch-selected-focus-handle-color: var(--light-primary);
-    --mdc-switch-selected-pressed-handle-color: var(--light-primary);
+    --mat-slide-toggle-selected-handle-color: var(--light-primary);
+    --mat-slide-toggle-selected-hover-handle-color: var(--light-primary);
+    --mat-slide-toggle-selected-focus-handle-color: var(--light-primary);
+    --mat-slide-toggle-selected-pressed-handle-color: var(--light-primary);
   }
 
   .mdc-switch__track {
