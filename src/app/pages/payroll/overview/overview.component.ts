@@ -17,6 +17,8 @@ import { PayrollDetailDialogComponent } from '../../../shared/dialog/payroll-det
 })
 export class OverviewComponent {
   payrollList = payrollList;
+  readonly departmentOptions = Array.from(new Set(payrollList.map(row => row.department))).sort((a, b) => a.localeCompare(b));
+  selectedDepartments: string[] = [];
   selectedPayroll: typeof payrollList[number] | null = null;
   readonly columnOptions = [
     { id: 'employee', label: 'Employee' },
@@ -118,6 +120,11 @@ export class OverviewComponent {
     return payslips.find(payslip => payslip.employeeId === employeeId)?.earnings.commissions ?? 0;
   }
 
+  get filteredPayrollList(): typeof payrollList {
+    if (this.selectedDepartments.length === 0) return this.payrollList;
+    return this.payrollList.filter(row => this.selectedDepartments.includes(row.department));
+  }
+
   readonly months = [
     { value: 1, label: 'January' },
     { value: 2, label: 'February' },
@@ -135,7 +142,7 @@ export class OverviewComponent {
   readonly years = Array.from({ length: 5 }, (_, index) => new Date().getFullYear() - index);
 
   get totals() {
-    return this.payrollList.reduce((totals, row) => {
+    return this.filteredPayrollList.reduce((totals, row) => {
       totals.basicPay += row.basicPay;
       totals.overtime += row.overtime;
       totals.deduction += row.deduction;

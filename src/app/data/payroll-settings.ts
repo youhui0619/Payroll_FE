@@ -9,7 +9,7 @@ export const payrollSettings: PayrollSettings = {
   calculationPrecision: 2,
   includeBasicSalary: true,
   includeOvertime: true,
-  includeAllowances: true,
+  includeClaimsAndAllowance: true,
   includeBonus: true,
   includeCommissionAndIncentives: true,
   overtimeCalculationBasis: 'HOURLY_RATE',

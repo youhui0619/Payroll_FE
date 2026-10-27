@@ -15,7 +15,7 @@ export interface PayrollSettings {
   calculationPrecision: 2 | 3;
   includeBasicSalary: boolean;
   includeOvertime: boolean;
-  includeAllowances: boolean;
+  includeClaimsAndAllowance: boolean;
   includeBonus: boolean;
   includeCommissionAndIncentives: boolean;
   overtimeCalculationBasis: OvertimeCalculationBasis;

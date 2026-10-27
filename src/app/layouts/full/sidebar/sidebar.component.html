@@ -33,12 +33,12 @@
                         [title]="item.label"
                         (click)="onMenuClick()">
                         <i class="iconify" [attr.data-icon]="item.icon"></i>
-                        <span class="menu-badge-collapsed" *ngIf="collapsed && !mobileOpen && item.badge">{{ item.badge }}</span>
+                        <span class="menu-badge-collapsed" *ngIf="collapsed && !mobileOpen && badgeValue(item)">{{ badgeValue(item) }}</span>
 
                         <ng-container *ngIf="!collapsed || mobileOpen">
                              <div class="d-flex justify-content-between align-items-center w-100" [title]="item.label">
                                 <span>{{ item.label }}</span>
-                                <span class="menu-badge" *ngIf="item.badge">{{ item.badge }}</span>
+                                <span class="menu-badge" *ngIf="badgeValue(item)">{{ badgeValue(item) }}</span>
                             </div>
                         </ng-container>
                     </a>
@@ -75,7 +75,7 @@
                             (click)="onMenuClick()">
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 {{ child.label }}
-                                <span class="submenu-badge" *ngIf="child.badge">{{ child.badge }}</span>
+                                <span class="submenu-badge" *ngIf="badgeValue(child)">{{ badgeValue(child) }}</span>
                             </div>
                         </a>
                     </nav>

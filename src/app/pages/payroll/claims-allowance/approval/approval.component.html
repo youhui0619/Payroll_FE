@@ -1,12 +1,12 @@
 <div class="row justify-content-between my-4">
   <div class="col-sm-7">
-    <h3 class="text-dark my-0">Claim Approval</h3>
+    <h3 class="text-dark my-0">Claim & Allowance Approval</h3>
     <p class="fw-300 text-muted mb-0">Review pending employee expense claims.</p>
   </div>
 </div>
 
 <div class="row my-4">
-  <div class="col-sm-6 px-2">
+  <div class="col-sm-3 px-2">
     <div class="card">
       <div class="card-body">
         <div class="d-flex align-items-center justify-content-between">
@@ -19,7 +19,7 @@
       </div>
     </div>
   </div>
-  <div class="col-sm-6 px-2">
+  <div class="col-sm-3 px-2">
     <div class="card">
       <div class="card-body">
         <div class="d-flex align-items-center justify-content-between">
@@ -71,7 +71,7 @@
                       <p class="text-dark fw-500 my-0">{{ employeeName(claim.employeeId) }}</p>
                       <p class="fs-10 fw-300 text-muted my-0">{{ claim.employeeId }} · {{ claim.departmentName }}</p>
                     </td>
-                    <td class="text-muted">{{ claim.claimDate | date:'d MMM y' }}</td>
+                    <td class="text-muted">{{ claim.claimDate | date:'short' }}</td>
                     <td class="text-muted">{{ claim.currency }} {{ claim.amount | number:'1.2-2' }}</td>
                     <td class="text-muted">{{ paymentMethodLabel(claim.paymentMethod) }}</td>
                     <td><span class="chip" [ngClass]="statusClass(claim.status)">{{ claim.status }}</span></td>

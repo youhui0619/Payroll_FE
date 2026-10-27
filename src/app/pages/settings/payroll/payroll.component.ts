@@ -25,7 +25,7 @@ export class PayrollComponent implements OnInit {
     calculationPrecision: new FormControl<PayrollSettings['calculationPrecision']>(2, { nonNullable: true, validators: [Validators.required] }),
     includeBasicSalary: new FormControl(true, { nonNullable: true }),
     includeOvertime: new FormControl(true, { nonNullable: true }),
-    includeAllowances: new FormControl(true, { nonNullable: true }),
+    includeClaimsAndAllowance: new FormControl(true, { nonNullable: true }),
     includeBonus: new FormControl(true, { nonNullable: true }),
     includeCommissionAndIncentives: new FormControl(true, { nonNullable: true }),
     overtimeCalculationBasis: new FormControl<PayrollSettings['overtimeCalculationBasis']>('HOURLY_RATE', { nonNullable: true, validators: [Validators.required] }),

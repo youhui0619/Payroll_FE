@@ -71,20 +71,21 @@
             </thead>
             <tbody>
               <tr *ngFor="let record of commissionRecords">
-                <td class="text-muted">{{ record.id }}</td>
+                <td class="text-muted">
+                  <a href="javascript:void(0)" (click)="openDetails(record)">{{ record.id }}</a></td>
                 <td>
                   <div class="text-dark fw-500">{{ record.employeeName }}</div>
-                  <small class="text-muted">{{ record.employeeId }}</small>
+                  <p class="text-muted fs-10 fw-300 my-0">{{ record.employeeId }}</p>
                 </td>
                 <td>
                   <div class="text-dark">{{ record.planName }}</div>
-                  <small class="text-muted">{{ record.payrollEarningCode }}</small>
+                  <p class="text-muted fs-10 fw-300 my-0">{{ record.payrollEarningCode }}</p>
                 </td>
                 <td class="text-dark fw-500">{{ record.amount | currency:'MYR':'symbol':'1.2-2' }}</td>
                 <td class="text-muted">{{ record.createdDate | date:'dd/MM/yyyy' }}</td>
                 <td><span [ngClass]="statusClass(record.status)">{{ statusLabel(record.status) }}</span></td>
                 <td>
-                    <button type="button" class="text-muted action-btn" mat-icon-button aria-label="View commission details" (click)="openDetails(record)">
+                    <button type="button" class="text-muted action-btn" mat-icon-button (click)="openDetails(record)">
                         <i-tabler name="eye"></i-tabler>
                     </button>
                 </td>

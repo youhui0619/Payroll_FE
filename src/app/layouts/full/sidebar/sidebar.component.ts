@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChange
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { commissionPayrollRecords } from '../../../data/commission-payroll-records';
 
 interface MenuItem {
   id?: number;
@@ -66,20 +67,21 @@ export class SidebarComponent implements OnInit, OnChanges {
         { label: 'OT History', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
       ]
     },
-
-    { header: 'Expenses & Claims' },
-    { label: 'Claims', icon: 'solar:clock-circle-outline', children: [
-        { label: 'Overview', icon: 'codex:dot-circle', route: '/expenses-claims/claims/overview' },
-        { label: 'Claim Approvals', icon: 'codex:dot-circle', route: '/expenses-claims/claims/approval' }
-      ]
-    },
-
     { header: 'Payroll' },
     { label: 'Payroll', icon: 'solar:card-2-outline', children: [
         { label: 'Overview', icon: 'codex:dot-circle', route: '/payroll/overview' },
-        { label: 'Allowances', icon: 'codex:dot-circle', route: '/payroll/overview', badge: 10 },
         { label: 'Bonus', icon: 'codex:dot-circle', route: '/payroll/overview', badge: 10 },
-        { label: 'Commission & Incentives', icon: 'codex:dot-circle', route: '/payroll/commission-incentives/overview' },
+       ]
+       
+    },
+    { label: 'Claims & Allowance', icon: 'solar:clock-circle-outline', children: [
+        { label: 'Overview', icon: 'codex:dot-circle', route: '/payroll/claims-allowance/overview' },
+        { label: 'Approvals', icon: 'codex:dot-circle', route: '/payroll/claims-allowance/approval' }
+      ]
+    },
+    { label: 'Commission & Incentives', icon: 'solar:card-2-outline', children: [
+        { label: 'Overview', icon: 'codex:dot-circle', route: '/payroll/commission-incentives/overview' },
+        { label: 'Approval', icon: 'codex:dot-circle', route: '/payroll/commission-incentives/approval' },
        ]
     },
     { label: 'Tax & PCB', icon: 'solar:calculator-minimalistic-outline', children: [
@@ -165,7 +167,14 @@ export class SidebarComponent implements OnInit, OnChanges {
   }
 
   hasChildBadge(item: MenuItem): boolean {
-    return !!(item.children && item.children.some(c => c.badge != null && c.badge !== '' && c.badge !== 0 && c.badge !== '0'));
+    return !!(item.children && item.children.some(c => this.badgeValue(c) != null && this.badgeValue(c) !== '' && this.badgeValue(c) !== 0 && this.badgeValue(c) !== '0'));
+  }
+
+  badgeValue(item: MenuItem): number | string | undefined {
+    // if (item.route === '/payroll/commission-incentives/approval') {
+    //   return commissionPayrollRecords.filter(record => record.status === 'PENDING_APPROVAL').length;
+    // }
+    return item.badge;
   }
 
   isItemActive(item: MenuItem): boolean {
