@@ -15,7 +15,7 @@
     "@angular/common": "^21.2.25",
     "@angular/compiler": "^21.2.25",
     "@angular/core": "^21.2.25",
-    "@angular/fire": "^20.1.0",
+    "@angular/fire": "^21.0.0",
     "@angular/forms": "^21.2.25",
     "@angular/material": "^20.2.14",
     "@angular/platform-browser": "^21.2.25",
@@ -34,7 +34,8 @@
     "rxjs": "~7.8.0",
     "temporal-polyfill": "^1.0.5",
     "tslib": "^2.3.0",
-    "zone.js": "~0.15.0"
+    "zone.js": "~0.15.0",
+    "firebase": "^12.18.0"
   },
   "devDependencies": {
     "@angular/build": "^21.2.28",
