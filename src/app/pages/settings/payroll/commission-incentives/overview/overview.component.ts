@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../../shared/material-imports';
@@ -16,7 +16,7 @@ import type {
 @Component({
   selector: 'app-overview',
   standalone: true,
-  imports: [...MaterialImports, CommonModule, RouterLink],
+  imports: [...MaterialImports, RouterLink],
   providers: [...MaterialProviders],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'

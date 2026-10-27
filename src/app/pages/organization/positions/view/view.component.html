@@ -1,137 +1,143 @@
 <div class="row justify-content-between mb-3">
-    <div class="col-sm-12">
-        <div class="d-flex align-items-center gap-2">
-            <a mat-icon-button class="d-flex justify-content-center w-auto mb-0" routerLink="/organization/positions/overview">
-                <i-tabler name="chevron-left" class="text-dark icon-16 d-flex"></i-tabler>
-            </a>
-            <p class="text-muted mb-0">Back to position overview</p>
-        </div>
+  <div class="col-sm-12">
+    <div class="d-flex align-items-center gap-2">
+      <a mat-icon-button class="d-flex justify-content-center w-auto mb-0" routerLink="/organization/positions/overview">
+        <i-tabler name="chevron-left" class="text-dark icon-16 d-flex"></i-tabler>
+      </a>
+      <p class="text-muted mb-0">Back to position overview</p>
     </div>
+  </div>
 </div>
 
 <div class="row">
-    <div class="col-sm-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div class="bg-light-primary text-primary icon me-3">
-                        <i-tabler name="briefcase"></i-tabler>
-                    </div>
-                    <div>
-                        <h4 class="my-0">{{ position.title }}</h4>
-                        <p class="fs-10 fw-300 text-muted my-2">
-                            {{ position.code }} · {{ departmentName }}
-                            <span class="ms-2 chip" [ngClass]="status === 'Active' ? 'bg-light-primary text-primary' : 'bg-light-secondary text-secondary'">{{ status }}</span>
-                        </p>
-                    </div>
-                </div>
-            </div>
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="bg-light-primary text-primary icon me-3">
+            <i-tabler name="briefcase"></i-tabler>
+          </div>
+          <div>
+            <h4 class="my-0">{{ position.title }}</h4>
+            <p class="fs-10 fw-300 text-muted my-2">
+              {{ position.code }} · {{ departmentName }}
+              <span class="ms-2 chip" [ngClass]="status === 'Active' ? 'bg-light-primary text-primary' : 'bg-light-secondary text-secondary'">{{ status }}</span>
+            </p>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <div class="row">
-    <div class="col-sm-3 px-2">
-        <div class="card"><div class="card-body">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="summary-info"><p class="f-s-12 text-muted">Employees</p><h3 class="mb-0">{{ employees.length }}</h3></div>
-                <div class="text-primary bg-light-primary text-end icon"><i-tabler name="users"></i-tabler></div>
-            </div>
-        </div></div>
-    </div>
-    <div class="col-sm-3 px-2">
-        <div class="card"><div class="card-body">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="summary-info"><p class="f-s-12 text-muted">Job Level</p><h3 class="mb-0">{{ jobLevelLabel }}</h3></div>
-                <div class="text-primary bg-light-primary text-end icon"><i-tabler name="chart-bar"></i-tabler></div>
-            </div>
-        </div></div>
-    </div>
+  <div class="col-sm-3 px-2">
+    <div class="card"><div class="card-body">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="summary-info"><p class="f-s-12 text-muted">Employees</p><h3 class="mb-0">{{ employees.length }}</h3></div>
+        <div class="text-primary bg-light-primary text-end icon"><i-tabler name="users"></i-tabler></div>
+      </div>
+    </div></div>
+  </div>
+  <div class="col-sm-3 px-2">
+    <div class="card"><div class="card-body">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="summary-info"><p class="f-s-12 text-muted">Job Level</p><h3 class="mb-0">{{ jobLevelLabel }}</h3></div>
+        <div class="text-primary bg-light-primary text-end icon"><i-tabler name="chart-bar"></i-tabler></div>
+      </div>
+    </div></div>
+  </div>
 </div>
 
 <div class="row mt-4">
-    <div class="col-sm-12 px-2">
-        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="0ms">
-            <mat-tab label="Details">
-                <div class="px-2 mt-3">
-                    <h4 class="text-primary">Position Information</h4>
-                    <div class="card"><div class="card-body">
-                        <div class="row mx-0">
-                            <div class="col-sm-4 px-2 mb-3"><label class="text-dark fw-500">Position Code</label><p class="text-muted">{{ position.code }}</p></div>
-                            <div class="col-sm-8 px-2 mb-3"><label class="text-dark fw-500">Position Title</label><p class="text-muted">{{ position.title }}</p></div>
-                            <div class="col-sm-4 px-2 mb-3"><label class="text-dark fw-500">Job Level</label><p class="text-muted">{{ jobLevelLabel }}</p></div>
-                            <div class="col-sm-4 px-2 mb-3"><label class="text-dark fw-500">Department</label><p class="text-muted">{{ departmentName }}</p></div>
-                            <div class="col-sm-4 px-2 mb-3"><label class="text-dark fw-500">Reports To</label><p class="text-muted">{{ position.reportsTo || '—' }}</p></div>
-                            <div class="col-sm-12 px-2 mb-3"><label class="text-dark fw-500">Description</label><p class="text-muted">{{ position.description || 'No description provided.' }}</p></div>
-                        </div>
-                    </div></div>
+  <div class="col-sm-12 px-2">
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" animationDuration="0ms">
+      <mat-tab label="Details">
+        <div class="px-2 mt-3">
+          <h4 class="text-primary">Position Information</h4>
+          <div class="card"><div class="card-body">
+            <div class="row mx-0">
+              <div class="col-sm-4 px-2 mb-3"><label class="text-dark fw-500">Position Code</label><p class="text-muted">{{ position.code }}</p></div>
+              <div class="col-sm-8 px-2 mb-3"><label class="text-dark fw-500">Position Title</label><p class="text-muted">{{ position.title }}</p></div>
+              <div class="col-sm-4 px-2 mb-3"><label class="text-dark fw-500">Job Level</label><p class="text-muted">{{ jobLevelLabel }}</p></div>
+              <div class="col-sm-4 px-2 mb-3"><label class="text-dark fw-500">Department</label><p class="text-muted">{{ departmentName }}</p></div>
+              <div class="col-sm-4 px-2 mb-3"><label class="text-dark fw-500">Reports To</label><p class="text-muted">{{ position.reportsTo || '—' }}</p></div>
+              <div class="col-sm-12 px-2 mb-3"><label class="text-dark fw-500">Description</label><p class="text-muted">{{ position.description || 'No description provided.' }}</p></div>
+            </div>
+          </div></div>
 
-                    <h4 class="text-primary">Effective Period</h4>
-                    <div class="card"><div class="card-body">
-                        <div class="row mx-0">
-                            <div class="col-sm-6 px-2 mb-3"><label class="text-dark fw-500">Effective From</label><p class="text-muted">{{ position.effectiveFrom ? (position.effectiveFrom | date:'d MMM y') : '—' }}</p></div>
-                            <div class="col-sm-6 px-2 mb-3"><label class="text-dark fw-500">Effective To</label><p class="text-muted">{{ position.effectiveTo ? (position.effectiveTo | date:'d MMM y') : 'No end date' }}</p></div>
-                        </div>
-                    </div></div>
-                </div>
-            </mat-tab>
+          <h4 class="text-primary">Effective Period</h4>
+          <div class="card"><div class="card-body">
+            <div class="row mx-0">
+              <div class="col-sm-6 px-2 mb-3"><label class="text-dark fw-500">Effective From</label><p class="text-muted">{{ position.effectiveFrom ? (position.effectiveFrom | date:'d MMM y') : '—' }}</p></div>
+              <div class="col-sm-6 px-2 mb-3"><label class="text-dark fw-500">Effective To</label><p class="text-muted">{{ position.effectiveTo ? (position.effectiveTo | date:'d MMM y') : 'No end date' }}</p></div>
+            </div>
+          </div></div>
+        </div>
+      </mat-tab>
 
-            <mat-tab label="Structure">
-                <div class="px-2 mt-3">
-                    <h4 class="text-primary">Position Structure</h4>
-                    <p class="text-muted">Showing this position first, followed by positions that report to it.</p>
-                    <div class="card"><div class="card-body">
-                        <div class="position-chart-scroll">
-                            <ul class="position-chart-tree">
-                                <ng-container *ngFor="let node of organizationTree">
-                                    <ng-container *ngTemplateOutlet="positionNode; context: { $implicit: node }"></ng-container>
-                                </ng-container>
-                            </ul>
-                        </div>
-                        <ng-template #positionNode let-node>
-                            <li [class.current-position]="node.position.id === position.id">
-                                <article class="position-chart-node" [routerLink]="['/organization/positions/view', node.position.id]" role="link" tabindex="0">
-                                    <div class="d-flex justify-content-between align-items-start gap-2">
-                                        <span class="position-code">{{ node.position.code }}</span>
-                                        <span class="chip" [ngClass]="positionStatus(node.position) === 'Active' ? 'bg-light-primary text-primary' : 'bg-light-secondary text-secondary'">{{ positionStatus(node.position) }}</span>
-                                    </div>
-                                    <h5>{{ node.position.title }}</h5>
-                                    <p class="mb-1 text-muted">{{ node.position.jobLevel.charAt(0) + node.position.jobLevel.slice(1).toLowerCase() }}</p>
-                                    <small>{{ positionEmployeeCount(node.position) }} employees</small>
-                                </article>
-                                <ul *ngIf="node.children.length">
-                                    <ng-container *ngFor="let child of node.children">
-                                        <ng-container *ngTemplateOutlet="positionNode; context: { $implicit: child }"></ng-container>
-                                    </ng-container>
-                                </ul>
-                            </li>
-                        </ng-template>
-                    </div></div>
-                </div>
-            </mat-tab>
+      <mat-tab label="Structure">
+        <div class="px-2 mt-3">
+          <h4 class="text-primary">Position Structure</h4>
+          <p class="text-muted">Showing this position first, followed by positions that report to it.</p>
+          <div class="card"><div class="card-body">
+            <div class="position-chart-scroll">
+              <ul class="position-chart-tree">
+                @for (node of organizationTree; track node) {
+                  <ng-container *ngTemplateOutlet="positionNode; context: { $implicit: node }"></ng-container>
+                }
+              </ul>
+            </div>
+            <ng-template #positionNode let-node>
+              <li [class.current-position]="node.position.id === position.id">
+                <article class="position-chart-node" [routerLink]="['/organization/positions/view', node.position.id]" role="link" tabindex="0">
+                  <div class="d-flex justify-content-between align-items-start gap-2">
+                    <span class="position-code">{{ node.position.code }}</span>
+                    <span class="chip" [ngClass]="positionStatus(node.position) === 'Active' ? 'bg-light-primary text-primary' : 'bg-light-secondary text-secondary'">{{ positionStatus(node.position) }}</span>
+                  </div>
+                  <h5>{{ node.position.title }}</h5>
+                  <p class="mb-1 text-muted">{{ node.position.jobLevel.charAt(0) + node.position.jobLevel.slice(1).toLowerCase() }}</p>
+                  <small>{{ positionEmployeeCount(node.position) }} employees</small>
+                </article>
+                @if (node.children.length) {
+                  <ul>
+                    @for (child of node.children; track child) {
+                      <ng-container *ngTemplateOutlet="positionNode; context: { $implicit: child }"></ng-container>
+                    }
+                  </ul>
+                }
+              </li>
+            </ng-template>
+          </div></div>
+        </div>
+      </mat-tab>
 
-            <mat-tab label="Employees">
-                <div class="px-2 mt-3">
-                    <h4 class="text-primary">Employees in this Position</h4>
-                    <div class="card mt-3"><div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table no-wrap w-100 text-left">
-                                <thead><tr><th class="text-dark">Employee</th><th class="text-dark">Employee ID</th><th class="text-dark">Department</th><th class="text-dark">Employment Type</th><th class="text-dark">Status</th></tr></thead>
-                                <tbody>
-                                    <tr *ngFor="let employee of employees">
-                                        <td><div class="d-flex align-items-center"><div class="avatar me-3">{{ employee.initials }}</div><span class="text-dark">{{ employee.employeeName }}</span></div></td>
-                                        <td><a routerLink="/workforce/employees/view">{{ employee.employeeId }}</a></td>
-                                        <td class="text-muted">{{ employee.department }}</td>
-                                        <td class="text-muted">{{ employee.employmentType }}</td>
-                                        <td><span class="chip" [ngClass]="employeeStatusClass(employee.employmentStatus)">{{ employee.employmentStatus }}</span></td>
-                                    </tr>
-                                    <tr *ngIf="employees.length === 0"><td colspan="5" class="text-muted text-center py-4">No employees are assigned to this position.</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div></div>
-                </div>
-            </mat-tab>
-        </mat-tab-group>
-    </div>
+      <mat-tab label="Employees">
+        <div class="px-2 mt-3">
+          <h4 class="text-primary">Employees in this Position</h4>
+          <div class="card mt-3"><div class="card-body">
+            <div class="table-responsive">
+              <table class="table no-wrap w-100 text-left">
+                <thead><tr><th class="text-dark">Employee</th><th class="text-dark">Employee ID</th><th class="text-dark">Department</th><th class="text-dark">Employment Type</th><th class="text-dark">Status</th></tr></thead>
+                <tbody>
+                  @for (employee of employees; track employee) {
+                    <tr>
+                      <td><div class="d-flex align-items-center"><div class="avatar me-3">{{ employee.initials }}</div><span class="text-dark">{{ employee.employeeName }}</span></div></td>
+                      <td><a routerLink="/workforce/employees/view">{{ employee.employeeId }}</a></td>
+                      <td class="text-muted">{{ employee.department }}</td>
+                      <td class="text-muted">{{ employee.employmentType }}</td>
+                      <td><span class="chip" [ngClass]="employeeStatusClass(employee.employmentStatus)">{{ employee.employmentStatus }}</span></td>
+                    </tr>
+                  }
+                  @if (employees.length === 0) {
+                    <tr><td colspan="5" class="text-muted text-center py-4">No employees are assigned to this position.</td></tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div></div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
 </div>

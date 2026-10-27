@@ -78,25 +78,29 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let setting of commissionIncentiveSettings">
-                <td class="text-muted">
+              @for (setting of commissionIncentiveSettings; track setting) {
+                <tr>
+                  <td class="text-muted">
                     <p>{{ setting.name }}</p>
                     <p class="fs-10 fw-300 my-0">{{ setting.code }}</p>
-                </td>
-                <td class="text-muted">{{ typeLabel(setting.commissionType) }}</td>
-                <td class="text-muted">{{ calculationLabel(setting) }}</td>
-                <td class="text-muted">{{ frequencyLabel(setting.calculationFrequency) }}</td>
-                <td class="text-muted">{{ payoutLabel(setting.payoutTiming) }}</td>
-                <td class="text-muted">{{ eligibilityLabel(setting) }}</td>
-                <td>
-                  <button class="text-muted action-btn" mat-icon-button [routerLink]="['/settings/payroll/commission-incentives/edit', setting.code]" [attr.aria-label]="'Edit ' + setting.name">
-                    <i-tabler name="edit"></i-tabler>
-                  </button>
-                </td>
-              </tr>
-              <tr *ngIf="commissionIncentiveSettings.length === 0">
-                <td colspan="9" class="text-center text-muted py-4">No commission or incentive settings found.</td>
-              </tr>
+                  </td>
+                  <td class="text-muted">{{ typeLabel(setting.commissionType) }}</td>
+                  <td class="text-muted">{{ calculationLabel(setting) }}</td>
+                  <td class="text-muted">{{ frequencyLabel(setting.calculationFrequency) }}</td>
+                  <td class="text-muted">{{ payoutLabel(setting.payoutTiming) }}</td>
+                  <td class="text-muted">{{ eligibilityLabel(setting) }}</td>
+                  <td>
+                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/settings/payroll/commission-incentives/edit', setting.code]" [attr.aria-label]="'Edit ' + setting.name">
+                      <i-tabler name="edit"></i-tabler>
+                    </button>
+                  </td>
+                </tr>
+              }
+              @if (commissionIncentiveSettings.length === 0) {
+                <tr>
+                  <td colspan="9" class="text-center text-muted py-4">No commission or incentive settings found.</td>
+                </tr>
+              }
             </tbody>
           </table>
         </div>

@@ -1,332 +1,372 @@
 <form [formGroup]="leaveForm" (ngSubmit)="onSubmit()">
-    <div class="row">
-        <div class="col-sm-12">
-            <h4 class="text-primary">Leave Information</h4>
-            <div class="card mb-4">
-                <div class="card-body">
-                    <div class="row mx-0">
-                        <div class="col-sm-4 px-2">
-                            <mat-label class="form-label">Leave Code <span class="text-danger">*</span></mat-label>
-                            <mat-form-field appearance="outline" class="form-input w-100">
-                                <input matInput placeholder="Enter leave code" formControlName="leaveCode">
-                                <mat-error class="text-danger" *ngIf="leaveForm.controls.leaveCode.hasError('required')">Leave code is required.</mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-sm-8 px-2">
-                            <mat-label class="form-label">Leave Name <span class="text-danger">*</span></mat-label>
-                            <mat-form-field appearance="outline" class="form-input w-100">
-                                <input matInput placeholder="Enter leave name" formControlName="leaveName">
-                                <mat-error class="text-danger" *ngIf="leaveForm.controls.leaveName.hasError('required')">Leave name is required.</mat-error>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-sm-4 px-2 mb-4">
-                            <mat-label class="form-label">Leave Status<span class="text-danger">
-                                *</span>
-                            </mat-label>
-                            <mat-button-toggle-group
-                                class="selection-group status-group"
-                                color="primary"
-                                hideSingleSelectionIndicator
-                                formControlName="status"
-                                required>
-                                <mat-button-toggle value="ACTIVE">Active</mat-button-toggle>
-                                <mat-button-toggle value="INACTIVE">Inactive</mat-button-toggle>
-                            </mat-button-toggle-group>
-                            <!-- <mat-error class="text-danger" class="text-danger">Gender is required</mat-error> -->
-                        </div>
-
-                        <div class="col-sm-4 px-2 mb-4">
-                            <mat-label class="form-label">Entitlement Unit<span class="text-danger">
-                                *</span>
-                            </mat-label>
-                            <mat-button-toggle-group
-                                class="selection-group status-group"
-                                color="primary"
-                                hideSingleSelectionIndicator
-                                formControlName="entitlementUnit"
-                                required>
-                                <mat-button-toggle value="DAILY">Daily</mat-button-toggle>
-                                <mat-button-toggle value="HOURLY">Hourly</mat-button-toggle>
-                            </mat-button-toggle-group>
-                            <!-- <mat-error class="text-danger" class="text-danger">Gender is required</mat-error> -->
-                        </div>
-
-                        <div class="col-sm-4 px-2 mb-4">
-                            <mat-label class="form-label">Leave Type<span class="text-danger">
-                                *</span>
-                            </mat-label>
-                            <mat-button-toggle-group
-                                class="selection-group status-group"
-                                color="primary"
-                                hideSingleSelectionIndicator
-                                formControlName="leaveType"
-                                required>
-                                <mat-button-toggle value="PAID">Paid</mat-button-toggle>
-                                <mat-button-toggle value="UNPAID">Unpaid</mat-button-toggle>
-                            </mat-button-toggle-group>
-                            <!-- <mat-error class="text-danger" class="text-danger">Gender is required</mat-error> -->
-                        </div>
-
-                        <div class="col-sm-12 px-2">
-                            <mat-label class="form-label">Description</mat-label>
-                            <mat-form-field appearance="outline" class="form-input w-100">
-                                <textarea matInput rows="3" placeholder="Describe when this leave type applies" formControlName="description"></textarea>
-                            </mat-form-field>
-                        </div>
-
-                    </div>
-                </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <h4 class="text-primary">Leave Information</h4>
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="row mx-0">
+            <div class="col-sm-4 px-2">
+              <mat-label class="form-label">Leave Code <span class="text-danger">*</span></mat-label>
+              <mat-form-field appearance="outline" class="form-input w-100">
+                <input matInput placeholder="Enter leave code" formControlName="leaveCode">
+                @if (leaveForm.controls.leaveCode.hasError('required')) {
+                  <mat-error class="text-danger">Leave code is required.</mat-error>
+                }
+              </mat-form-field>
             </div>
-
-            <h4 class="text-primary">Entitlement Rules</h4>
-            <div class="card mb-4">
-                <div class="card-body">
-                    <div class="row mx-0">
-                        <div class="col-sm-12 px-2 mb-4">
-                            <mat-label class="form-label">Entitlement Calculation Method <span class="text-danger">*</span></mat-label>
-                            <mat-radio-group class="form-radio-group row mx-0" formControlName="entitlementCalculationMethod">
-                                <div class="col-sm-6 px-2">
-                                    <mat-radio-button class="form-radio" color="primary" value="FIXED">
-                                        Fixed entitlement
-                                    </mat-radio-button>
-                                </div>
-                                <div class="col-sm-6 px-2">
-                                    <mat-radio-button class="form-radio" color="primary" value="SERVICE">
-                                        Based on length of service
-                                    </mat-radio-button>
-                                </div>
-                            </mat-radio-group>
-                        </div>
-
-                        <div class="col-sm-6 px-2" *ngIf="!isServiceBasedEntitlement">
-                            <mat-label class="form-label">Default Entitlement <span class="text-danger">*</span></mat-label>
-                            <mat-form-field appearance="outline" class="form-input w-100">
-                                <input type="number" min="0" matInput placeholder="Enter Entitlement days" formControlName="defaultEntitlement">
-                                <span matTextSurfix class="text-muted ms-2">Days</span>
-                                <mat-error class="text-danger" *ngIf="leaveForm.controls.defaultEntitlement.hasError('required')">Default entitlement is required.</mat-error>
-                                <mat-error class="text-danger" *ngIf="leaveForm.controls.defaultEntitlement.hasError('min')">Enter zero or more days.</mat-error>
-                            </mat-form-field>
-                        </div>
-
-                        <div class="col-sm-12 px-2 mb-3" *ngIf="isServiceBasedEntitlement">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <mat-label class="form-label">Service-based entitlement <span class="text-danger">*</span></mat-label>
-                                    <p class="text-muted mb-3 mt-0">Set the annual leave days for each length-of-service range.</p>
-                                </div>
-                                <button type="button" mat-flat-button color="primary" class="mt-2" (click)="addServiceEntitlementTier()">
-                                    <i-tabler name="plus" class="icon-16"></i-tabler> Add service range
-                                </button>
-                            </div>
-                            <div formArrayName="serviceEntitlementTiers">
-                                <div class="row align-items-start" *ngFor="let tier of serviceEntitlementTiers.controls; let i = index" [formGroupName]="i">
-                                    <div class="col-sm-3 px-2">
-                                        <mat-label class="form-label">Service from (years) <span class="text-danger">*</span></mat-label>
-                                        <mat-form-field appearance="outline" class="form-input w-100">
-                                            <input type="number" min="0" matInput placeholder="From years" formControlName="serviceFrom">
-                                            <mat-error class="text-danger" *ngIf="tier.get('serviceFrom')?.hasError('required')">Start of service range is required.</mat-error>
-                                            <mat-error class="text-danger" *ngIf="tier.get('serviceFrom')?.hasError('min')">Enter zero or more years.</mat-error>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-sm-3 px-2">
-                                        <mat-label class="form-label">Service to (years) <span class="text-danger" *ngIf="i < serviceEntitlementTiers.length - 1">*</span></mat-label>
-                                        <mat-form-field appearance="outline" class="form-input w-100">
-                                            <input type="number" min="0" matInput placeholder="To years" formControlName="serviceTo">
-                                            <mat-hint *ngIf="i === serviceEntitlementTiers.length - 1" class="fs-10 fw-300">*Leave blank for unlimited service.</mat-hint>
-                                            <mat-error class="text-danger" *ngIf="tier.get('serviceTo')?.hasError('required')">End of service range is required.</mat-error>
-                                            <mat-error class="text-danger" *ngIf="tier.get('serviceTo')?.hasError('min')">Enter zero or more years.</mat-error>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-sm-3 px-2">
-                                        <mat-label class="form-label">Days per year <span class="text-danger">*</span></mat-label>
-                                        <mat-form-field appearance="outline" class="form-input w-100">
-                                            <input type="number" min="0" matInput placeholder="Enter days" formControlName="daysPerYear">
-                                            <mat-error class="text-danger" *ngIf="tier.get('daysPerYear')?.hasError('required')">Days per year is required.</mat-error>
-                                            <mat-error class="text-danger" *ngIf="tier.get('daysPerYear')?.hasError('min')">Enter zero or more days.</mat-error>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-sm-3 px-2 pt-sm-4">
-                                        <button type="button" class="action-btn" mat-icon-button [disabled]="serviceEntitlementTiers.length === 1" (click)="removeServiceEntitlementTier(i)">
-                                            <i-tabler name="trash"></i-tabler>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 px-2 mb-4">
-                            <mat-label class="form-label">Entitlement Grant Method <span class="text-danger">*</span></mat-label>
-                            <mat-radio-group class="form-radio-group row mx-0" formControlName="entitlementGrantMethod">
-                                <div class="col-sm-6 px-2">
-                                    <mat-radio-button class="form-radio" color="primary" value="ANNUAL">
-                                        Annual grant - <span class="text-muted">credit at the start of the leave year</span>
-                                    </mat-radio-button>
-                                </div>
-                                <div class="col-sm-6 px-2">
-                                    <mat-radio-button class="form-radio" color="primary" value="MONTHLY_ACCRUAL">
-                                        Monthly accrual - <span class="text-muted">accumulate each month</span>
-                                    </mat-radio-button>
-                                </div>
-                                <div class="col-sm-6 px-2">
-                                    <mat-radio-button class="form-radio" color="primary" value="SERVICE_ANNIVERSARY">
-                                        Service anniversary - <span class="text-muted">credit on anniversary date</span>
-                                    </mat-radio-button>
-                                </div>
-                                <div class="col-sm-6 px-2">
-                                    <mat-radio-button class="form-radio" color="primary" value="MANUAL">
-                                        Manual grant - <span class="text-muted">HR assigns entitlement</span>
-                                    </mat-radio-button>
-                                </div>
-                            </mat-radio-group>
-                        </div>
-
-
-                        <div class="col-sm-6 px-2">
-                            <mat-label class="form-label">Eligibility <span class="text-danger">*</span></mat-label>
-                            <mat-form-field appearance="outline" class="form-input w-100">
-                                <mat-select placeholder="Select eligibility" formControlName="eligibility">
-                                    <mat-option value="ALL_EMPLOYEES">All Employees</mat-option>
-                                    <mat-option value="PERMANENT">Permanent employees only</mat-option>
-                                    <mat-option value="PROBATION">Probation Only</mat-option>
-                                    <mat-option value="PART_TIME">Part-time only</mat-option>
-                                    <mat-option value="CONTRACT_WORKER">Contract Worker only</mat-option>
-                                    <mat-option value="INTERN">Intern only</mat-option>
-                                </mat-select>
-                                <mat-error class="text-danger" class="text-danger">Status is required</mat-error>
-                            </mat-form-field>
-                        </div>
-
-                        <div class="col-sm-12 px-2 mb-4">
-                            <mat-label class="form-label">Leave Year <span class="text-danger">*</span></mat-label>
-                            <mat-radio-group class="form-radio-group row mx-0" formControlName="leaveYear">
-                                <div class="col-sm-6 px-2">
-                                    <mat-radio-button class="form-radio" color="primary" value="CALENDAR">
-                                        Calendar year (January–December)
-                                    </mat-radio-button>
-                                </div>
-                                <div class="col-sm-6 px-2">
-                                    <mat-radio-button class="form-radio" color="primary" value="EMPLOYMENT_ANNIVERSARY">
-                                        Employee's employment anniversary
-                                    </mat-radio-button>
-                                </div>
-                                <div class="col-sm-6 px-2">
-                                    <mat-radio-button class="form-radio" color="primary" value="FINANCIAL">
-                                        Company financial year
-                                    </mat-radio-button>
-                                </div>
-                            </mat-radio-group>
-                        </div>
-                    </div>
-                </div>
+            <div class="col-sm-8 px-2">
+              <mat-label class="form-label">Leave Name <span class="text-danger">*</span></mat-label>
+              <mat-form-field appearance="outline" class="form-input w-100">
+                <input matInput placeholder="Enter leave name" formControlName="leaveName">
+                @if (leaveForm.controls.leaveName.hasError('required')) {
+                  <mat-error class="text-danger">Leave name is required.</mat-error>
+                }
+              </mat-form-field>
             </div>
+            <div class="col-sm-4 px-2 mb-4">
+              <mat-label class="form-label">Leave Status<span class="text-danger">
+              *</span>
+            </mat-label>
+            <mat-button-toggle-group
+              class="selection-group status-group"
+              color="primary"
+              hideSingleSelectionIndicator
+              formControlName="status"
+              required>
+              <mat-button-toggle value="ACTIVE">Active</mat-button-toggle>
+              <mat-button-toggle value="INACTIVE">Inactive</mat-button-toggle>
+            </mat-button-toggle-group>
+            <!-- <mat-error class="text-danger" class="text-danger">Gender is required</mat-error> -->
+          </div>
 
-            <h4 class="text-primary">Carry Forward Rules</h4>
-            <div class="card mb-4">
-                <div class="card-body">
-                    <div class="row mx-0">
-                        <div class="col-sm-12 px-2 mb-4">
-                            <mat-label class="form-label">Unuse Leave Policy <span class="text-danger">*</span></mat-label>
-                            <mat-radio-group class="form-radio-group row mx-0" formControlName="carryForwardPolicy">
-                                <div class="col-sm-6 px-2">
-                                    <mat-radio-button class="form-radio" color="primary" value="NONE">
-                                        Do not allow carry forward
-                                    </mat-radio-button>
-                                </div>
-                                <div class="col-sm-6 px-2">
-                                    <mat-radio-button class="form-radio" color="primary" value="LIMITED">
-                                        Allow carry forward up to a limit
-                                    </mat-radio-button>
-                                </div>
-                                <div class="col-sm-6 px-2">
-                                    <mat-radio-button class="form-radio" color="primary" value="UNLIMITED">
-                                        Allow unlimited carry forward
-                                    </mat-radio-button>
-                                </div>
-                                <div class="col-sm-6 px-2">
-                                    <mat-radio-button class="form-radio" color="primary" value="HR_REVIEW">
-                                        Require HR review
-                                    </mat-radio-button>
-                                </div>
-                            </mat-radio-group>
-                        </div>
-
-                        <div class="col-sm-6 px-2" *ngIf="showMaximumCarryForward">
-                            <mat-label class="form-label">Maximum Carry Forward <span class="text-danger">*</span></mat-label>
-                            <mat-form-field appearance="outline" class="form-input w-100">
-                                <input type="number" min="0" matInput placeholder="Enter carry forward limit" formControlName="maximumCarryForward">
-                                <span matTextSurfix class="text-muted ms-2">Days</span>
-                                <mat-error class="text-danger" *ngIf="leaveForm.controls.maximumCarryForward.hasError('required')">Maximum carry forward is required.</mat-error>
-                                <mat-error class="text-danger" *ngIf="leaveForm.controls.maximumCarryForward.hasError('min')">Enter zero or more days.</mat-error>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <h4 class="text-primary">Approval Rules</h4>
-            <div class="card mb-4">
-                <div class="card-body">
-                    <div class="row mx-0">
-                        <div class="col-sm-12 px-2 mb-4">
-                            <mat-label class="form-label">Approval Overflow <span class="text-danger">*</span></mat-label>
-                            <mat-radio-group class="form-radio-group row mx-0" formControlName="approvalOverflow">
-                                <div class="col-sm-6 px-2">
-                                    <mat-radio-button class="form-radio" color="primary" value="MANAGER">
-                                        Reporting Manager
-                                    </mat-radio-button>
-                                </div>
-                                <div class="col-sm-6 px-2">
-                                    <mat-radio-button class="form-radio" color="primary" value="MANAGER_HR">
-                                        Reporting Manager → HR
-                                    </mat-radio-button>
-                                </div>
-                                <div class="col-sm-6 px-2">
-                                    <mat-radio-button class="form-radio" color="primary" value="HR_ONLY">
-                                        HR Only
-                                    </mat-radio-button>
-                                </div>
-                                <div class="col-sm-6 px-2">
-                                    <mat-radio-button class="form-radio" color="primary" value="NO_APPROVAL">
-                                        No approval required
-                                    </mat-radio-button>
-                                </div>
-                            </mat-radio-group>
-                        </div>
-
-                        <div class="col-sm-6 px-2">
-                            <mat-label class="form-label">Minimum Advance Notice <span class="text-danger">*</span></mat-label>
-                            <mat-form-field appearance="outline" class="form-input w-100">
-                                <input type="number" min="0" matInput placeholder="Enter Minimum Advance Notice" formControlName="minimumAdvanceNotice">
-                                <span matTextSurfix class="text-muted ms-2 text-nowrap">Working Days</span>
-                                <mat-error class="text-danger" *ngIf="leaveForm.controls.minimumAdvanceNotice.hasError('required')">Minimum advance notice is required.</mat-error>
-                                <mat-error class="text-danger" *ngIf="leaveForm.controls.minimumAdvanceNotice.hasError('min')">Enter zero or more days.</mat-error>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row mx-0">
-                        <div class="col-sm-6 px-2">
-                            <div class="d-flex justify-content-between align-items-center gap-3 py-3">
-                                <label class="text-dark my-0">Allow half-day leave applications</label>
-                                <mat-slide-toggle
-                                    color="primary"
-                                    formControlName="allowHalfDay">
-                                </mat-slide-toggle>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 px-2">
-                            <div class="d-flex justify-content-between align-items-center gap-3 py-3">
-                                <label class="text-dark my-0">Require supporting documents</label>
-                                <mat-slide-toggle
-                                    color="primary"
-                                    formControlName="requireSupportingDocuments">
-                                </mat-slide-toggle>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          <div class="col-sm-4 px-2 mb-4">
+            <mat-label class="form-label">Entitlement Unit<span class="text-danger">
+            *</span>
+          </mat-label>
+          <mat-button-toggle-group
+            class="selection-group status-group"
+            color="primary"
+            hideSingleSelectionIndicator
+            formControlName="entitlementUnit"
+            required>
+            <mat-button-toggle value="DAILY">Daily</mat-button-toggle>
+            <mat-button-toggle value="HOURLY">Hourly</mat-button-toggle>
+          </mat-button-toggle-group>
+          <!-- <mat-error class="text-danger" class="text-danger">Gender is required</mat-error> -->
         </div>
+
+        <div class="col-sm-4 px-2 mb-4">
+          <mat-label class="form-label">Leave Type<span class="text-danger">
+          *</span>
+        </mat-label>
+        <mat-button-toggle-group
+          class="selection-group status-group"
+          color="primary"
+          hideSingleSelectionIndicator
+          formControlName="leaveType"
+          required>
+          <mat-button-toggle value="PAID">Paid</mat-button-toggle>
+          <mat-button-toggle value="UNPAID">Unpaid</mat-button-toggle>
+        </mat-button-toggle-group>
+        <!-- <mat-error class="text-danger" class="text-danger">Gender is required</mat-error> -->
+      </div>
+
+      <div class="col-sm-12 px-2">
+        <mat-label class="form-label">Description</mat-label>
+        <mat-form-field appearance="outline" class="form-input w-100">
+          <textarea matInput rows="3" placeholder="Describe when this leave type applies" formControlName="description"></textarea>
+        </mat-form-field>
+      </div>
+
     </div>
-    <div class="d-flex align-items-center justify-content-end gap-3">
-        <button type="submit" mat-flat-button color="primary"><i-tabler name="check"></i-tabler>Submit</button>
+  </div>
+</div>
+
+<h4 class="text-primary">Entitlement Rules</h4>
+<div class="card mb-4">
+  <div class="card-body">
+    <div class="row mx-0">
+      <div class="col-sm-12 px-2 mb-4">
+        <mat-label class="form-label">Entitlement Calculation Method <span class="text-danger">*</span></mat-label>
+        <mat-radio-group class="form-radio-group row mx-0" formControlName="entitlementCalculationMethod">
+          <div class="col-sm-6 px-2">
+            <mat-radio-button class="form-radio" color="primary" value="FIXED">
+              Fixed entitlement
+            </mat-radio-button>
+          </div>
+          <div class="col-sm-6 px-2">
+            <mat-radio-button class="form-radio" color="primary" value="SERVICE">
+              Based on length of service
+            </mat-radio-button>
+          </div>
+        </mat-radio-group>
+      </div>
+
+      @if (!isServiceBasedEntitlement) {
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Default Entitlement <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input type="number" min="0" matInput placeholder="Enter Entitlement days" formControlName="defaultEntitlement">
+            <span matTextSurfix class="text-muted ms-2">Days</span>
+            @if (leaveForm.controls.defaultEntitlement.hasError('required')) {
+              <mat-error class="text-danger">Default entitlement is required.</mat-error>
+            }
+            @if (leaveForm.controls.defaultEntitlement.hasError('min')) {
+              <mat-error class="text-danger">Enter zero or more days.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      }
+
+      @if (isServiceBasedEntitlement) {
+        <div class="col-sm-12 px-2 mb-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <mat-label class="form-label">Service-based entitlement <span class="text-danger">*</span></mat-label>
+              <p class="text-muted mb-3 mt-0">Set the annual leave days for each length-of-service range.</p>
+            </div>
+            <button type="button" mat-flat-button color="primary" class="mt-2" (click)="addServiceEntitlementTier()">
+              <i-tabler name="plus" class="icon-16"></i-tabler> Add service range
+            </button>
+          </div>
+          <div formArrayName="serviceEntitlementTiers">
+            @for (tier of serviceEntitlementTiers.controls; track tier; let i = $index) {
+              <div class="row align-items-start" [formGroupName]="i">
+                <div class="col-sm-3 px-2">
+                  <mat-label class="form-label">Service from (years) <span class="text-danger">*</span></mat-label>
+                  <mat-form-field appearance="outline" class="form-input w-100">
+                    <input type="number" min="0" matInput placeholder="From years" formControlName="serviceFrom">
+                    @if (tier.get('serviceFrom')?.hasError('required')) {
+                      <mat-error class="text-danger">Start of service range is required.</mat-error>
+                    }
+                    @if (tier.get('serviceFrom')?.hasError('min')) {
+                      <mat-error class="text-danger">Enter zero or more years.</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-3 px-2">
+                  <mat-label class="form-label">Service to (years) @if (i < serviceEntitlementTiers.length - 1) {
+                    <span class="text-danger">*</span>
+                  }</mat-label>
+                  <mat-form-field appearance="outline" class="form-input w-100">
+                    <input type="number" min="0" matInput placeholder="To years" formControlName="serviceTo">
+                    @if (i === serviceEntitlementTiers.length - 1) {
+                      <mat-hint class="fs-10 fw-300">*Leave blank for unlimited service.</mat-hint>
+                    }
+                    @if (tier.get('serviceTo')?.hasError('required')) {
+                      <mat-error class="text-danger">End of service range is required.</mat-error>
+                    }
+                    @if (tier.get('serviceTo')?.hasError('min')) {
+                      <mat-error class="text-danger">Enter zero or more years.</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-3 px-2">
+                  <mat-label class="form-label">Days per year <span class="text-danger">*</span></mat-label>
+                  <mat-form-field appearance="outline" class="form-input w-100">
+                    <input type="number" min="0" matInput placeholder="Enter days" formControlName="daysPerYear">
+                    @if (tier.get('daysPerYear')?.hasError('required')) {
+                      <mat-error class="text-danger">Days per year is required.</mat-error>
+                    }
+                    @if (tier.get('daysPerYear')?.hasError('min')) {
+                      <mat-error class="text-danger">Enter zero or more days.</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+                <div class="col-sm-3 px-2 pt-sm-4">
+                  <button type="button" class="action-btn" mat-icon-button [disabled]="serviceEntitlementTiers.length === 1" (click)="removeServiceEntitlementTier(i)">
+                    <i-tabler name="trash"></i-tabler>
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+      <div class="col-sm-12 px-2 mb-4">
+        <mat-label class="form-label">Entitlement Grant Method <span class="text-danger">*</span></mat-label>
+        <mat-radio-group class="form-radio-group row mx-0" formControlName="entitlementGrantMethod">
+          <div class="col-sm-6 px-2">
+            <mat-radio-button class="form-radio" color="primary" value="ANNUAL">
+              Annual grant - <span class="text-muted">credit at the start of the leave year</span>
+            </mat-radio-button>
+          </div>
+          <div class="col-sm-6 px-2">
+            <mat-radio-button class="form-radio" color="primary" value="MONTHLY_ACCRUAL">
+              Monthly accrual - <span class="text-muted">accumulate each month</span>
+            </mat-radio-button>
+          </div>
+          <div class="col-sm-6 px-2">
+            <mat-radio-button class="form-radio" color="primary" value="SERVICE_ANNIVERSARY">
+              Service anniversary - <span class="text-muted">credit on anniversary date</span>
+            </mat-radio-button>
+          </div>
+          <div class="col-sm-6 px-2">
+            <mat-radio-button class="form-radio" color="primary" value="MANUAL">
+              Manual grant - <span class="text-muted">HR assigns entitlement</span>
+            </mat-radio-button>
+          </div>
+        </mat-radio-group>
+      </div>
+
+
+      <div class="col-sm-6 px-2">
+        <mat-label class="form-label">Eligibility <span class="text-danger">*</span></mat-label>
+        <mat-form-field appearance="outline" class="form-input w-100">
+          <mat-select placeholder="Select eligibility" formControlName="eligibility">
+            <mat-option value="ALL_EMPLOYEES">All Employees</mat-option>
+            <mat-option value="PERMANENT">Permanent employees only</mat-option>
+            <mat-option value="PROBATION">Probation Only</mat-option>
+            <mat-option value="PART_TIME">Part-time only</mat-option>
+            <mat-option value="CONTRACT_WORKER">Contract Worker only</mat-option>
+            <mat-option value="INTERN">Intern only</mat-option>
+          </mat-select>
+          <mat-error class="text-danger" class="text-danger">Status is required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-sm-12 px-2 mb-4">
+        <mat-label class="form-label">Leave Year <span class="text-danger">*</span></mat-label>
+        <mat-radio-group class="form-radio-group row mx-0" formControlName="leaveYear">
+          <div class="col-sm-6 px-2">
+            <mat-radio-button class="form-radio" color="primary" value="CALENDAR">
+              Calendar year (January–December)
+            </mat-radio-button>
+          </div>
+          <div class="col-sm-6 px-2">
+            <mat-radio-button class="form-radio" color="primary" value="EMPLOYMENT_ANNIVERSARY">
+              Employee's employment anniversary
+            </mat-radio-button>
+          </div>
+          <div class="col-sm-6 px-2">
+            <mat-radio-button class="form-radio" color="primary" value="FINANCIAL">
+              Company financial year
+            </mat-radio-button>
+          </div>
+        </mat-radio-group>
+      </div>
     </div>
+  </div>
+</div>
+
+<h4 class="text-primary">Carry Forward Rules</h4>
+<div class="card mb-4">
+  <div class="card-body">
+    <div class="row mx-0">
+      <div class="col-sm-12 px-2 mb-4">
+        <mat-label class="form-label">Unuse Leave Policy <span class="text-danger">*</span></mat-label>
+        <mat-radio-group class="form-radio-group row mx-0" formControlName="carryForwardPolicy">
+          <div class="col-sm-6 px-2">
+            <mat-radio-button class="form-radio" color="primary" value="NONE">
+              Do not allow carry forward
+            </mat-radio-button>
+          </div>
+          <div class="col-sm-6 px-2">
+            <mat-radio-button class="form-radio" color="primary" value="LIMITED">
+              Allow carry forward up to a limit
+            </mat-radio-button>
+          </div>
+          <div class="col-sm-6 px-2">
+            <mat-radio-button class="form-radio" color="primary" value="UNLIMITED">
+              Allow unlimited carry forward
+            </mat-radio-button>
+          </div>
+          <div class="col-sm-6 px-2">
+            <mat-radio-button class="form-radio" color="primary" value="HR_REVIEW">
+              Require HR review
+            </mat-radio-button>
+          </div>
+        </mat-radio-group>
+      </div>
+
+      @if (showMaximumCarryForward) {
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Maximum Carry Forward <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input type="number" min="0" matInput placeholder="Enter carry forward limit" formControlName="maximumCarryForward">
+            <span matTextSurfix class="text-muted ms-2">Days</span>
+            @if (leaveForm.controls.maximumCarryForward.hasError('required')) {
+              <mat-error class="text-danger">Maximum carry forward is required.</mat-error>
+            }
+            @if (leaveForm.controls.maximumCarryForward.hasError('min')) {
+              <mat-error class="text-danger">Enter zero or more days.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+<h4 class="text-primary">Approval Rules</h4>
+<div class="card mb-4">
+  <div class="card-body">
+    <div class="row mx-0">
+      <div class="col-sm-12 px-2 mb-4">
+        <mat-label class="form-label">Approval Overflow <span class="text-danger">*</span></mat-label>
+        <mat-radio-group class="form-radio-group row mx-0" formControlName="approvalOverflow">
+          <div class="col-sm-6 px-2">
+            <mat-radio-button class="form-radio" color="primary" value="MANAGER">
+              Reporting Manager
+            </mat-radio-button>
+          </div>
+          <div class="col-sm-6 px-2">
+            <mat-radio-button class="form-radio" color="primary" value="MANAGER_HR">
+              Reporting Manager → HR
+            </mat-radio-button>
+          </div>
+          <div class="col-sm-6 px-2">
+            <mat-radio-button class="form-radio" color="primary" value="HR_ONLY">
+              HR Only
+            </mat-radio-button>
+          </div>
+          <div class="col-sm-6 px-2">
+            <mat-radio-button class="form-radio" color="primary" value="NO_APPROVAL">
+              No approval required
+            </mat-radio-button>
+          </div>
+        </mat-radio-group>
+      </div>
+
+      <div class="col-sm-6 px-2">
+        <mat-label class="form-label">Minimum Advance Notice <span class="text-danger">*</span></mat-label>
+        <mat-form-field appearance="outline" class="form-input w-100">
+          <input type="number" min="0" matInput placeholder="Enter Minimum Advance Notice" formControlName="minimumAdvanceNotice">
+          <span matTextSurfix class="text-muted ms-2 text-nowrap">Working Days</span>
+          @if (leaveForm.controls.minimumAdvanceNotice.hasError('required')) {
+            <mat-error class="text-danger">Minimum advance notice is required.</mat-error>
+          }
+          @if (leaveForm.controls.minimumAdvanceNotice.hasError('min')) {
+            <mat-error class="text-danger">Enter zero or more days.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row mx-0">
+      <div class="col-sm-6 px-2">
+        <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+          <label class="text-dark my-0">Allow half-day leave applications</label>
+          <mat-slide-toggle
+            color="primary"
+            formControlName="allowHalfDay">
+          </mat-slide-toggle>
+        </div>
+      </div>
+      <div class="col-sm-6 px-2">
+        <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+          <label class="text-dark my-0">Require supporting documents</label>
+          <mat-slide-toggle
+            color="primary"
+            formControlName="requireSupportingDocuments">
+          </mat-slide-toggle>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<div class="d-flex align-items-center justify-content-end gap-3">
+  <button type="submit" mat-flat-button color="primary"><i-tabler name="check"></i-tabler>Submit</button>
+</div>
 </form>

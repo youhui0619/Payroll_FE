@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnDestroy } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
@@ -9,7 +9,7 @@ import { employees } from '../../../../data/employees';
 
 @Component({
   selector: 'app-list',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule,  ToastrModule, RouterLink],
+  imports: [...MaterialImports, FormsModule, ReactiveFormsModule, ToastrModule, RouterLink],
   providers: [...MaterialProviders, ToastrService],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'

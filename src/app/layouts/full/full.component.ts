@@ -1,5 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { HeaderComponent } from './header/header.component';
@@ -10,12 +10,11 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
   selector: 'app-full',
   standalone: true,
   imports: [
-    CommonModule,
     RouterOutlet,
     HeaderComponent,
     SidebarComponent,
     BreadcrumbComponent
-  ],
+],
   templateUrl: './full.component.html',
   styleUrl: './full.component.scss'
 })

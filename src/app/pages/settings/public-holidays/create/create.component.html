@@ -1,111 +1,118 @@
 <form [formGroup]="holidayForm" (ngSubmit)="onSubmit()">
-    <h4 class="text-primary">Holiday Information</h4>
-    <div class="card mb-4">
-        <div class="card-body">
-            <div class="row mx-0">
-                <div class="col-sm-8 px-2">
-                    <mat-label class="form-label">Holiday Name <span class="text-danger">*</span></mat-label>
-                    <mat-form-field appearance="outline" class="form-input w-100">
-                        <input matInput placeholder="Enter holiday name" formControlName="name">
-                        <mat-error class="text-danger">Holiday name is required.</mat-error>
-                    </mat-form-field>
-                </div>
-                <div class="col-sm-4 px-2">
-                    <mat-label class="form-label">Status
-                        <span class="text-danger">*</span>
-                    </mat-label>
-                    <mat-form-field appearance="outline" class="form-input w-100">
-                        <mat-select placeholder="Select status" formControlName="status">
-                            <mat-option value="ACTIVE">Active</mat-option>
-                            <mat-option value="INACTIVE">Inactive</mat-option>
-                        </mat-select>
-                        <mat-error class="text-danger">Status is required</mat-error>
-                    </mat-form-field>
-                </div>
-                <div class="col-sm-12 px-2">
-                    <mat-label class="form-label">Description</mat-label>
-                    <mat-form-field appearance="outline" class="form-input w-100">
-                        <textarea matInput rows="4" placeholder="Enter description" formControlName="description"></textarea>
-                    </mat-form-field>
-                </div>
-            </div>
+  <h4 class="text-primary">Holiday Information</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-8 px-2">
+          <mat-label class="form-label">Holiday Name <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput placeholder="Enter holiday name" formControlName="name">
+            <mat-error class="text-danger">Holiday name is required.</mat-error>
+          </mat-form-field>
         </div>
-    </div>
-
-    <h4 class="text-primary">Holiday Scope</h4>
-    <div class="card mb-4">
-        <div class="card-body">
-            <mat-label class="form-label">Applicable Scope <span class="text-danger">*</span></mat-label>
-            <mat-radio-group class="form-radio-group row mx-0" formControlName="scope">
-                <div class="col-sm-6 px-2">
-                    <mat-radio-button class="form-radio" color="primary" value="National">
-                        National
-                        <span class="d-block text-muted">Applies nationwide, subject to applicable holiday rules</span>
-                    </mat-radio-button>
-                </div>
-                <div class="col-sm-6 px-2">
-                    <mat-radio-button class="form-radio" color="primary" value="State">
-                        Selected States / Regions
-                        <span class="d-block text-muted">Applies only to selected locations</span>
-                    </mat-radio-button>
-                </div>
-            </mat-radio-group>
-
-            <div *ngIf="selectedScope === 'State'" class="mt-4">
-                <div class="d-flex align-items-start justify-content-between flex-wrap gap-2 mb-3">
-                    <div>
-                        <mat-label class="form-label mb-1">States / Regions <span class="text-danger">*</span></mat-label>
-                        <p class="text-muted mb-0">Select all locations where this holiday applies.</p>
-                    </div>
-                    <span class="text-muted">{{ selectedRegions.length }} selected</span>
-                </div>
-
-                <div class="mb-3">
-                    <mat-checkbox class="form-checkbox" color="primary" [checked]="allStatesSelected" [indeterminate]="selectedRegions.length > 0 && !allStatesSelected" (change)="toggleAllStates($event.checked)">
-                        Select all
-                    </mat-checkbox>
-                </div>
-
-                <div class="row" formArrayName="stateSelections">
-                    <div class="col-sm-6 col-md-4 col-lg-3 mb-2" *ngFor="let state of states; let i = index">
-                        <mat-checkbox class="form-checkbox" color="primary" [formControlName]="i" (change)="syncSelectedRegions()">
-                            {{ state }}
-                        </mat-checkbox>
-                    </div>
-                </div>
-
-                <div class="text-danger" *ngIf="submitted && selectedRegions.length === 0">Select at least one state or region.</div>
-            </div>
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Status
+            <span class="text-danger">*</span>
+          </mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <mat-select placeholder="Select status" formControlName="status">
+              <mat-option value="ACTIVE">Active</mat-option>
+              <mat-option value="INACTIVE">Inactive</mat-option>
+            </mat-select>
+            <mat-error class="text-danger">Status is required</mat-error>
+          </mat-form-field>
         </div>
-    </div>
-
-    <h4 class="text-primary">Holiday Date</h4>
-    <div class="card mb-4">
-        <div class="card-body">
-            <div class="row mx-0">
-                <div class="col-sm-6 px-2">
-                    <mat-label class="form-label">Start Date <span class="text-danger">*</span></mat-label>
-                    <mat-form-field appearance="outline" class="form-input w-100">
-                        <input matInput [matDatepicker]="startDate" placeholder="Select start date" formControlName="startDate">
-                        <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
-                        <mat-datepicker #startDate></mat-datepicker>
-                        <mat-error *ngIf="holidayForm.controls.startDate.hasError('required')">Start date is required.</mat-error>
-                    </mat-form-field>
-                </div>
-                <div class="col-sm-6 px-2">
-                    <mat-label class="form-label">End Date <span class="text-danger">*</span></mat-label>
-                    <mat-form-field appearance="outline" class="form-input w-100">
-                        <input matInput [matDatepicker]="endDate" placeholder="Select end date" formControlName="endDate">
-                        <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
-                        <mat-datepicker #endDate></mat-datepicker>
-                        <mat-error *ngIf="holidayForm.controls.endDate.hasError('required')">End date is required.</mat-error>
-                    </mat-form-field>
-                </div>
-            </div>
+        <div class="col-sm-12 px-2">
+          <mat-label class="form-label">Description</mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <textarea matInput rows="4" placeholder="Enter description" formControlName="description"></textarea>
+          </mat-form-field>
         </div>
+      </div>
     </div>
+  </div>
 
-    <div class="d-flex align-items-center justify-content-end gap-3">
-        <button type="submit" mat-flat-button color="primary"><i-tabler name="check"></i-tabler>Submit</button>
+  <h4 class="text-primary">Holiday Scope</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <mat-label class="form-label">Applicable Scope <span class="text-danger">*</span></mat-label>
+      <mat-radio-group class="form-radio-group row mx-0" formControlName="scope">
+        <div class="col-sm-6 px-2">
+          <mat-radio-button class="form-radio" color="primary" value="National">
+            National
+            <span class="d-block text-muted">Applies nationwide, subject to applicable holiday rules</span>
+          </mat-radio-button>
+        </div>
+        <div class="col-sm-6 px-2">
+          <mat-radio-button class="form-radio" color="primary" value="State">
+            Selected States / Regions
+            <span class="d-block text-muted">Applies only to selected locations</span>
+          </mat-radio-button>
+        </div>
+      </mat-radio-group>
+
+      @if (selectedScope === 'State') {
+        <div class="mt-4">
+          <div class="d-flex align-items-start justify-content-between flex-wrap gap-2 mb-3">
+            <div>
+              <mat-label class="form-label mb-1">States / Regions <span class="text-danger">*</span></mat-label>
+              <p class="text-muted mb-0">Select all locations where this holiday applies.</p>
+            </div>
+            <span class="text-muted">{{ selectedRegions.length }} selected</span>
+          </div>
+          <div class="mb-3">
+            <mat-checkbox class="form-checkbox" color="primary" [checked]="allStatesSelected" [indeterminate]="selectedRegions.length > 0 && !allStatesSelected" (change)="toggleAllStates($event.checked)">
+              Select all
+            </mat-checkbox>
+          </div>
+          <div class="row" formArrayName="stateSelections">
+            @for (state of states; track state; let i = $index) {
+              <div class="col-sm-6 col-md-4 col-lg-3 mb-2">
+                <mat-checkbox class="form-checkbox" color="primary" [formControlName]="i" (change)="syncSelectedRegions()">
+                  {{ state }}
+                </mat-checkbox>
+              </div>
+            }
+          </div>
+          @if (submitted && selectedRegions.length === 0) {
+            <div class="text-danger">Select at least one state or region.</div>
+          }
+        </div>
+      }
     </div>
+  </div>
+
+  <h4 class="text-primary">Holiday Date</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Start Date <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput [matDatepicker]="startDate" placeholder="Select start date" formControlName="startDate">
+            <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+            <mat-datepicker #startDate></mat-datepicker>
+            @if (holidayForm.controls.startDate.hasError('required')) {
+              <mat-error>Start date is required.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">End Date <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput [matDatepicker]="endDate" placeholder="Select end date" formControlName="endDate">
+            <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+            <mat-datepicker #endDate></mat-datepicker>
+            @if (holidayForm.controls.endDate.hasError('required')) {
+              <mat-error>End date is required.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex align-items-center justify-content-end gap-3">
+    <button type="submit" mat-flat-button color="primary"><i-tabler name="check"></i-tabler>Submit</button>
+  </div>
 </form>

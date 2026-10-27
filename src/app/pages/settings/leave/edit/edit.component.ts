@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, DestroyRef, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -16,7 +16,7 @@ type ServiceEntitlementTierForm = FormGroup<{
 @Component({
   selector: 'app-edit',
   standalone: true,
-  imports: [...MaterialImports, CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [...MaterialImports, ReactiveFormsModule, RouterLink],
   providers: [...MaterialProviders],
   templateUrl: './edit.component.html',
   styleUrl: './edit.component.scss'

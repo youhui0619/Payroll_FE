@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
@@ -11,7 +11,7 @@ import { Company } from '../../../../models/company.model';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule,  ToastrModule, FormsComponent],
+  imports: [...MaterialImports, FormsModule, ReactiveFormsModule, ToastrModule, FormsComponent],
   providers: [...MaterialProviders, ToastrService],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'

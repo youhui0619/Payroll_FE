@@ -27,14 +27,18 @@
             <p class="text-muted fs-10 fs-300 my-0">Department</p>
             <p class="text-dark my-0 fw-500">{{ claim.departmentName }}</p>
           </div>
-          <div *ngIf="employee">
-            <p class="text-muted fs-10 fs-300 my-0">Position</p>
-            <p class="text-dark my-0 fw-500">{{ employee.position }}</p>
-          </div>
-          <div *ngIf="employee">
-            <p class="text-muted fs-10 fs-300 my-0">Contact No.</p>
-            <p class="text-dark my-0 fw-500">{{ employee.contactNo }}</p>
-          </div>
+          @if (employee) {
+            <div>
+              <p class="text-muted fs-10 fs-300 my-0">Position</p>
+              <p class="text-dark my-0 fw-500">{{ employee.position }}</p>
+            </div>
+          }
+          @if (employee) {
+            <div>
+              <p class="text-muted fs-10 fs-300 my-0">Contact No.</p>
+              <p class="text-dark my-0 fw-500">{{ employee.contactNo }}</p>
+            </div>
+          }
         </div>
       </section>
 
@@ -71,14 +75,17 @@
       <section class="section-block">
         <div class="section-heading"><h4 class="text-primary mb-0">Supporting documents</h4></div>
         <div class="detail-grid">
-          <div class="detail-full-width" *ngIf="claim.supportingDocuments.length > 0; else noDocuments">
-            <ul class="document-list">
-              <li *ngFor="let document of claim.supportingDocuments">{{ document }}</li>
-            </ul>
-          </div>
-          <ng-template #noDocuments>
+          @if (claim.supportingDocuments.length > 0) {
+            <div class="detail-full-width">
+              <ul class="document-list">
+                @for (document of claim.supportingDocuments; track document) {
+                  <li>{{ document }}</li>
+                }
+              </ul>
+            </div>
+          } @else {
             <div class="detail-full-width"><p class="text-dark my-0 fw-500">No documents attached.</p></div>
-          </ng-template>
+          }
         </div>
       </section>
 
@@ -104,42 +111,46 @@
         </div>
       </section>
 
-      <section class="py-4 d-flex justify-content-end align-items-center gap-3" *ngIf="showDecisionActions">
-        <div class="review-comment">
-          <mat-label for="claim-review-comment" class="form-label">Approval comment <span class="text-danger">*</span></mat-label>
-          <mat-form-field appearance="outline" class="form-input w-100">
-            <textarea
-              matInput
-              id="claim-review-comment"
-              rows="1"
-              [(ngModel)]="decisionComment"
-              placeholder="Add a comment before approving this claim"
+      @if (showDecisionActions) {
+        <section class="py-4 d-flex justify-content-end align-items-center gap-3">
+          <div class="review-comment">
+            <mat-label for="claim-review-comment" class="form-label">Approval comment <span class="text-danger">*</span></mat-label>
+            <mat-form-field appearance="outline" class="form-input w-100">
+              <textarea
+                matInput
+                id="claim-review-comment"
+                rows="1"
+                [(ngModel)]="decisionComment"
+                placeholder="Add a comment before approving this claim"
               required></textarea>
-        </mat-form-field>
-        </div>
-        <div class="decision-actions">
-          <button type="button" class="decision-button reject-button" (click)="decide('Rejected')">
-            <i-tabler name="x" class="icon-16"></i-tabler>
-            Reject
-          </button>
-          <button type="button" class="decision-button approve-button" (click)="decide('Approved')" [disabled]="!decisionComment.trim()">
-            <i-tabler name="check" class="icon-16"></i-tabler>
-            Approve
-          </button>
-        </div>
-      </section>
-      <section class="py-4" *ngIf="!showDecisionActions">
-        <div class="d-flex justify-content-between align-items-center">
-         <div>
-           <p class="my-0 text-muted fs-12 fw-300">Net pay (RM)</p>
-            <h2>{{ claim.amount | number:'1.2-2' }} <span class="text-primary ms-2 fs-12 fw-400">{{ paymentMethodLabel(claim.paymentMethod) }}</span></h2>
+            </mat-form-field>
           </div>
-          <button type="button" mat-flat-button color="primary" class="download-button">
-            <i-tabler name="download"></i-tabler>
-            Download
-          </button>
-        </div>
-      </section>
+          <div class="decision-actions">
+            <button type="button" class="decision-button reject-button" (click)="decide('Rejected')">
+              <i-tabler name="x" class="icon-16"></i-tabler>
+              Reject
+            </button>
+            <button type="button" class="decision-button approve-button" (click)="decide('Approved')" [disabled]="!decisionComment.trim()">
+              <i-tabler name="check" class="icon-16"></i-tabler>
+              Approve
+            </button>
+          </div>
+        </section>
+      }
+      @if (!showDecisionActions) {
+        <section class="py-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="my-0 text-muted fs-12 fw-300">Net pay (RM)</p>
+              <h2>{{ claim.amount | number:'1.2-2' }} <span class="text-primary ms-2 fs-12 fw-400">{{ paymentMethodLabel(claim.paymentMethod) }}</span></h2>
+            </div>
+            <button type="button" mat-flat-button color="primary" class="download-button">
+              <i-tabler name="download"></i-tabler>
+              Download
+            </button>
+          </div>
+        </section>
+      }
     </div>
   </section>
 </div>

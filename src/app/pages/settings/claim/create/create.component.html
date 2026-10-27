@@ -20,25 +20,39 @@
           <mat-label class="form-label">Claim Code <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput formControlName="code" placeholder="e.g. WELLNESS">
-            <mat-error class="text-dangera" *ngIf="claimForm.controls.code.hasError('required')">Claim code is required.</mat-error>
-            <mat-error class="text-dangera" *ngIf="claimForm.controls.code.hasError('pattern')">Start with a letter; use letters, numbers, hyphens, or underscores.</mat-error>
-            <mat-error class="text-dangera" *ngIf="claimForm.controls.code.hasError('maxlength')">Use no more than 20 characters.</mat-error>
-            <mat-error class="text-dangera" *ngIf="claimForm.controls.code.hasError('duplicate')">This claim code already exists.</mat-error>
+            @if (claimForm.controls.code.hasError('required')) {
+              <mat-error class="text-dangera">Claim code is required.</mat-error>
+            }
+            @if (claimForm.controls.code.hasError('pattern')) {
+              <mat-error class="text-dangera">Start with a letter; use letters, numbers, hyphens, or underscores.</mat-error>
+            }
+            @if (claimForm.controls.code.hasError('maxlength')) {
+              <mat-error class="text-dangera">Use no more than 20 characters.</mat-error>
+            }
+            @if (claimForm.controls.code.hasError('duplicate')) {
+              <mat-error class="text-dangera">This claim code already exists.</mat-error>
+            }
           </mat-form-field>
         </div>
         <div class="col-sm-8 px-2">
           <mat-label class="form-label">Claim Type Name <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput formControlName="name" placeholder="Enter claim type name">
-            <mat-error class="text-dangera" *ngIf="claimForm.controls.name.hasError('required')">Claim type name is required.</mat-error>
-            <mat-error class="text-dangera" *ngIf="claimForm.controls.name.hasError('maxlength')">Use no more than 60 characters.</mat-error>
+            @if (claimForm.controls.name.hasError('required')) {
+              <mat-error class="text-dangera">Claim type name is required.</mat-error>
+            }
+            @if (claimForm.controls.name.hasError('maxlength')) {
+              <mat-error class="text-dangera">Use no more than 60 characters.</mat-error>
+            }
           </mat-form-field>
         </div>
         <div class="col-sm-12 px-2">
           <mat-label class="form-label">Description</mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <textarea matInput rows="3" formControlName="description" placeholder="Describe the expenses covered by this claim type"></textarea>
-            <mat-error class="text-dangera" *ngIf="claimForm.controls.description.hasError('maxlength')">Use no more than 250 characters.</mat-error>
+            @if (claimForm.controls.description.hasError('maxlength')) {
+              <mat-error class="text-dangera">Use no more than 250 characters.</mat-error>
+            }
           </mat-form-field>
         </div>
         <div class="col-sm-4 px-2 mb-3">

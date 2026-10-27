@@ -16,45 +16,54 @@
   </ngx-dropzone-label>
 </ngx-dropzone>
 
-<div class="mt-4" *ngIf="existingPaths.length">
-  <div class="file-item d-flex align-items-center gap-3 w-100 mb-4" *ngFor="let path of existingPaths">
-    <div class="file-img flex-shrink-0 d-flex justify-content-center align-items-center">
-      <img *ngIf="accept.includes('image'); else existingFileIcon" [src]="path" [alt]="path.split('/').pop() || 'Uploaded image'" class="file-preview">
-      <ng-template #existingFileIcon>
-        <i-tabler name="file" class="text-muted" [attr.aria-label]="'File: ' + path.split('/').pop()"></i-tabler>
-      </ng-template>
-    </div>
-    <div class="file-info flex-grow-1">
-      <div class="file-name">{{ path.split('/').pop() }}</div>
-    </div>
-    <button type="button" class="btn btn-link p-0 cursor-pointer" (click)="removeExistingPath(path)" aria-label="Remove saved file">
-      <i-tabler name="x" class="icon-16 text-muted"></i-tabler>
-    </button>
+@if (existingPaths.length) {
+  <div class="mt-4">
+    @for (path of existingPaths; track path) {
+      <div class="file-item d-flex align-items-center gap-3 w-100 mb-4">
+        <div class="file-img flex-shrink-0 d-flex justify-content-center align-items-center">
+          @if (accept.includes('image')) {
+            <img [src]="path" [alt]="path.split('/').pop() || 'Uploaded image'" class="file-preview">
+          } @else {
+            <i-tabler name="file" class="text-muted" [attr.aria-label]="'File: ' + path.split('/').pop()"></i-tabler>
+          }
+        </div>
+        <div class="file-info flex-grow-1">
+          <div class="file-name">{{ path.split('/').pop() }}</div>
+        </div>
+        <button type="button" class="btn btn-link p-0 cursor-pointer" (click)="removeExistingPath(path)" aria-label="Remove saved file">
+          <i-tabler name="x" class="icon-16 text-muted"></i-tabler>
+        </button>
+      </div>
+    }
   </div>
-</div>
+}
 
-<div class="mt-4" *ngIf="value.length">
-  <div class="file-item d-flex align-items-center gap-3 w-100 mb-4" *ngFor="let file of value">
-    <div class="file-img flex-shrink-0 d-flex justify-content-center align-items-center">
-      <i-tabler
-        *ngIf="file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf'); else imagePreview"
-        name="file-type-pdf"
-        class="text-danger"
-        [attr.aria-label]="'PDF file: ' + file.name">
-      </i-tabler>
-      <ng-template #imagePreview>
-        <img [src]="previewUrls.get(file)" [alt]="file.name" class="file-preview">
-      </ng-template>
-    </div>
-    <div class="file-info flex-grow-1">
-      <div class="file-name">{{ file.name }}</div>
-      <div class="file-size">{{ formatFileSize(file.size) }}</div>
-    </div>
-    <button
-      type="button"
-       class="btn btn-link p-0 cursor-pointer"
-      (click)="removeFile(file)">
-      <i-tabler name="x" class="icon-16 text-muted"/>
-    </button>
+@if (value.length) {
+  <div class="mt-4">
+    @for (file of value; track file) {
+      <div class="file-item d-flex align-items-center gap-3 w-100 mb-4">
+        <div class="file-img flex-shrink-0 d-flex justify-content-center align-items-center">
+          @if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+            <i-tabler
+              name="file-type-pdf"
+              class="text-danger"
+              [attr.aria-label]="'PDF file: ' + file.name">
+            </i-tabler>
+          } @else {
+            <img [src]="previewUrls.get(file)" [alt]="file.name" class="file-preview">
+          }
+        </div>
+        <div class="file-info flex-grow-1">
+          <div class="file-name">{{ file.name }}</div>
+          <div class="file-size">{{ formatFileSize(file.size) }}</div>
+        </div>
+        <button
+          type="button"
+          class="btn btn-link p-0 cursor-pointer"
+          (click)="removeFile(file)">
+          <i-tabler name="x" class="icon-16 text-muted"/>
+        </button>
+      </div>
+    }
   </div>
-</div>
+}

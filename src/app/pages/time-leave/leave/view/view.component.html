@@ -1,155 +1,158 @@
 <div class="row justify-content-between mb-3">
-    <div class="col-sm-12">
-        <div class="d-flex align-items-center gap-2">
-            <a mat-icon-button class="d-flex justify-content-center w-auto mb-0">
-                <i-tabler name="chevron-left" class="text-dark icon-16 d-flex"></i-tabler>
-            </a>
-            <p class="text-muted mb-0">Back to leave overview</p>
-        </div>
+  <div class="col-sm-12">
+    <div class="d-flex align-items-center gap-2">
+      <a mat-icon-button class="d-flex justify-content-center w-auto mb-0">
+        <i-tabler name="chevron-left" class="text-dark icon-16 d-flex"></i-tabler>
+      </a>
+      <p class="text-muted mb-0">Back to leave overview</p>
     </div>
+  </div>
 </div>
 
 
 <div class="row">
-    <div class="col-sm-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="row mx-0">
-                    <div class="col-sm-7 px-2">
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row mx-0">
+          <div class="col-sm-7 px-2">
+            <div class="d-flex align-items-center">
+              <div class="avatar me-4">{{ employee.initials }}</div>
+              <div>
+                <h4 class="my-0">{{ employee.employeeName }}</h4>
+                <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
+                <span class="chip bg-light-primary text-primary me-2">{{ employee.employmentStatus }}</span> <span class="chip bg-light-secondary text-secondary me-2">{{ employee.employmentType }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-3 px-2">
+    <div class="card">
+      <div class="card-body">
+        <div  class="d-flex align-items-center justify-content-between">
+          <div class="summary-info">
+            <p class="f-s-12 text-muted">Annual Leave Balance
+            </p>
+            <h3 class="mb-0">10 <span class="text-dark me-2">/13</span> <span class="text-muted fw-400 fs-12">days</span></h3>
+          </div>
+          <div class="text-primary bg-light-primary text-end icon">
+            <i-tabler name="users"></i-tabler>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-3 px-2">
+    <div class="card">
+      <div class="card-body">
+        <div  class="d-flex align-items-center justify-content-between">
+          <div class="summary-info">
+            <p class="f-s-12 text-muted">Medical Leave Balance
+            </p>
+            <h3 class="mb-0">10 <span class="text-dark me-2">/13</span> <span class="text-muted fw-400 fs-12">days</span></h3>
+          </div>
+          <div class="text-primary bg-light-primary text-end icon">
+            <i-tabler name="user-check"></i-tabler>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-3 px-2">
+    <div class="card">
+      <div class="card-body">
+        <div  class="d-flex align-items-center justify-content-between">
+          <div class="summary-info">
+            <p class="f-s-12 text-muted">Unpaid Leave Taken
+            </p>
+            <h3 class="mb-0">2 <span class="text-muted fw-400 fs-12">days</span></h3>
+          </div>
+          <div class="text-primary bg-light-primary text-end icon">
+            <i-tabler name="user-check"></i-tabler>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12 px-2">
+    <div class="card">
+      <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All (100)</span>  |  Annual Leave (12)  |  Medical Leave (10)  |  Unpaid Leave (6)</h6>
+          <div>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <i-tabler name="download" class="icon-16"></i-tabler> Export</button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row mx-0">
+          <div class="col-sm-12 px-2">
+            <div class="material-datatables table-responsive">
+              <table matSort class="mat-sort table no-wrap w-100 text-left leave-balance-table" matSort>
+                <thead>
+                  <tr>
+                    <th class="text-dark">Leave Type / Ref</th>
+                    <th class="text-dark">Date</th>
+                    <th class="text-dark">Days Taken</th>
+                    <th class="text-dark">Status</th>
+                    <th class="text-dark">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (leave of leaveRequests; track leave) {
+                    <tr>
+                      <td>
                         <div class="d-flex align-items-center">
-                            <div class="avatar me-4">{{ employee.initials }}</div>
-                            <div>
-                                <h4 class="my-0">{{ employee.employeeName }}</h4>
-                                <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
-                                <span class="chip bg-light-primary text-primary me-2">{{ employee.employmentStatus }}</span> <span class="chip bg-light-secondary text-secondary me-2">{{ employee.employmentType }}</span>
-                            </div>
+                          <div [class]="leave.iconClass + ' text-end icon me-3'">
+                            <i-tabler name="calendar"></i-tabler>
+                          </div>
+                          <div>
+                            <p class="text-dark fw-500 my-0">{{ leave.leaveType }}</p>
+                            <p class="fs-10 fw-300 text-muted my-0">{{ leave.reference }}</p>
+                          </div>
                         </div>
-                    </div>
-                </div>
+                      </td>
+                      <td class="text-muted">{{ leave.dateRange }}</td>
+                      <td class="text-muted">{{ leave.daysTaken }}</td>
+                      <td class="text-muted"><span class="chip" [ngClass]="leave.statusClass">{{ leave.status }}</span></td>
+                      <td class="text-muted">
+                        <button
+                          type="button"
+                          class="text-muted action-btn"
+                          mat-icon-button
+                          (click)="openLeaveDetails(leave)">
+                          <i-tabler name="eye"></i-tabler>
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
-<div class="row">
-    <div class="col-sm-3 px-2">
-        <div class="card">
-            <div class="card-body">
-                <div  class="d-flex align-items-center justify-content-between">
-                    <div class="summary-info">
-                        <p class="f-s-12 text-muted">Annual Leave Balance
-                        </p>
-                        <h3 class="mb-0">10 <span class="text-dark me-2">/13</span> <span class="text-muted fw-400 fs-12">days</span></h3>
-                    </div>
-                    <div class="text-primary bg-light-primary text-end icon">
-                        <i-tabler name="users"></i-tabler>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-3 px-2">
-        <div class="card">
-            <div class="card-body">
-                <div  class="d-flex align-items-center justify-content-between">
-                    <div class="summary-info">
-                        <p class="f-s-12 text-muted">Medical Leave Balance
-                        </p>
-                        <h3 class="mb-0">10 <span class="text-dark me-2">/13</span> <span class="text-muted fw-400 fs-12">days</span></h3>
-                    </div>
-                    <div class="text-primary bg-light-primary text-end icon">
-                        <i-tabler name="user-check"></i-tabler>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-3 px-2">
-        <div class="card">
-            <div class="card-body">
-                <div  class="d-flex align-items-center justify-content-between">
-                    <div class="summary-info">
-                        <p class="f-s-12 text-muted">Unpaid Leave Taken
-                        </p>
-                        <h3 class="mb-0">2 <span class="text-muted fw-400 fs-12">days</span></h3>
-                    </div>
-                    <div class="text-primary bg-light-primary text-end icon">
-                        <i-tabler name="user-check"></i-tabler>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-sm-12 px-2">
-        <div class="card">
-            <div class="card-header">
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All (100)</span>  |  Annual Leave (12)  |  Medical Leave (10)  |  Unpaid Leave (6)</h6>
-                    <div>
-                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
-                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
-                        <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <i-tabler name="download" class="icon-16"></i-tabler> Export</button>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="row mx-0">
-                    <div class="col-sm-12 px-2">
-                         <div class="material-datatables table-responsive">
-                            <table matSort class="mat-sort table no-wrap w-100 text-left leave-balance-table" matSort>
-                                <thead>
-                                    <tr>
-                                        <th class="text-dark">Leave Type / Ref</th>
-                                        <th class="text-dark">Date</th>
-                                        <th class="text-dark">Days Taken</th>
-                                        <th class="text-dark">Status</th>
-                                        <th class="text-dark">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let leave of leaveRequests">
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div [class]="leave.iconClass + ' text-end icon me-3'">
-                                                    <i-tabler name="calendar"></i-tabler>
-                                                </div>
-                                                <div>
-                                                    <p class="text-dark fw-500 my-0">{{ leave.leaveType }}</p>
-                                                    <p class="fs-10 fw-300 text-muted my-0">{{ leave.reference }}</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-muted">{{ leave.dateRange }}</td>
-                                        <td class="text-muted">{{ leave.daysTaken }}</td>
-                                        <td class="text-muted"><span class="chip" [ngClass]="leave.statusClass">{{ leave.status }}</span></td>
-                                        <td class="text-muted">
-                                            <button
-                                                type="button"
-                                                class="text-muted action-btn"
-                                                mat-icon-button
-                                                (click)="openLeaveDetails(leave)">
-                                                <i-tabler name="eye"></i-tabler>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<app-leave-detail-dialog
-    *ngIf="selectedLeave as leave"
+@if (selectedLeave; as leave) {
+  <app-leave-detail-dialog
     [data]="leave"
     [showDecisionActions]="leave.status === 'Pending'"
     (closed)="selectedLeave = null">
-</app-leave-detail-dialog>
+  </app-leave-detail-dialog>
+}

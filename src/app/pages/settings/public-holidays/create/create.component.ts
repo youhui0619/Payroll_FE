@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
@@ -6,7 +6,7 @@ import { MaterialImports, MaterialProviders } from '../../../../shared/material-
 @Component({
   selector: 'app-create',
   standalone: true,
-  imports: [...MaterialImports, CommonModule, ReactiveFormsModule],
+  imports: [...MaterialImports, ReactiveFormsModule],
   providers: [...MaterialProviders],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'

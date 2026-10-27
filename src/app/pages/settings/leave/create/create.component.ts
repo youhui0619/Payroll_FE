@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -14,7 +14,7 @@ type ServiceEntitlementTierForm = FormGroup<{
 @Component({
   selector: 'app-create',
   standalone: true,
-  imports: [...MaterialImports, CommonModule, ReactiveFormsModule],
+  imports: [...MaterialImports, ReactiveFormsModule],
   providers: [...MaterialProviders],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'

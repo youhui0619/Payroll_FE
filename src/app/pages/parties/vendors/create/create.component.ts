@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnDestroy } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
@@ -16,7 +16,7 @@ const hiddenField = (name: string, formControlName: string, type = 'text'): Form
 
 @Component({
   selector: 'app-create',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule,  ToastrModule, FormsComponent],
+  imports: [...MaterialImports, FormsModule, ReactiveFormsModule, ToastrModule, FormsComponent],
   providers: [...MaterialProviders, ToastrService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'

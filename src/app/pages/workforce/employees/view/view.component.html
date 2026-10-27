@@ -1,705 +1,721 @@
 <div class="row justify-content-between mb-3">
-    <div class="col-sm-12">
-        <div class="d-flex align-items-center gap-2">
-            <a mat-icon-button class="d-flex justify-content-center w-auto mb-0">
-                <i-tabler name="chevron-left" class="text-dark icon-16 d-flex"></i-tabler>
-            </a>
-            <p class="text-muted mb-0">Back to employees list</p>
-        </div>
+  <div class="col-sm-12">
+    <div class="d-flex align-items-center gap-2">
+      <a mat-icon-button class="d-flex justify-content-center w-auto mb-0">
+        <i-tabler name="chevron-left" class="text-dark icon-16 d-flex"></i-tabler>
+      </a>
+      <p class="text-muted mb-0">Back to employees list</p>
     </div>
+  </div>
 </div>
 <div class="row">
-    <div class="col-sm-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="row mx-0">
-                    <div class="col-sm-7 px-2">
-                        <div class="d-flex align-items-center">
-                            <div class="avatar me-4">{{ employee.initials }}</div>
-                            <div>
-                                <h4 class="my-0">{{ employee.employeeName }}</h4>
-                                <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
-                                <span class="chip bg-light-primary text-primary me-2">{{ employee.employmentStatus }}</span> <span class="chip bg-light-secondary text-secondary me-2">{{ employee.employmentType }}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
-                        <button mat-flat-button color="primary" class="ms-2" [routerLink]="['/workforce/employees/edit', employee.employeeId]">
-                            <i-tabler name="edit"></i-tabler>
-                            Edit
-                        </button>
-                    </div>
-                </div>
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row mx-0">
+          <div class="col-sm-7 px-2">
+            <div class="d-flex align-items-center">
+              <div class="avatar me-4">{{ employee.initials }}</div>
+              <div>
+                <h4 class="my-0">{{ employee.employeeName }}</h4>
+                <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
+                <span class="chip bg-light-primary text-primary me-2">{{ employee.employmentStatus }}</span> <span class="chip bg-light-secondary text-secondary me-2">{{ employee.employmentType }}</span>
+              </div>
             </div>
+          </div>
+
+          <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
+            <button mat-flat-button color="primary" class="ms-2" [routerLink]="['/workforce/employees/edit', employee.employeeId]">
+              <i-tabler name="edit"></i-tabler>
+              Edit
+            </button>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
-<app-leave-detail-dialog
-    *ngIf="selectedLeave as leave"
+@if (selectedLeave; as leave) {
+  <app-leave-detail-dialog
     [data]="leave"
     [showDecisionActions]="leave.status === 'Pending'"
     (closed)="selectedLeave = null">
-</app-leave-detail-dialog>
-<app-claim-detail-dialog
-    *ngIf="selectedClaim as claim"
+  </app-leave-detail-dialog>
+}
+@if (selectedClaim; as claim) {
+  <app-claim-detail-dialog
     [claim]="claim"
     [showDecisionActions]="claim.status === 'Pending'"
     (decisionMade)="decideClaim($event)"
     (closed)="selectedClaim = null">
-</app-claim-detail-dialog>
+  </app-claim-detail-dialog>
+}
 
 @if(selectedTabIndex === 3){
-    <div class="row">
-        <div class="col-sm-3 px-2">
-            <div class="card">
-                <div class="card-body">
-                    <div  class="d-flex align-items-center justify-content-between">
-                        <div class="summary-info">
-                            <p class="f-s-12 text-muted">Days attended
-                            </p>
-                            <h3 class="mb-0">22 <span class="text-muted fw-400 fs-12">days</span></h3>
-                        </div>
-                        <div class="text-primary bg-light-primary text-end icon">
-                            <i-tabler name="users"></i-tabler>
-                        </div>
-                    </div>
-                </div>
+  <div class="row">
+    <div class="col-sm-3 px-2">
+      <div class="card">
+        <div class="card-body">
+          <div  class="d-flex align-items-center justify-content-between">
+            <div class="summary-info">
+              <p class="f-s-12 text-muted">Days attended
+              </p>
+              <h3 class="mb-0">22 <span class="text-muted fw-400 fs-12">days</span></h3>
             </div>
-        </div>
-
-        <div class="col-sm-3 px-2">
-            <div class="card">
-                <div class="card-body">
-                    <div  class="d-flex align-items-center justify-content-between">
-                        <div class="summary-info">
-                            <p class="f-s-12 text-muted">Annual Leave days
-                            </p>
-                            <h3 class="mb-0">2 <span class="text-muted fw-400 fs-12">days</span></h3>
-                        </div>
-                        <div class="text-primary bg-light-primary text-end icon">
-                            <i-tabler name="user-check"></i-tabler>
-                        </div>
-                    </div>
-                </div>
+            <div class="text-primary bg-light-primary text-end icon">
+              <i-tabler name="users"></i-tabler>
             </div>
+          </div>
         </div>
-
-
-        <div class="col-sm-3 px-2">
-            <div class="card">
-                <div class="card-body">
-                    <div  class="d-flex align-items-center justify-content-between">
-                        <div class="summary-info">
-                            <p class="f-s-12 text-muted">Unpaid Leave days
-                            </p>
-                            <h3 class="mb-0">2 <span class="text-muted fw-400 fs-12">days</span></h3>
-                        </div>
-                        <div class="text-primary bg-light-primary text-end icon">
-                            <i-tabler name="user-check"></i-tabler>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-3 px-2">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div class="summary-info">
-                            <p class="f-s-12 text-muted">Medical Leave days
-                            </p>
-                            <h3 class="mb-0">1 <span class="text-muted fw-400 fs-12">days</span></h3>
-                        </div>
-                        <div class="text-primary bg-light-primary text-end icon">
-                            <i-tabler name="hourglass-empty"></i-tabler>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+
+    <div class="col-sm-3 px-2">
+      <div class="card">
+        <div class="card-body">
+          <div  class="d-flex align-items-center justify-content-between">
+            <div class="summary-info">
+              <p class="f-s-12 text-muted">Annual Leave days
+              </p>
+              <h3 class="mb-0">2 <span class="text-muted fw-400 fs-12">days</span></h3>
+            </div>
+            <div class="text-primary bg-light-primary text-end icon">
+              <i-tabler name="user-check"></i-tabler>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-sm-3 px-2">
+      <div class="card">
+        <div class="card-body">
+          <div  class="d-flex align-items-center justify-content-between">
+            <div class="summary-info">
+              <p class="f-s-12 text-muted">Unpaid Leave days
+              </p>
+              <h3 class="mb-0">2 <span class="text-muted fw-400 fs-12">days</span></h3>
+            </div>
+            <div class="text-primary bg-light-primary text-end icon">
+              <i-tabler name="user-check"></i-tabler>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-3 px-2">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex align-items-center justify-content-between">
+            <div class="summary-info">
+              <p class="f-s-12 text-muted">Medical Leave days
+              </p>
+              <h3 class="mb-0">1 <span class="text-muted fw-400 fs-12">days</span></h3>
+            </div>
+            <div class="text-primary bg-light-primary text-end icon">
+              <i-tabler name="hourglass-empty"></i-tabler>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 }
 @else if(selectedTabIndex === 4){
-    <div class="row">
-        <div class="col-sm-3 px-2">
-            <div class="card">
-                <div class="card-body">
-                    <div  class="d-flex align-items-center justify-content-between">
-                        <div class="summary-info">
-                            <p class="f-s-12 text-muted">Annual leave balance
-                            </p>
-                            <h3 class="mb-0">2 <span class="text-muted fw-400 fs-12">/12 days</span></h3>
-                        </div>
-                        <div class="text-primary bg-light-primary text-end icon">
-                            <i-tabler name="users"></i-tabler>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="row">
+  <div class="col-sm-3 px-2">
+    <div class="card">
+      <div class="card-body">
+        <div  class="d-flex align-items-center justify-content-between">
+          <div class="summary-info">
+            <p class="f-s-12 text-muted">Annual leave balance
+            </p>
+            <h3 class="mb-0">2 <span class="text-muted fw-400 fs-12">/12 days</span></h3>
+          </div>
+          <div class="text-primary bg-light-primary text-end icon">
+            <i-tabler name="users"></i-tabler>
+          </div>
         </div>
-
-        <div class="col-sm-3 px-2">
-            <div class="card">
-                <div class="card-body">
-                    <div  class="d-flex align-items-center justify-content-between">
-                        <div class="summary-info">
-                            <p class="f-s-12 text-muted">Medical Leave Balance
-                            </p>
-                            <h3 class="mb-0">2 <span class="text-muted fw-400 fs-12">/12 days</span></h3>
-                        </div>
-                        <div class="text-primary bg-light-primary text-end icon">
-                            <i-tabler name="user-check"></i-tabler>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-3 px-2">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div class="summary-info">
-                            <p class="f-s-12 text-muted">Pending Request
-                            </p>
-                            <h3 class="mb-0">1</h3>
-                        </div>
-                        <div class="text-primary bg-light-primary text-end icon">
-                            <i-tabler name="hourglass-empty"></i-tabler>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+  </div>
+
+  <div class="col-sm-3 px-2">
+    <div class="card">
+      <div class="card-body">
+        <div  class="d-flex align-items-center justify-content-between">
+          <div class="summary-info">
+            <p class="f-s-12 text-muted">Medical Leave Balance
+            </p>
+            <h3 class="mb-0">2 <span class="text-muted fw-400 fs-12">/12 days</span></h3>
+          </div>
+          <div class="text-primary bg-light-primary text-end icon">
+            <i-tabler name="user-check"></i-tabler>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-3 px-2">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="summary-info">
+            <p class="f-s-12 text-muted">Pending Request
+            </p>
+            <h3 class="mb-0">1</h3>
+          </div>
+          <div class="text-primary bg-light-primary text-end icon">
+            <i-tabler name="hourglass-empty"></i-tabler>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 }
 @else if(selectedTabIndex === 5){
 <div class="row">
-    <div class="col-sm-4 px-2">
-        <div class="card">
-            <div class="card-body">
-                <div  class="d-flex align-items-center justify-content-between">
-                    <div class="summary-info">
-                        <p class="f-s-12 text-muted">Total submitted
-                        </p>
-                        <h3 class="mb-0"><span class="text-muted fw-400 fs-12">RM</span> 1,000.00 </h3>
-                    </div>
-                    <div class="text-primary bg-light-primary text-end icon">
-                        <i-tabler name="users"></i-tabler>
-                    </div>
-                </div>
-            </div>
+  <div class="col-sm-4 px-2">
+    <div class="card">
+      <div class="card-body">
+        <div  class="d-flex align-items-center justify-content-between">
+          <div class="summary-info">
+            <p class="f-s-12 text-muted">Total submitted
+            </p>
+            <h3 class="mb-0"><span class="text-muted fw-400 fs-12">RM</span> 1,000.00 </h3>
+          </div>
+          <div class="text-primary bg-light-primary text-end icon">
+            <i-tabler name="users"></i-tabler>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 
-    <div class="col-sm-4 px-2">
-        <div class="card">
-            <div class="card-body">
-                <div  class="d-flex align-items-center justify-content-between">
-                    <div class="summary-info">
-                        <p class="f-s-12 text-muted">Pending claims
-                        </p>
-                        <h3 class="mb-0"><span class="text-muted fw-400 fs-12">RM</span> 100.00 </h3>
-                    </div>
-                    <div class="text-primary bg-light-primary text-end icon">
-                        <i-tabler name="users"></i-tabler>
-                    </div>
-                </div>
-            </div>
+  <div class="col-sm-4 px-2">
+    <div class="card">
+      <div class="card-body">
+        <div  class="d-flex align-items-center justify-content-between">
+          <div class="summary-info">
+            <p class="f-s-12 text-muted">Pending claims
+            </p>
+            <h3 class="mb-0"><span class="text-muted fw-400 fs-12">RM</span> 100.00 </h3>
+          </div>
+          <div class="text-primary bg-light-primary text-end icon">
+            <i-tabler name="users"></i-tabler>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 }
 @else{
-    <div class="row">
-        <div class="col-sm-3 px-2">
-            <div class="card">
-                <div class="card-body">
-                    <div  class="d-flex align-items-center justify-content-between">
-                        <div class="summary-info">
-                            <p class="f-s-12 text-muted">Days attended
-                            </p>
-                            <h3 class="mb-0">22</h3>
-                        </div>
-                        <div class="text-primary bg-light-primary text-end icon">
-                            <i-tabler name="users"></i-tabler>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="row">
+  <div class="col-sm-3 px-2">
+    <div class="card">
+      <div class="card-body">
+        <div  class="d-flex align-items-center justify-content-between">
+          <div class="summary-info">
+            <p class="f-s-12 text-muted">Days attended
+            </p>
+            <h3 class="mb-0">22</h3>
+          </div>
+          <div class="text-primary bg-light-primary text-end icon">
+            <i-tabler name="users"></i-tabler>
+          </div>
         </div>
-
-        <div class="col-sm-3 px-2">
-            <div class="card">
-                <div class="card-body">
-                    <div  class="d-flex align-items-center justify-content-between">
-                        <div class="summary-info">
-                            <p class="f-s-12 text-muted">Active
-                            </p>
-                            <h3 class="mb-0">112</h3>
-                        </div>
-                        <div class="text-primary bg-light-primary text-end icon">
-                            <i-tabler name="user-check"></i-tabler>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-3 px-2">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div class="summary-info">
-                            <p class="f-s-12 text-muted">Probation
-                            </p>
-                            <h3 class="mb-0">10</h3>
-                        </div>
-                        <div class="text-primary bg-light-primary text-end icon">
-                            <i-tabler name="hourglass-empty"></i-tabler>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+  </div>
+
+  <div class="col-sm-3 px-2">
+    <div class="card">
+      <div class="card-body">
+        <div  class="d-flex align-items-center justify-content-between">
+          <div class="summary-info">
+            <p class="f-s-12 text-muted">Active
+            </p>
+            <h3 class="mb-0">112</h3>
+          </div>
+          <div class="text-primary bg-light-primary text-end icon">
+            <i-tabler name="user-check"></i-tabler>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-3 px-2">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="summary-info">
+            <p class="f-s-12 text-muted">Probation
+            </p>
+            <h3 class="mb-0">10</h3>
+          </div>
+          <div class="text-primary bg-light-primary text-end icon">
+            <i-tabler name="hourglass-empty"></i-tabler>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 }
 
 <div class="row mb-4">
-        <!-- <div class="px-2" [ngClass]="isWideTab ? 'col-sm-12' : 'col-sm-8'"> -->
-        <div class="px-2 col-sm-12">
-        <mat-tab-group
-            mat-stretch-tabs="false"
-            mat-align-tabs="start"
-                animationDuration="0ms"
-                (selectedIndexChange)="selectedTabIndex = $event">
-            <mat-tab label="Overview">
-                <div class="px-2 mt-3">
-                    <h4 class="text-primary">Employee Detail</h4>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row mx-0">
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">Employee ID</label>
-                                    <p class="text-muted">{{ employee.employeeId }}</p>
-                                </div>
-                                <div class="col-sm-8 px-2 mb-3">
-                                    <label class="text-dark fw-500">Employee Name</label>
-                                    <p class="text-muted">{{ employee.employeeName }}</p>
-                                </div>
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">NRIC / Passport No.</label>
-                                    <p class="text-muted">{{ employee.nricPassportNo }}</p>
-                                </div>
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">Date of Birth</label>
-                                    <p class="text-muted">{{ employee.dateOfBirth | date:'dd/MM/yyyy' }}</p>
-                                </div>
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">Gender</label>
-                                    <p class="text-muted">{{ employee.gender }}</p>
-                                </div>
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">Nationality</label>
-                                    <p class="text-muted">{{ employee.nationality }}</p>
-                                </div>
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">Race</label>
-                                    <p class="text-muted">{{ employee.race }}</p>
-                                </div>
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">Religion</label>
-                                    <p class="text-muted">{{ employee.religion }}</p>
-                                </div>
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">Marital Status</label>
-                                    <p class="text-muted">{{ employee.maritalStatus }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <h4 class="text-primary">Contact Detail</h4>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row mx-0">
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">Email Address</label>
-                                    <p class="text-muted">{{ employee.email }}</p>
-                                </div>
-                                <div class="col-sm-8 px-2 mb-3">
-                                    <label class="text-dark fw-500">Contact No</label>
-                                    <p class="text-muted">{{ employee.contactNo }}</p>
-                                </div>
-                                <div class="col-sm-12 px-2 mb-3">
-                                    <label class="text-dark fw-500">Address</label>
-                                    <p class="text-muted">{{ employee.address }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <h4 class="text-primary">Emergency Contact</h4>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row mx-0">
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">Contact Name</label>
-                                    <p class="text-muted">{{ employee.emergencyContactName }}</p>
-                                </div>
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">Relationship</label>
-                                    <p class="text-muted">{{ employee.emergencyContactRelationship }}</p>
-                                </div>
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">Contact No.</label>
-                                    <p class="text-muted">{{ employee.emergencyContactNo }}</p>
-                                </div>
-                                <div class="col-sm-12 px-2 mb-3">
-                                    <label class="text-dark fw-500">Address</label>
-                                    <p class="text-muted">{{ employee.address }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </mat-tab>
-            <mat-tab label="Employment Information">
-                <div class="px-2 mt-3">
-                    <h4 class="text-primary">Employment Information</h4>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row mx-0">
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">Department</label>
-                                    <p class="text-muted">{{ employee.department }}</p>
-                                </div>
-                                <div class="col-sm-8 px-2 mb-3">
-                                    <label class="text-dark fw-500">Position</label>
-                                    <p class="text-muted">{{ employee.position }}</p>
-                                </div>
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">Reporting Manager</label>
-                                    <p class="text-muted">{{ employee.reportingManager }}</p>
-                                </div>
-                                <div class="col-sm-12 px-2 mb-3">
-                                    <label class="text-dark fw-500">Work Location</label>
-                                    <p class="text-muted">{{ employee.workLocation }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <h4 class="text-primary">Employment Dates</h4>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row mx-0">
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">Joined Date</label>
-                                    <p class="text-muted">{{ employee.joinedDate | date:'dd/MM/yyyy' }}</p>
-                                </div>
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">Confirmation Date</label>
-                                    <p class="text-muted">{{ employee.confirmationDate | date:'dd/MM/yyyy' }}</p>
-                                </div>
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">Resignation Date</label>
-                                    <p class="text-muted">{{ employee.resignationDate ? (employee.resignationDate | date:'dd/MM/yyyy') : '-' }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </mat-tab>
-            <mat-tab label="Payroll & Tax">
-                <div class="px-2 mt-3">
-                    <h4 class="text-primary">Salary Information</h4>
-                    <div class="w-100 salary-box mb-4">
-                        <p class="fs-10 text-muted my-0 fw-300">Basic salary</p>
-                        <h3 class="my-1">{{ employee.basicSalary | currency:'MYR':'symbol':'1.2-2' }}</h3>
-                        <p class="fs-10 text-muted mb-0">{{ employee.salaryType }} · {{ employee.paymentMethod }}</p>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row mx-0">
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">Bank</label>
-                                    <p class="text-muted">{{ employee.bank }}</p>
-                                </div>
-                                <div class="col-sm-8 px-2 mb-3">
-                                    <label class="text-dark fw-500">Bank account</label>
-                                    <p class="text-muted">{{ employee.bankAccount }}</p>
-                                </div>
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">EPF employee no.</label>
-                                    <p class="text-muted">{{ employee.epfEmployeeNo }}</p>
-                                </div>
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">EPF employer no.</label>
-                                    <p class="text-muted">{{ employee.epfEmployerNo }}</p>
-                                </div>
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">SOCSO number</label>
-                                    <p class="text-muted">{{ employee.socsoNo }}</p>
-                                </div>
-                                <div class="col-sm-4 px-2 mb-3">
-                                    <label class="text-dark fw-500">EIS status</label>
-                                    <p class="text-muted">{{ employee.eisStatus }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <h4 class="text-primary mt-4">Commission &amp; incentives</h4>
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <div *ngFor="let setting of selectedCommissionSettings; let last = last"
-                                class="d-flex align-items-center justify-content-between gap-3 py-3"
-                                [class.border-bottom]="!last">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="icon bg-light-primary text-primary flex-shrink-0">
-                                        <i-tabler name="receipt"></i-tabler>
-                                    </div>
-                                    <div>
-                                        <div class="d-flex align-items-center gap-2 flex-wrap">
-                                            <label class="text-dark my-0">{{ setting.name }}</label>
-                                            <span class="badge bg-light-primary text-primary">{{ commissionCalculationFrequencyLabel(setting.calculationFrequency) }}</span>
-                                        </div>
-                                        <p class="text-muted mb-0">{{ commissionCalculationMethodLabel(setting.calculationMethod) }} · {{ commissionCalculationLabel(setting) }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <p *ngIf="selectedCommissionSettings.length === 0" class="text-muted mb-0 py-3">
-                                No commission or incentive programs are assigned to this employee.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </mat-tab>
-            <mat-tab label="Attendance">
-                <div class="px-2 mt-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row mx-0">
-                                <div class="col-sm-12 px-2">
-                                    <full-calendar #calendar [options]="calendarOptions" class="employee-calendar"></full-calendar>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </mat-tab>
-            <mat-tab label="Leave">
-                <div class="px-2 mt-3">
-                    <div class="row mx-0 mb-3">
-                        <div class="col-sm-12 px-2">
-                            <h4 class="text-primary my-0">Leave Summary</h4>
-                            <div class="card mt-2">
-                                <div class="card-body">
-                                    <p class="mb-3">Leave year: {{ leaveYear }}</p>
-                                    <div class="table-responsive">
-                                        <table class="table no-wrap w-100 text-left">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-dark">Leave type</th>
-                                                    <th class="text-dark">Entitlement</th>
-                                                    <th class="text-dark">Total Balance</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let policy of leavePolicies">
-                                                    <td class="text-muted">{{ policy.leaveName }}</td>
-                                                    <td class="text-muted">{{ leaveEntitlementLabel(policy) }}</td>
-                                                    <td class="text-primary fw-550">{{ leaveBalanceLabel(policy) }}</td>
-                                                </tr>
-                                                <tr *ngIf="leavePolicies.length === 0">
-                                                    <td colspan="3" class="text-muted text-center py-3">No active leave policies are available.</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mx-0 mb-3">
-                        <div class="col-sm-7 px-2">
-                            <h4 class="text-primary my-0">Leave Records</h4>
-                            <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
-                        </div>
-                        <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
-                            <button mat-flat-button color="primary" class="ms-2">
-                                <i-tabler name="plus"></i-tabler>
-                                Add Leave
-                            </button>
-                        </div>
-                    </div>
-                    <div class="row mx-0">
-                        <div class="col-sm-12 px-2">
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                                        <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All ({{ leaveRequests.length }})</span>  |  Annual Leave ({{ leaveCount('Annual Leave') }})  |  Medical Leave ({{ leaveCount('Medical Leave') }})  |  Unpaid Leave ({{ leaveCount('Unpaid Leave') }})</h6>
-                                        <div>
-                                            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
-                                            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
-                                            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="download" class="icon-16"></i-tabler> Export</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="material-datatables table-responsive">
-                                        <table matSort class="mat-sort table no-wrap w-100 text-left leave-balance-table">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-dark">Leave Type / Ref</th>
-                                                    <th class="text-dark">Date</th>
-                                                    <th class="text-dark">Days Taken</th>
-                                                    <th class="text-dark">Status</th>
-                                                    <th class="text-dark">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let leave of leaveRequests">
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <div [class]="leave.iconClass + ' text-end icon me-3'">
-                                                                <i-tabler name="calendar"></i-tabler>
-                                                            </div>
-                                                            <div>
-                                                                <p class="text-dark fw-500 my-0">{{ leave.leaveType }}</p>
-                                                                <p class="fs-10 fw-300 text-muted my-0">{{ leave.reference }}</p>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td class="text-muted">{{ leave.dateRange }}</td>
-                                                    <td class="text-muted">{{ leave.daysTaken }}</td>
-                                                    <td class="text-muted"><span class="chip" [ngClass]="leave.statusClass">{{ leave.status }}</span></td>
-                                                    <td class="text-muted">
-                                                        <button type="button" class="text-muted action-btn" mat-icon-button (click)="openLeaveRequestDetails(leave)">
-                                                            <i-tabler name="eye"></i-tabler>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </mat-tab>
-            <mat-tab label="Claim">
-                <div class="px-2 mt-3">
-                    <div class="row mx-0 mb-3">
-                        <div class="col-sm-7 px-2">
-                            <h4 class="text-primary my-0">Employee claims</h4>
-                            <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
-                        </div>
-                        <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
-                            <button mat-flat-button color="primary" class="ms-2" routerLink="/expenses-claims/claims/create">
-                                <i-tabler name="plus"></i-tabler>
-                                New Claim
-                            </button>
-                        </div>
-                    </div>
-                    <div class="row mx-0">
-                        <div class="col-sm-12 px-2">
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                                        <h6 class="fs-14 fw-400 text-muted my-0">
-                                            <span class="fw-550 text-primary">All ({{ claimRequests.length }})</span>
-                                            | Approved ({{ claimCount('Approved') }})
-                                            | Pending ({{ claimCount('Pending') }})
-                                            | Rejected ({{ claimCount('Rejected') }})
-                                            | Paid ({{ claimCount('Paid') }})
-                                        </h6>
-                                        <div>
-                                            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
-                                            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
-                                            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="download" class="icon-16"></i-tabler> Export</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="material-datatables table-responsive">
-                                        <table matSort class="mat-sort table no-wrap w-100 text-left leave-balance-table">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-dark">Claim Type / Description</th>
-                                                    <th class="text-dark">Date</th>
-                                                    <th class="text-dark">Amount</th>
-                                                    <th class="text-dark">Status</th>
-                                                    <th class="text-dark">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let claim of claimRequests">
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="text-primary bg-light-primary text-end icon me-3">
-                                                                <i-tabler name="receipt"></i-tabler>
-                                                            </div>
-                                                            <div>
-                                                                <p class="text-dark fw-500 my-0">{{ claimTypeLabel(claim.claimType) }}</p>
-                                                                <p class="fs-10 fw-300 text-muted my-0">{{ claim.id }} · {{ claim.description }}</p>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td class="text-muted">{{ claim.claimDate | date:'d MMM y' }}</td>
-                                                    <td class="text-muted">{{ claim.currency }} {{ claim.amount | number:'1.2-2' }}</td>
-                                                    <td class="text-muted"><span class="chip" [ngClass]="claimStatusClass(claim.status)">{{ claim.status }}</span></td>
-                                                    <td class="text-muted">
-                                                        <button type="button" class="text-muted action-btn" mat-icon-button (click)="openClaimDetails(claim)" [attr.aria-label]="'View claim ' + claim.id">
-                                                            <i-tabler name="eye"></i-tabler>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                <tr *ngIf="claimRequests.length === 0">
-                                                    <td colspan="5" class="text-muted text-center py-3">No claims found for this employee.</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </mat-tab>
-
-            <mat-tab label="Documentations">
-                <div class="px-2 mt-3">
-                   <div class="row mx-0">
-                        <div class="col-sm-12 px-2">
-                            <div class="d-flex justify-content-between">
-                                <h4 class="text-primary my-0">Documentations</h4>
-                                <button mat-flat-button color="primary" class="ms-2">
-                                    <i-tabler name="plus"></i-tabler>
-                                    New Claim
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </mat-tab>
-        </mat-tab-group>
-    </div>
-
-    <!-- <div class="col-sm-4 px-2" [hidden]="isWideTab">
-        <h4 class="text-primary">Recent activity</h4>
-        <div class="card">
+  <!-- <div class="px-2" [ngClass]="isWideTab ? 'col-sm-12' : 'col-sm-8'"> -->
+  <div class="px-2 col-sm-12">
+    <mat-tab-group
+      mat-stretch-tabs="false"
+      mat-align-tabs="start"
+      animationDuration="0ms"
+      (selectedIndexChange)="selectedTabIndex = $event">
+      <mat-tab label="Overview">
+        <div class="px-2 mt-3">
+          <h4 class="text-primary">Employee Detail</h4>
+          <div class="card">
             <div class="card-body">
-                123
+              <div class="row mx-0">
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">Employee ID</label>
+                  <p class="text-muted">{{ employee.employeeId }}</p>
+                </div>
+                <div class="col-sm-8 px-2 mb-3">
+                  <label class="text-dark fw-500">Employee Name</label>
+                  <p class="text-muted">{{ employee.employeeName }}</p>
+                </div>
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">NRIC / Passport No.</label>
+                  <p class="text-muted">{{ employee.nricPassportNo }}</p>
+                </div>
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">Date of Birth</label>
+                  <p class="text-muted">{{ employee.dateOfBirth | date:'dd/MM/yyyy' }}</p>
+                </div>
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">Gender</label>
+                  <p class="text-muted">{{ employee.gender }}</p>
+                </div>
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">Nationality</label>
+                  <p class="text-muted">{{ employee.nationality }}</p>
+                </div>
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">Race</label>
+                  <p class="text-muted">{{ employee.race }}</p>
+                </div>
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">Religion</label>
+                  <p class="text-muted">{{ employee.religion }}</p>
+                </div>
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">Marital Status</label>
+                  <p class="text-muted">{{ employee.maritalStatus }}</p>
+                </div>
+              </div>
             </div>
+          </div>
+
+
+          <h4 class="text-primary">Contact Detail</h4>
+          <div class="card">
+            <div class="card-body">
+              <div class="row mx-0">
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">Email Address</label>
+                  <p class="text-muted">{{ employee.email }}</p>
+                </div>
+                <div class="col-sm-8 px-2 mb-3">
+                  <label class="text-dark fw-500">Contact No</label>
+                  <p class="text-muted">{{ employee.contactNo }}</p>
+                </div>
+                <div class="col-sm-12 px-2 mb-3">
+                  <label class="text-dark fw-500">Address</label>
+                  <p class="text-muted">{{ employee.address }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h4 class="text-primary">Emergency Contact</h4>
+          <div class="card">
+            <div class="card-body">
+              <div class="row mx-0">
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">Contact Name</label>
+                  <p class="text-muted">{{ employee.emergencyContactName }}</p>
+                </div>
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">Relationship</label>
+                  <p class="text-muted">{{ employee.emergencyContactRelationship }}</p>
+                </div>
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">Contact No.</label>
+                  <p class="text-muted">{{ employee.emergencyContactNo }}</p>
+                </div>
+                <div class="col-sm-12 px-2 mb-3">
+                  <label class="text-dark fw-500">Address</label>
+                  <p class="text-muted">{{ employee.address }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
-    </div> -->
+      </mat-tab>
+      <mat-tab label="Employment Information">
+        <div class="px-2 mt-3">
+          <h4 class="text-primary">Employment Information</h4>
+          <div class="card">
+            <div class="card-body">
+              <div class="row mx-0">
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">Department</label>
+                  <p class="text-muted">{{ employee.department }}</p>
+                </div>
+                <div class="col-sm-8 px-2 mb-3">
+                  <label class="text-dark fw-500">Position</label>
+                  <p class="text-muted">{{ employee.position }}</p>
+                </div>
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">Reporting Manager</label>
+                  <p class="text-muted">{{ employee.reportingManager }}</p>
+                </div>
+                <div class="col-sm-12 px-2 mb-3">
+                  <label class="text-dark fw-500">Work Location</label>
+                  <p class="text-muted">{{ employee.workLocation }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <h4 class="text-primary">Employment Dates</h4>
+          <div class="card">
+            <div class="card-body">
+              <div class="row mx-0">
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">Joined Date</label>
+                  <p class="text-muted">{{ employee.joinedDate | date:'dd/MM/yyyy' }}</p>
+                </div>
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">Confirmation Date</label>
+                  <p class="text-muted">{{ employee.confirmationDate | date:'dd/MM/yyyy' }}</p>
+                </div>
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">Resignation Date</label>
+                  <p class="text-muted">{{ employee.resignationDate ? (employee.resignationDate | date:'dd/MM/yyyy') : '-' }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Payroll & Tax">
+        <div class="px-2 mt-3">
+          <h4 class="text-primary">Salary Information</h4>
+          <div class="w-100 salary-box mb-4">
+            <p class="fs-10 text-muted my-0 fw-300">Basic salary</p>
+            <h3 class="my-1">{{ employee.basicSalary | currency:'MYR':'symbol':'1.2-2' }}</h3>
+            <p class="fs-10 text-muted mb-0">{{ employee.salaryType }} · {{ employee.paymentMethod }}</p>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <div class="row mx-0">
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">Bank</label>
+                  <p class="text-muted">{{ employee.bank }}</p>
+                </div>
+                <div class="col-sm-8 px-2 mb-3">
+                  <label class="text-dark fw-500">Bank account</label>
+                  <p class="text-muted">{{ employee.bankAccount }}</p>
+                </div>
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">EPF employee no.</label>
+                  <p class="text-muted">{{ employee.epfEmployeeNo }}</p>
+                </div>
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">EPF employer no.</label>
+                  <p class="text-muted">{{ employee.epfEmployerNo }}</p>
+                </div>
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">SOCSO number</label>
+                  <p class="text-muted">{{ employee.socsoNo }}</p>
+                </div>
+                <div class="col-sm-4 px-2 mb-3">
+                  <label class="text-dark fw-500">EIS status</label>
+                  <p class="text-muted">{{ employee.eisStatus }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h4 class="text-primary mt-4">Commission &amp; incentives</h4>
+          <div class="card mb-4">
+            <div class="card-body">
+              @for (setting of selectedCommissionSettings; track setting; let last = $last) {
+                <div
+                  class="d-flex align-items-center justify-content-between gap-3 py-3"
+                  [class.border-bottom]="!last">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="icon bg-light-primary text-primary flex-shrink-0">
+                      <i-tabler name="receipt"></i-tabler>
+                    </div>
+                    <div>
+                      <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <label class="text-dark my-0">{{ setting.name }}</label>
+                        <span class="badge bg-light-primary text-primary">{{ commissionCalculationFrequencyLabel(setting.calculationFrequency) }}</span>
+                      </div>
+                      <p class="text-muted mb-0">{{ commissionCalculationMethodLabel(setting.calculationMethod) }} · {{ commissionCalculationLabel(setting) }}</p>
+                    </div>
+                  </div>
+                </div>
+              }
+              @if (selectedCommissionSettings.length === 0) {
+                <p class="text-muted mb-0 py-3">
+                  No commission or incentive programs are assigned to this employee.
+                </p>
+              }
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Attendance">
+        <div class="px-2 mt-3">
+          <div class="card">
+            <div class="card-body">
+              <div class="row mx-0">
+                <div class="col-sm-12 px-2">
+                  <full-calendar #calendar [options]="calendarOptions" class="employee-calendar"></full-calendar>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Leave">
+        <div class="px-2 mt-3">
+          <div class="row mx-0 mb-3">
+            <div class="col-sm-12 px-2">
+              <h4 class="text-primary my-0">Leave Summary</h4>
+              <div class="card mt-2">
+                <div class="card-body">
+                  <p class="mb-3">Leave year: {{ leaveYear }}</p>
+                  <div class="table-responsive">
+                    <table class="table no-wrap w-100 text-left">
+                      <thead>
+                        <tr>
+                          <th class="text-dark">Leave type</th>
+                          <th class="text-dark">Entitlement</th>
+                          <th class="text-dark">Total Balance</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (policy of leavePolicies; track policy) {
+                          <tr>
+                            <td class="text-muted">{{ policy.leaveName }}</td>
+                            <td class="text-muted">{{ leaveEntitlementLabel(policy) }}</td>
+                            <td class="text-primary fw-550">{{ leaveBalanceLabel(policy) }}</td>
+                          </tr>
+                        }
+                        @if (leavePolicies.length === 0) {
+                          <tr>
+                            <td colspan="3" class="text-muted text-center py-3">No active leave policies are available.</td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mx-0 mb-3">
+            <div class="col-sm-7 px-2">
+              <h4 class="text-primary my-0">Leave Records</h4>
+              <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
+            </div>
+            <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
+              <button mat-flat-button color="primary" class="ms-2">
+                <i-tabler name="plus"></i-tabler>
+                Add Leave
+              </button>
+            </div>
+          </div>
+          <div class="row mx-0">
+            <div class="col-sm-12 px-2">
+              <div class="card">
+                <div class="card-header">
+                  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All ({{ leaveRequests.length }})</span>  |  Annual Leave ({{ leaveCount('Annual Leave') }})  |  Medical Leave ({{ leaveCount('Medical Leave') }})  |  Unpaid Leave ({{ leaveCount('Unpaid Leave') }})</h6>
+                    <div>
+                      <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
+                      <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
+                      <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="download" class="icon-16"></i-tabler> Export</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="material-datatables table-responsive">
+                    <table matSort class="mat-sort table no-wrap w-100 text-left leave-balance-table">
+                      <thead>
+                        <tr>
+                          <th class="text-dark">Leave Type / Ref</th>
+                          <th class="text-dark">Date</th>
+                          <th class="text-dark">Days Taken</th>
+                          <th class="text-dark">Status</th>
+                          <th class="text-dark">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (leave of leaveRequests; track leave) {
+                          <tr>
+                            <td>
+                              <div class="d-flex align-items-center">
+                                <div [class]="leave.iconClass + ' text-end icon me-3'">
+                                  <i-tabler name="calendar"></i-tabler>
+                                </div>
+                                <div>
+                                  <p class="text-dark fw-500 my-0">{{ leave.leaveType }}</p>
+                                  <p class="fs-10 fw-300 text-muted my-0">{{ leave.reference }}</p>
+                                </div>
+                              </div>
+                            </td>
+                            <td class="text-muted">{{ leave.dateRange }}</td>
+                            <td class="text-muted">{{ leave.daysTaken }}</td>
+                            <td class="text-muted"><span class="chip" [ngClass]="leave.statusClass">{{ leave.status }}</span></td>
+                            <td class="text-muted">
+                              <button type="button" class="text-muted action-btn" mat-icon-button (click)="openLeaveRequestDetails(leave)">
+                                <i-tabler name="eye"></i-tabler>
+                              </button>
+                            </td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Claim">
+        <div class="px-2 mt-3">
+          <div class="row mx-0 mb-3">
+            <div class="col-sm-7 px-2">
+              <h4 class="text-primary my-0">Employee claims</h4>
+              <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
+            </div>
+            <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
+              <button mat-flat-button color="primary" class="ms-2" routerLink="/expenses-claims/claims/create">
+                <i-tabler name="plus"></i-tabler>
+                New Claim
+              </button>
+            </div>
+          </div>
+          <div class="row mx-0">
+            <div class="col-sm-12 px-2">
+              <div class="card">
+                <div class="card-header">
+                  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <h6 class="fs-14 fw-400 text-muted my-0">
+                      <span class="fw-550 text-primary">All ({{ claimRequests.length }})</span>
+                      | Approved ({{ claimCount('Approved') }})
+                      | Pending ({{ claimCount('Pending') }})
+                      | Rejected ({{ claimCount('Rejected') }})
+                      | Paid ({{ claimCount('Paid') }})
+                    </h6>
+                    <div>
+                      <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
+                      <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
+                      <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="download" class="icon-16"></i-tabler> Export</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="material-datatables table-responsive">
+                    <table matSort class="mat-sort table no-wrap w-100 text-left leave-balance-table">
+                      <thead>
+                        <tr>
+                          <th class="text-dark">Claim Type / Description</th>
+                          <th class="text-dark">Date</th>
+                          <th class="text-dark">Amount</th>
+                          <th class="text-dark">Status</th>
+                          <th class="text-dark">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (claim of claimRequests; track claim) {
+                          <tr>
+                            <td>
+                              <div class="d-flex align-items-center">
+                                <div class="text-primary bg-light-primary text-end icon me-3">
+                                  <i-tabler name="receipt"></i-tabler>
+                                </div>
+                                <div>
+                                  <p class="text-dark fw-500 my-0">{{ claimTypeLabel(claim.claimType) }}</p>
+                                  <p class="fs-10 fw-300 text-muted my-0">{{ claim.id }} · {{ claim.description }}</p>
+                                </div>
+                              </div>
+                            </td>
+                            <td class="text-muted">{{ claim.claimDate | date:'d MMM y' }}</td>
+                            <td class="text-muted">{{ claim.currency }} {{ claim.amount | number:'1.2-2' }}</td>
+                            <td class="text-muted"><span class="chip" [ngClass]="claimStatusClass(claim.status)">{{ claim.status }}</span></td>
+                            <td class="text-muted">
+                              <button type="button" class="text-muted action-btn" mat-icon-button (click)="openClaimDetails(claim)" [attr.aria-label]="'View claim ' + claim.id">
+                                <i-tabler name="eye"></i-tabler>
+                              </button>
+                            </td>
+                          </tr>
+                        }
+                        @if (claimRequests.length === 0) {
+                          <tr>
+                            <td colspan="5" class="text-muted text-center py-3">No claims found for this employee.</td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Documentations">
+        <div class="px-2 mt-3">
+          <div class="row mx-0">
+            <div class="col-sm-12 px-2">
+              <div class="d-flex justify-content-between">
+                <h4 class="text-primary my-0">Documentations</h4>
+                <button mat-flat-button color="primary" class="ms-2">
+                  <i-tabler name="plus"></i-tabler>
+                  New Claim
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+  <!-- <div class="col-sm-4 px-2" [hidden]="isWideTab">
+  <h4 class="text-primary">Recent activity</h4>
+  <div class="card">
+    <div class="card-body">
+      123
+    </div>
+  </div>
+</div> -->
 </div>

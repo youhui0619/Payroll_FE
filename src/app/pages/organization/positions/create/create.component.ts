@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
@@ -8,7 +8,7 @@ import { departments as departmentData } from '../../../../data/departments';
 
 @Component({
   selector: 'app-create',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, FormsComponent],
+  imports: [...MaterialImports, FormsModule, ReactiveFormsModule, ToastrModule, FormsComponent],
   providers: [...MaterialProviders, ToastrService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'

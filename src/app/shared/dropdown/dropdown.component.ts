@@ -1,10 +1,10 @@
 import { Component, ElementRef, HostListener, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-dropdown',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './dropdown.component.html',
   styleUrls: ['./dropdown.component.scss']
 })

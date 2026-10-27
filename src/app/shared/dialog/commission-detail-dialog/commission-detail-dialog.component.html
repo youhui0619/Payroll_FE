@@ -61,42 +61,46 @@
         </div>
       </section>
 
-      <section class="decision-footer" *ngIf="showDecisionActions">
-        <div class="review-comment">
-          <mat-label for="commission-review-comment" class="form-label">Approval comment <span class="text-danger">*</span></mat-label>
-          <mat-form-field appearance="outline" class="form-input w-100">
-            <textarea
-              matInput
-              id="commission-review-comment"
-              rows="1"
-              [(ngModel)]="decisionComment"
-              placeholder="Add a comment before reviewing this commission"
+      @if (showDecisionActions) {
+        <section class="decision-footer">
+          <div class="review-comment">
+            <mat-label for="commission-review-comment" class="form-label">Approval comment <span class="text-danger">*</span></mat-label>
+            <mat-form-field appearance="outline" class="form-input w-100">
+              <textarea
+                matInput
+                id="commission-review-comment"
+                rows="1"
+                [(ngModel)]="decisionComment"
+                placeholder="Add a comment before reviewing this commission"
               required></textarea>
-          </mat-form-field>
-        </div>
-        <div class="decision-actions">
-          <button type="button" class="decision-button reject-button" (click)="decide('Rejected')">
-            <i-tabler name="x" class="icon-16"></i-tabler>
-            Reject
-          </button>
-          <button type="button" class="decision-button approve-button" (click)="decide('Approved')" [disabled]="!decisionComment.trim()">
-            <i-tabler name="check" class="icon-16"></i-tabler>
-            Approve
-          </button>
-        </div>
-      </section>
-      <section class="py-4" *ngIf="!showDecisionActions">
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <p class="my-0 text-muted fs-12 fw-300">Commission Amount (RM)</p>
+            </mat-form-field>
+          </div>
+          <div class="decision-actions">
+            <button type="button" class="decision-button reject-button" (click)="decide('Rejected')">
+              <i-tabler name="x" class="icon-16"></i-tabler>
+              Reject
+            </button>
+            <button type="button" class="decision-button approve-button" (click)="decide('Approved')" [disabled]="!decisionComment.trim()">
+              <i-tabler name="check" class="icon-16"></i-tabler>
+              Approve
+            </button>
+          </div>
+        </section>
+      }
+      @if (!showDecisionActions) {
+        <section class="py-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="my-0 text-muted fs-12 fw-300">Commission Amount (RM)</p>
               <h2>{{ record.amount | number:'1.2-2' }}</h2>
             </div>
-          <button type="button" mat-flat-button color="primary" class="download-button">
-            <i-tabler name="download"></i-tabler>
-            Download
-          </button>
-        </div>
-      </section>
+            <button type="button" mat-flat-button color="primary" class="download-button">
+              <i-tabler name="download"></i-tabler>
+              Download
+            </button>
+          </div>
+        </section>
+      }
     </div>
   </section>
 </div>

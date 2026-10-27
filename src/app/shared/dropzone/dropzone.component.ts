@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, forwardRef, Input, OnDestroy, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NgxDropzoneChangeEvent, NgxDropzoneModule } from 'ngx-dropzone';
@@ -10,7 +10,7 @@ type DropzoneValue = File | string | Array<File | string>;
 @Component({
   selector: 'app-dropzone',
   standalone: true,
-  imports: [CommonModule, NgxDropzoneModule, TablerIconComponent],
+  imports: [NgxDropzoneModule, TablerIconComponent],
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DropzoneComponent), multi: true }, provideTablerIcons(TablerIcons)],
   templateUrl: './dropzone.component.html',
   styleUrl: './dropzone.component.scss'

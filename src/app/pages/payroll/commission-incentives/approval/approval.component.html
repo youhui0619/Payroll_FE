@@ -53,8 +53,9 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let record of pendingRecords">
-                <td class="text-muted"><a href="javascript:void(0)" (click)="openDetails(record)">{{ record.id }}</a>
+              @for (record of pendingRecords; track record) {
+                <tr>
+                  <td class="text-muted"><a href="javascript:void(0)" (click)="openDetails(record)">{{ record.id }}</a>
                 </td>
                 <td>
                   <div class="text-dark fw-500">{{ record.employeeName }}</div>
@@ -74,20 +75,24 @@
                   </button>
                 </td>
               </tr>
-              <tr *ngIf="pendingRecords.length === 0">
+            }
+            @if (pendingRecords.length === 0) {
+              <tr>
                 <td colspan="7" class="text-center text-muted py-4">There are no pending commission records to review.</td>
               </tr>
-            </tbody>
-          </table>
-        </div>
+            }
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 </div>
+</div>
 
-<app-commission-detail-dialog
-  *ngIf="selectedRecord as record"
-  [record]="record"
-  [showDecisionActions]="record.status === 'PENDING_APPROVAL'"
-  (closed)="closeDetails()">
-</app-commission-detail-dialog>
+@if (selectedRecord; as record) {
+  <app-commission-detail-dialog
+    [record]="record"
+    [showDecisionActions]="record.status === 'PENDING_APPROVAL'"
+    (closed)="closeDetails()">
+  </app-commission-detail-dialog>
+}

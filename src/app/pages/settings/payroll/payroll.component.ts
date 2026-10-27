@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../shared/material-imports';
@@ -8,7 +8,7 @@ import type { PayrollSettings } from '../../../models/payroll-settings.model';
 @Component({
   selector: 'app-payroll',
   standalone: true,
-  imports: [...MaterialImports, CommonModule, ReactiveFormsModule],
+  imports: [...MaterialImports, ReactiveFormsModule],
   providers: [...MaterialProviders],
   templateUrl: './payroll.component.html',
   styleUrl: './payroll.component.scss'

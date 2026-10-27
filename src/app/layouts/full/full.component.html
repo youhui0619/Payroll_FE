@@ -1,7 +1,7 @@
 <div
   class="admin-layout"
   [class.sidebar-collapsed]="sidebarCollapsed"
->
+  >
   <!-- Sidebar -->
   <app-sidebar
     [collapsed]="sidebarCollapsed"
@@ -10,7 +10,9 @@
   ></app-sidebar>
 
   <!-- Mobile overlay -->
-  <div *ngIf="mobileSidebarOpen" class="sidebar-overlay d-lg-none" (click)="closeMobileSidebar()"></div>
+  @if (mobileSidebarOpen) {
+    <div class="sidebar-overlay d-lg-none" (click)="closeMobileSidebar()"></div>
+  }
 
   <!-- Main -->
   <div class="main-wrapper">
@@ -19,7 +21,7 @@
       [sidebarOpen]="!sidebarCollapsed"
       (toggleSidebar)="toggleSidebar()"
       (toggleMobileSidebar)="toggleMobileSidebar()"
-    />
+      />
 
     <!-- Content -->
     <main class="main-content">

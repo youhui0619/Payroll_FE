@@ -57,34 +57,38 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let claim of pendingClaims">
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <div class="bg-light-primary text-primary text-end icon me-3"><i-tabler name="receipt"></i-tabler></div>
-                        <div>
-                          <p class="text-dark fw-500 my-0">{{ claimTypeLabel(claim.claimType) }}</p>
-                          <p class="fs-10 fw-300 text-muted my-0">{{ claim.id }}</p>
+                  @for (claim of pendingClaims; track claim) {
+                    <tr>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="bg-light-primary text-primary text-end icon me-3"><i-tabler name="receipt"></i-tabler></div>
+                          <div>
+                            <p class="text-dark fw-500 my-0">{{ claimTypeLabel(claim.claimType) }}</p>
+                            <p class="fs-10 fw-300 text-muted my-0">{{ claim.id }}</p>
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td>
-                      <p class="text-dark fw-500 my-0">{{ employeeName(claim.employeeId) }}</p>
-                      <p class="fs-10 fw-300 text-muted my-0">{{ claim.employeeId }} · {{ claim.departmentName }}</p>
-                    </td>
-                    <td class="text-muted">{{ claim.claimDate | date:'short' }}</td>
-                    <td class="text-muted">{{ claim.currency }} {{ claim.amount | number:'1.2-2' }}</td>
-                    <td class="text-muted">{{ paymentMethodLabel(claim.paymentMethod) }}</td>
-                    <td><span class="chip" [ngClass]="statusClass(claim.status)">{{ claim.status }}</span></td>
-                    <td>
-                      <button type="button" class="text-muted action-btn" mat-icon-button
-                        (click)="openClaimDetails(claim)" [attr.aria-label]="'Review claim ' + claim.id">
-                        <i-tabler name="eye"></i-tabler>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr *ngIf="pendingClaims.length === 0">
-                    <td colspan="7" class="text-muted text-center py-4">There are no pending claims to review.</td>
-                  </tr>
+                      </td>
+                      <td>
+                        <p class="text-dark fw-500 my-0">{{ employeeName(claim.employeeId) }}</p>
+                        <p class="fs-10 fw-300 text-muted my-0">{{ claim.employeeId }} · {{ claim.departmentName }}</p>
+                      </td>
+                      <td class="text-muted">{{ claim.claimDate | date:'short' }}</td>
+                      <td class="text-muted">{{ claim.currency }} {{ claim.amount | number:'1.2-2' }}</td>
+                      <td class="text-muted">{{ paymentMethodLabel(claim.paymentMethod) }}</td>
+                      <td><span class="chip" [ngClass]="statusClass(claim.status)">{{ claim.status }}</span></td>
+                      <td>
+                        <button type="button" class="text-muted action-btn" mat-icon-button
+                          (click)="openClaimDetails(claim)" [attr.aria-label]="'Review claim ' + claim.id">
+                          <i-tabler name="eye"></i-tabler>
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                  @if (pendingClaims.length === 0) {
+                    <tr>
+                      <td colspan="7" class="text-muted text-center py-4">There are no pending claims to review.</td>
+                    </tr>
+                  }
                 </tbody>
               </table>
             </div>
@@ -95,10 +99,11 @@
   </div>
 </div>
 
-<app-claim-detail-dialog
-  *ngIf="selectedClaim as claim"
-  [claim]="claim"
-  [showDecisionActions]="claim.status === 'Pending'"
-  (decisionMade)="decideClaim($event)"
-  (closed)="closeClaimDetails()">
-</app-claim-detail-dialog>
+@if (selectedClaim; as claim) {
+  <app-claim-detail-dialog
+    [claim]="claim"
+    [showDecisionActions]="claim.status === 'Pending'"
+    (decisionMade)="decideClaim($event)"
+    (closed)="closeClaimDetails()">
+  </app-claim-detail-dialog>
+}

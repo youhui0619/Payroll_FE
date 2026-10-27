@@ -1,92 +1,89 @@
 <div class="row justify-content-between mb-3">
-    <div class="col-sm-12">
-        <div class="d-flex align-items-center gap-2">
-            <a mat-icon-button class="d-flex justify-content-center w-auto mb-0" routerLink="/settings/public-holidays/list">
-                <i-tabler name="chevron-left" class="text-dark icon-16 d-flex"></i-tabler>
-            </a>
-            <p class="text-muted mb-0">Back to public holidays list</p>
-        </div>
+  <div class="col-sm-12">
+    <div class="d-flex align-items-center gap-2">
+      <a mat-icon-button class="d-flex justify-content-center w-auto mb-0" routerLink="/settings/public-holidays/list">
+        <i-tabler name="chevron-left" class="text-dark icon-16 d-flex"></i-tabler>
+      </a>
+      <p class="text-muted mb-0">Back to public holidays list</p>
     </div>
+  </div>
 </div>
 
-<ng-container *ngIf="holiday as record; else holidayNotFound">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex align-items-start justify-content-between">
-                        <div class="d-flex align-items-center">
-                            <div class="bg-light-primary text-primary icon me-3">
-                                <i-tabler name="calendar-event"></i-tabler>
-                            </div>
-                            <div>
-                                <h4 class="my-0">{{ record.name }}</h4>
-                                <p class="fs-10 fw-300 text-muted my-0">
-                                    {{ record.id }}
-                                </p>
-                            </div>
-                        </div>
-                        <div>
-                             <span class="ms-2 chip" [ngClass]="record.status === 'ACTIVE' ? 'bg-light-success text-success' : 'bg-light-secondary text-secondary'">{{ record.status === 'ACTIVE' ? 'Active' : 'Inactive' }}</span>
-                            <span class="ms-2 chip bg-light-info text-info">{{ record.scope }}</span>
-                        </div>
-                    </div>
-                </div>
+@if (holiday; as record) {
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex align-items-start justify-content-between">
+            <div class="d-flex align-items-center">
+              <div class="bg-light-primary text-primary icon me-3">
+                <i-tabler name="calendar-event"></i-tabler>
+              </div>
+              <div>
+                <h4 class="my-0">{{ record.name }}</h4>
+                <p class="fs-10 fw-300 text-muted my-0">
+                  {{ record.id }}
+                </p>
+              </div>
             </div>
+            <div>
+              <span class="ms-2 chip" [ngClass]="record.status === 'ACTIVE' ? 'bg-light-success text-success' : 'bg-light-secondary text-secondary'">{{ record.status === 'ACTIVE' ? 'Active' : 'Inactive' }}</span>
+              <span class="ms-2 chip bg-light-info text-info">{{ record.scope }}</span>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-
-    <div class="row">
-        <div class="col-sm-12 px-2">
-            <h4 class="text-primary">Date</h4>
-            <div class="card">
-                <div class="card-body">
-                    <div class="row mx-0">
-                        <div class="col-sm-6 px-2 mb-3">
-                            <label class="text-dark fw-500">Start Date</label>
-                            <p class="text-muted">{{ record.startDate | date:'d MMM y (EEEE)' }}</p>
-                        </div>
-                        <div class="col-sm-6 px-2 mb-3">
-                            <label class="text-dark fw-500">End Date</label>
-                            <p class="text-muted">{{ record.endDate | date:'d MMM y (EEEE)' }}</p>
-                        </div>
-                    </div>
-                </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 px-2">
+      <h4 class="text-primary">Date</h4>
+      <div class="card">
+        <div class="card-body">
+          <div class="row mx-0">
+            <div class="col-sm-6 px-2 mb-3">
+              <label class="text-dark fw-500">Start Date</label>
+              <p class="text-muted">{{ record.startDate | date:'d MMM y (EEEE)' }}</p>
             </div>
-
-            <h4 class="text-primary">Holiday Information</h4>
-            <div class="card">
-                <div class="card-body">
-                    <div class="row mx-0">
-                        <div class="col-sm-6 px-2 mb-3">
-                            <label class="text-dark fw-500">Holiday Code</label>
-                            <p class="text-muted">{{ record.id }}</p>
-                        </div>
-                        <div class="col-sm-6 px-2 mb-3">
-                            <label class="text-dark fw-500">Holiday Name</label>
-                            <p class="text-muted">{{ record.name }}</p>
-                        </div>
-                        <div class="col-sm-6 px-2 mb-3">
-                            <label class="text-dark fw-500">Holiday Scope</label>
-                            <p class="text-muted">{{ record.scope }}</p>
-                        </div>
-                        <div class="col-sm-6 px-2 mb-3">
-                            <label class="text-dark fw-500">Applicable States / Regions</label>
-                            <p class="text-muted">{{ holidayRegions }}</p>
-                        </div>
-                        <div class="col-sm-12 px-2 mb-3">
-                            <label class="text-dark fw-500">Description</label>
-                            <p class="text-muted">{{ record.description || '—' }}</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="col-sm-6 px-2 mb-3">
+              <label class="text-dark fw-500">End Date</label>
+              <p class="text-muted">{{ record.endDate | date:'d MMM y (EEEE)' }}</p>
             </div>
+          </div>
         </div>
+      </div>
+      <h4 class="text-primary">Holiday Information</h4>
+      <div class="card">
+        <div class="card-body">
+          <div class="row mx-0">
+            <div class="col-sm-6 px-2 mb-3">
+              <label class="text-dark fw-500">Holiday Code</label>
+              <p class="text-muted">{{ record.id }}</p>
+            </div>
+            <div class="col-sm-6 px-2 mb-3">
+              <label class="text-dark fw-500">Holiday Name</label>
+              <p class="text-muted">{{ record.name }}</p>
+            </div>
+            <div class="col-sm-6 px-2 mb-3">
+              <label class="text-dark fw-500">Holiday Scope</label>
+              <p class="text-muted">{{ record.scope }}</p>
+            </div>
+            <div class="col-sm-6 px-2 mb-3">
+              <label class="text-dark fw-500">Applicable States / Regions</label>
+              <p class="text-muted">{{ holidayRegions }}</p>
+            </div>
+            <div class="col-sm-12 px-2 mb-3">
+              <label class="text-dark fw-500">Description</label>
+              <p class="text-muted">{{ record.description || '—' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</ng-container>
+  </div>
+} @else {
+  <div class="card">
+    <div class="card-body text-muted">Public holiday record not found.</div>
+  </div>
+}
 
-<ng-template #holidayNotFound>
-    <div class="card">
-        <div class="card-body text-muted">Public holiday record not found.</div>
-    </div>
-</ng-template>

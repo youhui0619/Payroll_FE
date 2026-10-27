@@ -70,40 +70,45 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let record of commissionRecords">
-                <td class="text-muted">
-                  <a href="javascript:void(0)" (click)="openDetails(record)">{{ record.id }}</a></td>
-                <td>
-                  <div class="text-dark fw-500">{{ record.employeeName }}</div>
-                  <p class="text-muted fs-10 fw-300 my-0">{{ record.employeeId }}</p>
-                </td>
-                <td>
-                  <div class="text-dark">{{ record.planName }}</div>
-                  <p class="text-muted fs-10 fw-300 my-0">{{ record.payrollEarningCode }}</p>
-                </td>
-                <td class="text-dark fw-500">{{ record.amount | currency:'MYR':'symbol':'1.2-2' }}</td>
-                <td class="text-muted">{{ record.createdDate | date:'dd/MM/yyyy' }}</td>
-                <td><span [ngClass]="statusClass(record.status)">{{ statusLabel(record.status) }}</span></td>
-                <td>
-                    <button type="button" class="text-muted action-btn" mat-icon-button (click)="openDetails(record)">
+              @for (record of commissionRecords; track record) {
+                <tr>
+                  <td class="text-muted">
+                    <a href="javascript:void(0)" (click)="openDetails(record)">{{ record.id }}</a></td>
+                    <td>
+                      <div class="text-dark fw-500">{{ record.employeeName }}</div>
+                      <p class="text-muted fs-10 fw-300 my-0">{{ record.employeeId }}</p>
+                    </td>
+                    <td>
+                      <div class="text-dark">{{ record.planName }}</div>
+                      <p class="text-muted fs-10 fw-300 my-0">{{ record.payrollEarningCode }}</p>
+                    </td>
+                    <td class="text-dark fw-500">{{ record.amount | currency:'MYR':'symbol':'1.2-2' }}</td>
+                    <td class="text-muted">{{ record.createdDate | date:'dd/MM/yyyy' }}</td>
+                    <td><span [ngClass]="statusClass(record.status)">{{ statusLabel(record.status) }}</span></td>
+                    <td>
+                      <button type="button" class="text-muted action-btn" mat-icon-button (click)="openDetails(record)">
                         <i-tabler name="eye"></i-tabler>
-                    </button>
-                </td>
-            </tr>
-              <tr *ngIf="commissionRecords.length === 0">
-                <td colspan="9" class="text-center text-muted py-4">No commission records found.</td>
-              </tr>
-            </tbody>
-          </table>
+                      </button>
+                    </td>
+                  </tr>
+                }
+                @if (commissionRecords.length === 0) {
+                  <tr>
+                    <td colspan="9" class="text-center text-muted py-4">No commission records found.</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<app-commission-detail-dialog
-  *ngIf="selectedRecord as record"
-  [record]="record"
-  [showDecisionActions]="record.status === 'PENDING_APPROVAL'"
-  (closed)="closeDetails()">
-</app-commission-detail-dialog>
+  @if (selectedRecord; as record) {
+    <app-commission-detail-dialog
+      [record]="record"
+      [showDecisionActions]="record.status === 'PENDING_APPROVAL'"
+      (closed)="closeDetails()">
+    </app-commission-detail-dialog>
+  }

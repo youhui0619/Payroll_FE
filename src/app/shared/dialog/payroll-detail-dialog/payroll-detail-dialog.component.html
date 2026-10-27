@@ -44,261 +44,286 @@
           <div>
             <p class="text-muted fs-10 fs-300 my-0">Gender</p>
             <p class="text-dark my-0 fw-500">{{ payslip.employee.gender }}</p></div>
-        </div>
-      </section>
+          </div>
+        </section>
 
-      <section class="section-block">
-        <div class="section-heading">
-           <h4 class="text-primary mb-0">Leave balances</h4>
-        </div>
-        <div class="cards-grid">
-          <div class="detail-card">
-            <h4 class="fs-14 fw-600 mb-3">Annual leave</h4>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">Available c/f</p>
-              <p class="my-0 text-dark">{{ payslip.leaveBalances.annual.available | number:'1.1-1' }}</p>
-            </div>
-            <hr class="my-2"/>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">Granted</p>
-              <p class="my-0 text-dark">{{ (payslip.leaveBalances.annual.granted | number:'1.1-1') }} </p>
-            </div>
-            <hr class="my-2"/>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">Leave taken</p>
-              <p class="my-0 text-dark">{{ payslip.leaveBalances.annual.taken | number:'1.1-1' }}</p>
-            </div>
-            <hr class="my-2"/>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">Available balance b/f</p>
-              <p class="my-0 text-dark"><strong>{{ payslip.leaveBalances.annual.carriedForward | number:'1.1-1' }}</strong></p>
-            </div>
+        <section class="section-block">
+          <div class="section-heading">
+            <h4 class="text-primary mb-0">Leave balances</h4>
           </div>
-          <div class="detail-card">
-            <h4 class="fs-14 fw-600 mb-3">Medical leave</h4>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">Available for 2026</p>
-              <p class="my-0 text-dark">{{ payslip.leaveBalances.medical.available | number:'1.1-1' }}</p>
-            </div>
-            <hr class="my-2"/>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">Granted</p>
-              <p class="my-0 text-dark">{{ payslip.leaveBalances.medical.granted | number:'1.1-1' }}</p>
-            </div>
-            <hr class="my-2"/>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">Leave taken</p>
-              <p class="my-0 text-dark">{{ payslip.leaveBalances.medical.taken | number:'1.1-1' }}</p>
-            </div>
-            <hr class="my-2"/>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">Available balance b/f</p>
-              <p class="my-0 text-dark"><strong>{{ payslip.leaveBalances.medical.carriedForward | number:'1.1-1' }}</strong></p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section-block">
-        <div class="section-heading">
-          <h4 class="text-primary mb-0">Related references</h4>
-          <span>{{ payslip.period }}</span>
-        </div>
-        <div class="reference-grid">
-          <div class="reference-card mb-3">
-            <h4 class="fs-14 fw-600 my-0">Leave</h4>
-            <div *ngIf="leaveReferenceRecords.length > 0; else noLeaveReferences" class="reference-list">
-              <div *ngFor="let leave of leaveReferenceRecords" class="reference-row py-3">
-                <div class="d-flex align-items-center ">
-                  <div class="icon bg-light-primary text-primary me-3">
-                    <i-tabler name="calendar"></i-tabler>
-                  </div>
-                  <div>
-                    <p class="text-dark fw-500 my-0">{{ leave.leaveType }}</p>
-                  <p class="text-muted fs-10 fw-300 my-0">{{ leave.dateRange }} · <span class="badge fs-10 fw-400" [ngClass]="leave.statusClass">{{ leave.status }}</span></p>
-                  </div>
-                </div>
-                <button type="button" class="reference-link" (click)="openLeaveReference(leave)">{{ leave.reference }}</button>
-              </div>
-            </div>
-            <ng-template #noLeaveReferences><p class="text-muted my-0">No leave references for this period.</p></ng-template>
-          </div>
-
-          <div class="reference-card mb-3">
-            <h4 class="fs-14 fw-600  my-0">Claims</h4>
-            <div *ngIf="claimReferenceRecords.length > 0; else noClaimReferences" class="reference-list">
-              <div *ngFor="let claim of claimReferenceRecords"  class="reference-row py-3">
-                <div class="d-flex align-items-center ">
-                  <div class="icon bg-light-primary text-primary me-3">
-                    <i-tabler name="calendar"></i-tabler>
-                  </div>
-                  <div>
-                    <p class="text-dark fw-500 my-0">{{ claimTypeLabel(claim.claimType) }}</p>
-                  <p class="text-muted fs-10 fw-300 my-0">{{ claim.claimDate | date:'d MMM y' }} · <span class="badge fs-10 fw-400" [ngClass]="claimStatusClass(claim.status)">{{ claim.status }}</span></p>
-                  </div>
-                </div>
-                <button type="button" class="reference-link" (click)="openClaimReference(claim)">{{ claim.id }}</button>
-              </div>
-            </div>
-            <ng-template #noClaimReferences><p class="text-muted my-0">No claim references for this period.</p></ng-template>
-          </div>
-
-          <div class="reference-card mb-3">
-            <h4 class="fs-14 fw-600 my-0">Commission &amp; incentives</h4>
-            <div *ngIf="payslip.earnings.commissionItems.length > 0; else noCommissionReferences" class="reference-list">
-            <div *ngFor="let commission of payslip.earnings.commissionItems" class="reference-row py-3">
-                <div class="d-flex align-items-center ">
-                  <div class="icon bg-light-primary text-primary me-3">
-                    <i-tabler name="cash"></i-tabler>
-                  </div>
-                  <div>
-                    <p class="text-dark fw-500 my-0">{{ commission.planName }}</p>
-                    <p class="text-muted fs-10 fw-300 my-0">{{ commission.createdDate | date:'d MMM y' }} · <span class="badge fs-10 fw-400" [ngClass]="commissionStatusClass(commission.status)">{{ commissionStatusLabel(commission.status) }}</span></p>
-                  </div>
-                </div>
-                <button type="button" class="reference-link" (click)="openCommissionReference(commission)">{{ commission.id }}</button>
-              </div>
-            </div>
-            <ng-template #noCommissionReferences><p class="text-muted my-0">No paid commission records for this period.</p></ng-template>
-          </div>
-        </div>
-      </section>
-
-      <section class="section-block">
-        <div class="section-heading">
-          <h4 class="text-primary mb-0">Payroll breakdown</h4>
-          <span>RM</span>
-        </div>
-        <div class="cards-grid">
-          <div class="detail-card">
-            <h4 class="fs-14 fw-600 mb-3">Earnings</h4>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">Basic pay</p>
-              <p class="my-0 text-dark">{{ payslip.earnings.basicPay | number:'1.2-2' }}</p>
-            </div>
-            <hr class="my-2"/>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">Less (-): Unpaid leave</p>
-              <p class="my-0 text-dark">{{ payslip.earnings.unpaidLeave | number:'1.2-2' }}</p>
-            </div>
-            <hr class="my-2"/>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">Add (+): Overtime</p>
-              <p class="my-0 text-dark">{{ payslip.earnings.overtime | number:'1.2-2' }}</p>
-            </div>
-            <hr class="my-2"/>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">Allowance</p>
-              <p class="my-0 text-dark">{{ payslip.earnings.allowance | number:'1.2-2' }}</p>
-            </div>
-            <hr class="my-2"/>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">Bonus</p>
-              <p class="my-0 text-dark">{{ payslip.earnings.bonus | number:'1.2-2' }}</p>
-            </div>
-            <hr class="my-2" *ngIf="payslip.earnings.commissions > 0"/>
-            <div *ngIf="payslip.earnings.commissions > 0" class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">Commission &amp; incentives</p>
-              <p class="my-0 text-dark">{{ payslip.earnings.commissions | number:'1.2-2' }}</p>
-            </div>
-            <div class="d-flex justify-content-between align-items-center gap-3 subtotal">
-              <p class="my-0 text-dark"><strong>Gross pay</strong></p>
-              <p class="my-0 text-dark"><strong>{{ payslip.earnings.grossPay | number:'1.2-2' }}</strong></p>
-            </div>
-          </div>
-          <div class="detail-card">
-            <h4 class="fs-14 fw-600 mb-3">Employee deductions</h4>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">EPF (11%)</p>
-              <p class="my-0 text-dark">{{ payslip.deductions.epf | number:'1.2-2' }}</p>
-            </div>
-            <hr class="my-2"/>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">SOCSO</p>
-              <p class="my-0 text-dark">{{ payslip.deductions.socso | number:'1.2-2' }}</p>
-            </div>
-            <hr class="my-2"/>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">Lindungan 24 jam</p>
-              <p class="my-0 text-dark">{{ payslip.deductions.lindungan24Jam | number:'1.2-2' }}</p>
-            </div>
-              <hr class="my-2"/>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">EIS</p>
-              <p class="my-0 text-dark">{{ payslip.deductions.eis | number:'1.2-2' }}</p>
-            </div>
-            <hr class="my-2"/>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">PCB</p>
-              <p class="my-0 text-dark">{{ payslip.deductions.pcb | number:'1.2-2' }}</p>
-            </div>
-            <hr class="my-2"/>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">Advance</p>
-              <p class="my-0 text-dark">{{ payslip.deductions.advance | number:'1.2-2' }}</p>
-            </div>
-            <hr class="my-2"/>
-            <div class="d-flex justify-content-between align-items-center gap-3">
-              <p class="my-0 text-muted">Other deductions</p>
-              <p class="my-0 text-dark">{{ payslip.deductions.other | number:'1.2-2' }}</p>
-            </div>
-            <div class="d-flex justify-content-between align-items-center gap-3 subtotal">
-              <p class="my-0 text-dark"><strong>Total deductions</strong></p>
-              <p class="my-0 text-dark"><strong>{{ payslip.deductions.total | number:'1.2-2' }}</strong></p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section-block">
-        <div class="section-heading">
-          <h4 class="text-primary mb-0">Employer contributions</h4>
-          <span>RM</span>
-        </div>
-        <div class="detail-card">
-          <div class="row mx-0">
-            <div class="col-6">
+          <div class="cards-grid">
+            <div class="detail-card">
+              <h4 class="fs-14 fw-600 mb-3">Annual leave</h4>
               <div class="d-flex justify-content-between align-items-center gap-3">
-                <p class="text-muted my-0">EPF (13%/12%)</p>
-                <p class="my-0 text-dark">{{ payslip.employerContributions.epf | number:'1.2-2' }}</p>
+                <p class="my-0 text-muted">Available c/f</p>
+                <p class="my-0 text-dark">{{ payslip.leaveBalances.annual.available | number:'1.1-1' }}</p>
               </div>
               <hr class="my-2"/>
               <div class="d-flex justify-content-between align-items-center gap-3">
-                <p class="text-muted my-0">SOCSO</p>
-                <p class="my-0 text-dark">{{ payslip.employerContributions.socso | number:'1.2-2' }}</p>
+                <p class="my-0 text-muted">Granted</p>
+                <p class="my-0 text-dark">{{ (payslip.leaveBalances.annual.granted | number:'1.1-1') }} </p>
               </div>
               <hr class="my-2"/>
               <div class="d-flex justify-content-between align-items-center gap-3">
-                <p class="text-muted my-0">EIS</p>
-                <p class="my-0 text-dark">{{ payslip.employerContributions.eis | number:'1.2-2' }}</p>
+                <p class="my-0 text-muted">Leave taken</p>
+                <p class="my-0 text-dark">{{ payslip.leaveBalances.annual.taken | number:'1.1-1' }}</p>
+              </div>
+              <hr class="my-2"/>
+              <div class="d-flex justify-content-between align-items-center gap-3">
+                <p class="my-0 text-muted">Available balance b/f</p>
+                <p class="my-0 text-dark"><strong>{{ payslip.leaveBalances.annual.carriedForward | number:'1.1-1' }}</strong></p>
               </div>
             </div>
-            <div class="col-6 mt-auto">
-              <div class="text-end">
-                <p class="text-muted fs-10 fw-300 my-0">Subject to EPF: RM {{ payslip.contributionBases.epf | number:'1.2-2' }}</p>
-                <p class="text-muted fs-10 fw-300 my-0">Subject to PERKESO: RM {{ payslip.contributionBases.perkeso | number:'1.2-2' }}</p>
+            <div class="detail-card">
+              <h4 class="fs-14 fw-600 mb-3">Medical leave</h4>
+              <div class="d-flex justify-content-between align-items-center gap-3">
+                <p class="my-0 text-muted">Available for 2026</p>
+                <p class="my-0 text-dark">{{ payslip.leaveBalances.medical.available | number:'1.1-1' }}</p>
+              </div>
+              <hr class="my-2"/>
+              <div class="d-flex justify-content-between align-items-center gap-3">
+                <p class="my-0 text-muted">Granted</p>
+                <p class="my-0 text-dark">{{ payslip.leaveBalances.medical.granted | number:'1.1-1' }}</p>
+              </div>
+              <hr class="my-2"/>
+              <div class="d-flex justify-content-between align-items-center gap-3">
+                <p class="my-0 text-muted">Leave taken</p>
+                <p class="my-0 text-dark">{{ payslip.leaveBalances.medical.taken | number:'1.1-1' }}</p>
+              </div>
+              <hr class="my-2"/>
+              <div class="d-flex justify-content-between align-items-center gap-3">
+                <p class="my-0 text-muted">Available balance b/f</p>
+                <p class="my-0 text-dark"><strong>{{ payslip.leaveBalances.medical.carriedForward | number:'1.1-1' }}</strong></p>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section class="py-4">
-        <div class="d-flex justify-content-between align-items-center">
-         <div>
-           <p class="my-0 text-muted fs-12 fw-300">Net pay (RM)</p>
-            <h2>{{ payslip.netPay | number:'1.2-2' }} <span class="text-primary ms-2 fs-12 fw-400">{{ payslip.paymentMethod }}</span></h2>
+        <section class="section-block">
+          <div class="section-heading">
+            <h4 class="text-primary mb-0">Related references</h4>
+            <span>{{ payslip.period }}</span>
           </div>
-          <button type="button" mat-flat-button color="primary" class="download-button">
-            <i-tabler name="download"></i-tabler>
-            Download payslip
-          </button>
-        </div>
-      </section>
-    </div>
-  </section>
-</div>
+          <div class="reference-grid">
+            <div class="reference-card mb-3">
+              <h4 class="fs-14 fw-600 my-0">Leave</h4>
+              @if (leaveReferenceRecords.length > 0) {
+                <div class="reference-list">
+                  @for (leave of leaveReferenceRecords; track leave) {
+                    <div class="reference-row py-3">
+                      <div class="d-flex align-items-center ">
+                        <div class="icon bg-light-primary text-primary me-3">
+                          <i-tabler name="calendar"></i-tabler>
+                        </div>
+                        <div>
+                          <p class="text-dark fw-500 my-0">{{ leave.leaveType }}</p>
+                          <p class="text-muted fs-10 fw-300 my-0">{{ leave.dateRange }} · <span class="badge fs-10 fw-400" [ngClass]="leave.statusClass">{{ leave.status }}</span></p>
+                        </div>
+                      </div>
+                      <button type="button" class="reference-link" (click)="openLeaveReference(leave)">{{ leave.reference }}</button>
+                    </div>
+                  }
+                </div>
+              } @else {
+                <p class="text-muted my-0">No leave references for this period.</p>
+              }
+            </div>
 
-<app-leave-detail-dialog *ngIf="selectedLeave as leave" [data]="leave" (closed)="selectedLeave = null"></app-leave-detail-dialog>
-<app-claim-detail-dialog *ngIf="selectedClaim as claim" [claim]="claim" (closed)="selectedClaim = null"></app-claim-detail-dialog>
-<app-commission-detail-dialog *ngIf="selectedCommission as commission" [record]="commission" (closed)="selectedCommission = null"></app-commission-detail-dialog>
+            <div class="reference-card mb-3">
+              <h4 class="fs-14 fw-600  my-0">Claims</h4>
+              @if (claimReferenceRecords.length > 0) {
+                <div class="reference-list">
+                  @for (claim of claimReferenceRecords; track claim) {
+                    <div  class="reference-row py-3">
+                      <div class="d-flex align-items-center ">
+                        <div class="icon bg-light-primary text-primary me-3">
+                          <i-tabler name="calendar"></i-tabler>
+                        </div>
+                        <div>
+                          <p class="text-dark fw-500 my-0">{{ claimTypeLabel(claim.claimType) }}</p>
+                          <p class="text-muted fs-10 fw-300 my-0">{{ claim.claimDate | date:'d MMM y' }} · <span class="badge fs-10 fw-400" [ngClass]="claimStatusClass(claim.status)">{{ claim.status }}</span></p>
+                        </div>
+                      </div>
+                      <button type="button" class="reference-link" (click)="openClaimReference(claim)">{{ claim.id }}</button>
+                    </div>
+                  }
+                </div>
+              } @else {
+                <p class="text-muted my-0">No claim references for this period.</p>
+              }
+            </div>
+
+            <div class="reference-card mb-3">
+              <h4 class="fs-14 fw-600 my-0">Commission &amp; incentives</h4>
+              @if (payslip.earnings.commissionItems.length > 0) {
+                <div class="reference-list">
+                  @for (commission of payslip.earnings.commissionItems; track commission) {
+                    <div class="reference-row py-3">
+                      <div class="d-flex align-items-center ">
+                        <div class="icon bg-light-primary text-primary me-3">
+                          <i-tabler name="cash"></i-tabler>
+                        </div>
+                        <div>
+                          <p class="text-dark fw-500 my-0">{{ commission.planName }}</p>
+                          <p class="text-muted fs-10 fw-300 my-0">{{ commission.createdDate | date:'d MMM y' }} · <span class="badge fs-10 fw-400" [ngClass]="commissionStatusClass(commission.status)">{{ commissionStatusLabel(commission.status) }}</span></p>
+                        </div>
+                      </div>
+                      <button type="button" class="reference-link" (click)="openCommissionReference(commission)">{{ commission.id }}</button>
+                    </div>
+                  }
+                </div>
+              } @else {
+                <p class="text-muted my-0">No paid commission records for this period.</p>
+              }
+            </div>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <h4 class="text-primary mb-0">Payroll breakdown</h4>
+            <span>RM</span>
+          </div>
+          <div class="cards-grid">
+            <div class="detail-card">
+              <h4 class="fs-14 fw-600 mb-3">Earnings</h4>
+              <div class="d-flex justify-content-between align-items-center gap-3">
+                <p class="my-0 text-muted">Basic pay</p>
+                <p class="my-0 text-dark">{{ payslip.earnings.basicPay | number:'1.2-2' }}</p>
+              </div>
+              <hr class="my-2"/>
+              <div class="d-flex justify-content-between align-items-center gap-3">
+                <p class="my-0 text-muted">Less (-): Unpaid leave</p>
+                <p class="my-0 text-dark">{{ payslip.earnings.unpaidLeave | number:'1.2-2' }}</p>
+              </div>
+              <hr class="my-2"/>
+              <div class="d-flex justify-content-between align-items-center gap-3">
+                <p class="my-0 text-muted">Add (+): Overtime</p>
+                <p class="my-0 text-dark">{{ payslip.earnings.overtime | number:'1.2-2' }}</p>
+              </div>
+              <hr class="my-2"/>
+              <div class="d-flex justify-content-between align-items-center gap-3">
+                <p class="my-0 text-muted">Allowance</p>
+                <p class="my-0 text-dark">{{ payslip.earnings.allowance | number:'1.2-2' }}</p>
+              </div>
+              <hr class="my-2"/>
+              <div class="d-flex justify-content-between align-items-center gap-3">
+                <p class="my-0 text-muted">Bonus</p>
+                <p class="my-0 text-dark">{{ payslip.earnings.bonus | number:'1.2-2' }}</p>
+              </div>
+              @if (payslip.earnings.commissions > 0) {
+                <hr class="my-2"/>
+              }
+              @if (payslip.earnings.commissions > 0) {
+                <div class="d-flex justify-content-between align-items-center gap-3">
+                  <p class="my-0 text-muted">Commission &amp; incentives</p>
+                  <p class="my-0 text-dark">{{ payslip.earnings.commissions | number:'1.2-2' }}</p>
+                </div>
+              }
+              <div class="d-flex justify-content-between align-items-center gap-3 subtotal">
+                <p class="my-0 text-dark"><strong>Gross pay</strong></p>
+                <p class="my-0 text-dark"><strong>{{ payslip.earnings.grossPay | number:'1.2-2' }}</strong></p>
+              </div>
+            </div>
+            <div class="detail-card">
+              <h4 class="fs-14 fw-600 mb-3">Employee deductions</h4>
+              <div class="d-flex justify-content-between align-items-center gap-3">
+                <p class="my-0 text-muted">EPF (11%)</p>
+                <p class="my-0 text-dark">{{ payslip.deductions.epf | number:'1.2-2' }}</p>
+              </div>
+              <hr class="my-2"/>
+              <div class="d-flex justify-content-between align-items-center gap-3">
+                <p class="my-0 text-muted">SOCSO</p>
+                <p class="my-0 text-dark">{{ payslip.deductions.socso | number:'1.2-2' }}</p>
+              </div>
+              <hr class="my-2"/>
+              <div class="d-flex justify-content-between align-items-center gap-3">
+                <p class="my-0 text-muted">Lindungan 24 jam</p>
+                <p class="my-0 text-dark">{{ payslip.deductions.lindungan24Jam | number:'1.2-2' }}</p>
+              </div>
+              <hr class="my-2"/>
+              <div class="d-flex justify-content-between align-items-center gap-3">
+                <p class="my-0 text-muted">EIS</p>
+                <p class="my-0 text-dark">{{ payslip.deductions.eis | number:'1.2-2' }}</p>
+              </div>
+              <hr class="my-2"/>
+              <div class="d-flex justify-content-between align-items-center gap-3">
+                <p class="my-0 text-muted">PCB</p>
+                <p class="my-0 text-dark">{{ payslip.deductions.pcb | number:'1.2-2' }}</p>
+              </div>
+              <hr class="my-2"/>
+              <div class="d-flex justify-content-between align-items-center gap-3">
+                <p class="my-0 text-muted">Advance</p>
+                <p class="my-0 text-dark">{{ payslip.deductions.advance | number:'1.2-2' }}</p>
+              </div>
+              <hr class="my-2"/>
+              <div class="d-flex justify-content-between align-items-center gap-3">
+                <p class="my-0 text-muted">Other deductions</p>
+                <p class="my-0 text-dark">{{ payslip.deductions.other | number:'1.2-2' }}</p>
+              </div>
+              <div class="d-flex justify-content-between align-items-center gap-3 subtotal">
+                <p class="my-0 text-dark"><strong>Total deductions</strong></p>
+                <p class="my-0 text-dark"><strong>{{ payslip.deductions.total | number:'1.2-2' }}</strong></p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <h4 class="text-primary mb-0">Employer contributions</h4>
+            <span>RM</span>
+          </div>
+          <div class="detail-card">
+            <div class="row mx-0">
+              <div class="col-6">
+                <div class="d-flex justify-content-between align-items-center gap-3">
+                  <p class="text-muted my-0">EPF (13%/12%)</p>
+                  <p class="my-0 text-dark">{{ payslip.employerContributions.epf | number:'1.2-2' }}</p>
+                </div>
+                <hr class="my-2"/>
+                <div class="d-flex justify-content-between align-items-center gap-3">
+                  <p class="text-muted my-0">SOCSO</p>
+                  <p class="my-0 text-dark">{{ payslip.employerContributions.socso | number:'1.2-2' }}</p>
+                </div>
+                <hr class="my-2"/>
+                <div class="d-flex justify-content-between align-items-center gap-3">
+                  <p class="text-muted my-0">EIS</p>
+                  <p class="my-0 text-dark">{{ payslip.employerContributions.eis | number:'1.2-2' }}</p>
+                </div>
+              </div>
+              <div class="col-6 mt-auto">
+                <div class="text-end">
+                  <p class="text-muted fs-10 fw-300 my-0">Subject to EPF: RM {{ payslip.contributionBases.epf | number:'1.2-2' }}</p>
+                  <p class="text-muted fs-10 fw-300 my-0">Subject to PERKESO: RM {{ payslip.contributionBases.perkeso | number:'1.2-2' }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="py-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="my-0 text-muted fs-12 fw-300">Net pay (RM)</p>
+              <h2>{{ payslip.netPay | number:'1.2-2' }} <span class="text-primary ms-2 fs-12 fw-400">{{ payslip.paymentMethod }}</span></h2>
+            </div>
+            <button type="button" mat-flat-button color="primary" class="download-button">
+              <i-tabler name="download"></i-tabler>
+              Download payslip
+            </button>
+          </div>
+        </section>
+      </div>
+    </section>
+  </div>
+
+  @if (selectedLeave; as leave) {
+    <app-leave-detail-dialog [data]="leave" (closed)="selectedLeave = null"></app-leave-detail-dialog>
+  }
+  @if (selectedClaim; as claim) {
+    <app-claim-detail-dialog [claim]="claim" (closed)="selectedClaim = null"></app-claim-detail-dialog>
+  }
+  @if (selectedCommission; as commission) {
+    <app-commission-detail-dialog [record]="commission" (closed)="selectedCommission = null"></app-commission-detail-dialog>
+  }

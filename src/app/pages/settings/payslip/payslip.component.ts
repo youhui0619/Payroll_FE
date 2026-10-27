@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../shared/material-imports';
@@ -8,7 +8,7 @@ import type { PayslipSettings } from '../../../models/payslip-settings.model';
 @Component({
   selector: 'app-payslip',
   standalone: true,
-  imports: [...MaterialImports, CommonModule, ReactiveFormsModule],
+  imports: [...MaterialImports, ReactiveFormsModule],
   providers: [...MaterialProviders],
   templateUrl: './payslip.component.html',
   styleUrl: './payslip.component.scss'

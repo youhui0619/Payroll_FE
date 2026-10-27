@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
@@ -13,7 +13,7 @@ import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.componen
 @Component({
   selector: 'app-create',
   standalone: true,
-  imports: [...MaterialImports, CommonModule, ReactiveFormsModule, DropzoneComponent],
+  imports: [...MaterialImports, ReactiveFormsModule, DropzoneComponent],
   providers: [...MaterialProviders],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'
