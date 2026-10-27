@@ -70,7 +70,7 @@
   <div class="d-flex align-items-center flex-wrap gap-2">
     <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
       <input type="text" matInput placeholder="Search claims..." [(ngModel)]="searchText">
-      <span matTextPrefix class="text-muted me-2"><tabler-icon icon="search" class="icon-16"></tabler-icon></span>
+      <span matTextPrefix class="text-muted me-2"><tabler-icon icon="search" [size]="16"></tabler-icon></span>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
@@ -110,9 +110,9 @@
             <span class="fw-550 text-primary">All (10) </span> | Pending (1)  |  Rejected (2)  |  Paid (3)
           </h6>
           <div>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="x" class="icon-16"></tabler-icon> Clear</button>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="upload" class="icon-16"></tabler-icon> Import</button>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <tabler-icon icon="download" class="icon-16"></tabler-icon> Export</button>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="x" [size]="16"></tabler-icon> Clear</button>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="upload" [size]="16"></tabler-icon> Import</button>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <tabler-icon icon="download" [size]="16"></tabler-icon> Export</button>
           </div>
         </div>
       </div>

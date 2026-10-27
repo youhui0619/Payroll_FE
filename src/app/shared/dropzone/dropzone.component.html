@@ -31,7 +31,7 @@
           <div class="file-name">{{ path.split('/').pop() }}</div>
         </div>
         <button type="button" class="btn btn-link p-0 cursor-pointer" (click)="removeExistingPath(path)" aria-label="Remove saved file">
-          <tabler-icon icon="x" class="icon-16 text-muted"></tabler-icon>
+          <tabler-icon icon="x" class="text-muted" [size]="16"></tabler-icon>
         </button>
       </div>
     }
@@ -61,7 +61,7 @@
           type="button"
           class="btn btn-link p-0 cursor-pointer"
           (click)="removeFile(file)">
-          <tabler-icon icon="x" class="icon-16 text-muted"/>
+          <tabler-icon icon="x" class="text-muted" [size]="16"/>
         </button>
       </div>
     }

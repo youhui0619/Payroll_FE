@@ -2,7 +2,7 @@
   <div class="col-sm-12">
     <div class="d-flex align-items-center gap-2">
       <a mat-icon-button class="d-flex justify-content-center w-auto mb-0">
-        <tabler-icon icon="chevron-left" class="text-dark icon-16 d-flex"></tabler-icon>
+        <tabler-icon icon="chevron-left" class="text-dark d-flex" [size]="16"></tabler-icon>
       </a>
       <p class="text-muted mb-0">Back to employees list</p>
     </div>
@@ -557,9 +557,9 @@
                   <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                     <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All ({{ leaveRequests.length }})</span>  |  Annual Leave ({{ leaveCount('Annual Leave') }})  |  Medical Leave ({{ leaveCount('Medical Leave') }})  |  Unpaid Leave ({{ leaveCount('Unpaid Leave') }})</h6>
                     <div>
-                      <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="x" class="icon-16"></tabler-icon> Clear</button>
-                      <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="upload" class="icon-16"></tabler-icon> Import</button>
-                      <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="download" class="icon-16"></tabler-icon> Export</button>
+                      <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="x" [size]="16"></tabler-icon> Clear</button>
+                      <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="upload" [size]="16"></tabler-icon> Import</button>
+                      <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="download" [size]="16"></tabler-icon> Export</button>
                     </div>
                   </div>
                 </div>
@@ -635,9 +635,9 @@
                       | Paid ({{ claimCount('Paid') }})
                     </h6>
                     <div>
-                      <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="x" class="icon-16"></tabler-icon> Clear</button>
-                      <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="upload" class="icon-16"></tabler-icon> Import</button>
-                      <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="download" class="icon-16"></tabler-icon> Export</button>
+                      <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="x" [size]="16"></tabler-icon> Clear</button>
+                      <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="upload" [size]="16"></tabler-icon> Import</button>
+                      <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="download" [size]="16"></tabler-icon> Export</button>
                     </div>
                   </div>
                 </div>

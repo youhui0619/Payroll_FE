@@ -167,48 +167,6 @@ h4{
     align-items: center;
 }
 
-.icon-16{
-  width: 16px!important;
-  height: 16px!important;
-}
-
-.icon-14{
-  width: 14px!important;
-  height: 14px!important;
-}
-
-.icon-32{
-  width: 32px!important;
-  height: 32px!important;
-}
-
-.icon-40{
-  width: 40px!important;
-  height: 32px!important;
-}
-
-// TablerIconComponent renders the SVG inside its host element.
-tabler-icon.icon-16 > svg{
-  width: 16px!important;
-  height: 16px!important;
-}
-
-tabler-icon.icon-14 > svg{
-  width: 14px!important;
-  height: 14px!important;
-}
-
-tabler-icon.icon-32 > svg{
-  width: 32px!important;
-  height: 32px!important;
-}
-
-tabler-icon.icon-40 > svg{
-  width: 40px!important;
-  height: 32px!important;
-}
-
-
 /* =========================================
    Angular Material Stepper
    ========================================= */

@@ -127,11 +127,11 @@
           </div>
           <div class="decision-actions">
             <button type="button" class="decision-button reject-button" (click)="decide('Rejected')">
-              <tabler-icon icon="x" class="icon-16"></tabler-icon>
+              <tabler-icon icon="x" [size]="16"></tabler-icon>
               Reject
             </button>
             <button type="button" class="decision-button approve-button" (click)="decide('Approved')" [disabled]="!decisionComment.trim()">
-              <tabler-icon icon="check" class="icon-16"></tabler-icon>
+              <tabler-icon icon="check" [size]="16"></tabler-icon>
               Approve
             </button>
           </div>
