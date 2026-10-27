@@ -25,7 +25,7 @@
     "@ngx-dropzone/cdk": "^21.1.0",
     "@ngx-dropzone/material": "^21.1.0",
     "@popperjs/core": "^2.11.8",
-    "angular-tabler-icons": "^3.26.0",
+    "@tabler/icons-angular": "^3.49.0",
     "bootstrap": "^5.3.8",
     "firebase-tools": "^15.32.1",
     "fullcalendar": "^7.1.1",
