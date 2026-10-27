@@ -9,8 +9,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
 import {MatRadioModule} from '@angular/material/radio';
 import {provideNativeDateAdapter} from '@angular/material/core';
 import {DateRange, MatDatepickerModule} from '@angular/material/datepicker';
-import { TablerIconComponent, provideTablerIcons } from 'angular-tabler-icons';
-import * as TablerIcons from 'angular-tabler-icons/icons';
+import { TablerIconComponent } from '@tabler/icons-angular';
+
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
@@ -26,7 +26,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
   selector: 'app-dashboard',
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, TablerIconComponent, MatFormFieldModule, MatSelectModule, MatInputModule, MatButtonModule, MatCheckboxModule, MatRadioModule, MatDatepickerModule, MatSort, MatPaginator, MatMenuModule, MatSlideToggleModule, MatTabsModule, MatAutocompleteModule, NgxDropzoneModule, MatStepperModule],
-  providers: [provideNativeDateAdapter(), provideTablerIcons(TablerIcons)],
+  providers: [provideNativeDateAdapter()],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })

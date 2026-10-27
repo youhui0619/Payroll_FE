@@ -33,7 +33,7 @@
               (click)="togglePasswordVisibility()"
               [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
               [attr.aria-pressed]="!hidePassword">
-              <i-tabler [name]="hidePassword ? 'eye' : 'eye-off'"></i-tabler>
+              <tabler-icon [icon]="hidePassword ? 'eye' : 'eye-off'"></tabler-icon>
             </button>
           </mat-form-field>
 

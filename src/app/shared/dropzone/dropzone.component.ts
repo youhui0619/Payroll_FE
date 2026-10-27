@@ -2,8 +2,8 @@
 import { Component, EventEmitter, forwardRef, Input, OnDestroy, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NgxDropzoneChangeEvent, NgxDropzoneModule } from 'ngx-dropzone';
-import { TablerIconComponent, provideTablerIcons } from 'angular-tabler-icons';
-import * as TablerIcons from 'angular-tabler-icons/icons';
+import { TablerIconComponent } from '@tabler/icons-angular';
+
 
 type DropzoneValue = File | string | Array<File | string>;
 
@@ -11,7 +11,7 @@ type DropzoneValue = File | string | Array<File | string>;
   selector: 'app-dropzone',
   standalone: true,
   imports: [NgxDropzoneModule, TablerIconComponent],
-  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DropzoneComponent), multi: true }, provideTablerIcons(TablerIcons)],
+  providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DropzoneComponent), multi: true }],
   templateUrl: './dropzone.component.html',
   styleUrl: './dropzone.component.scss'
 })

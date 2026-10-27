@@ -5,7 +5,7 @@
   </div>
   <div class="col-sm-5 d-flex align-items-center justify-content-end">
     <button mat-flat-button color="primary" class="ms-2" routerLink="/organization/positions/create">
-      <i-tabler name="plus"></i-tabler>
+      <tabler-icon icon="plus"></tabler-icon>
       Create Position
     </button>
   </div>
@@ -16,7 +16,7 @@
     <div class="card"><div class="card-body">
       <div class="d-flex align-items-center justify-content-between">
         <div class="summary-info"><p class="f-s-12 text-muted">Total Positions</p><h3 class="mb-0">{{ positions.length }}</h3></div>
-        <div class="text-primary bg-light-primary text-end icon"><i-tabler name="briefcase"></i-tabler></div>
+        <div class="text-primary bg-light-primary text-end icon"><tabler-icon icon="briefcase"></tabler-icon></div>
       </div>
     </div></div>
   </div>
@@ -24,7 +24,7 @@
     <div class="card"><div class="card-body">
       <div class="d-flex align-items-center justify-content-between">
         <div class="summary-info"><p class="f-s-12 text-muted">Active</p><h3 class="mb-0">{{ activePositionCount }}</h3></div>
-        <div class="text-primary bg-light-primary text-end icon"><i-tabler name="user-check"></i-tabler></div>
+        <div class="text-primary bg-light-primary text-end icon"><tabler-icon icon="user-check"></tabler-icon></div>
       </div>
     </div></div>
   </div>
@@ -32,7 +32,7 @@
     <div class="card"><div class="card-body">
       <div class="d-flex align-items-center justify-content-between">
         <div class="summary-info"><p class="f-s-12 text-muted">Inactive</p><h3 class="mb-0">{{ inactivePositionCount }}</h3></div>
-        <div class="text-secondary bg-light-secondary text-end icon"><i-tabler name="user-off"></i-tabler></div>
+        <div class="text-secondary bg-light-secondary text-end icon"><tabler-icon icon="user-off"></tabler-icon></div>
       </div>
     </div></div>
   </div>
@@ -42,7 +42,7 @@
   <div class="d-flex align-items-center flex-wrap gap-2">
     <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
       <input type="text" matInput placeholder="Search positions..." [(ngModel)]="searchTerm">
-      <span matTextPrefix class="text-muted me-2"><i-tabler name="search" class="icon-16"></i-tabler></span>
+      <span matTextPrefix class="text-muted me-2"><tabler-icon icon="search" class="icon-16"></tabler-icon></span>
     </mat-form-field>
     <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
       <mat-select placeholder="Select department" multiple [(ngModel)]="selectedDepartmentIds">
@@ -71,9 +71,9 @@
             | Active ({{ activePositionCount }}) | Inactive ({{ inactivePositionCount }})
           </h6>
           <div>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2" type="button" (click)="clearFilters()"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <i-tabler name="download" class="icon-16"></i-tabler> Export</button>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2" type="button" (click)="clearFilters()"><tabler-icon icon="x" class="icon-16"></tabler-icon> Clear</button>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="upload" class="icon-16"></tabler-icon> Import</button>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <tabler-icon icon="download" class="icon-16"></tabler-icon> Export</button>
           </div>
         </div>
       </div>
@@ -111,7 +111,7 @@
                   </td>
                   <td>
                     <button class="text-muted action-btn" mat-icon-button [routerLink]="['/organization/positions/view', position.id]" aria-label="View position">
-                      <i-tabler name="eye"></i-tabler>
+                      <tabler-icon icon="eye"></tabler-icon>
                     </button>
                   </td>
                 </tr>

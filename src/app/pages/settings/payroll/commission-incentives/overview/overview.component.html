@@ -5,7 +5,7 @@
   </div>
   <div class="col-sm-5 d-flex align-items-center justify-content-end">
     <button mat-flat-button color="primary" class="ms-2" routerLink="/settings/payroll/commission-incentives/create">
-      <i-tabler name="plus"></i-tabler>
+      <tabler-icon icon="plus"></tabler-icon>
       Create Commission
     </button>
   </div>
@@ -20,7 +20,7 @@
             <p class="f-s-12 text-muted mb-1">Total Programs</p>
             <h3 class="mb-0">{{ commissionIncentiveSettings.length }}</h3>
           </div>
-          <div class="text-primary bg-light-primary text-end icon"><i-tabler name="receipt"></i-tabler></div>
+          <div class="text-primary bg-light-primary text-end icon"><tabler-icon icon="receipt"></tabler-icon></div>
         </div>
       </div>
     </div>
@@ -33,7 +33,7 @@
             <p class="f-s-12 text-muted mb-1">Approval Required</p>
             <h3 class="mb-0">{{ approvalRequiredCount }}</h3>
           </div>
-          <div class="text-warning bg-light-warning text-end icon"><i-tabler name="hourglass-empty"></i-tabler></div>
+          <div class="text-warning bg-light-warning text-end icon"><tabler-icon icon="hourglass-empty"></tabler-icon></div>
         </div>
       </div>
     </div>
@@ -46,7 +46,7 @@
             <p class="f-s-12 text-muted mb-1">All Employees Eligible</p>
             <h3 class="mb-0">{{ allEmployeesCount }}</h3>
           </div>
-          <div class="text-success bg-light-success text-end icon"><i-tabler name="users"></i-tabler></div>
+          <div class="text-success bg-light-success text-end icon"><tabler-icon icon="users"></tabler-icon></div>
         </div>
       </div>
     </div>
@@ -91,7 +91,7 @@
                   <td class="text-muted">{{ eligibilityLabel(setting) }}</td>
                   <td>
                     <button class="text-muted action-btn" mat-icon-button [routerLink]="['/settings/payroll/commission-incentives/edit', setting.code]" [attr.aria-label]="'Edit ' + setting.name">
-                      <i-tabler name="edit"></i-tabler>
+                      <tabler-icon icon="edit"></tabler-icon>
                     </button>
                   </td>
                 </tr>

@@ -6,7 +6,7 @@
 
   <div class="col-sm-5 d-flex align-items-center justify-content-end">
     <button mat-flat-button color="primary" class="ms-2" routerLink="/organization/departments/create">
-      <i-tabler name="plus"></i-tabler>
+      <tabler-icon icon="plus"></tabler-icon>
       Create Department
     </button>
   </div>
@@ -23,7 +23,7 @@
             <h3 class="mb-0">{{ departments.length }}</h3>
           </div>
           <div class="text-primary bg-light-primary text-end icon">
-            <i-tabler name="users"></i-tabler>
+            <tabler-icon icon="users"></tabler-icon>
           </div>
         </div>
       </div>
@@ -40,7 +40,7 @@
             <h3 class="mb-0">{{ activeDepartmentCount }}</h3>
           </div>
           <div class="text-primary bg-light-primary text-end icon">
-            <i-tabler name="user-check"></i-tabler>
+            <tabler-icon icon="user-check"></tabler-icon>
           </div>
         </div>
       </div>
@@ -57,7 +57,7 @@
             <h3 class="mb-0">{{ inactiveDepartmentCount }}</h3>
           </div>
           <div class="text-primary bg-light-primary text-end icon">
-            <i-tabler name="user-off"></i-tabler>
+            <tabler-icon icon="user-off"></tabler-icon>
           </div>
         </div>
       </div>
@@ -73,7 +73,7 @@
             <h3 class="mb-0">{{ draftDepartmentCount }}</h3>
           </div>
           <div class="text-warning bg-light-warning text-end icon">
-            <i-tabler name="file-text"></i-tabler>
+            <tabler-icon icon="file-text"></tabler-icon>
           </div>
         </div>
       </div>
@@ -87,7 +87,7 @@
     <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
       <input type="text" matInput placeholder="Search..." [(ngModel)]="searchTerm">
       <span matTextPrefix class="text-muted me-2">
-        <i-tabler name="search" class="icon-16"></i-tabler>
+        <tabler-icon icon="search" class="icon-16"></tabler-icon>
       </span>
     </mat-form-field>
 
@@ -119,9 +119,9 @@
             | Active ({{ filteredCountByStatus('Active') }}) | Inactive ({{ filteredCountByStatus('Inactive') }}) | Draft ({{ filteredCountByStatus('Draft') }})
           </h6>
           <div>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2" type="button" (click)="clearFilters()"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <i-tabler name="download" class="icon-16"></i-tabler> Export</button>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2" type="button" (click)="clearFilters()"><tabler-icon icon="x" class="icon-16"></tabler-icon> Clear</button>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="upload" class="icon-16"></tabler-icon> Import</button>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <tabler-icon icon="download" class="icon-16"></tabler-icon> Export</button>
           </div>
         </div>
       </div>
@@ -154,10 +154,10 @@
                   <td><span class="chip" [ngClass]="statusClass(department.status)">{{ department.status }}</span></td>
                   <td>
                     <button class="text-muted action-btn" mat-icon-button [routerLink]="['/organization/departments/view', department.id]">
-                      <i-tabler name="eye"></i-tabler>
+                      <tabler-icon icon="eye"></tabler-icon>
                     </button>
                     <button class="text-muted action-btn" mat-icon-button>
-                      <i-tabler name="edit"></i-tabler>
+                      <tabler-icon icon="edit"></tabler-icon>
                     </button>
                   </td>
                 </tr>

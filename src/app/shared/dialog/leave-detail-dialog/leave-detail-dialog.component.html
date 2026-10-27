@@ -108,11 +108,11 @@
           </div>
           <div class="decision-actions">
             <button type="button" class="decision-button reject-button" (click)="decide('Rejected')">
-              <i-tabler name="x" class="icon-16"></i-tabler>
+              <tabler-icon icon="x" class="icon-16"></tabler-icon>
               Reject
             </button>
             <button type="button" class="decision-button approve-button" (click)="decide('Approved')" [disabled]="!decisionComment.trim()">
-              <i-tabler name="check" class="icon-16"></i-tabler>
+              <tabler-icon icon="check" class="icon-16"></tabler-icon>
               Approve
             </button>
           </div>
@@ -122,7 +122,7 @@
         <section class="py-4">
           <div class="d-flex justify-content-end align-items-center">
             <button type="button" mat-flat-button color="primary" class="download-button">
-              <i-tabler name="download"></i-tabler>
+              <tabler-icon icon="download"></tabler-icon>
               Download
             </button>
           </div>

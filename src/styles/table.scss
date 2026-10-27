@@ -30,7 +30,7 @@
   align-items: center !important;
   justify-content: center !important;
 
-  i-tabler,
+  tabler-icon,
   svg,
   .mat-icon {
     width: 18px !important;
@@ -43,7 +43,7 @@
 
 .action-btn:hover{
 
-  i-tabler,
+  tabler-icon,
   svg,
   .mat-icon {
     color: var(--primary)

@@ -7,7 +7,7 @@
     (click)="onToggle()"
     aria-label="Toggle sidebar"
   >
-   <i-tabler [name]="toggleIconName"></i-tabler>
+   <tabler-icon [icon]="toggleIconName"></tabler-icon>
   </button>
 
 
@@ -18,7 +18,7 @@
     (click)="onToggleMobile()"
     aria-label="Open sidebar"
   >
-   <i-tabler [name]="toggleIconName"></i-tabler>
+   <tabler-icon [icon]="toggleIconName"></tabler-icon>
   </button>
 
 
@@ -34,7 +34,7 @@
           (click)="toggleNotifications($event)"
           aria-haspopup="true"
           [attr.aria-expanded]="isDropdownOpen">
-          <i-tabler name="layout-sidebar-left-collapse"></i-tabler>
+          <tabler-icon icon="layout-sidebar-left-collapse"></tabler-icon>
           <span class="notif-count" *ngIf="unreadCount">{{ unreadCount }}</span>
         </button>
         <app-dropdown [(isOpen)]="isDropdownOpen" [notifications]="dropdownList"></app-dropdown>

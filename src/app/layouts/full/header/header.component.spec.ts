@@ -25,7 +25,7 @@ describe('HeaderComponent', () => {
     component.sidebarOpen = true;
     fixture.detectChanges();
 
-    const icon = fixture.nativeElement.querySelector('i-tabler');
+    const icon = fixture.nativeElement.querySelector('tabler-icon');
     expect(icon.name).toBe('layout-sidebar-left-collapse');
   });
 });

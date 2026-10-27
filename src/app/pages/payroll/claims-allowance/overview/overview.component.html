@@ -5,7 +5,7 @@
   </div>
   <div class="col-sm-5 d-flex align-items-center justify-content-end">
     <button mat-flat-button color="primary" routerLink="/payroll/claims-allowance/create">
-      <i-tabler name="plus"></i-tabler>
+      <tabler-icon icon="plus"></tabler-icon>
       Create Claim
     </button>
   </div>
@@ -20,7 +20,7 @@
             <p class="f-s-12 text-muted">Total Claims</p>
             <h3 class="mb-0">{{ claims.length }}</h3>
           </div>
-          <div class="text-primary bg-light-primary text-end icon"><i-tabler name="receipt"></i-tabler></div>
+          <div class="text-primary bg-light-primary text-end icon"><tabler-icon icon="receipt"></tabler-icon></div>
         </div>
       </div>
     </div>
@@ -33,7 +33,7 @@
             <p class="f-s-12 text-muted">Pending Review</p>
             <h3 class="mb-0">{{ pendingCount }}</h3>
           </div>
-          <div class="text-warning bg-light-warning text-end icon"><i-tabler name="hourglass-empty"></i-tabler></div>
+          <div class="text-warning bg-light-warning text-end icon"><tabler-icon icon="hourglass-empty"></tabler-icon></div>
         </div>
       </div>
     </div>
@@ -46,7 +46,7 @@
             <p class="f-s-12 text-muted">Approved</p>
             <h3 class="mb-0">{{ approvedCount }}</h3>
           </div>
-          <div class="text-primary bg-light-primary text-end icon"><i-tabler name="circle-check"></i-tabler></div>
+          <div class="text-primary bg-light-primary text-end icon"><tabler-icon icon="circle-check"></tabler-icon></div>
         </div>
       </div>
     </div>
@@ -59,7 +59,7 @@
             <p class="f-s-12 text-muted">Total Amount</p>
             <h3 class="mb-0"><span class="text-muted fw-400 fs-12">MYR</span> {{ totalClaimAmount | number:'1.2-2' }}</h3>
           </div>
-          <div class="text-success bg-light-success text-end icon"><i-tabler name="cash"></i-tabler></div>
+          <div class="text-success bg-light-success text-end icon"><tabler-icon icon="cash"></tabler-icon></div>
         </div>
       </div>
     </div>
@@ -70,7 +70,7 @@
   <div class="d-flex align-items-center flex-wrap gap-2">
     <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
       <input type="text" matInput placeholder="Search claims..." [(ngModel)]="searchText">
-      <span matTextPrefix class="text-muted me-2"><i-tabler name="search" class="icon-16"></i-tabler></span>
+      <span matTextPrefix class="text-muted me-2"><tabler-icon icon="search" class="icon-16"></tabler-icon></span>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
@@ -110,9 +110,9 @@
             <span class="fw-550 text-primary">All (10) </span> | Pending (1)  |  Rejected (2)  |  Paid (3)
           </h6>
           <div>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <i-tabler name="download" class="icon-16"></i-tabler> Export</button>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="x" class="icon-16"></tabler-icon> Clear</button>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="upload" class="icon-16"></tabler-icon> Import</button>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <tabler-icon icon="download" class="icon-16"></tabler-icon> Export</button>
           </div>
         </div>
       </div>
@@ -138,7 +138,7 @@
                       <td>
                         <div class="d-flex align-items-center">
                           <div class="bg-light-primary text-primary text-end icon me-3">
-                            <i-tabler name="calendar"></i-tabler>
+                            <tabler-icon icon="calendar"></tabler-icon>
                           </div>
                           <div>
                             <p class="text-dark fw-500 my-0">{{ claimTypeLabel(claim.claimType) }}</p>
@@ -157,7 +157,7 @@
                       <td>
                         <button type="button" class="text-muted action-btn" mat-icon-button
                           (click)="openClaimDetails(claim)" [attr.aria-label]="'View claim ' + claim.id">
-                          <i-tabler name="eye"></i-tabler>
+                          <tabler-icon icon="eye"></tabler-icon>
                         </button>
                       </td>
                     </tr>

@@ -18,9 +18,9 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 
-import { TablerIconComponent } from 'angular-tabler-icons';
-import { provideTablerIcons } from 'angular-tabler-icons';
-import * as TablerIcons from 'angular-tabler-icons/icons';
+import { TablerIconComponent } from '@tabler/icons-angular';
+
+
 
 export const MaterialImports = [
   MatFormFieldModule,
@@ -45,5 +45,4 @@ export const MaterialImports = [
 
 export const MaterialProviders = [
   provideNativeDateAdapter(),
-  provideTablerIcons(TablerIcons),
 ];

@@ -14,7 +14,7 @@
             <p class="f-s-12 text-muted">Pending Claims</p>
             <h3 class="mb-0">{{ pendingClaims.length }}</h3>
           </div>
-          <div class="text-warning bg-light-warning text-end icon"><i-tabler name="hourglass-empty"></i-tabler></div>
+          <div class="text-warning bg-light-warning text-end icon"><tabler-icon icon="hourglass-empty"></tabler-icon></div>
         </div>
       </div>
     </div>
@@ -27,7 +27,7 @@
             <p class="f-s-12 text-muted">Pending Amount</p>
             <h3 class="mb-0"><span class="text-muted fw-400 fs-12">MYR</span> {{ pendingAmount | number:'1.2-2' }}</h3>
           </div>
-          <div class="text-primary bg-light-primary text-end icon"><i-tabler name="cash"></i-tabler></div>
+          <div class="text-primary bg-light-primary text-end icon"><tabler-icon icon="cash"></tabler-icon></div>
         </div>
       </div>
     </div>
@@ -61,7 +61,7 @@
                     <tr>
                       <td>
                         <div class="d-flex align-items-center">
-                          <div class="bg-light-primary text-primary text-end icon me-3"><i-tabler name="receipt"></i-tabler></div>
+                          <div class="bg-light-primary text-primary text-end icon me-3"><tabler-icon icon="receipt"></tabler-icon></div>
                           <div>
                             <p class="text-dark fw-500 my-0">{{ claimTypeLabel(claim.claimType) }}</p>
                             <p class="fs-10 fw-300 text-muted my-0">{{ claim.id }}</p>
@@ -79,7 +79,7 @@
                       <td>
                         <button type="button" class="text-muted action-btn" mat-icon-button
                           (click)="openClaimDetails(claim)" [attr.aria-label]="'Review claim ' + claim.id">
-                          <i-tabler name="eye"></i-tabler>
+                          <tabler-icon icon="eye"></tabler-icon>
                         </button>
                       </td>
                     </tr>

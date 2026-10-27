@@ -24,14 +24,14 @@
           @if (accept.includes('image')) {
             <img [src]="path" [alt]="path.split('/').pop() || 'Uploaded image'" class="file-preview">
           } @else {
-            <i-tabler name="file" class="text-muted" [attr.aria-label]="'File: ' + path.split('/').pop()"></i-tabler>
+            <tabler-icon icon="file" class="text-muted" [attr.aria-label]="'File: ' + path.split('/').pop()"></tabler-icon>
           }
         </div>
         <div class="file-info flex-grow-1">
           <div class="file-name">{{ path.split('/').pop() }}</div>
         </div>
         <button type="button" class="btn btn-link p-0 cursor-pointer" (click)="removeExistingPath(path)" aria-label="Remove saved file">
-          <i-tabler name="x" class="icon-16 text-muted"></i-tabler>
+          <tabler-icon icon="x" class="icon-16 text-muted"></tabler-icon>
         </button>
       </div>
     }
@@ -44,11 +44,11 @@
       <div class="file-item d-flex align-items-center gap-3 w-100 mb-4">
         <div class="file-img flex-shrink-0 d-flex justify-content-center align-items-center">
           @if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
-            <i-tabler
-              name="file-type-pdf"
+            <tabler-icon
+              icon="file-type-pdf"
               class="text-danger"
               [attr.aria-label]="'PDF file: ' + file.name">
-            </i-tabler>
+            </tabler-icon>
           } @else {
             <img [src]="previewUrls.get(file)" [alt]="file.name" class="file-preview">
           }
@@ -61,7 +61,7 @@
           type="button"
           class="btn btn-link p-0 cursor-pointer"
           (click)="removeFile(file)">
-          <i-tabler name="x" class="icon-16 text-muted"/>
+          <tabler-icon icon="x" class="icon-16 text-muted"/>
         </button>
       </div>
     }

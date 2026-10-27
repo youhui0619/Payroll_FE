@@ -5,7 +5,7 @@
   </div>
   <div class="col-sm-5 d-flex align-items-center justify-content-end">
     <button mat-flat-button color="primary" routerLink="/payroll/commission-incentives/create">
-      <i-tabler name="plus"></i-tabler>
+      <tabler-icon icon="plus"></tabler-icon>
       Create Commission
     </button>
   </div>
@@ -19,7 +19,7 @@
           <p class="f-s-12 text-muted mb-1">Commission Records</p>
           <h3 class="mb-0">{{ commissionRecords.length }}</h3>
         </div>
-        <div class="text-primary bg-light-primary text-end icon"><i-tabler name="receipt"></i-tabler></div>
+        <div class="text-primary bg-light-primary text-end icon"><tabler-icon icon="receipt"></tabler-icon></div>
       </div>
     </div>
   </div>
@@ -30,7 +30,7 @@
           <p class="f-s-12 text-muted mb-1">Pending Approval</p>
           <h3 class="mb-0">{{ pendingApprovalCount }}</h3>
         </div>
-        <div class="text-warning bg-light-warning text-end icon"><i-tabler name="hourglass-empty"></i-tabler></div>
+        <div class="text-warning bg-light-warning text-end icon"><tabler-icon icon="hourglass-empty"></tabler-icon></div>
       </div>
     </div>
   </div>
@@ -41,7 +41,7 @@
           <p class="f-s-12 text-muted mb-1">Total Commission</p>
           <h3 class="mb-0"><span class="text-muted fw-400 fs-12">MYR</span> {{ totalCommissionAmount | number:'1.2-2' }}</h3>
         </div>
-        <div class="text-success bg-light-success text-end icon"><i-tabler name="cash"></i-tabler></div>
+        <div class="text-success bg-light-success text-end icon"><tabler-icon icon="cash"></tabler-icon></div>
       </div>
     </div>
   </div>
@@ -87,7 +87,7 @@
                     <td><span [ngClass]="statusClass(record.status)">{{ statusLabel(record.status) }}</span></td>
                     <td>
                       <button type="button" class="text-muted action-btn" mat-icon-button (click)="openDetails(record)">
-                        <i-tabler name="eye"></i-tabler>
+                        <tabler-icon icon="eye"></tabler-icon>
                       </button>
                     </td>
                   </tr>

@@ -129,7 +129,7 @@
                 <p class="text-muted mb-3 mt-0">Set the annual leave days for each length-of-service range.</p>
               </div>
               <button type="button" mat-flat-button color="primary" class="mt-2" (click)="addServiceEntitlementTier()">
-                <i-tabler name="plus" class="icon-16"></i-tabler> Add service range
+                <tabler-icon icon="plus" class="icon-16"></tabler-icon> Add service range
               </button>
             </div>
             <div formArrayName="serviceEntitlementTiers">
@@ -178,7 +178,7 @@
                   </div>
                   <div class="col-sm-3 px-2 pt-sm-4">
                     <button type="button" class="action-btn" mat-icon-button [disabled]="serviceEntitlementTiers.length === 1" (click)="removeServiceEntitlementTier(i)">
-                      <i-tabler name="trash"></i-tabler>
+                      <tabler-icon icon="trash"></tabler-icon>
                     </button>
                   </div>
                 </div>
@@ -364,7 +364,7 @@
 </div>
 <div class="d-flex align-items-center justify-content-end gap-3">
   <button type="button" mat-stroked-button routerLink="/settings/leave-settings/overview">Cancel</button>
-  <button type="submit" mat-flat-button color="primary"><i-tabler name="check"></i-tabler>Save Changes</button>
+  <button type="submit" mat-flat-button color="primary"><tabler-icon icon="check"></tabler-icon>Save Changes</button>
 </div>
 </form>
 }

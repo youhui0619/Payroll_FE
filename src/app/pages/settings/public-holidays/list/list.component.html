@@ -6,7 +6,7 @@
 
   <div class="col-sm-5 d-flex align-items-center justify-content-end">
     <button mat-flat-button color="primary" class="ms-2" routerLink="/settings/public-holidays/create">
-      <i-tabler name="plus"></i-tabler>
+      <tabler-icon icon="plus"></tabler-icon>
       Create Holidays
     </button>
   </div>
@@ -23,7 +23,7 @@
             <h3 class="mb-0">{{ holidays.length }}</h3>
           </div>
           <div class="text-primary bg-light-primary text-end icon">
-            <i-tabler name="users"></i-tabler>
+            <tabler-icon icon="users"></tabler-icon>
           </div>
         </div>
       </div>
@@ -40,7 +40,7 @@
             <h3 class="mb-0">{{ upcomingHolidayCount }}</h3>
           </div>
           <div class="text-primary bg-light-primary text-end icon">
-            <i-tabler name="user-check"></i-tabler>
+            <tabler-icon icon="user-check"></tabler-icon>
           </div>
         </div>
       </div>
@@ -54,7 +54,7 @@
     <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
       <input type="text" matInput placeholder="Search..." [value]="searchTerm" (input)="searchTerm = $any($event.target).value">
       <span matTextPrefix class="text-muted me-2">
-        <i-tabler name="search" class="icon-16"></i-tabler>
+        <tabler-icon icon="search" class="icon-16"></tabler-icon>
       </span>
     </mat-form-field>
 
@@ -92,9 +92,9 @@
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
           <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All ({{ filteredHolidays.length }})</span>  |  Active ({{ activeHolidayCount }})  |  Inactive ({{ inactiveHolidayCount }})</h6>
           <div>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2" type="button" (click)="clearFilters()"><i-tabler name="x" class="icon-16"></i-tabler> Clear</button>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><i-tabler name="upload" class="icon-16"></i-tabler> Import</button>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <i-tabler name="download" class="icon-16"></i-tabler> Export</button>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2" type="button" (click)="clearFilters()"><tabler-icon icon="x" class="icon-16"></tabler-icon> Clear</button>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="upload" class="icon-16"></tabler-icon> Import</button>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <tabler-icon icon="download" class="icon-16"></tabler-icon> Export</button>
           </div>
         </div>
       </div>
@@ -131,10 +131,10 @@
                   </td>
                   <td>
                     <button class="text-muted action-btn" mat-icon-button [routerLink]="['/settings/public-holidays/view', holiday.id]">
-                      <i-tabler name="eye"></i-tabler>
+                      <tabler-icon icon="eye"></tabler-icon>
                     </button>
                     <button class="text-muted action-btn" mat-icon-button>
-                      <i-tabler name="edit"></i-tabler>
+                      <tabler-icon icon="edit"></tabler-icon>
                     </button>
                   </td>
                 </tr>
