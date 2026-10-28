@@ -1,0 +1,14 @@
+.notification-row .icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 575.98px) {
+  .notification-row {
+    align-items: flex-start !important;
+  }
+}

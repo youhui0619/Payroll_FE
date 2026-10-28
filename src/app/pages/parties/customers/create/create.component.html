@@ -1,7 +1,7 @@
 <form [formGroup]="customerForm" (ngSubmit)="onSubmit(customerForm)">
     <app-forms [fields]="customers" [form]="customerForm"></app-forms>
     <div class="d-flex align-items-center justify-content-end gap-3">
-        <button type="button" mat-flat-button color="primary-outline"><tabler-icon icon="check"></tabler-icon>Draft</button>
-        <button type="submit" mat-flat-button color="primary"><tabler-icon icon="check"></tabler-icon>Submit</button>
+        <button type="button" mat-flat-button color="primary-outline"><tabler-icon icon="circle-dashed" [size]="16"></tabler-icon>Draft</button>
+        <button type="submit" mat-flat-button color="primary"><tabler-icon icon="check" [size]="16"></tabler-icon>Submit</button>
     </div>
 </form>

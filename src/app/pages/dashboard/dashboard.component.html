@@ -112,7 +112,7 @@
                     (click)="togglePasswordVisibility()"
                     [attr.aria-label]="hide ? 'Show password' : 'Hide password'"
                     [attr.aria-pressed]="!hide">
-                    <tabler-icon [icon]="hide ? 'eye' : 'eye-off'"></tabler-icon>
+                    <tabler-icon [icon]="hide ? 'eye' : 'eye-off'" [size]="16"></tabler-icon>
                   </button>
                 </div>
                 <mat-error class="text-danger">Password is required</mat-error>

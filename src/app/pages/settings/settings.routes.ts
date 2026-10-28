@@ -14,7 +14,8 @@ import { PayslipComponent } from './payslip/payslip.component';
 import { OverviewComponent as CommissionOverviewComponent } from './payroll/commission-incentives/overview/overview.component';
 import { CreateComponent as CommissionCreateComponent } from './payroll/commission-incentives/create/create.component';
 import { EditComponent as CommissionEditComponent } from './payroll/commission-incentives/edit/edit.component';
-
+import { RegionalPreferencesComponent } from './preferences/regional-preferences/regional-preferences.component';
+import { NotificationsComponent } from './preferences/notifications/notifications.component';
 
 
 export const SETTINGS_ROUTES: Routes = [
@@ -93,6 +94,16 @@ export const SETTINGS_ROUTES: Routes = [
     path: 'payroll/commission-incentives/edit/:code',
     title: 'Edit Commission & Incentives',
     component: CommissionEditComponent
+  },
+  {
+    path: 'preferences/regional',
+    title: 'Regional Preferences',
+    component: RegionalPreferencesComponent
+  },
+  {
+    path: 'preferences/notifications',
+    title: 'Notifications',
+    component: NotificationsComponent
   },
 
 

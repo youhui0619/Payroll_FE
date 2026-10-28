@@ -114,11 +114,15 @@ export class SidebarComponent implements OnInit, OnChanges {
         { label: 'Payslip Settings', icon: 'codex:dot-circle', route: '/settings/payslip' }
       ] 
     },
-
     { label: 'Payroll', icon: 'solar:settings-outline', children: [
         { label: 'Payroll Settings', icon: 'codex:dot-circle', route: '/settings/payroll' },
         { label: 'Commission and incentives', icon: 'codex:dot-circle', route: '/settings/payroll/commission-incentives/overview' }
       ] 
+    },
+    { label: 'Preferences', icon: 'akar-icons:shipping-box-01', children: [
+        { label: 'Notifications', icon: 'codex:dot-circle', route: '/settings/preferences/notifications' },
+        { label: 'Regional Preferences', icon: 'codex:dot-circle', route: '/settings/preferences/regional' },
+      ]
     },
 
     { label: 'Access Control', icon: 'solar:lock-keyhole-outline', children: [

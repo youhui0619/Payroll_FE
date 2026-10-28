@@ -1,0 +1,68 @@
+<form [formGroup]="preferencesForm" (ngSubmit)="onSubmit()">
+    @for (group of preferenceGroups; track group.id) {
+    <section class="regional-preference-group mb-4">
+        <h4 class="text-primary mb-0">{{ group.title }}</h4>
+        <p class="text-muted mt-0 mb-2">{{ group.description }}</p>
+        <div class="card">
+            <div class="card-body py-0">
+                @for (preference of group.preferences; track preference.id) {
+                <div class="regional-preference-row d-flex align-items-center gap-3 py-3">
+                    <div class="icon bg-light-primary text-primary flex-shrink-0">
+                        <tabler-icon [icon]="preference.icon || 'settings'" [size]="20"></tabler-icon>
+                    </div>
+                    <div class="preference-description">
+                        <label class="text-dark fw-550 my-0">{{ preference.title }}</label>
+                        <p class="text-muted mb-0">{{ preference.description }}</p>
+                    </div>
+                    <div class="preference-control">
+                        <mat-form-field appearance="outline" class="form-input w-100" subscriptSizing="dynamic">
+                            @if (preference.controlType === 'text') {
+                            <input matInput [id]="'regional-' + preference.id" [placeholder]="preference.placeholder || ''" [formControlName]="preference.id">
+                            } @else {
+                            <mat-select [id]="'regional-' + preference.id" [formControlName]="preference.id">
+                                @for (option of preference.options ?? []; track option.value) {
+                                <mat-option [value]="option.value">{{ option.label }}</mat-option>
+                                }
+                            </mat-select>
+                            }
+                        </mat-form-field>
+                        @if (preference.id === 'dateFormat' || preference.id === 'timeZone' || preference.id === 'timeFormat' || preference.id === 'currency' || preference.id === 'numberFormat' || preference.id === 'language') {
+                            <div class="preview-output text-end">
+                                <strong>
+                                    @switch (preference.id) {
+                                        @case ('dateFormat') {
+                                            {{ datePreviewSample | date: preferencesForm.controls['dateFormat'].value: preferencesForm.controls['timeZone'].value.replace('UTC', '').replace('−', '-').replace('±', '+') }}
+                                        }
+                                        @case ('timeZone') {
+                                            {{ datePreviewSample | date: (preferencesForm.controls['timeFormat'].value === '12h' ? 'h:mm a' : 'HH:mm'): preferencesForm.controls['timeZone'].value.replace('UTC', '').replace('−', '-').replace('±', '+') }} ({{ preferencesForm.controls['timeZone'].value }})
+                                        }
+                                        @case ('timeFormat') {
+                                            {{ datePreviewSample | date: (preferencesForm.controls['timeFormat'].value === '12h' ? 'h:mm a' : 'HH:mm'): preferencesForm.controls['timeZone'].value.replace('UTC', '').replace('−', '-').replace('±', '+') }}
+                                        }
+                                        @case ('currency') {
+                                            {{ 1234.56 | regionalCurrency: '1.2-2': preferencesForm.controls['currency'].value }}
+                                        }
+                                        @case ('numberFormat') {
+                                            {{ 1234.56 | number: '1.2-2': (preferencesForm.controls['numberFormat'].value === '1.234,56' ? 'de-DE' : 'en-US') }}
+                                        }
+                                        @case ('language') {
+                                            {{ preferencesForm.controls['language'].value | uppercase }}
+                                        }
+                                    }
+                                </strong>
+                            </div>
+                        }
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </section>
+    }
+
+    <div class="d-flex justify-content-end">
+        <button type="submit" mat-flat-button color="primary">
+            <tabler-icon icon="check" [size]="16"></tabler-icon> Save Preferences
+        </button>
+    </div>
+</form>
