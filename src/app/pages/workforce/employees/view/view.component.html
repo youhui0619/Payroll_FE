@@ -15,18 +15,18 @@
         <div class="row mx-0">
           <div class="col-sm-7 px-2">
             <div class="d-flex align-items-center">
-              <div class="avatar me-4">{{ employee.initials }}</div>
+              <div class="icon bg-light-primary text-primary me-3 fw-550">{{ employee.initials }}</div>
               <div>
-                <h4 class="my-0">{{ employee.employeeName }}</h4>
-                <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
-                <span class="chip bg-light-primary text-primary me-2">{{ employee.employmentStatus }}</span> <span class="chip bg-light-secondary text-secondary me-2">{{ employee.employmentType }}</span>
+                <h4 class="my-0">{{ employee.employeeName }} <span class="badge bg-light-primary text-primary me-2 fw-400">{{ employee.employmentStatus }}</span> <span class="badge bg-light-secondary text-secondary fw-400">{{ employee.employmentType }}</span></h4>
+                <p class="fs-10 fw-300 text-muted mt-0">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
+                
               </div>
             </div>
           </div>
 
           <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
             <button mat-flat-button color="primary" class="ms-2" [routerLink]="['/workforce/employees/edit', employee.employeeId]">
-              <tabler-icon icon="edit"></tabler-icon>
+              <tabler-icon icon="edit" [size]="16"></tabler-icon>
               Edit
             </button>
           </div>
@@ -545,7 +545,7 @@
             </div>
             <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
               <button mat-flat-button color="primary" class="ms-2">
-                <tabler-icon icon="plus"></tabler-icon>
+                <tabler-icon icon="plus" [size]="16"></tabler-icon>
                 Add Leave
               </button>
             </div>
@@ -599,6 +599,11 @@
                             </td>
                           </tr>
                         }
+                        @if (leaveRequests.length === 0) {
+                          <tr>
+                            <td colspan="5" class="text-muted text-center py-3">No leave found for this employee.</td>
+                          </tr>
+                        }
                       </tbody>
                     </table>
                   </div>
@@ -617,7 +622,7 @@
             </div>
             <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
               <button mat-flat-button color="primary" class="ms-2" routerLink="/expenses-claims/claims/create">
-                <tabler-icon icon="plus"></tabler-icon>
+                <tabler-icon icon="plus" [size]="16"></tabler-icon>
                 New Claim
               </button>
             </div>

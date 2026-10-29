@@ -21,9 +21,8 @@
                 <tabler-icon icon="users"></tabler-icon>
               </div>
               <div>
-                <h4 class="my-0">{{ department.name }}</h4>
-                <p class="fs-10 fw-300 text-muted my-2 ">{{ department.code }} . <span class="ms-2 chip bg-light-primary text-primary me-2">{{ department.status }}</span></p>
-
+                <h4 class="my-0">{{ department.name }} <span class="ms-2 badge bg-light-primary text-primary fw-400">{{ department.status }}</span></h4>
+                <p class="fs-10 fw-300 text-muted mb-2 ">{{ department.code }}</p>
               </div>
             </div>
           </div>
@@ -213,46 +212,44 @@
           <div class="card-body">
             <div class="material-datatables table-responsive">
               <table matSort class="mat-sort table no-wrap w-100 text-left" matSort>
-                <thead>
-                  <tr>
-                    <th class="text-dark" mat-sort-header="assigned">Employee</th>
-                    <th class="text-dark" mat-sort-header="assigned">Employee ID</th>
-                    <th class="text-dark" mat-sort-header="status">Type</th>
-                    <th class="text-dark" mat-sort-header="tin">TIN</th>
-                    <th class="text-dark" mat-sort-header="kwsp">KWSP</th>
-                    <th class="text-dark" mat-sort-header="budget">Status</th>
-                    <th class="text-dark">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (employee of filteredEmployees; track employee) {
-                    <tr>
-                      <td class="text-muted">
-                        <div class="d-flex align-items-center justify-content-start">
-                          <div class="avatar me-3">{{ employee.initials }}</div>
-                          <div>
-                            <p class="text-dark my-0">{{ employee.employeeName }}</p>
-                            <p class="fs-10 fw-300 text-muted my-0">{{ employee.department }} · {{ employee.position }}</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="text-muted"><a href="javascript:void(0)" routerLink="/workforce/employees/view">{{ employee.employeeId }}</a></td>
-                      <td class="text-muted">{{ employee.employmentType }}</td>
-                      <td class="text-muted">{{ employee.tin }}</td>
-                      <td class="text-muted">{{ employee.kwspNo }}</td>
-                      <td><span class="chip" [ngClass]="employeeStatusClass(employee.employmentStatus)">{{ employee.employmentStatus }}</span></td>
-                      <td>
-                        <button class="text-muted action-btn" mat-icon-button>
-                          <tabler-icon icon="eye"></tabler-icon>
-                        </button>
-                        <button class="text-muted action-btn" mat-icon-button>
-                          <tabler-icon icon="edit"></tabler-icon>
-                        </button>
-                      </td>
-                    </tr>
-                  }
-                </tbody>
-              </table>
+            <thead>
+              <tr>
+                <th class="text-dark" mat-sort-header="assigned">Employee</th>
+                <th class="text-dark" mat-sort-header="status">Type</th>
+                <th class="text-dark" mat-sort-header="department">Department</th>
+                <th class="text-dark" mat-sort-header="position">Position</th>
+                <th class="text-dark" mat-sort-header="budget">Status</th>
+                <th class="text-dark">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (employee of filteredEmployees; track employee) {
+                <tr>
+                  <td class="text-muted cursor-pointer" [routerLink]="['/workforce/employees/view', employee.employeeId]">
+                    <div class="d-flex align-items-center justify-content-start">
+                      <div class="avatar me-3">{{ employee.initials }}</div>
+                      <div>
+                        <p class="text-dark my-0">{{ employee.employeeName }}</p>
+                        <p class="fs-10 fw-300 text-muted my-0">{{ employee.employeeId }}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="text-muted">{{ employee.employmentType }}</td>
+                  <td class="text-muted">{{ employee.department }}</td>
+                  <td class="text-muted">{{ employee.position }}</td>
+                  <td><span class="chip bg-light-primary text-primary">{{ employee.employmentStatus }}</span></td>
+                  <td>
+                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/workforce/employees/view', employee.employeeId]">
+                      <tabler-icon icon="eye"></tabler-icon>
+                    </button>
+                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/workforce/employees/edit', employee.employeeId]">
+                      <tabler-icon icon="edit"></tabler-icon>
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+            </table>
               @if (filteredEmployees.length === 0) {
                 <div class="text-center text-muted py-4">
                   No employees match the selected filters.

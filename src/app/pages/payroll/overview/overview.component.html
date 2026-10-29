@@ -140,9 +140,6 @@
               @if (isColumnVisible('employee')) {
                 <th class="text-dark text-nowrap text-center sticky-col sticky-col-employee">Employee</th>
               }
-              @if (isColumnVisible('employeeId')) {
-                <th class="text-dark text-nowrap text-center sticky-col" [class.sticky-col-id]="isColumnVisible('employee')" [class.sticky-col-id-alone]="!isColumnVisible('employee')">Employee ID</th>
-              }
               @if (isColumnVisible('basicPay')) {
                 <th class="text-dark text-nowrap text-center">Basic Pay<br/>(RM)</th>
               }
@@ -239,12 +236,9 @@
                   <td class="text-muted text-nowrap sticky-col sticky-col-employee">
                     <div class="d-flex align-items-center justify-content-start">
                       <div class="avatar me-3">{{ row.initials }}</div>
-                      <div><p class="text-dark my-0">{{ row.employee }}</p><p class="fs-10 fw-300 text-muted my-0">{{ row.department }} · {{ row.position }}</p></div>
+                      <div><p class="text-dark my-0">{{ row.employee }}</p><p class="fs-10 fw-300 text-muted my-0">{{ row.employeeId }}</p></div>
                     </div>
                   </td>
-                }
-                @if (isColumnVisible('employeeId')) {
-                  <td class="text-muted text-nowrap sticky-col" [class.sticky-col-id]="isColumnVisible('employee')" [class.sticky-col-id-alone]="!isColumnVisible('employee')"><a href="javascript:void(0)" routerLink="/workforce/employees/view">{{ row.employeeId }}</a></td>
                 }
                 @if (isColumnVisible('basicPay')) {
                   <td class="text-muted text-nowrap text-center">{{ row.basicPay | number:'1.2-2' }}</td>
@@ -322,9 +316,6 @@
             <tr class="payroll-total-row">
               @if (isColumnVisible('employee')) {
                 <td class="text-dark text-nowrap fw-bold sticky-col sticky-col-employee">Total</td>
-              }
-              @if (isColumnVisible('employeeId')) {
-                <td class="text-dark text-nowrap fw-bold sticky-col" [class.sticky-col-id]="isColumnVisible('employee')" [class.sticky-col-id-alone]="!isColumnVisible('employee')"></td>
               }
               @if (isColumnVisible('basicPay')) {
                 <td class="text-dark text-nowrap fw-bold text-center">{{ totals.basicPay | number:'1.2-2' }}</td>

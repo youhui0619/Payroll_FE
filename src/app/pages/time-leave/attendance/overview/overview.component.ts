@@ -35,8 +35,71 @@ export class OverviewComponent implements AfterViewInit {
   monthLabel = '';
 
   employees: EmployeeRecord[] = employeeDirectory;
+  selectedDepartments: string[] = [];
 
   readonly leaveRecords: LeaveRecord[] = attendanceRecords;
+
+  get todayDateKey(): string {
+    const today = new Date();
+    return [
+      today.getFullYear(),
+      String(today.getMonth() + 1).padStart(2, '0'),
+      String(today.getDate()).padStart(2, '0')
+    ].join('-');
+  }
+
+  get departments(): string[] {
+    return [...new Set(this.employees.map(employee => employee.department).filter(Boolean))]
+      .sort((first, second) => first.localeCompare(second));
+  }
+
+  get filteredEmployees(): EmployeeRecord[] {
+    if (this.selectedDepartments.length === 0) return this.employees;
+    return this.employees.filter(employee => this.selectedDepartments.includes(employee.department));
+  }
+
+  get medicalLeaveCount(): number {
+    return this.countEmployeesOnLeave('Medical Leave');
+  }
+
+  get annualLeaveCount(): number {
+    return this.countEmployeesOnLeave('Annual Leave');
+  }
+
+  get unpaidLeaveCount(): number {
+    return this.countEmployeesOnLeave('Unpaid Leave');
+  }
+
+  get presentTodayCount(): number {
+    return this.filteredEmployees.filter(employee => {
+      const hasApprovedLeave = this.hasApprovedLeave(employee.employeeId, this.todayDateKey);
+      const isPublicHoliday = !!this.getPublicHoliday(employee, this.todayDateKey);
+      return !hasApprovedLeave && !isPublicHoliday;
+    }).length;
+  }
+
+  private countEmployeesOnLeave(leaveType: string): number {
+    return new Set(
+      this.leaveRecords
+        .filter(leave =>
+          leave.leaveType === leaveType &&
+          leave.status === 'Approved' &&
+          this.filteredEmployees.some(employee => employee.employeeId === leave.employeeId) &&
+          leave.startDate <= this.todayDateKey &&
+          leave.endDate >= this.todayDateKey
+        )
+        .map(leave => leave.employeeId)
+    ).size;
+  }
+
+  private hasApprovedLeave(employeeId: string, dateKey: string): boolean {
+    return this.leaveRecords.some(leave =>
+      leave.employeeId === employeeId &&
+      leave.status === 'Approved' &&
+      leave.startDate <= dateKey &&
+      leave.endDate >= dateKey
+    );
+  }
 
   readonly months = [
     { value: 1, label: 'January' },

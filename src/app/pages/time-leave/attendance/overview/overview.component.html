@@ -13,7 +13,7 @@
           <div class="summary-info">
             <p class="f-s-12 text-muted">Present Today
             </p>
-            <h3 class="mb-0">112</h3>
+            <h3 class="mb-0">{{ presentTodayCount }}</h3>
           </div>
           <div class="text-success bg-light-success text-end icon">
             <tabler-icon icon="user-check"></tabler-icon>
@@ -30,7 +30,7 @@
           <div class="summary-info">
             <p class="f-s-12 text-muted">Medical Leave
             </p>
-            <h3 class="mb-0">8</h3>
+            <h3 class="mb-0">{{ medicalLeaveCount }}</h3>
           </div>
           <div class="text-danger bg-light-danger text-end icon">
             <tabler-icon icon="medical-cross"></tabler-icon>
@@ -47,7 +47,7 @@
           <div class="summary-info">
             <p class="f-s-12 text-muted">Annual Leave
             </p>
-            <h3 class="mb-0">10</h3>
+            <h3 class="mb-0">{{ annualLeaveCount }}</h3>
           </div>
           <div class="text-warning bg-light-warning text-end icon">
             <tabler-icon icon="calendar-event"></tabler-icon>
@@ -64,7 +64,7 @@
           <div class="summary-info">
             <p class="f-s-12 text-muted">Unpaid Leave
             </p>
-            <h3 class="mb-0">0</h3>
+            <h3 class="mb-0">{{ unpaidLeaveCount }}</h3>
           </div>
           <div class="text-secondary bg-light-secondary text-end icon">
             <tabler-icon icon="wallet-off"></tabler-icon>
@@ -91,9 +91,14 @@
       appearance="outline"
       class="form-input"
       subscriptSizing="dynamic">
-      <mat-select placeholder="Select Department" multiple>
-        <mat-option value="active">Active</mat-option>
-        <mat-option value="inactive">Inactive</mat-option>
+      <mat-select
+        placeholder="Select Department"
+        multiple
+        [value]="selectedDepartments"
+        (selectionChange)="selectedDepartments = $event.value">
+        @for (department of departments; track department) {
+          <mat-option [value]="department">{{ department }}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
 
@@ -156,9 +161,9 @@
                 </tr>
               </thead>
               <tbody>
-                @for (employee of employees; track employee) {
+                @for (employee of filteredEmployees; track employee) {
                   <tr>
-                    <td class="text-muted text-nowrap sticky-col sticky-col-employee" [routerLink]="['/workforce/employees/view', employee.employeeId]">
+                    <td class="text-muted text-nowrap sticky-col sticky-col-employee cursor-pointer" [routerLink]="['/workforce/employees/view', employee.employeeId]">
                       <div class="d-flex align-items-center justify-content-start">
                         <div class="avatar me-3">{{ employee.initials }}</div>
                         <div><p class="text-dark my-0">{{ employee.employeeName }}</p><p class="fs-10 fw-300 text-muted my-0">{{ employee.employeeId }}</p></div>
@@ -187,13 +192,14 @@
                     }
                   </tr>
                 }
-                @if (employees.length === 0) {
+                @if (filteredEmployees.length === 0) {
                   <tr>
                     <td class="empty-state" [attr.colspan]="days.length + 2">No employees to display.</td>
                   </tr>
                 }
               </tbody>
             </table>
+            <div class="calendar-scroll-tail" aria-hidden="true"></div>
           </div>
         </div>
       </div>

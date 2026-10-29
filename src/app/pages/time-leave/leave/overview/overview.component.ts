@@ -33,9 +33,29 @@ export class OverviewComponent {
   monthLabel = '';
 
   employees: EmployeeRecord[] = employeeDirectory;
+  selectedDepartments: string[] = [];
+
+  get departments(): string[] {
+    return [...new Set(this.employees.map(employee => employee.department).filter(Boolean))]
+      .sort((first, second) => first.localeCompare(second));
+  }
+
+  get filteredEmployees(): EmployeeRecord[] {
+    if (this.selectedDepartments.length === 0) return this.employees;
+    return this.employees.filter(employee => this.selectedDepartments.includes(employee.department));
+  }
 
   leaveBalancesFor(employeeId: string) {
     return getEmployeeLeaveBalances(employeeId);
+  }
+
+  leaveBalanceClass(balance: number, entitled: number): string {
+    if (entitled <= 0) return 'bg-light-primary text-primary';
+
+    const remainingRatio = balance / entitled;
+    if (remainingRatio < 0.3) return 'bg-light-danger text-danger';
+    if (remainingRatio < 0.7) return 'bg-light-warning text-warning';
+    return 'bg-light-primary text-primary';
   }
 
   readonly leaveRecords: LeaveRecord[] = attendanceRecords;

@@ -67,10 +67,19 @@
 }
 
 .table-wrapper {
+  --sticky-employee-width: 240px;
+  display: flex;
+  align-items: flex-start;
   overflow: auto;
 }
 
+.calendar-scroll-tail {
+  flex: 0 0 max(0px, calc(100% - var(--sticky-employee-width)));
+  height: 1px;
+}
+
 .leave-table {
+  flex: 0 0 auto;
   border-collapse: separate;
   border-spacing: 0;
   width: max-content;
@@ -225,9 +234,9 @@ td.sticky-col {
 
 .sticky-col-employee {
   left: 0;
-  min-width: 240px;
-  width: 240px;
-  max-width: 240px;
+  min-width: var(--sticky-employee-width, 240px);
+  width: var(--sticky-employee-width, 240px);
+  max-width: var(--sticky-employee-width, 240px);
   box-sizing: border-box;
   text-align: left !important;
   background: #f8fafc;

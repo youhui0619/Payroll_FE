@@ -119,9 +119,14 @@
       appearance="outline"
       class="form-input"
       subscriptSizing="dynamic">
-      <mat-select placeholder="Select Department" multiple>
-        <mat-option value="active">Active</mat-option>
-        <mat-option value="inactive">Inactive</mat-option>
+      <mat-select
+        placeholder="Select Department"
+        multiple
+        [value]="selectedDepartments"
+        (selectionChange)="selectedDepartments = $event.value">
+        @for (department of departments; track department) {
+          <mat-option [value]="department">{{ department }}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
 
@@ -154,7 +159,7 @@
     <div class="card">
       <div class="card-header">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-          <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All (100)</span></h6>
+          <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All ({{ filteredEmployees.length }})</span></h6>
           <div class="d-flex align-items-center flex-wrap gap-2">
             <mat-form-field appearance="outline" class="form-input column-picker" subscriptSizing="dynamic">
               <mat-select [(ngModel)]="selectedLeaveColumns" multiple placeholder="Select leave columns">
@@ -178,11 +183,10 @@
             <thead>
               <tr>
                 <th class="text-dark sticky-col sticky-col-employee" mat-sort-header="assigned">Employee</th>
-                <th class="text-dark sticky-col sticky-col-id" mat-sort-header="assigned">Employee ID</th>
                 @if (isLeaveColumnVisible('annual')) {
-                  <th class="text-dark text-nowrap text-center epf-heading leave-group-header border-right" colspan="3">
+                  <th class="text-dark text-nowrap text-center leave-group-header border-right" colspan="3">
                     <span>Annual Leave</span>
-                    <span class="epf-subheading">
+                    <span class="leave-subheading">
                       <span>Entitled</span>
                       <span>Taken</span>
                       <span>Balance</span>
@@ -190,9 +194,9 @@
                   </th>
                 }
                 @if (isLeaveColumnVisible('medical')) {
-                  <th class="text-dark text-nowrap text-center epf-heading leave-group-header border-right" colspan="3">
+                  <th class="text-dark text-nowrap text-center leave-group-header border-right" colspan="3">
                     <span>Medical Leave</span>
-                    <span class="epf-subheading">
+                    <span class="leave-subheading">
                       <span>Entitled</span>
                       <span>Taken</span>
                       <span>Balance</span>
@@ -204,63 +208,43 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="text-muted sticky-col sticky-col-employee">
-                  <div class="d-flex align-items-center justify-content-start">
-                    <div class="avatar me-3">{{ employees[0].initials }}</div>
-                    <div>
-                      <p class="text-dark my-0">{{ employees[0].employeeName }}</p>
-                      <p class="fs-10 fw-300 text-muted my-0">{{ employees[0].department }} · {{ employees[0].position }}</p>
+              @for (employee of filteredEmployees; track employee.employeeId) {
+                <tr>
+                  <td class="text-muted sticky-col sticky-col-employee" [routerLink]="['/workforce/employees/view', employee.employeeId]">
+                    <div class="d-flex align-items-center justify-content-start">
+                      <div class="avatar me-3">{{ employee.initials }}</div>
+                      <div>
+                        <p class="text-dark my-0">{{ employee.employeeName }}</p>
+                        <p class="fs-10 fw-300 text-muted my-0">{{ employee.employeeId }}</p>
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td class="text-muted sticky-col sticky-col-id"><a href="javascript:void(0)" routerLink="/workforce/employees/view">{{ employees[0].employeeId }}</a></td>
-                @if (isLeaveColumnVisible('annual')) {
-                  <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employees[0].employeeId).annual.entitled | number:'1.1-1' }}</td>
-                  <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employees[0].employeeId).annual.taken | number:'1.1-1' }}</td>
-                  <td class="text-muted text-center leave-value-cell border-right"><span class="chip bg-light-primary text-primary">{{ leaveBalancesFor(employees[0].employeeId).annual.balance | number:'1.1-1' }}</span></td>
-                }
-                @if (isLeaveColumnVisible('medical')) {
-                  <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employees[0].employeeId).medical.entitled | number:'1.1-1' }}</td>
-                  <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employees[0].employeeId).medical.taken | number:'1.1-1' }}</td>
-                  <td class="text-muted text-center leave-value-cell border-right"><span class="chip bg-light-primary text-primary">{{ leaveBalancesFor(employees[0].employeeId).medical.balance | number:'1.1-1' }}</span></td>
-                }
-                <td class="text-muted as-at-cell">30 Sep 2026</td>
-                <td class="action-cell">
-                  <button class="text-muted action-btn" mat-icon-button routerLink="/time-leave/leave/1/view">
-                    <tabler-icon icon="eye"></tabler-icon>
-                  </button>
-                </td>
-              </tr>
-
-              <tr>
-                <td class="text-muted sticky-col sticky-col-employee">
-                  <div class="d-flex align-items-center justify-content-start">
-                    <div class="avatar me-3">{{ employees[1].initials }}</div>
-                    <div>
-                      <p class="text-dark my-0">{{ employees[1].employeeName }}</p>
-                      <p class="fs-10 fw-300 text-muted my-0">{{ employees[1].department }} · {{ employees[1].position }}</p>
-                    </div>
-                  </div>
-                </td>
-                <td class="text-muted sticky-col sticky-col-id"><a href="javascript:void(0)" routerLink="/workforce/employees/view">{{ employees[1].employeeId }}</a></td>
-                @if (isLeaveColumnVisible('annual')) {
-                  <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employees[1].employeeId).annual.entitled | number:'1.1-1' }}</td>
-                  <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employees[1].employeeId).annual.taken | number:'1.1-1' }}</td>
-                  <td class="text-muted text-center leave-value-cell border-right"><span class="chip bg-light-danger text-danger">{{ leaveBalancesFor(employees[1].employeeId).annual.balance | number:'1.1-1' }}</span></td>
-                }
-                @if (isLeaveColumnVisible('medical')) {
-                  <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employees[1].employeeId).medical.entitled | number:'1.1-1' }}</td>
-                  <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employees[1].employeeId).medical.taken | number:'1.1-1' }}</td>
-                  <td class="text-muted text-center leave-value-cell border-right"><span class="chip bg-light-warning text-warning">{{ leaveBalancesFor(employees[1].employeeId).medical.balance | number:'1.1-1' }}</span></td>
-                }
-                <td class="text-muted as-at-cell">30 Sep 2026</td>
-                <td class="action-cell">
-                  <button class="text-muted action-btn" mat-icon-button routerLink="/time-leave/leave/1/view">
-                    <tabler-icon icon="eye"></tabler-icon>
-                  </button>
-                </td>
-              </tr>
+                  </td>
+                  @if (isLeaveColumnVisible('annual')) {
+                    <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employee.employeeId).annual.entitled | number:'1.1-1' }}</td>
+                    <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employee.employeeId).annual.taken | number:'1.1-1' }}</td>
+                    <td class="text-muted text-center leave-value-cell border-right"><span class="chip" [ngClass]="leaveBalanceClass(leaveBalancesFor(employee.employeeId).annual.balance, leaveBalancesFor(employee.employeeId).annual.entitled)">{{ leaveBalancesFor(employee.employeeId).annual.balance | number:'1.1-1' }}</span></td>
+                  }
+                  @if (isLeaveColumnVisible('medical')) {
+                    <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employee.employeeId).medical.entitled | number:'1.1-1' }}</td>
+                    <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employee.employeeId).medical.taken | number:'1.1-1' }}</td>
+                    <td class="text-muted text-center leave-value-cell border-right"><span class="chip" [ngClass]="leaveBalanceClass(leaveBalancesFor(employee.employeeId).medical.balance, leaveBalancesFor(employee.employeeId).medical.entitled)">{{ leaveBalancesFor(employee.employeeId).medical.balance | number:'1.1-1' }}</span></td>
+                  }
+                  <td class="text-muted as-at-cell">30 Sep 2026</td>
+                  <td class="action-cell">
+                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/workforce/employees/view', employee.employeeId]">
+                      <tabler-icon icon="eye"></tabler-icon>
+                    </button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td
+                    class="text-muted text-center py-4"
+                    [attr.colspan]="3 + (isLeaveColumnVisible('annual') ? 3 : 0) + (isLeaveColumnVisible('medical') ? 3 : 0)">
+                    No employees to display.
+                  </td>
+                </tr>
+              }
             </tbody>
           </table>
           <mat-paginator [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>

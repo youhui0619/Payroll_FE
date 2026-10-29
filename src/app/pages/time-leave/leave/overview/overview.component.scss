@@ -11,20 +11,24 @@
   font-weight: 600;
 }
 
-.epf-heading {
-  text-align: center;
+.leave-group-header {
   padding-left: 0;
   padding-right: 0;
-  vertical-align: middle;
 }
 
-.epf-subheading {
+.leave-subheading {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(100px, 1fr));
   width: 100%;
-  gap: 0;
   margin-top: 0.5rem;
   text-align: center;
+}
+
+.leave-value-cell {
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px;
+  box-sizing: border-box;
 }
 
 .sticky-col {

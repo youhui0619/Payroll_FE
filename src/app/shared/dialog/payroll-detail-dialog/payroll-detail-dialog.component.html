@@ -2,10 +2,10 @@
   <section class="dialog-panel" role="dialog" aria-modal="true" aria-labelledby="payroll-dialog-title" (click)="$event.stopPropagation()">
     <header class="dialog-header">
       <div class="dialog-heading">
-        <div class="title-line">
+        <div class="title-line mb-2">
           <h2>Payslip</h2>
-          <span class="chip text-primary bg-light-primary me-2">{{ payslip.period }}</span>
-          <span class="chip text-primary bg-light-primary">{{ payslip.status }}</span>
+          <span class="badge fw-400 text-primary bg-light-primary">{{ payslip.period }}</span>
+          <span class="badge fw-400 text-primary bg-light-primary">{{ payslip.status }}</span>
         </div>
         <p class="company-name">{{ payslip.company.name }}</p>
         <p class="company-meta">{{ payslip.company.registrationNumber }} · {{ payslip.company.llpNumber }}</p>

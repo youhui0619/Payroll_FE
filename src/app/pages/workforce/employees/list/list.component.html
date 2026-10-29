@@ -128,10 +128,9 @@
             <thead>
               <tr>
                 <th class="text-dark" mat-sort-header="assigned">Employee</th>
-                <th class="text-dark" mat-sort-header="assigned">Employee ID</th>
                 <th class="text-dark" mat-sort-header="status">Type</th>
-                <th class="text-dark" mat-sort-header="tin">TIN</th>
-                <th class="text-dark" mat-sort-header="kwsp">KWSP</th>
+                <th class="text-dark" mat-sort-header="department">Department</th>
+                <th class="text-dark" mat-sort-header="position">Position</th>
                 <th class="text-dark" mat-sort-header="budget">Status</th>
                 <th class="text-dark">Action</th>
               </tr>
@@ -139,19 +138,18 @@
             <tbody>
               @for (employee of employees; track employee) {
                 <tr>
-                  <td class="text-muted">
+                  <td class="text-muted cursor-pointer" [routerLink]="['/workforce/employees/view', employee.employeeId]">
                     <div class="d-flex align-items-center justify-content-start">
                       <div class="avatar me-3">{{ employee.initials }}</div>
                       <div>
                         <p class="text-dark my-0">{{ employee.employeeName }}</p>
-                        <p class="fs-10 fw-300 text-muted my-0">{{ employee.department }} · {{ employee.position }}</p>
+                        <p class="fs-10 fw-300 text-muted my-0">{{ employee.employeeId }}</p>
                       </div>
                     </div>
                   </td>
-                  <td class="text-muted"><a href="javascript:void(0)" [routerLink]="['/workforce/employees/view', employee.employeeId]">{{ employee.employeeId }}</a></td>
                   <td class="text-muted">{{ employee.employmentType }}</td>
-                  <td class="text-muted">{{ employee.tin }}</td>
-                  <td class="text-muted">{{ employee.kwspNo }}</td>
+                  <td class="text-muted">{{ employee.department }}</td>
+                  <td class="text-muted">{{ employee.position }}</td>
                   <td><span class="chip bg-light-primary text-primary">{{ employee.employmentStatus }}</span></td>
                   <td>
                     <button class="text-muted action-btn" mat-icon-button [routerLink]="['/workforce/employees/view', employee.employeeId]">
