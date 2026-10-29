@@ -83,7 +83,7 @@
           </div>
           <div>
             <p class="text-muted fs-10 fs-300 my-0">Approved date</p>
-            <p class="text-dark my-0 fw-500">{{ data.approval.approvedDate ? (data.approval.approvedDate | date:'dd/MM/yyyy') : '-' }}</p>
+            <p class="text-dark my-0 fw-500">{{ data.approval.approvedDate ? (data.approval.approvedDate | regionalDate:'dd/MM/yyyy') : '-' }}</p>
           </div>
           <div class="detail-full-width">
             <p class="text-muted fs-10 fs-300 my-0">Comments</p>

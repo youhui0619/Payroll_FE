@@ -298,7 +298,7 @@
                 </div>
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Date of Birth</label>
-                  <p class="text-muted">{{ employee.dateOfBirth | date:'dd/MM/yyyy' }}</p>
+                  <p class="text-muted">{{ employee.dateOfBirth | regionalDate:'dd/MM/yyyy' }}</p>
                 </div>
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Gender</label>
@@ -404,15 +404,15 @@
               <div class="row mx-0">
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Joined Date</label>
-                  <p class="text-muted">{{ employee.joinedDate | date:'dd/MM/yyyy' }}</p>
+                  <p class="text-muted">{{ employee.joinedDate | regionalDate:'dd/MM/yyyy' }}</p>
                 </div>
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Confirmation Date</label>
-                  <p class="text-muted">{{ employee.confirmationDate | date:'dd/MM/yyyy' }}</p>
+                  <p class="text-muted">{{ employee.confirmationDate | regionalDate:'dd/MM/yyyy' }}</p>
                 </div>
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Resignation Date</label>
-                  <p class="text-muted">{{ employee.resignationDate ? (employee.resignationDate | date:'dd/MM/yyyy') : '-' }}</p>
+                  <p class="text-muted">{{ employee.resignationDate ? (employee.resignationDate | regionalDate:'dd/MM/yyyy') : '-' }}</p>
                 </div>
               </div>
             </div>
@@ -424,7 +424,7 @@
           <h4 class="text-primary">Salary Information</h4>
           <div class="w-100 salary-box mb-4">
             <p class="fs-10 text-muted my-0 fw-300">Basic salary</p>
-            <h3 class="my-1">{{ employee.basicSalary | currency:'MYR':'symbol':'1.2-2' }}</h3>
+            <h3 class="my-1">{{ employee.basicSalary | regionalCurrency:'1.2-2':'MYR' }}</h3>
             <p class="fs-10 text-muted mb-0">{{ employee.salaryType }} · {{ employee.paymentMethod }}</p>
           </div>
           <div class="card">
@@ -667,7 +667,7 @@
                                 </div>
                               </div>
                             </td>
-                            <td class="text-muted">{{ claim.claimDate | date:'d MMM y' }}</td>
+                            <td class="text-muted">{{ claim.claimDate | regionalDate:'d MMM y' }}</td>
                             <td class="text-muted">{{ claim.currency }} {{ claim.amount | number:'1.2-2' }}</td>
                             <td class="text-muted"><span class="chip" [ngClass]="claimStatusClass(claim.status)">{{ claim.status }}</span></td>
                             <td class="text-muted">

@@ -149,7 +149,7 @@
                   <td class="text-muted">{{ departmentName(department.parentDepartmentId) }}</td>
                   <td class="text-muted">{{ departmentHead(department.headOfDepartmentId) }}</td>
                   <td class="text-muted text-center">{{ departmentEmployeeCount(department) }}</td>
-                  <td class="text-muted">{{ department.effectiveFrom | date:'dd/MM/yyyy' }}</td>
+                  <td class="text-muted">{{ department.effectiveFrom | regionalDate:'dd/MM/yyyy' }}</td>
                   <td><span class="chip" [ngClass]="statusClass(department.status)">{{ department.status }}</span></td>
                   <td>
                     <button class="text-muted action-btn" mat-icon-button [routerLink]="['/organization/departments/view', department.id]">

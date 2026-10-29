@@ -141,7 +141,7 @@
                         </div>
                         <div>
                           <p class="text-dark fw-500 my-0">{{ claimTypeLabel(claim.claimType) }}</p>
-                          <p class="text-muted fs-10 fw-300 my-0">{{ claim.claimDate | date:'d MMM y' }} · <span class="badge fs-10 fw-400" [ngClass]="claimStatusClass(claim.status)">{{ claim.status }}</span></p>
+                          <p class="text-muted fs-10 fw-300 my-0">{{ claim.claimDate | regionalDate:'d MMM y' }} · <span class="badge fs-10 fw-400" [ngClass]="claimStatusClass(claim.status)">{{ claim.status }}</span></p>
                         </div>
                       </div>
                       <button type="button" class="reference-link" (click)="openClaimReference(claim)">{{ claim.id }}</button>
@@ -165,7 +165,7 @@
                         </div>
                         <div>
                           <p class="text-dark fw-500 my-0">{{ commission.planName }}</p>
-                          <p class="text-muted fs-10 fw-300 my-0">{{ commission.createdDate | date:'d MMM y' }} · <span class="badge fs-10 fw-400" [ngClass]="commissionStatusClass(commission.status)">{{ commissionStatusLabel(commission.status) }}</span></p>
+                          <p class="text-muted fs-10 fw-300 my-0">{{ commission.createdDate | regionalDate:'d MMM y' }} · <span class="badge fs-10 fw-400" [ngClass]="commissionStatusClass(commission.status)">{{ commissionStatusLabel(commission.status) }}</span></p>
                         </div>
                       </div>
                       <button type="button" class="reference-link" (click)="openCommissionReference(commission)">{{ commission.id }}</button>

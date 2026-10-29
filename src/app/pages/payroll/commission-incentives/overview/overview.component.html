@@ -82,8 +82,8 @@
                       <div class="text-dark">{{ record.planName }}</div>
                       <p class="text-muted fs-10 fw-300 my-0">{{ record.payrollEarningCode }}</p>
                     </td>
-                    <td class="text-dark fw-500">{{ record.amount | currency:'MYR':'symbol':'1.2-2' }}</td>
-                    <td class="text-muted">{{ record.createdDate | date:'dd/MM/yyyy' }}</td>
+                    <td class="text-dark fw-500">{{ record.amount | regionalCurrency:'1.2-2':'MYR' }}</td>
+                    <td class="text-muted">{{ record.createdDate | regionalDate:'dd/MM/yyyy' }}</td>
                     <td><span [ngClass]="statusClass(record.status)">{{ statusLabel(record.status) }}</span></td>
                     <td>
                       <button type="button" class="text-muted action-btn" mat-icon-button (click)="openDetails(record)">

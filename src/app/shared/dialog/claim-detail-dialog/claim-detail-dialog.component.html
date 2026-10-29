@@ -51,7 +51,7 @@
           </div>
           <div>
             <p class="text-muted fs-10 fs-300 my-0">Claim date</p>
-            <p class="text-dark my-0 fw-500">{{ claim.claimDate | date:'dd/MM/yyyy' }}</p>
+            <p class="text-dark my-0 fw-500">{{ claim.claimDate | regionalDate:'dd/MM/yyyy' }}</p>
           </div>
           <div>
             <p class="text-muted fs-10 fs-300 my-0">Amount</p>
@@ -94,7 +94,7 @@
         <div class="detail-grid">
           <div>
             <p class="text-muted fs-10 fs-300 my-0">Submitted at</p>
-            <p class="text-dark my-0 fw-500">{{ claim.submittedAt | date:'dd/MM/yyyy, h:mm a' }}</p>
+            <p class="text-dark my-0 fw-500">{{ claim.submittedAt | regionalDate:'dd/MM/yyyy' }}, {{ claim.submittedAt | regionalTime }}</p>
           </div>
           <div>
             <p class="text-muted fs-10 fs-300 my-0">Approved by</p>
@@ -102,7 +102,7 @@
           </div>
           <div>
             <p class="text-muted fs-10 fs-300 my-0">Approved date</p>
-            <p class="text-dark my-0 fw-500">{{ claim.approval.approvedDate ? (claim.approval.approvedDate | date:'dd/MM/yyyy') : '-' }}</p>
+            <p class="text-dark my-0 fw-500">{{ claim.approval.approvedDate ? (claim.approval.approvedDate | regionalDate:'dd/MM/yyyy') : '-' }}</p>
           </div>
           <div class="detail-full-width">
             <p class="text-muted fs-10 fs-300 my-0">Comments</p>

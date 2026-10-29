@@ -44,7 +44,7 @@
         <div class="detail-grid">
           <div>
             <p class="text-muted fs-10 fs-300 my-0">Submitted at</p>
-            <p class="text-dark my-0 fw-500">{{ record.createdDate | date:'dd/MM/yyyy' }}</p>
+            <p class="text-dark my-0 fw-500">{{ record.createdDate | regionalDate:'dd/MM/yyyy' }}</p>
           </div>
           <div>
             <p class="text-muted fs-10 fs-300 my-0">Approved by</p>
@@ -52,7 +52,7 @@
           </div>
           <div>
             <p class="text-muted fs-10 fs-300 my-0">Approved at</p>
-            <p class="text-dark my-0 fw-500">{{ record.approvedAt ? (record.approvedAt | date:'dd/MM/yyyy, h:mm a') : '-' }}</p>
+            <p class="text-dark my-0 fw-500">{{ record.approvedAt ? ((record.approvedAt | regionalDate:'dd/MM/yyyy') + ', ' + (record.approvedAt | regionalTime)) : '-' }}</p>
           </div>
           <div class="detail-full-width">
             <p class="text-muted fs-10 fs-300 my-0">Comments</p>

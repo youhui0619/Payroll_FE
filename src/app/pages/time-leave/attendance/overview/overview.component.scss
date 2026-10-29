@@ -233,18 +233,6 @@ td.sticky-col {
   background: #f8fafc;
 }
 
-.sticky-col-id {
-  left: 240px;
-  min-width: 130px;
-  width: 130px;
-  max-width: 130px;
-  border-right: 1px solid var(--light-disabled);
-  box-sizing: border-box;
-  text-align: left !important;
-  background: #f8fafc;
-}
-
-tbody .sticky-col-employee,
-tbody .sticky-col-id {
+tbody .sticky-col-employee {
   background: #fff;
 }

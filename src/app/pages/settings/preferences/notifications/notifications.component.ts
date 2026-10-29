@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormRecord, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { NOTIFICATION_PREFERENCE_GROUPS } from '../../../../data/notification-preferences.data';
+import { getNotificationPreferenceGroups, NOTIFICATION_PREFERENCE_VALUES } from '../../../../data/notification-preferences.data';
 
 @Component({
   selector: 'app-notifications',
@@ -13,7 +13,7 @@ import { NOTIFICATION_PREFERENCE_GROUPS } from '../../../../data/notification-pr
   styleUrl: './notifications.component.scss'
 })
 export class NotificationsComponent implements OnInit {
-  readonly notificationGroups = NOTIFICATION_PREFERENCE_GROUPS;
+  readonly notificationGroups = getNotificationPreferenceGroups();
   readonly notificationForm = new FormRecord<FormControl<boolean>>({});
 
   ngOnInit(): void {
@@ -21,13 +21,13 @@ export class NotificationsComponent implements OnInit {
       for (const preference of group.preferences) {
         this.notificationForm.addControl(
           preference.id,
-          new FormControl(preference.enabled, { nonNullable: true })
+          new FormControl(NOTIFICATION_PREFERENCE_VALUES[preference.id] ?? false, { nonNullable: true })
         );
       }
     }
   }
 
-  onSubmit(form:any){
-    console.log("form.value", form.valueca)
+  onSubmit(): void {
+    console.log('Notification preferences', this.notificationForm.getRawValue());
   }
 }

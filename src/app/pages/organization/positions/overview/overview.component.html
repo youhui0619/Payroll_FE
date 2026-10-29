@@ -103,7 +103,7 @@
                   <td class="text-muted">{{ jobLevelLabel(position.jobLevel) }}</td>
                   <td class="text-muted">{{ position.reportsTo || '-' }}</td>
                   <td class="text-muted text-center">{{ employeeCount(position) }}</td>
-                  <td class="text-muted">{{ position.effectiveFrom | date:'dd/MM/yyyy' }}</td>
+                  <td class="text-muted">{{ position.effectiveFrom | regionalDate:'dd/MM/yyyy' }}</td>
                   <td>
                     <span class="chip" [ngClass]="isActive(position) ? 'bg-light-primary text-primary' : 'bg-light-secondary text-secondary'">
                       {{ isActive(position) ? 'Active' : 'Inactive' }}

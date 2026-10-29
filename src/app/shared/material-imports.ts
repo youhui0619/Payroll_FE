@@ -18,27 +18,28 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { FileInputDirective } from '@ngx-dropzone/cdk';
 import { MatDropzone } from '@ngx-dropzone/material';
-import { RegionalCurrencySymbolPipe } from './pipes/regional-format.pipes';
+import { RegionalCurrencyPipe, RegionalCurrencySymbolPipe, RegionalDatePipe, RegionalNumberPipe, RegionalTimePipe } from './pipes/regional-format.pipes';
 
 import * as TablerIcons from '@tabler/icons-angular';
 
 const tablerIcons = [
-  TablerIcons.IconAdjustments, TablerIcons.IconAlertTriangle, TablerIcons.IconArrowNarrowRight, TablerIcons.IconArrowRight,
+  TablerIcons.IconAdjustments, TablerIcons.IconAlertTriangle, TablerIcons.IconArrowLeft, TablerIcons.IconArrowNarrowRight, TablerIcons.IconArrowRight,
   TablerIcons.IconArrowsExchange, TablerIcons.IconArticle, TablerIcons.IconBox, TablerIcons.IconBuilding,
-  TablerIcons.IconBuildingWarehouse, TablerIcons.IconCalendarDue, TablerIcons.IconCalendarEvent, TablerIcons.IconChartBar,
+  TablerIcons.IconBriefcase, TablerIcons.IconBuildingWarehouse, TablerIcons.IconCalendar, TablerIcons.IconCalendarDue, TablerIcons.IconCalendarEvent, TablerIcons.IconCash, TablerIcons.IconChartBar,
   TablerIcons.IconChartDonut, TablerIcons.IconCheck, TablerIcons.IconChevronLeft, TablerIcons.IconCircleCheck,
-  TablerIcons.IconCircleDashed, TablerIcons.IconClipboardCheck, TablerIcons.IconClipboardList, TablerIcons.IconClock,
+  TablerIcons.IconCircleDashed, TablerIcons.IconCircleDot, TablerIcons.IconClipboardCheck, TablerIcons.IconClipboardList, TablerIcons.IconClock,
   TablerIcons.IconClock24, TablerIcons.IconCopy, TablerIcons.IconCreditCard, TablerIcons.IconCurrencyDollar,
   TablerIcons.IconDimensions, TablerIcons.IconDownload, TablerIcons.IconEdit, TablerIcons.IconEye,
   TablerIcons.IconEyeOff, TablerIcons.IconFile, TablerIcons.IconFileDescription, TablerIcons.IconFileTypePdf,
-  TablerIcons.IconForklift, TablerIcons.IconGridDots, TablerIcons.IconHandClick, TablerIcons.IconHome,
+  TablerIcons.IconFileText, TablerIcons.IconForklift, TablerIcons.IconGridDots, TablerIcons.IconHandClick, TablerIcons.IconHome, TablerIcons.IconHourglassEmpty,
   TablerIcons.IconLanguage, TablerIcons.IconLayoutSidebarLeftCollapse, TablerIcons.IconLayoutSidebarLeftExpand, TablerIcons.IconLoader,
+  TablerIcons.IconMedicalCross,
   TablerIcons.IconMailQuestion, TablerIcons.IconMap, TablerIcons.IconMap2, TablerIcons.IconMapPin,
   TablerIcons.IconNumber, TablerIcons.IconPackage, TablerIcons.IconPackageImport, TablerIcons.IconPlus,
-  TablerIcons.IconProgressCheck, TablerIcons.IconSearch, TablerIcons.IconSettings, TablerIcons.IconShieldCheck,
+  TablerIcons.IconProgressCheck, TablerIcons.IconReceipt, TablerIcons.IconSearch, TablerIcons.IconSettings, TablerIcons.IconShieldCheck,
   TablerIcons.IconStar, TablerIcons.IconTable, TablerIcons.IconTransfer, TablerIcons.IconTransferIn,
   TablerIcons.IconTransferOut, TablerIcons.IconTrash, TablerIcons.IconTruckDelivery, TablerIcons.IconUpload,
-  TablerIcons.IconUserCheck, TablerIcons.IconUserOff, TablerIcons.IconUsers, TablerIcons.IconX,
+  TablerIcons.IconUserCheck, TablerIcons.IconUserOff, TablerIcons.IconUsers, TablerIcons.IconWalletOff, TablerIcons.IconX,
 ];
 
 const tablerIconRegistry = Object.fromEntries(
@@ -72,6 +73,10 @@ export const MaterialImports = [
   MatDropzone,
   TablerIcons.TablerIconComponent,
   RegionalCurrencySymbolPipe,
+  RegionalCurrencyPipe,
+  RegionalDatePipe,
+  RegionalNumberPipe,
+  RegionalTimePipe,
 ];
 
 export const MaterialProviders = [

@@ -150,7 +150,7 @@
                         <p class="text-dark fw-500 my-0">{{ claim.employeeName }}</p>
                         <p class="fs-10 fw-300 text-muted my-0">{{ claim.employeeId }} · {{ claim.departmentName }}</p>
                       </td>
-                      <td class="text-muted">{{ claim.claimDate | date:'d MMM y' }}</td>
+                      <td class="text-muted">{{ claim.claimDate | regionalDate:'d MMM y' }}</td>
                       <td class="text-muted">{{ claim.currency }} {{ claim.amount | number:'1.2-2' }}</td>
                       <td class="text-muted">{{ paymentMethodLabel(claim.paymentMethod) }}</td>
                       <td><span class="chip" [ngClass]="statusClass(claim.status)">{{ claim.status }}</span></td>

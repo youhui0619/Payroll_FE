@@ -1,110 +1,81 @@
+import type { NotificationPreferenceGroup } from '../models/notification-preference.model';
+import type { PayrollSettings } from '../models/payroll-settings.model';
+import { payrollSettings } from './payroll-settings';
 
-import { NotificationPreferenceGroup } from '../models/notification-preference.model';
+export const NOTIFICATION_PREFERENCE_VALUES: Record<string, boolean> = {
+  emailNotifications: true,
+  whatsappNotifications: false,
+  leaveApplications: true,
+  claims: true,
+  attendanceOvertime: true,
+  payrollPayslips: true,
+  statutoryCompliance: true
+};
 
-export const NOTIFICATION_PREFERENCE_GROUPS: NotificationPreferenceGroup[] = [
-  {
-    id: 'email',
-    title: 'Email Updates',
-    description: 'Choose which updates are sent by email.',
-    preferences: [
-      {
-        id: 'newsletter',
-        title: 'Product Updates',
-        description: 'News, product updates and important changes.',
-        icon: 'article',
-        enabled: true
-      },
-      {
-        id: 'daily-summary',
-        title: 'Daily Inventory Summary',
-        description: 'Daily stock levels and inventory activity.',
-        icon: 'chart-bar',
-        enabled: false
-      }
-    ]
-  },
-  {
-    id: 'inventory',
-    title: 'Inventory Alerts',
-    description: 'Alerts about stock and inventory conditions.',
-    preferences: [
-      {
-        id: 'low-stock',
-        title: 'Low Stock Alerts',
-        description: 'Inventory falls below its minimum threshold.',
-        icon: 'package',
-        enabled: true
-      },
-      {
-        id: 'expiry-alerts',
-        title: 'Expiry Alerts',
-        description: 'Tracked lots or batches are approaching expiry.',
-        icon: 'calendar-due',
-        enabled: true
-      }
-    ]
-  },
-  {
-    id: 'warehouse-operations',
-    title: 'Warehouse Operations',
-    description: 'Updates triggered by warehouse workflows.',
-    preferences: [
-      {
-        id: 'receiving-updates',
-        title: 'Receiving Updates',
-        description: 'Inbound receipts are completed or have exceptions.',
-        icon: 'package-import',
-        enabled: true
-      },
-      {
-        id: 'putaway-updates',
-        title: 'Put-away Updates',
-        description: 'Put-away tasks are completed or fail.',
-        icon: 'package',
-        enabled: true
-      },
-      {
-        id: 'order-picking-updates',
-        title: 'Picking & Packing Updates',
-        description: 'Orders are picked, packed or ready to dispatch.',
-        icon: 'clipboard-list',
-        enabled: true
-      },
-      {
-        id: 'stock-transfer-updates',
-        title: 'Stock Transfer Updates',
-        description: 'Transfers are dispatched, received or completed.',
-        icon: 'arrows-exchange',
-        enabled: true
-      },
-      {
-        id: 'operational-exceptions',
-        title: 'Operational Exceptions',
-        description: 'Short picks, failed put-away or stock discrepancies.',
-        icon: 'alert-triangle',
-        enabled: true
-      },
-      {
-        id: 'adjustment-approvals',
-        title: 'Adjustment Approvals',
-        description: 'Stock adjustment requests need review.',
-        icon: 'clipboard-check',
-        enabled: true
-      }
-    ]
-  },
-  {
-    id: 'account',
-    title: 'Account Security',
-    description: 'Important notices about account access.',
-    preferences: [
-      {
-        id: 'security-alerts',
-        title: 'Security Alerts',
-        description: 'Sign-in and account security notifications.',
-        icon: 'shield-check',
-        enabled: true
-      }
-    ]
-  }
-];
+export function getNotificationPreferenceGroups(settings: PayrollSettings = payrollSettings): NotificationPreferenceGroup[] {
+  const groups: NotificationPreferenceGroup[] = [
+    {
+      id: 'notification-channels',
+      title: 'Notification Channels',
+      description: 'Choose how you want to receive notifications.',
+      preferences: [
+        {
+          id: 'emailNotifications',
+          title: 'Email notifications',
+          description: 'Receive notifications by email.',
+          icon: 'mail-question'
+        },
+        {
+          id: 'whatsappNotifications',
+          title: 'WhatsApp notifications',
+          description: 'Receive notifications on WhatsApp.',
+          icon: 'article'
+        }
+      ]
+    },
+    {
+      id: 'events-to-notify',
+      title: 'Events to notify',
+      description: 'Choose which payroll and employee updates you want to hear about.',
+      preferences: [
+        {
+          id: 'leaveApplications',
+          title: 'Leave applications',
+          description: 'Submitted, approved, rejected or cancelled.',
+          icon: 'calendar-event'
+        },
+        ...(settings.includeClaimsAndAllowance ? [{
+          id: 'claims',
+          title: 'Claims',
+          description: 'Submitted, approved, rejected or paid.',
+          icon: 'file-description'
+        }] : []),
+        ...(settings.includeOvertime ? [{
+          id: 'attendanceOvertime',
+          title: 'Attendance & overtime',
+          description: 'Adjustment requests and overtime approvals.',
+          icon: 'clock'
+        }] : []),
+        {
+          id: 'payrollPayslips',
+          title: 'Payroll & payslips',
+          description: 'Payroll completed, payslip published or corrected.',
+          icon: 'file-description'
+        },
+        ...(
+          settings.enableEpf || settings.enableSocso || settings.enableEis ||
+          settings.enablePcb || settings.enableHrdCorpLevy
+            ? [{
+                id: 'statutoryCompliance',
+                title: 'Statutory & compliance',
+                description: 'Reminders for configured statutory tasks.',
+                icon: 'progress-check'
+              }]
+            : []
+        )
+      ]
+    }
+  ];
+
+  return groups;
+}

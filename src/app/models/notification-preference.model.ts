@@ -3,7 +3,6 @@ export interface NotificationPreference {
   title: string;
   description: string;
   icon: string;
-  enabled: boolean;
 }
 
 export interface NotificationPreferenceGroup {

@@ -43,11 +43,11 @@
           <div class="row mx-0">
             <div class="col-sm-6 px-2 mb-3">
               <label class="text-dark fw-500">Start Date</label>
-              <p class="text-muted">{{ record.startDate | date:'d MMM y (EEEE)' }}</p>
+              <p class="text-muted">{{ record.startDate | regionalDate:'d MMM y (EEEE)' }}</p>
             </div>
             <div class="col-sm-6 px-2 mb-3">
               <label class="text-dark fw-500">End Date</label>
-              <p class="text-muted">{{ record.endDate | date:'d MMM y (EEEE)' }}</p>
+              <p class="text-muted">{{ record.endDate | regionalDate:'d MMM y (EEEE)' }}</p>
             </div>
           </div>
         </div>

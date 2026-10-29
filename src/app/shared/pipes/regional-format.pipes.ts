@@ -56,3 +56,14 @@ export class RegionalDatePipe implements PipeTransform {
     return this.pipe.transform(value, pattern, offsetFor(this.preferences.timeZone), localeFor(this.preferences.numberFormat));
   }
 }
+
+@Pipe({ name: 'regionalTime', standalone: true, pure: false })
+export class RegionalTimePipe implements PipeTransform {
+  private readonly preferences = inject(RegionalPreferencesService);
+  private readonly pipe = new DatePipe('en-US');
+
+  transform(value: Date | string | number | null | undefined, format?: string): string | null {
+    const pattern = format ?? (this.preferences.timeFormat === '12h' ? 'h:mm a' : 'HH:mm');
+    return this.pipe.transform(value, pattern, offsetFor(this.preferences.timeZone), localeFor(this.preferences.numberFormat));
+  }
+}

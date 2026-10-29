@@ -112,11 +112,11 @@
               <div class="row mx-0">
                 <div class="col-sm-6 px-2 mb-3">
                   <label class="text-dark fw-500">Effective From</label>
-                  <p class="text-muted">{{ department.effectiveFrom | date:'d MMM y' }}</p>
+                  <p class="text-muted">{{ department.effectiveFrom | regionalDate:'d MMM y' }}</p>
                 </div>
                 <div class="col-sm-6 px-2 mb-3">
                   <label class="text-dark fw-500">Effective To</label>
-                  <p class="text-muted">{{ department.effectiveTo ? (department.effectiveTo | date:'d MMM y') : 'No end date' }}</p>
+                  <p class="text-muted">{{ department.effectiveTo ? (department.effectiveTo | regionalDate:'d MMM y') : 'No end date' }}</p>
                 </div>
               </div>
             </div>

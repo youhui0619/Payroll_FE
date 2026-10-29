@@ -204,10 +204,10 @@ export class OverviewComponent implements AfterViewInit {
 
     const wrapperRect = wrapper.getBoundingClientRect();
     const columnRect = column.getBoundingClientRect();
-    const stickyColumn = wrapper.querySelector<HTMLElement>('.sticky-col-id');
+    const stickyColumn = wrapper.querySelector<HTMLElement>('.sticky-col-employee');
     const stickyWidth = stickyColumn
       ? stickyColumn.getBoundingClientRect().right - wrapperRect.left
-      : 370;
+      : 240;
     const columnContentLeft = columnRect.left - wrapperRect.left + wrapper.scrollLeft;
     const targetScrollLeft = columnContentLeft - stickyWidth;
     const maxScrollLeft = wrapper.scrollWidth - wrapper.clientWidth;

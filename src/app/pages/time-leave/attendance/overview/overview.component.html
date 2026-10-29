@@ -147,7 +147,6 @@
               <thead>
                 <tr>
                   <th class="text-dark text-nowrap sticky-col sticky-col-employee">Employee</th>
-                  <th class="text-dark text-nowrap sticky-col sticky-col-id">Employee ID</th>
                   @for (day of days; track day) {
                     <th class="day-column" [class.weekend]="day.isWeekend" [class.today]="day.isToday" [attr.data-today-column]="day.isToday ? '' : null" [attr.data-first-day-column]="day.date === 1 ? '' : null">
                       {{ day.date }}
@@ -159,14 +158,11 @@
               <tbody>
                 @for (employee of employees; track employee) {
                   <tr>
-                    <td class="text-muted text-nowrap sticky-col sticky-col-employee">
+                    <td class="text-muted text-nowrap sticky-col sticky-col-employee" [routerLink]="['/workforce/employees/view', employee.employeeId]">
                       <div class="d-flex align-items-center justify-content-start">
                         <div class="avatar me-3">{{ employee.initials }}</div>
-                        <div><p class="text-dark my-0">{{ employee.employeeName }}</p><p class="fs-10 fw-300 text-muted my-0">{{ employee.department }} · {{ employee.position }}</p></div>
+                        <div><p class="text-dark my-0">{{ employee.employeeName }}</p><p class="fs-10 fw-300 text-muted my-0">{{ employee.employeeId }}</p></div>
                       </div>
-                    </td>
-                    <td class="text-muted text-nowrap sticky-col sticky-col-id">
-                      <a href="javascript:void(0)" routerLink="/workforce/employees/view">{{ employee.employeeId }}</a>
                     </td>
                     @for (day of days; track day) {
                       <td class="leave-cell" [class.weekend]="day.isWeekend" [class.today]="day.isToday" [class.public-holiday]="getPublicHoliday(employee, day.dateKey)">
