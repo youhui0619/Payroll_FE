@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -10,6 +10,7 @@ import { departments } from '../../../../data/departments';
 import { employees as employeeRecords } from '../../../../data/employees';
 import type { Department } from '../../../../models/department.model';
 import type { EmployeeRecord } from '../../../../models/employee.model';
+import { NavigationService } from '../../../../services/navigation.service';
 
 interface DepartmentTreeNode {
   department: Department;
@@ -24,12 +25,15 @@ interface DepartmentTreeNode {
   styleUrl: './view.component.scss'
 })
 export class ViewComponent {
+  private readonly navigation = inject(NavigationService);
   department!: Department;
   employees: EmployeeRecord[] = [];
   organizationTree: DepartmentTreeNode[] = [];
   searchTerm = '';
   selectedEmploymentTypes: string[] = [];
   selectedEmploymentStatuses: string[] = [];
+
+  goBack(): void { void this.navigation.back('/organization/departments/overview'); }
 
   constructor(route: ActivatedRoute) {
     route.paramMap.pipe(takeUntilDestroyed()).subscribe(params => {

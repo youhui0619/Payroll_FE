@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { publicHolidays } from '../../../../data/public-holidays';
 import type { PublicHolidayRecord } from '../../../../models/public-holiday.model';
+import { NavigationService } from '../../../../services/navigation.service';
 
 @Component({
   selector: 'app-view',
@@ -15,7 +16,10 @@ import type { PublicHolidayRecord } from '../../../../models/public-holiday.mode
   styleUrl: './view.component.scss'
 })
 export class ViewComponent {
+  private readonly navigation = inject(NavigationService);
   holiday: PublicHolidayRecord | undefined;
+
+  goBack(): void { void this.navigation.back('/settings/public-holidays/list'); }
 
   constructor(route: ActivatedRoute) {
     route.paramMap.pipe(takeUntilDestroyed()).subscribe(params => {

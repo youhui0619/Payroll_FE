@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
@@ -11,6 +11,7 @@ import themePlugin from "@fullcalendar/angular/themes/monarch";
 import { LeaveApplication } from '../../../../models/leave.model';
 import { getEmployee } from '../../../../data/employees';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
+import { NavigationService } from '../../../../services/navigation.service';
 
 @Component({
   selector: 'app-view',
@@ -20,8 +21,11 @@ import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../sh
   styleUrl: './view.component.scss'
 })
 export class ViewComponent {
+  private readonly navigation = inject(NavigationService);
   selectedLeave: LeaveDialogData | null = null;
   readonly employee = getEmployee('EMP-0042');
+
+  goBack(): void { void this.navigation.back('/time-leave/leave/overview'); }
 
   readonly leaveRequests: LeaveApplication[] = [
     {

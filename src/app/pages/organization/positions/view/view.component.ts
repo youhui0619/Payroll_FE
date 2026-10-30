@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
@@ -8,6 +8,7 @@ import { employees } from '../../../../data/employees';
 import { positions } from '../../../../data/positions';
 import type { EmployeeRecord } from '../../../../models/employee.model';
 import type { Position } from '../../../../models/position.model';
+import { NavigationService } from '../../../../services/navigation.service';
 
 interface PositionTreeNode {
   position: Position;
@@ -22,10 +23,13 @@ interface PositionTreeNode {
   styleUrl: './view.component.scss'
 })
 export class ViewComponent {
+  private readonly navigation = inject(NavigationService);
   position!: Position;
   departmentName = '—';
   employees: EmployeeRecord[] = [];
   organizationTree: PositionTreeNode[] = [];
+
+  goBack(): void { void this.navigation.back('/organization/positions/overview'); }
 
   constructor(route: ActivatedRoute) {
     route.paramMap.pipe(takeUntilDestroyed()).subscribe(params => {

@@ -1,11 +1,12 @@
 
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { claimTypes } from '../../../../data/claim-types';
 import type { ClaimTypeSetting, ClaimTypeSettingStatus } from '../../../../models/claim-setting.model';
+import { NavigationService } from '../../../../services/navigation.service';
 
 @Component({
   selector: 'app-edit',
@@ -16,8 +17,11 @@ import type { ClaimTypeSetting, ClaimTypeSettingStatus } from '../../../../model
   styleUrl: './edit.component.scss'
 })
 export class EditComponent implements OnInit {
+  private readonly navigation = inject(NavigationService);
   claimType: ClaimTypeSetting | undefined;
   submitted = false;
+
+  goBack(): void { void this.navigation.back('/settings/claim-settings/overview'); }
 
   readonly claimForm = new FormGroup({
     code: new FormControl('', { nonNullable: true, validators: [Validators.required] }),

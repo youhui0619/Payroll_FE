@@ -1,5 +1,5 @@
 
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, Validators, ValidatorFn, FormControl, ValidationErrors, UntypedFormArray, NgForm, FormGroup, FormArray,FormsModule, ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -17,6 +17,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { NavigationService } from '../../../../services/navigation.service';
 
 @Component({
   selector: 'app-view',
@@ -26,5 +27,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
   styleUrl: './view.component.scss'
 })
 export class ViewComponent {
+  private readonly navigation = inject(NavigationService);
+  goBack(): void { void this.navigation.back('/parties/vendors/list'); }
 
 }

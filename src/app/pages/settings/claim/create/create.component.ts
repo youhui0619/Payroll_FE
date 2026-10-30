@@ -1,10 +1,11 @@
 
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { claimTypes } from '../../../../data/claim-types';
 import type { ClaimTypeSetting, ClaimTypeSettingStatus } from '../../../../models/claim-setting.model';
+import { NavigationService } from '../../../../services/navigation.service';
 
 @Component({
   selector: 'app-create',
@@ -15,6 +16,7 @@ import type { ClaimTypeSetting, ClaimTypeSettingStatus } from '../../../../model
   styleUrl: './create.component.scss'
 })
 export class CreateComponent {
+  private readonly navigation = inject(NavigationService);
   readonly claimForm = new FormGroup({
     code: new FormControl('', {
       nonNullable: true,
@@ -25,6 +27,8 @@ export class CreateComponent {
     status: new FormControl<ClaimTypeSettingStatus>('ACTIVE', { nonNullable: true })
   });
   submitted = false;
+
+  goBack(): void { void this.navigation.back('/settings/claim-settings/overview'); }
 
   constructor(private readonly router: Router) {}
 
