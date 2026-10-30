@@ -27,15 +27,16 @@
     "@popperjs/core": "^2.11.8",
     "@tabler/icons-angular": "^3.49.0",
     "bootstrap": "^5.3.8",
+    "firebase": "^12.18.0",
     "firebase-tools": "^15.32.1",
     "fullcalendar": "^7.1.1",
+    "ng-apexcharts": "^3.2.0",
     "ngx-dropzone": "^3.1.0",
     "ngx-toastr": "^19.1.0",
     "rxjs": "~7.8.0",
     "temporal-polyfill": "^1.0.5",
     "tslib": "^2.3.0",
-    "zone.js": "~0.15.0",
-    "firebase": "^12.18.0"
+    "zone.js": "~0.15.0"
   },
   "devDependencies": {
     "@angular/build": "^21.2.28",

@@ -1,0 +1,40 @@
+
+.summary-progress{
+    height: 8px;
+    border-radius: 0px!important;
+    display: flex;
+    margin-bottom: 8px;
+    align-items: center;
+
+    .progress-bar{
+        height: 100%;
+        margin-right: 4px
+    }
+}
+
+
+.c-qty{
+    max-width: 150px;
+}
+
+.dashboard-chart {
+  width: 100%;
+  min-width: 0;
+}
+
+.dashboard-chart apx-chart {
+  display: block;
+  width: 100%;
+}
+
+.progress{
+    height: 6px;
+    min-width: 80px;
+    border-radius: 0px!important;
+    display: flex;
+    align-items: center;
+
+    .progress-bar{
+        height: 100%;
+    }
+}

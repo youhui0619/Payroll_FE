@@ -21,86 +21,66 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatStepperModule } from '@angular/material/stepper';
 import { FileInputDirective } from '@ngx-dropzone/cdk';
 import { NgxDropzoneModule } from 'ngx-dropzone';
+import { ChartOptions, NgApexchartsModule } from '../../shared/chart-imports';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, TablerIconComponent, MatFormFieldModule, MatSelectModule, MatInputModule, MatButtonModule, MatCheckboxModule, MatRadioModule, MatDatepickerModule, MatSort, MatPaginator, MatMenuModule, MatSlideToggleModule, MatTabsModule, MatAutocompleteModule, NgxDropzoneModule, MatStepperModule],
+  imports: [FormsModule, ReactiveFormsModule, TablerIconComponent, MatFormFieldModule, MatSelectModule, MatInputModule, MatButtonModule, MatCheckboxModule, MatRadioModule, MatDatepickerModule, MatSort, MatPaginator, MatMenuModule, MatSlideToggleModule, MatTabsModule, MatAutocompleteModule, NgxDropzoneModule, MatStepperModule, NgApexchartsModule],
   providers: [provideNativeDateAdapter()],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
-  hide: boolean = true;
-  files: File[] = [];
-  filePreviewUrls: string[] = [];
-  togglePasswordVisibility(): void {
-    this.hide = !this.hide;
-  }
-
-  form = new FormGroup({
-    name: new FormControl({ value: '', disabled: true }, [Validators.required]),
-    password: new FormControl('', [Validators.required]),
-    category: new FormControl('', [Validators.required]),
-    remark: new FormControl('', [Validators.required]),
-    autocomplete: new FormControl('', [Validators.required]),
-    isActive: new FormControl(false),
-    image: new FormControl<File[]>([])
-  });
-
-  firstFormGroup = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    });
-    secondFormGroup = new FormGroup({
-    secondCtrl: new FormControl('', [Validators.required]),
-    });
-
-
-  onSelect(event: any): void {
-    if (!event.addedFiles?.length) {
-        return;
-    }
-
-    const newFiles: File[] = event.addedFiles;
-
-    this.files = [
-        ...this.files,
-        ...newFiles
-    ];
-
-    const newPreviewUrls = newFiles.map((file: File) =>
-        URL.createObjectURL(file)
-    );
-
-    this.filePreviewUrls = [
-        ...this.filePreviewUrls,
-        ...newPreviewUrls
-    ];
-
-    this.form.controls.image.setValue(this.files);
-}
-
-onRemove(index: number): void {
-    URL.revokeObjectURL(this.filePreviewUrls[index]);
-
-    this.files.splice(index, 1);
-    this.filePreviewUrls.splice(index, 1);
-
-    this.files = [...this.files];
-    this.filePreviewUrls = [...this.filePreviewUrls];
-
-    this.form.controls.image.setValue(this.files);
-}
-
-  formatFileSize(bytes: number): string {
-    if (bytes === 0) {
-      return '0 Bytes';
-    }
-
-    const units = ['Bytes', 'KB', 'MB', 'GB'];
-    const index = Math.floor(Math.log(bytes) / Math.log(1024));
-
-    return `${(bytes / Math.pow(1024, index)).toFixed(1)} ${units[index]}`;
-  }
-
+  readonly years = Array.from({ length: 5 }, (_, index) => new Date().getFullYear() - index);
+  public chartOptions: Partial<ChartOptions> = {
+    series: [
+      { name: 'Present', data: [112, 116, 114, 119, 121, 118, 120, 117, 123, 119, 125, 112] },
+      { name: 'Annual leave', data: [8, 6, 9, 5, 4, 7, 5, 8, 3, 6, 2, 5] },
+      { name: 'Unpaid leave', data: [3, 2, 4, 2, 3, 2, 1, 3, 2, 2, 1, 3] },
+    ],
+    chart: {
+      type: 'bar',
+      height: 320,
+      stacked: true,
+      toolbar: { show: false },
+      zoom: { enabled: false },
+      foreColor: '#74808b',
+      fontFamily: 'inherit',
+    },
+    colors: ['#2e7d32', '#03a9f4', '#e53935'],
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '48%',
+        borderRadius: 3,
+      },
+    },
+    dataLabels: { enabled: false },
+    xaxis: {
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      axisBorder: { show: false },
+      axisTicks: { show: false },
+    },
+    yaxis: {
+      min: 0,
+      forceNiceScale: true,
+      title: { text: 'Employees' },
+      labels: { formatter: (value) => `${Math.round(value)}` },
+    },
+    grid: { borderColor: '#e9ecef', strokeDashArray: 4 },
+    legend: { position: 'bottom', horizontalAlign: 'left', offsetY: 4 },
+    fill: { opacity: 1 },
+    tooltip: { shared: true, intersect: false },
+    responsive: [
+      {
+        breakpoint: 576,
+        options: {
+          chart: { height: 280 },
+          plotOptions: { bar: { columnWidth: '60%' } },
+          yaxis: { title: { text: undefined } },
+        },
+      },
+    ],
+  };
 }

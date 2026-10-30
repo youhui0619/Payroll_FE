@@ -3,7 +3,7 @@
     border-radius: 10px;
     background: #fff;
     overflow: hidden;
-    padding: 12px;
+    padding: 20px;
     box-shadow: var(--shadow);
     margin-bottom: 16px;
     border: 0;
@@ -11,6 +11,7 @@
     .card-header{
         background: #fff;
         border: none;
+        padding: 0;
 
         h4{
             color: var(--header);
@@ -33,7 +34,7 @@
         color: var(--header);
         line-height: 1.5;
         margin-bottom: 0;
-        padding: 8px;
+        padding: 0px;
 
         p{
             margin-bottom: 0;

@@ -34,6 +34,8 @@ const tablerIcons = [
   TablerIcons.IconFileText, TablerIcons.IconForklift, TablerIcons.IconGridDots, TablerIcons.IconHandClick, TablerIcons.IconHome, TablerIcons.IconHourglassEmpty,
   TablerIcons.IconLanguage, TablerIcons.IconLayoutSidebarLeftCollapse, TablerIcons.IconLayoutSidebarLeftExpand, TablerIcons.IconLoader,
   TablerIcons.IconMedicalCross,
+  TablerIcons.IconArrowNarrowUp,
+  TablerIcons.IconArrowNarrowDown,
   TablerIcons.IconMailQuestion, TablerIcons.IconMap, TablerIcons.IconMap2, TablerIcons.IconMapPin,
   TablerIcons.IconNumber, TablerIcons.IconPackage, TablerIcons.IconPackageImport, TablerIcons.IconPlus,
   TablerIcons.IconProgressCheck, TablerIcons.IconReceipt, TablerIcons.IconSearch, TablerIcons.IconSettings, TablerIcons.IconShieldCheck,
