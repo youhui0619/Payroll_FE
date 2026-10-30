@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -27,6 +27,7 @@ import type {
 } from '../../../../models/commission-incentive-setting.model';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
 import { ClaimDetailDialogComponent } from '../../../../shared/dialog/claim-detail-dialog/claim-detail-dialog.component';
+import { NavigationService } from '../../../../services/navigation.service';
 
 function dayAfter(dateString: string): string {
   const [year, month, day] = dateString.split('-').map(Number);
@@ -48,6 +49,9 @@ const leaveEventColors: Record<string, { background: string; text: string }> = {
   styleUrl: './view.component.scss'
 })
 export class ViewComponent {
+
+  private navigation = inject(NavigationService);
+  
   employee!: EmployeeRecord;
   readonly leaveYear = new Date().getFullYear();
   readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');
@@ -225,6 +229,10 @@ export class ViewComponent {
     if (balance !== undefined) return `${balance} ${this.leaveUnit(policy)}`;
     if (policy.entitlementGrantMethod === 'MANUAL' && policy.defaultEntitlement === null) return '—';
     return `${policy.defaultEntitlement ?? 0} ${this.leaveUnit(policy)}`;
+  }
+
+  goBack() {
+    return this.navigation.back('/workforce/employees/list');
   }
 
   private policyBalance(policy: LeavePolicy): { entitled: number; balance: number } | undefined {

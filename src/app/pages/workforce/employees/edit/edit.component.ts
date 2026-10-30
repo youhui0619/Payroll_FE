@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { ActivatedRoute } from '@angular/router';
@@ -23,6 +23,7 @@ import type {
   CommissionCalculationMethod,
   CommissionIncentiveSetting
 } from '../../../../models/commission-incentive-setting.model';
+import { NavigationService } from '../../../../services/navigation.service';
 
 const statutoryEntitlementOptions = [
   { code: 'EPF', name: 'EPF / KWSP', setting: 'includeEpf' },
@@ -43,13 +44,8 @@ export class EditComponent implements OnInit {
 
   constructor(private readonly route: ActivatedRoute, private readonly destroyRef: DestroyRef) {}
 
-  ngOnInit(): void {
-    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
-      const employeeId = params.get('id');
-      if (employeeId) this.patchEmployeeForm(employeeId);
-    });
-  }
-
+  private navigation = inject(NavigationService);
+  
   readonly departments: Department[] = departments.filter(department => department.status === 'Active');
   readonly positions: Position[] = positions;
   readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');
@@ -126,6 +122,13 @@ export class EditComponent implements OnInit {
     }),
   });
 
+  ngOnInit(): void {
+    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
+      const employeeId = params.get('id');
+      if (employeeId) this.patchEmployeeForm(employeeId);
+    });
+  }
+
   get availablePositions(): Position[] {
     const departmentName = this.employeeForm.controls.employment.controls.department.value;
     const department = this.departments.find(item => item.name === departmentName);
@@ -157,6 +160,10 @@ export class EditComponent implements OnInit {
           return !!employeeId && setting.eligibleEmployeeIds.includes(employeeId);
       }
     });
+  }
+
+  goBack() {
+    return this.navigation.back('/workforce/employees/list');
   }
 
   isCommissionSelected(code: string): boolean {

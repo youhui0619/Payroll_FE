@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
@@ -14,6 +14,7 @@ import type { Department } from '../../../../models/department.model';
 import type { Position } from '../../../../models/position.model';
 import { commissionIncentiveSettings } from '../../../../data/commission-incentive-settings';
 import { payrollSettings } from '../../../../data/payroll-settings';
+import { NavigationService } from '../../../../services/navigation.service';
 import type {
   CommissionCalculationFrequency,
   CommissionCalculationMethod,
@@ -38,11 +39,17 @@ const statutoryEntitlementOptions = [
 })
 export class CreateComponent {
 
+  private navigation = inject(NavigationService);
+
   readonly departments: Department[] = departments.filter(department => department.status === 'Active');
   readonly positions: Position[] = positions;
   readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');
   readonly commissionIncentiveSettings: CommissionIncentiveSetting[] = commissionIncentiveSettings;
   readonly availableStatutoryEntitlements = statutoryEntitlementOptions.filter(option => payrollSettings[option.setting]);
+
+  goBack() {
+    return this.navigation.back('/workforce/employees/list');
+  }
 
   employeeForm = new FormGroup({
     personal: new FormGroup({
