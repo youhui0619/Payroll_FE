@@ -1,5 +1,5 @@
 
-<div class="row align-items-stretch my-4">
+<div class="row align-items-stretch">
   <div class="col-sm-3 px-2 d-flex flex-column">
     <div class="card flex-grow-1 mb-4">
       <div class="card-body">
@@ -38,7 +38,7 @@
   <div class="col-sm-3 px-2 d-flex flex-column">
     <div class="card flex-grow-1 mb-4">
       <div class="card-body">
-        <div  class="d-flex align-items-start justify-content-between">
+        <div class="d-flex align-items-start justify-content-between">
           <div class="summary-info">
             <p class="fs-12 text-muted">Present Today
             </p>
@@ -73,10 +73,10 @@
 
 
 <div class="row">
-  <div class="col-lg-8 col-md-7 px-2">
+  <div class="col-lg-8 px-2">
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center mb-3">
-        <h4>Attendance Overview</h4>
+        <h4>Payroll Overview</h4>
         <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
           <mat-select placeholder="Select Year">
             @for (year of years; track year) {
@@ -86,72 +86,249 @@
         </mat-form-field>
       </div>
       <div class="card-body">
-        <div class="dashboard-chart">
-          <apx-chart
-            [series]="chartOptions.series!"
-            [chart]="chartOptions.chart!"
-            [responsive]="chartOptions.responsive!"
-            [colors]="chartOptions.colors!"
-            [plotOptions]="chartOptions.plotOptions!"
-            [dataLabels]="chartOptions.dataLabels!"
-            [xaxis]="chartOptions.xaxis!"
-            [yaxis]="chartOptions.yaxis!"
-            [grid]="chartOptions.grid!"
-            [legend]="chartOptions.legend!"
-            [fill]="chartOptions.fill!"
-            [tooltip]="chartOptions.tooltip!"
-          ></apx-chart>
+        <div class="row mx-0">
+          <div class="col-sm-8 px-2">
+            <apx-chart
+              [series]="chartOptions.series!"
+              [chart]="chartOptions.chart!"
+              [responsive]="chartOptions.responsive!"
+              [colors]="chartOptions.colors!"
+              [plotOptions]="chartOptions.plotOptions!"
+              [dataLabels]="chartOptions.dataLabels!"
+              [xaxis]="chartOptions.xaxis!"
+              [yaxis]="chartOptions.yaxis!"
+              [grid]="chartOptions.grid!"
+              [legend]="chartOptions.legend!"
+              [fill]="chartOptions.fill!"
+              [tooltip]="chartOptions.tooltip!"
+            ></apx-chart>
+          </div>
+          <div class="col-sm-4 px-2 my-auto">
+            <div class="d-flex align-items-center justify-content-start">
+              <div class="text-primary bg-light-primary text-end icon me-3">
+                <tabler-icon icon="user-check"></tabler-icon>
+              </div>
+              <div class="summary-info">
+                <p class="fs-12 text-muted">Total Net Pay of {{selectedPayrollMonth}}
+                </p>
+                @if (selectedMonthNetPay !== null) {
+                  <h3 class="mb-0">{{ formatCurrency(selectedMonthNetPay) }}</h3>
+                   <p class="fs-10 text-danger my-0"> <tabler-icon icon="arrow-narrow-down" [size]="10"></tabler-icon>3% vs Last Month</p>
+                } @else {
+                  <p class="fs-12 text-muted my-0">Press a month column to view total net pay</p>
+                }
+
+              </div>
+            </div>
+            <button mat-flat-button color="primary" class="w-100 mt-4"><tabler-icon icon="logs" [size]="16"></tabler-icon>View Report</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="row mx-0">
+      <div class="col-sm-6 px-2 ps-0">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center mb-3">
+            <h4>Team Overview</h4>
+            <mat-form-field appearance="outline" class="form-input w-50" subscriptSizing="dynamic">
+              <mat-select placeholder="Select Year">
+                @for (year of years; track year) {
+                  <mat-option [value]="year">Year {{ year }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="card-body">
+            <div class="row mx-0">
+              <div class="col-sm-12 px-2">
+              	<apx-chart [series]="doughnutChartOptions.series" [chart]="doughnutChartOptions.chart"
+                  [xaxis]="doughnutChartOptions.xaxis" [yaxis]="doughnutChartOptions.yaxis" [grid]="doughnutChartOptions.grid"
+                  [stroke]="doughnutChartOptions.stroke" [tooltip]="doughnutChartOptions.tooltip"
+                  [plotOptions]="doughnutChartOptions.plotOptions" [dataLabels]="doughnutChartOptions.dataLabels"
+                  [legend]="doughnutChartOptions.legend" [colors]="doughnutChartOptions.colors" [markers]="doughnutChartOptions.markers">
+                </apx-chart>
+              </div>
+              <div class="col-sm-12 px-2 mt-3">
+                <ul class="team-overview-list">
+                  @for (team of teamOverview; track team.department; let i = $index) {
+                    <li class="team-overview-item">
+                      <span class="team-overview-label">
+                        <i class="team-overview-dot" [style.backgroundColor]="teamOverviewColors[i % teamOverviewColors.length]"></i>
+                        <span>{{ team.department }}</span>
+                      </span>
+                      <strong>{{ team.count }}</strong>
+                    </li>
+                  } @empty {
+                    <li class="text-muted">No team data available.</li>
+                  }
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-sm-6 px-2 pe-0">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center mb-3">
+            <h4>Payroll Overview</h4>
+            <mat-form-field appearance="outline" class="form-input w-50" subscriptSizing="dynamic">
+              <mat-select placeholder="Select Year">
+                @for (year of years; track year) {
+                  <mat-option [value]="year">Year {{ year }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="card-body">
+            <div class="row mx-0">
+              <div class="col-sm-12 px-2">
+              	<apx-chart [series]="doughnutChartOptions.series" [chart]="doughnutChartOptions.chart"
+                  [xaxis]="doughnutChartOptions.xaxis" [yaxis]="doughnutChartOptions.yaxis" [grid]="doughnutChartOptions.grid"
+                  [stroke]="doughnutChartOptions.stroke" [tooltip]="doughnutChartOptions.tooltip"
+                  [plotOptions]="doughnutChartOptions.plotOptions" [dataLabels]="doughnutChartOptions.dataLabels"
+                  [legend]="doughnutChartOptions.legend" [colors]="doughnutChartOptions.colors" [markers]="doughnutChartOptions.markers">
+                </apx-chart>
+              </div>
+              <div class="col-sm-12 px-2 mt-3">
+                <ul class="team-overview-list">
+                  @for (team of teamOverview; track team.department; let i = $index) {
+                    <li class="team-overview-item">
+                      <span class="team-overview-label">
+                        <i class="team-overview-dot" [style.backgroundColor]="teamOverviewColors[i % teamOverviewColors.length]"></i>
+                        <span>{{ team.department }}</span>
+                      </span>
+                      <strong>{{ team.count }}</strong>
+                    </li>
+                  } @empty {
+                    <li class="text-muted">No team data available.</li>
+                  }
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="col-lg-4 col-md-5 px-2">
+  <div class="col-sm-4 px-2">
     <div class="card">
-      <div class="card-header mb-3">
-        <h4>Attendance Overview</h4>
+      <div class="card-header">
+        <h4 class="mb-0">Leave Calendar</h4>
       </div>
       <div class="card-body">
-        <div class="d-flex align-items-end mb-4">
-          <h4 style="font-size: 32px" class="mb-0">65%</h4>
-          <p class="fs-10 text-danger my-0 mb-2"> <tabler-icon icon="arrow-narrow-down" [size]="10"></tabler-icon>3% vs Last Month</p>
+        <div class="d-flex align-items-center justify-content-end">
+          <button type="button" class="calendar-nav" aria-label="Previous month" (click)="changeCalendarMonth(-1)">‹</button>
+          <strong>{{ calendarMonthLabel }}</strong>
+          <button type="button" class="calendar-nav" aria-label="Next month" (click)="changeCalendarMonth(1)">›</button>
+          <button type="button" class="calendar-today" (click)="goToToday()">Today</button>
+        </div>
+        <div class="leave-calendar">
+          @for (weekday of weekdays; track weekday) {
+            <div class="calendar-weekday" role="columnheader">{{ weekday }}</div>
+          }
+          @for (cell of calendarCells; track cell.dateKey) {
+            <button
+              type="button"
+              class="calendar-day"
+              role="gridcell"
+              [class.outside-month]="!cell.inCurrentMonth"
+              [class.text-muted]="cell.date.getDay() === 0 || cell.date.getDay() === 6"
+              [class.today]="cell.isToday"
+              [class.selected]="selectedCalendarDateKey === cell.dateKey"
+              [attr.aria-pressed]="selectedCalendarDateKey === cell.dateKey"
+              (click)="selectedCalendarDateKey = cell.dateKey">
+              <span>{{ cell.date.getDate() }}</span>
+              <span class="leave-markers" aria-hidden="true">
+                @for (marker of leaveMarkersForDate(cell.dateKey); track marker) {
+                  <span class="leave-dot {{ marker }}"></span>
+                }
+              </span>
+            </button>
+          }
         </div>
 
-        <div class="summary-progress">
-            <div class="progress-bar bg-success" style="width: 65%;"></div>
-            <div class="progress-bar bg-info" style="width: 15%;"></div>
-            <div class="progress-bar bg-danger" style="width: 20%;"></div>
+        <div class="leave-calendar-legend">
+          <span><i class="leave-dot annual"></i> Annual</span>
+          <span><i class="leave-dot medical"></i> Medical</span>
+          <span><i class="leave-dot unpaid"></i> Unpaid</span>
+          <span><i class="leave-dot other"></i> Other</span>
         </div>
-        <div class="row mx-0">
-            <div class="col-4 px-2">
-                <div class="d-flex align-items-center gap-2">
-                    <div
-                        class="progress-bar bg-success"
-                        style="width: 8px; height: 8px; border-radius: 50%;"></div>
-                    <div class="text-muted fs-10">Attend:<span class="fw-600 ms-1">13</span>
+
+        <div class="month-leave-list">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 id="month-leave-heading">{{ selectedCalendarDateLabel }}</h5>
+            <a href="javascript:void(0)" routerLink="/time-leave/leave/approval">View All</a>
+          </div>
+          @if (selectedDayLeaveEntries.length) {
+            <div class="month-leave-entries">
+              @for (leave of selectedDayLeaveEntries; track leave.record.employeeId + leave.record.startDate + leave.record.code) {
+                <div class="d-flex align-items-center justify-content-between py-1">
+                  <div class="d-flex align-items-center">
+                      <div class="bg-light-danger text-danger text-end icon me-3">
+                        <tabler-icon icon="calendar"></tabler-icon>
+                      </div>
+                      <div>
+                        <p class="text-dark fw-500 my-0">{{ leave.employeeName }}</p>
+                        <p class="text-muted my-0 fs-10 fw-300">{{ leave.record.leaveType }} · {{ formatDateRange(leave.record.startDate, leave.record.endDate) }}</p>
+                      </div>
                     </div>
+
+                    <button class="text-muted action-btn" mat-icon-button  (click)="openLeaveDetails(leave)">
+                      <tabler-icon icon="eye"></tabler-icon>
+                    </button>
                 </div>
+              }
             </div>
-            <div class="col-4 px-2">
-                <div class="d-flex align-items-center gap-2">
-                    <div
-                        class="progress-bar bg-info"
-                        style="width: 8px; height: 8px; border-radius: 50%;"></div>
-                    <div class="text-muted fs-10">Annual Leave:<span class="fw-600 ms-1">5</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-4 px-2">
-                <div class="d-flex align-items-center gap-2">
-                    <div
-                        class="progress-bar bg-danger"
-                        style="width: 8px; height: 8px; border-radius: 50%;"></div>
-                    <div class="text-muted fs-10">Unpaid Leave:<span class="fw-600 ms-1">5</span>
-                    </div>
-                </div>
-            </div>
+          } @else {
+            <p class="text-muted mb-0">No approved leave on this day.</p>
+          }
         </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header mb-3 d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Leave Request</h4>
+        <a href="javascript:void(0)" routerLink="/time-leave/leave/approval">View All</a>
+      </div>
+      <div class="card-body">
+        @if (selectedDayLeaveEntries.length) {
+          <div class="month-leave-entries">
+            @for (leave of selectedDayLeaveEntries; track leave.record.employeeId + leave.record.startDate + leave.record.code) {
+              <div class="d-flex align-items-center justify-content-between py-1">
+                <div class="d-flex align-items-center">
+                    <div class="bg-light-danger text-danger text-end icon me-3">
+                      <tabler-icon icon="calendar"></tabler-icon>
+                    </div>
+                    <div>
+                      <p class="text-dark fw-500 my-0">{{ leave.employeeName }}</p>
+                      <p class="text-muted my-0 fs-10 fw-300">{{ leave.record.leaveType }} · {{ formatDateRange(leave.record.startDate, leave.record.endDate) }}</p>
+                    </div>
+                  </div>
+
+                  <button class="text-muted action-btn" mat-icon-button  (click)="openLeaveDetails(leave)">
+                    <tabler-icon icon="eye"></tabler-icon>
+                  </button>
+              </div>
+            }
+          </div>
+        } @else {
+          <p class="text-muted mb-0">No approved leave on this day.</p>
+        }
       </div>
     </div>
   </div>
 </div>
+
+@if (selectedLeave; as leave) {
+  <app-leave-detail-dialog
+    [data]="leave"
+    (closed)="selectedLeave = null">
+  </app-leave-detail-dialog>
+}

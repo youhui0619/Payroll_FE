@@ -37,7 +37,7 @@ export class SidebarComponent implements OnInit, OnChanges {
   openMap: Record<number, boolean> = {};
   private defaultMenu: MenuItem[] = [
     { header: 'Dashboard' },
-    { label: 'Dashboard', icon: 'solar:widget-2-outline', route: '/dashboard', badge: 10 },
+    { label: 'Dashboard', icon: 'solar:widget-2-outline', route: '/dashboard' },
     
     
     { header: 'Workforce' },
