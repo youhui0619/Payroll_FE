@@ -66,6 +66,10 @@ export class ViewComponent {
     return this.commissionIncentiveSettings.filter(setting => selectedCodes.has(setting.code));
   }
 
+  hasStatutoryEntitlement(code: string): boolean {
+    return (this.employee?.statutoryEntitlementCodes ?? []).includes(code);
+  }
+
   commissionCalculationLabel(setting: CommissionIncentiveSetting): string {
     if (setting.calculationMethod === 'PERCENTAGE_OF_REVENUE') return `${setting.rate ?? 0}% of revenue`;
     if (setting.calculationMethod === 'PERCENTAGE_OF_PROFIT') return `${setting.rate ?? 0}% of profit`;

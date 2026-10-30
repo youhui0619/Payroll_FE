@@ -438,23 +438,61 @@
                   <label class="text-dark fw-500">Bank account</label>
                   <p class="text-muted">{{ employee.bankAccount }}</p>
                 </div>
-                <div class="col-sm-4 px-2 mb-3">
-                  <label class="text-dark fw-500">EPF employee no.</label>
-                  <p class="text-muted">{{ employee.epfEmployeeNo }}</p>
-                </div>
-                <div class="col-sm-4 px-2 mb-3">
-                  <label class="text-dark fw-500">EPF employer no.</label>
-                  <p class="text-muted">{{ employee.epfEmployerNo }}</p>
-                </div>
-                <div class="col-sm-4 px-2 mb-3">
-                  <label class="text-dark fw-500">SOCSO number</label>
-                  <p class="text-muted">{{ employee.socsoNo }}</p>
-                </div>
-                <div class="col-sm-4 px-2 mb-3">
-                  <label class="text-dark fw-500">EIS status</label>
-                  <p class="text-muted">{{ employee.eisStatus }}</p>
-                </div>
               </div>
+            </div>
+          </div>
+
+          <h4 class="text-primary mt-4">Statutory Entitlements</h4>
+          <div class="card mb-4">
+            <div class="card-body">
+              @if (employee.statutoryEntitlementCodes?.length) {
+                <div class="row mx-0">
+                  @if (hasStatutoryEntitlement('EPF')) {
+                    <div class="col-sm-4 px-2 mb-3">
+                      <label class="text-dark fw-500">EPF employee no.</label>
+                      <p class="text-muted">{{ employee.epfEmployeeNo || '—' }}</p>
+                    </div>
+                    <div class="col-sm-4 px-2 mb-3">
+                      <label class="text-dark fw-500">EPF employer no.</label>
+                      <p class="text-muted">{{ employee.epfEmployerNo || '—' }}</p>
+                    </div>
+                    <div class="col-sm-4 px-2 mb-3">
+                      <label class="text-dark fw-500">EPF employee contribution rate</label>
+                      <p class="text-muted">{{ employee.epfRate ? employee.epfRate + '%' : '—' }}</p>
+                    </div>
+                  }
+                  @if (hasStatutoryEntitlement('SOCSO')) {
+                    <div class="col-sm-4 px-2 mb-3">
+                      <label class="text-dark fw-500">SOCSO number</label>
+                      <p class="text-muted">{{ employee.socsoNo || '—' }}</p>
+                    </div>
+                    <div class="col-sm-4 px-2 mb-3">
+                      <label class="text-dark fw-500">SOCSO contribution category</label>
+                      <p class="text-muted">{{ employee.contributionCategory || '—' }}</p>
+                    </div>
+                  }
+                  @if (hasStatutoryEntitlement('LHDN')) {
+                    <div class="col-sm-4 px-2 mb-3">
+                      <label class="text-dark fw-500">LHDN tax number</label>
+                      <p class="text-muted">{{ employee.tin || '—' }}</p>
+                    </div>
+                  }
+                  @if (hasStatutoryEntitlement('EIS')) {
+                    <div class="col-sm-4 px-2 mb-3">
+                      <label class="text-dark fw-500">EIS status</label>
+                      <p class="text-muted">{{ employee.eisStatus || '—' }}</p>
+                    </div>
+                  }
+                  @if (hasStatutoryEntitlement('HRD_CORP_LEVY')) {
+                    <div class="col-sm-4 px-2 mb-3">
+                      <label class="text-dark fw-500">HRD Corp employer registration no.</label>
+                      <p class="text-muted">{{ employee.hrdRegisterNo || '—' }}</p>
+                    </div>
+                  }
+                </div>
+              } @else {
+                <p class="text-muted mb-0">No statutory entitlements are assigned to this employee.</p>
+              }
             </div>
           </div>
 

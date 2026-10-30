@@ -78,6 +78,44 @@
     </div>
   </div>
 
+  <h4 class="text-primary">Statutory</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-6 px-2">
+          <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+            <label class="text-dark my-0">EPF / KWSP</label>
+            <mat-slide-toggle color="primary" formControlName="includeEpf"></mat-slide-toggle>
+          </div>
+        </div>
+        <div class="col-sm-6 px-2">
+          <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+            <label class="text-dark my-0">SOCSO / PERKESO</label>
+            <mat-slide-toggle color="primary" formControlName="includeSocso"></mat-slide-toggle>
+          </div>
+        </div>
+        <div class="col-sm-6 px-2">
+          <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+            <label class="text-dark my-0">LHDN (PCB / MTD)</label>
+            <mat-slide-toggle color="primary" formControlName="includePcb"></mat-slide-toggle>
+          </div>
+        </div>
+        <div class="col-sm-6 px-2">
+          <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+            <label class="text-dark my-0">EIS / SIP</label>
+            <mat-slide-toggle color="primary" formControlName="includeEis"></mat-slide-toggle>
+          </div>
+        </div>
+        <div class="col-sm-6 px-2">
+          <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+            <label class="text-dark my-0">HRD Corp Levy</label>
+            <mat-slide-toggle color="primary" formControlName="includeHrdCorpLevy"></mat-slide-toggle>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <h4 class="text-primary">Earnings</h4>
   <div class="card mb-4">
     <div class="card-body">
@@ -224,56 +262,6 @@
       </div>
     </div>
   </div>
-
-
-  <h4 class="text-primary">Statutory & Tax</h4>
-  <div class="card mb-4">
-    <div class="card-body">
-      <div class="row mx-0">
-        <div class="col-sm-6 px-2">
-          <div class="d-flex justify-content-between align-items-center gap-3 py-3">
-            <label class="text-dark my-0">EPF / KWSP</label>
-            <mat-slide-toggle
-              color="primary" formControlName="enableEpf">
-            </mat-slide-toggle>
-          </div>
-        </div>
-        <div class="col-sm-6 px-2">
-          <div class="d-flex justify-content-between align-items-center gap-3 py-3">
-            <label class="text-dark my-0">SOCSO / PERKESO</label>
-            <mat-slide-toggle
-              color="primary" formControlName="enableSocso">
-            </mat-slide-toggle>
-          </div>
-        </div>
-        <div class="col-sm-6 px-2">
-          <div class="d-flex justify-content-between align-items-center gap-3 py-3">
-            <label class="text-dark my-0">EIS / SIP</label>
-            <mat-slide-toggle
-              color="primary" formControlName="enableEis">
-            </mat-slide-toggle>
-          </div>
-        </div>
-        <div class="col-sm-6 px-2">
-          <div class="d-flex justify-content-between align-items-center gap-3 py-3">
-            <label class="text-dark my-0">PCB / MTD</label>
-            <mat-slide-toggle
-              color="primary" formControlName="enablePcb">
-            </mat-slide-toggle>
-          </div>
-        </div>
-        <div class="col-sm-6 px-2">
-          <div class="d-flex justify-content-between align-items-center gap-3 py-3">
-            <label class="text-dark my-0">HRD Corp levy</label>
-            <mat-slide-toggle
-              color="primary" formControlName="enableHrdCorpLevy">
-            </mat-slide-toggle>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <h4 class="text-primary">Payment Settings</h4>
   <div class="card mb-4">
     <div class="card-body">

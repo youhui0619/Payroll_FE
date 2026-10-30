@@ -1,14 +1,33 @@
 import type { EmployeeRecord } from '../models/employee.model';
+import { payrollSettings } from './payroll-settings';
 
 type SampleEmployeeInput = Pick<EmployeeRecord,
   'employeeId' | 'employeeName' | 'nricPassportNo' | 'gender' | 'race' |
   'religion' | 'department' | 'position' | 'basicSalary' | 'contactNo'> & {
     reportingManager?: string;
     commissionSettingCodes?: string[];
+    epfRate?: string;
+    contributionCategory?: string;
+    hrdRegisterNo?: string;
+    statutoryEntitlementCodes?: string[];
   };
+
+const defaultStatutoryEntitlementCodes = [
+  ...(payrollSettings.includeEpf ? ['EPF'] : []),
+  ...(payrollSettings.includeSocso ? ['SOCSO'] : []),
+  ...(payrollSettings.includePcb ? ['LHDN'] : []),
+  ...(payrollSettings.includeEis ? ['EIS'] : []),
+  ...(payrollSettings.includeHrdCorpLevy ? ['HRD_CORP_LEVY'] : []),
+];
 
 function createSampleEmployee(input: SampleEmployeeInput): EmployeeRecord {
   const employeeNumber = input.employeeId.slice(-4);
+  const statutoryEntitlementCodes = input.statutoryEntitlementCodes ?? [...defaultStatutoryEntitlementCodes];
+  const hasEpf = statutoryEntitlementCodes.includes('EPF');
+  const hasSocso = statutoryEntitlementCodes.includes('SOCSO');
+  const hasLhdn = statutoryEntitlementCodes.includes('LHDN');
+  const hasEis = statutoryEntitlementCodes.includes('EIS');
+  const hasHrdCorpLevy = statutoryEntitlementCodes.includes('HRD_CORP_LEVY');
   const initials = input.employeeName
     .split(/\s+/)
     .slice(0, 2)
@@ -21,7 +40,7 @@ function createSampleEmployee(input: SampleEmployeeInput): EmployeeRecord {
     dateOfBirth: '1992-04-15',
     nationality: 'Malaysian',
     maritalStatus: 'Single',
-    tin: `IG${employeeNumber}001000`,
+    tin: hasLhdn ? `IG${employeeNumber}001000` : '',
     email: `${input.employeeName.toLowerCase().replace(/\s+/g, '.')}@example.com`,
     address: '12, Jalan Bukit Kempas, 81200 Johor Bahru, Johor',
     reportingManager: input.reportingManager ?? `${input.department} Manager`,
@@ -35,11 +54,15 @@ function createSampleEmployee(input: SampleEmployeeInput): EmployeeRecord {
     paymentMethod: 'Transfer by bank',
     bank: 'Maybank',
     bankAccount: `100000${employeeNumber}`,
-    epfEmployeeNo: `EPF-${employeeNumber}`,
-    epfEmployerNo: `ER-${employeeNumber}`,
-    kwspNo: `21${employeeNumber}4610`,
-    socsoNo: `SOCSO-${employeeNumber}`,
-    eisStatus: 'Active',
+    epfEmployeeNo: hasEpf ? `EPF-${employeeNumber}` : '',
+    epfEmployerNo: hasEpf ? `ER-${employeeNumber}` : '',
+    epfRate: input.epfRate ?? (hasEpf ? '11' : ''),
+    kwspNo: hasEpf ? `21${employeeNumber}4610` : '',
+    socsoNo: hasSocso ? `SOCSO-${employeeNumber}` : '',
+    contributionCategory: input.contributionCategory ?? (hasSocso ? 'category1' : ''),
+    eisStatus: hasEis ? 'Active' : 'Not Applicable',
+    hrdRegisterNo: hasHrdCorpLevy ? (input.hrdRegisterNo ?? `HRD-${employeeNumber}`) : '',
+    statutoryEntitlementCodes,
     commissionSettingCodes: input.commissionSettingCodes ?? [],
     emergencyContactName: `Family of ${input.employeeName.split(' ')[0]}`,
     emergencyContactRelationship: 'Family member',
@@ -79,9 +102,13 @@ export const employees: EmployeeRecord[] = [
     bankAccount: '1234567890',
     epfEmployeeNo: 'EPF-0042',
     epfEmployerNo: 'ER-0042',
+    epfRate: '11',
     kwspNo: '21454610',
     socsoNo: 'SOCSO-0042',
+    contributionCategory: 'category1',
     eisStatus: 'Active',
+    hrdRegisterNo: '',
+    statutoryEntitlementCodes: [...defaultStatutoryEntitlementCodes],
     commissionSettingCodes: [],
     emergencyContactName: 'Nur Abdullah',
     emergencyContactRelationship: 'Parent',
@@ -118,9 +145,13 @@ export const employees: EmployeeRecord[] = [
     bankAccount: '9876543210',
     epfEmployeeNo: 'EPF-0043',
     epfEmployerNo: 'ER-0043',
+    epfRate: '11',
     kwspNo: '12016768',
     socsoNo: 'SOCSO-0043',
+    contributionCategory: 'category1',
     eisStatus: 'Active',
+    hrdRegisterNo: '',
+    statutoryEntitlementCodes: [...defaultStatutoryEntitlementCodes],
     commissionSettingCodes: [],
     emergencyContactName: 'Lim Wei Ming',
     emergencyContactRelationship: 'Sibling',
@@ -180,12 +211,14 @@ export const employees: EmployeeRecord[] = [
   createSampleEmployee({
     employeeId: 'EMP-0054', employeeName: 'Arjun Menon', nricPassportNo: '920815-08-5678',
     gender: 'Male', race: 'Indian', religion: 'Hinduism', department: 'Information Technology',
-    position: 'Systems Administrator', basicSalary: 5800, contactNo: '+60 12-444 0011', reportingManager: 'IT Manager'
+    position: 'Systems Administrator', basicSalary: 5800, contactNo: '+60 12-444 0011', reportingManager: 'IT Manager',
+    statutoryEntitlementCodes: []
   }),
   createSampleEmployee({
     employeeId: 'EMP-0055', employeeName: 'Ethan Chua', nricPassportNo: '900927-10-6789',
     gender: 'Male', race: 'Chinese', religion: 'Buddhism', department: 'Information Technology',
-    position: 'Network Engineer', basicSalary: 7000, contactNo: '+60 12-444 0012', reportingManager: 'IT Manager'
+    position: 'Network Engineer', basicSalary: 7000, contactNo: '+60 12-444 0012', reportingManager: 'IT Manager',
+    statutoryEntitlementCodes: []
   })
 ];
 

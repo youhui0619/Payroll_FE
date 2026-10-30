@@ -29,9 +29,13 @@ export interface EmployeeRecord {
   bankAccount: string;
   epfEmployeeNo: string;
   epfEmployerNo: string;
+  epfRate: string;
   kwspNo: string;
   socsoNo: string;
+  contributionCategory: string;
   eisStatus: string;
+  hrdRegisterNo: string;
+  statutoryEntitlementCodes: string[];
   commissionSettingCodes: string[];
   emergencyContactName: string;
   emergencyContactRelationship: string;
@@ -78,8 +82,12 @@ export interface EmployeePayrollInfo {
   bankAccount: string | null;
   epfEmployeeNo: string | null;
   epfEmployerNo: string | null;
+  epfRate: string | null;
   socsoNo: string | null;
+  contributionCategory: string | null;
   eisStatus: string | null;
+  hrdRegisterNo: string | null;
+  statutoryEntitlementCodes: string[];
   commissionSettingCodes: string[];
 }
 
@@ -155,8 +163,12 @@ export const EMPTY_EMPLOYEE_FORM_DATA: EmployeeFormData = {
     bankAccount: '',
     epfEmployeeNo: '',
     epfEmployerNo: '',
+    epfRate: '',
     socsoNo: '',
+    contributionCategory: '',
     eisStatus: '',
+    hrdRegisterNo: '',
+    statutoryEntitlementCodes: [],
     commissionSettingCodes: [],
   },
   taxInformation: {

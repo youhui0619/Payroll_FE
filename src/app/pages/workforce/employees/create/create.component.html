@@ -16,7 +16,7 @@
 
   <div class="col-sm-5 d-flex align-items-center justify-content-end">
     <button mat-flat-button color="primary" class="ms-2">
-      <tabler-icon icon="circle-dot"></tabler-icon>
+      <tabler-icon icon="circle-dashed" [size]="16"></tabler-icon>
       Save as draft
     </button>
   </div>
@@ -482,29 +482,37 @@
                 </div>
               </div>
               <h4 class="text-primary">Statutory Entitlements</h4>
-              <div class="card">
+              <div class="card mb-4">
                 <div class="card-body">
-                  <div class="row">
-                  </div>
+                  @for (entitlement of availableStatutoryEntitlements; track entitlement.code; let last = $last) {
+                    <div
+                      class="d-flex align-items-center justify-content-between gap-3 py-3"
+                      [class.border-bottom]="!last">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="icon bg-light-primary text-primary flex-shrink-0">
+                          <tabler-icon icon="receipt"></tabler-icon>
+                        </div>
+                        <label class="text-dark my-0">{{ entitlement.name }}</label>
+                      </div>
+                      <mat-slide-toggle
+                        color="primary"
+                        [checked]="isStatutoryEntitlementSelected(entitlement.code)"
+                        [aria-label]="'Include ' + entitlement.name + ' for this employee'"
+                        (change)="setStatutoryEntitlementSelected(entitlement.code, $event.checked)">
+                      </mat-slide-toggle>
+                    </div>
+                  } @empty {
+                    <p class="text-muted mb-0 py-3">No statutory contributions are included in Payroll Settings.</p>
+                  }
                 </div>
               </div>
 
-
-              <h4 class="text-primary">Statutory Entitlements</h4>
-              <div class="card">
+              <h4 class="text-primary">Statutory Details</h4>
+              <div class="card mb-4">
                 <div class="card-body">
-                  <div class="row">
-                    <div class="col-sm-6 px-2">
-                      <mat-label class="form-label">EPF Employee No.
-                        <span class="text-danger">
-                        *</span>
-                      </mat-label>
-                      <mat-form-field appearance="outline" class="form-input w-100">
-                        <input type="text" matInput placeholder="Enter EPF Employee No." formControlName="epfEmployeeNo">
-                        <mat-error class="text-danger">EPF Employee No. is required</mat-error>
-                      </mat-form-field>
-                    </div>
-
+                  @if (isStatutoryEntitlementSelected('EPF') || isStatutoryEntitlementSelected('SOCSO') || isStatutoryEntitlementSelected('EIS') || isStatutoryEntitlementSelected('HRD_CORP_LEVY')) {
+                    <div class="row">
+                    @if (isStatutoryEntitlementSelected('EPF')) {
                     <div class="col-sm-6 px-2">
                       <mat-label class="form-label">EPF Employer No.
                         <span class="text-danger">
@@ -517,6 +525,22 @@
                     </div>
 
                     <div class="col-sm-6 px-2">
+                      <mat-label class="form-label">Employee Contribution Rate
+                        <span class="text-danger">
+                        *</span>
+                      </mat-label>
+                      <mat-form-field appearance="outline" class="form-input w-100">
+                       <mat-select placeholder="Select Employee Contribution Rate" formControlName="epfRate">
+                          <mat-option value="11">11%</mat-option>
+                          <mat-option value="9">9%</mat-option>
+                        </mat-select>
+                        <mat-error class="text-danger">Employee Contribution Rate is required</mat-error>
+                      </mat-form-field>
+                    </div>
+                    }
+
+                    @if (isStatutoryEntitlementSelected('SOCSO')) {
+                    <div class="col-sm-6 px-2">
                       <mat-label class="form-label">SOCSO No.
                         <span class="text-danger">
                         *</span>
@@ -528,22 +552,55 @@
                     </div>
 
                     <div class="col-sm-6 px-2">
+                      <mat-label class="form-label">Contribution Category
+                        <span class="text-danger">
+                        *</span>
+                      </mat-label>
+                      <mat-form-field appearance="outline" class="form-input w-100">
+                       <mat-select placeholder="Select Contribution Category" formControlName="contributionCategory">
+                          <mat-option value="category1">Category 1 - Employer + Employee</mat-option>
+                          <mat-option value="category2">Category 2 - Employer only</mat-option>
+                          <mat-option value="no">Not applicable</mat-option>
+                        </mat-select>
+                        <mat-error class="text-danger">Contribution Category is required</mat-error>
+                      </mat-form-field>
+                    </div>
+                    }
+
+                    @if (isStatutoryEntitlementSelected('EIS')) {
+                    <div class="col-sm-6 px-2">
                       <mat-label class="form-label">EIS Status
                         <span class="text-danger">
                         *</span>
                       </mat-label>
                       <mat-form-field appearance="outline" class="form-input w-100">
                         <mat-select placeholder="Select EIS Status" formControlName="eisStatus">
-                          <mat-option value="Monthly">Monthly</mat-option>
-                          <mat-option value="Daily">Daily</mat-option>
-                          <mat-option value="Hourly">Hourly</mat-option>
+                          <mat-option value="Active">Active</mat-option>
+                          <mat-option value="Inactive">Inactive</mat-option>
+                          <mat-option value="Not Applicable">Not applicable</mat-option>
                         </mat-select>
                         <mat-error class="text-danger">EIS Status is required</mat-error>
                       </mat-form-field>
                     </div>
-                  </div>
+                    }
+
+                     @if (isStatutoryEntitlementSelected('HRD_CORP_LEVY')) {
+                      <div class="col-sm-6 px-2">
+                        <mat-label class="form-label">HRD Corp Employer Registration Number
+                          <span class="text-danger">
+                          *</span>
+                        </mat-label>
+                        <mat-form-field appearance="outline" class="form-input w-100">
+                          <input type="text" matInput placeholder="Enter HRD Corp Employer Registration Number" formControlName="hrdRegisterNo">
+                          <mat-error class="text-danger">HRD Corp Employer Registration Number is required</mat-error>
+                        </mat-form-field>
+                      </div>
+                     }
+                    </div>
+                  } @else {
+                    <p class="text-muted mb-0">No statutory details apply to the selected entitlements.</p>
+                  }
                 </div>
-              </div>
             </div>
             <h4 class="text-primary mt-4">Commission &amp; incentives</h4>
             <div class="card mb-4">
@@ -584,6 +641,7 @@
                 <tabler-icon icon="arrow-left"></tabler-icon>Back
               </button>
               <button mat-flat-button color="primary" type="button" matStepperNext> <tabler-icon icon="arrow-right"></tabler-icon>Next</button>
+            </div>
             </div>
           </mat-step>
           <mat-step formGroupName="taxInformation">

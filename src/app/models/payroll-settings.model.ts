@@ -29,11 +29,11 @@ export interface PayrollSettings {
   publicHolidayWorkingHoursPerDay: number | null;
   publicHolidayEarningCode: string;
   deductionProrationMethod: DeductionProrationMethod;
-  enableEpf: boolean;
-  enableSocso: boolean;
-  enableEis: boolean;
-  enablePcb: boolean;
-  enableHrdCorpLevy: boolean;
+  includeEpf: boolean;
+  includeSocso: boolean;
+  includeEis: boolean;
+  includePcb: boolean;
+  includeHrdCorpLevy: boolean;
   paymentMethod: PayrollPaymentMethod;
   automaticallyCalculatePayroll: boolean;
   blockApprovalOnValidationErrors: boolean;

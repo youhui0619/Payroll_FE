@@ -17,11 +17,20 @@ import type { Position } from '../../../../models/position.model';
 import { getEmployee } from '../../../../data/employees';
 import { getEmployeeLeaveBalances } from '../../../../data/leave-balances';
 import { commissionIncentiveSettings } from '../../../../data/commission-incentive-settings';
+import { payrollSettings } from '../../../../data/payroll-settings';
 import type {
   CommissionCalculationFrequency,
   CommissionCalculationMethod,
   CommissionIncentiveSetting
 } from '../../../../models/commission-incentive-setting.model';
+
+const statutoryEntitlementOptions = [
+  { code: 'EPF', name: 'EPF / KWSP', setting: 'includeEpf' },
+  { code: 'SOCSO', name: 'SOCSO / PERKESO', setting: 'includeSocso' },
+  { code: 'LHDN', name: 'LHDN (PCB / MTD)', setting: 'includePcb' },
+  { code: 'EIS', name: 'EIS / SIP', setting: 'includeEis' },
+  { code: 'HRD_CORP_LEVY', name: 'HRD Corp Levy', setting: 'includeHrdCorpLevy' },
+] as const;
 
 @Component({
   selector: 'app-edit',
@@ -45,6 +54,7 @@ export class EditComponent implements OnInit {
   readonly positions: Position[] = positions;
   readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');
   readonly commissionIncentiveSettings: CommissionIncentiveSetting[] = commissionIncentiveSettings;
+  readonly availableStatutoryEntitlements = statutoryEntitlementOptions.filter(option => payrollSettings[option.setting]);
 
   employeeForm = new FormGroup({
     personal: new FormGroup({
@@ -85,8 +95,12 @@ export class EditComponent implements OnInit {
       bankAccount: new FormControl(''),
       epfEmployeeNo: new FormControl(''),
       epfEmployerNo: new FormControl(''),
+      epfRate: new FormControl(''),
       socsoNo: new FormControl(''),
+      contributionCategory: new FormControl(''),
       eisStatus: new FormControl(''),
+      hrdRegisterNo: new FormControl(''),
+      statutoryEntitlementCodes: new FormControl<string[]>([], { nonNullable: true }),
       commissionSettingCodes: new FormControl<string[]>([], { nonNullable: true }),
     }),
     taxInformation: new FormGroup({
@@ -151,6 +165,20 @@ export class EditComponent implements OnInit {
 
   setCommissionSelected(code: string, selected: boolean): void {
     const codes = this.employeeForm.controls.payroll.controls.commissionSettingCodes;
+    const selectedCodes = new Set(codes.value);
+
+    if (selected) selectedCodes.add(code);
+    else selectedCodes.delete(code);
+
+    codes.setValue([...selectedCodes]);
+  }
+
+  isStatutoryEntitlementSelected(code: string): boolean {
+    return this.employeeForm.controls.payroll.controls.statutoryEntitlementCodes.value.includes(code);
+  }
+
+  setStatutoryEntitlementSelected(code: string, selected: boolean): void {
+    const codes = this.employeeForm.controls.payroll.controls.statutoryEntitlementCodes;
     const selectedCodes = new Set(codes.value);
 
     if (selected) selectedCodes.add(code);
@@ -239,8 +267,12 @@ export class EditComponent implements OnInit {
         bankAccount: employee.bankAccount,
         epfEmployeeNo: employee.epfEmployeeNo,
         epfEmployerNo: employee.epfEmployerNo,
+        epfRate: employee.epfRate ?? '',
         socsoNo: employee.socsoNo,
+        contributionCategory: employee.contributionCategory ?? '',
         eisStatus: employee.eisStatus,
+        hrdRegisterNo: employee.hrdRegisterNo ?? '',
+        statutoryEntitlementCodes: employee.statutoryEntitlementCodes ?? this.availableStatutoryEntitlements.map(option => option.code),
         commissionSettingCodes: employee.commissionSettingCodes ?? [],
       },
       leave: {
@@ -303,6 +335,9 @@ export class EditComponent implements OnInit {
   }
 
   onSubmit(): void {
+    const availableStatutoryCodes = new Set<string>(this.availableStatutoryEntitlements.map(option => option.code));
+    const selectedStatutoryCodes = this.employeeForm.controls.payroll.controls.statutoryEntitlementCodes;
+    selectedStatutoryCodes.setValue(selectedStatutoryCodes.value.filter(code => availableStatutoryCodes.has(code)));
     const availableCodes = new Set(this.availableCommissionSettings.map(setting => setting.code));
     const selectedCodes = this.employeeForm.controls.payroll.controls.commissionSettingCodes;
     selectedCodes.setValue(selectedCodes.value.filter(code => availableCodes.has(code)));

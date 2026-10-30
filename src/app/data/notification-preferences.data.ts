@@ -63,8 +63,8 @@ export function getNotificationPreferenceGroups(settings: PayrollSettings = payr
           icon: 'file-description'
         },
         ...(
-          settings.enableEpf || settings.enableSocso || settings.enableEis ||
-          settings.enablePcb || settings.enableHrdCorpLevy
+          settings.includeEpf || settings.includeSocso || settings.includeEis ||
+          settings.includePcb || settings.includeHrdCorpLevy
             ? [{
                 id: 'statutoryCompliance',
                 title: 'Statutory & compliance',
