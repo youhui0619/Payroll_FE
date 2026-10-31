@@ -10,7 +10,7 @@
             <mat-datepicker-toggle matSuffix [for]="claimDate"></mat-datepicker-toggle>
             <mat-datepicker #claimDate></mat-datepicker>
             @if (claimForm.controls.claimDate.hasError('required')) {
-              <mat-error>Claim date is required.</mat-error>
+              <mat-error class="text-danger">Claim date is required.</mat-error>
             }
           </mat-form-field>
         </div>
@@ -23,7 +23,7 @@
                 <mat-option [value]="department.id">{{ department.name }}</mat-option>
               }
             </mat-select>
-            <mat-error>Department is required.</mat-error>
+            <mat-error class="text-danger">Department is required.</mat-error>
           </mat-form-field>
         </div>
 
@@ -47,7 +47,7 @@
               }
             </mat-autocomplete>
             @if (claimForm.controls.employeeId.hasError('required') || claimForm.controls.employeeId.hasError('selectionRequired')) {
-              <mat-error>
+              <mat-error class="text-danger">
                 Select an employee from the list.
               </mat-error>
             }
@@ -91,7 +91,7 @@
                 <mat-option [value]="claimType.value">{{ claimType.label }}</mat-option>
               }
             </mat-select>
-            <mat-error>Claim type is required.</mat-error>
+            <mat-error class="text-danger">Claim type is required.</mat-error>
           </mat-form-field>
         </div>
 
@@ -100,7 +100,7 @@
           <mat-form-field appearance="outline" class="form-input w-100">
             <textarea matInput rows="4" placeholder="Enter claim description" formControlName="description"></textarea>
             @if (claimForm.controls.description.hasError('required')) {
-              <mat-error>Description is required.</mat-error>
+              <mat-error class="text-danger">Description is required.</mat-error>
             }
           </mat-form-field>
         </div>
@@ -111,10 +111,10 @@
             <span matTextPrefix class="text-muted me-2">MYR</span>
             <input type="number" min="0.01" step="0.01" matInput placeholder="Enter amount" formControlName="amount">
             @if (claimForm.controls.amount.hasError('required')) {
-              <mat-error>Amount is required.</mat-error>
+              <mat-error class="text-danger">Amount is required.</mat-error>
             }
             @if (claimForm.controls.amount.hasError('min')) {
-              <mat-error>Amount must be greater than zero.</mat-error>
+              <mat-error class="text-danger">Amount must be greater than zero.</mat-error>
             }
           </mat-form-field>
         </div>
@@ -127,7 +127,7 @@
                 <mat-option [value]="paymentMethod.value">{{ paymentMethod.label }}</mat-option>
               }
             </mat-select>
-            <mat-error>Payment method is required.</mat-error>
+            <mat-error class="text-danger">Payment method is required.</mat-error>
           </mat-form-field>
         </div>
       </div>

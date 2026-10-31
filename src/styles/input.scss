@@ -379,6 +379,33 @@
   color: var(--disabled) !important;
 }
 
+/* Timepicker dropdown */
+.mat-timepicker-panel {
+  min-width: 180px;
+  max-height: 256px;
+  padding: 4px 0 !important;
+  border-radius: 8px !important;
+  background: var(--white) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+.mat-timepicker-panel .mat-mdc-option {
+  min-height: 38px;
+  font-size: 14px;
+  color: var(--header);
+
+  &:hover,
+  &.mat-mdc-option-active {
+    background-color: var(--light-primary) !important;
+    color: var(--primary) !important;
+  }
+
+  &.mdc-list-item--selected {
+    background-color: var(--primary) !important;
+    color: var(--white) !important;
+  }
+}
+
 .mat-mdc-slide-toggle {
   .mdc-switch {
     --mat-slide-toggle-track-width: 52px;

@@ -27,10 +27,10 @@
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput formControlName="name" placeholder="Enter claim type name">
             @if (claimForm.controls.name.hasError('required')) {
-              <mat-error>Claim type name is required.</mat-error>
+              <mat-error class="text-danger">Claim type name is required.</mat-error>
             }
             @if (claimForm.controls.name.hasError('maxlength')) {
-              <mat-error>Use no more than 60 characters.</mat-error>
+              <mat-error class="text-danger">Use no more than 60 characters.</mat-error>
             }
           </mat-form-field>
         </div>
@@ -39,7 +39,7 @@
           <mat-form-field appearance="outline" class="form-input w-100">
             <textarea matInput rows="3" formControlName="description" placeholder="Describe the expenses covered by this claim type"></textarea>
             @if (claimForm.controls.description.hasError('maxlength')) {
-              <mat-error>Use no more than 250 characters.</mat-error>
+              <mat-error class="text-danger">Use no more than 250 characters.</mat-error>
             }
           </mat-form-field>
         </div>

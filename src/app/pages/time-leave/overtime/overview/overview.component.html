@@ -1,0 +1,140 @@
+<div class="row justify-content-between mb-4">
+  <div class="col-sm-7">
+    <h3 class="text-dark my-0">Overtime Overview</h3>
+    <p class="fw-300 text-muted mb-0">Review and manage employee overtime requests.</p>
+  </div>
+  <div class="col-sm-5 d-flex align-items-center justify-content-end">
+    <button mat-flat-button color="primary" routerLink="/time-leave/overtime/create">
+      <tabler-icon icon="plus"></tabler-icon>
+      Create Overtime Request
+    </button>
+  </div>
+</div>
+
+<div class="row my-4">
+  <div class="col-sm-3 px-2">
+    <div class="card"><div class="card-body d-flex align-items-center justify-content-between">
+      <div><p class="fs-12 text-muted">Total Requests</p><h3 class="mb-0">{{ overtimeRequests.length }}</h3></div>
+      <div class="text-primary bg-light-primary text-end icon"><tabler-icon icon="clock"></tabler-icon></div>
+    </div></div>
+  </div>
+  <div class="col-sm-3 px-2">
+    <div class="card"><div class="card-body d-flex align-items-center justify-content-between">
+      <div><p class="fs-12 text-muted">Pending Review</p><h3 class="mb-0">{{ pendingCount }}</h3></div>
+      <div class="text-warning bg-light-warning text-end icon"><tabler-icon icon="hourglass-empty"></tabler-icon></div>
+    </div></div>
+  </div>
+  <div class="col-sm-3 px-2">
+    <div class="card"><div class="card-body d-flex align-items-center justify-content-between">
+      <div><p class="fs-12 text-muted">Approved</p><h3 class="mb-0">{{ approvedCount }}</h3></div>
+      <div class="text-primary bg-light-primary text-end icon"><tabler-icon icon="circle-check"></tabler-icon></div>
+    </div></div>
+  </div>
+  <div class="col-sm-3 px-2">
+    <div class="card"><div class="card-body d-flex align-items-center justify-content-between">
+      <div><p class="fs-12 text-muted">Net Overtime Hours</p><h3 class="mb-0">{{ formatDuration(totalNetMinutes) }}</h3></div>
+      <div class="text-success bg-light-success text-end icon"><tabler-icon icon="clock-24"></tabler-icon></div>
+    </div></div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="d-flex align-items-center flex-wrap gap-2">
+    <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+      <input type="text" matInput placeholder="Search overtime..." [(ngModel)]="searchText">
+      <span matTextPrefix class="text-muted me-2"><tabler-icon icon="search" [size]="16"></tabler-icon></span>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+      <mat-select placeholder="Select Department" multiple [(ngModel)]="selectedDepartmentIds">
+        @for (department of departments; track department.id) {
+          <mat-option [value]="department.id">{{ department.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+      <mat-select placeholder="Select Status" multiple [(ngModel)]="selectedStatuses">
+        @for (status of statuses; track status) { <mat-option [value]="status">{{ status }}</mat-option> }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+      <mat-date-range-input [rangePicker]="rangePicker">
+        <input matStartDate placeholder="Start date" [(ngModel)]="selectedStartDate">
+        <input matEndDate placeholder="End date" [(ngModel)]="selectedEndDate">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+      <mat-date-range-picker #rangePicker></mat-date-range-picker>
+    </mat-form-field>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-sm-12 px-2">
+    <div class="card">
+      <div class="card-header mb-3">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All (100)</span>  |  Active (12)  |  Probation (10)  |  Inactive (6)</h6>
+          <div>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="x" [size]="16"></tabler-icon> Clear</button>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="upload" [size]="16"></tabler-icon> Import</button>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <tabler-icon icon="download" [size]="16"></tabler-icon> Export</button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="material-datatables table-responsive">
+          <table class="table no-wrap w-100 text-left">
+            <thead><tr>
+              <th class="text-dark">Type / Ref</th><th class="text-dark">Employee</th><th class="text-dark">Overtime Date</th>
+              <th class="text-dark">Time</th><th class="text-dark">Net Duration</th><th class="text-dark">Rate</th><th class="text-dark">Status</th><th class="text-dark">Action</th>
+            </tr></thead>
+            <tbody>
+              @for (request of filteredRequests; track request.id) {
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="bg-light-primary text-primary text-end icon me-3">
+                        <tabler-icon icon="calendar"></tabler-icon>
+                      </div>
+                      <div>
+                        <p class="text-dark fw-500 my-0">{{ overtimeTypeLabel(request.overtimeType) }}</p>
+                        <p class="fs-10 fw-300 text-muted my-0">{{ request.id }}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <p class="text-dark fw-500 my-0">{{ request.employeeName }}</p>
+                    <p class="fs-10 fw-300 text-muted my-0">{{ request.employeeId }}</p>
+                  </td>
+                  <td class="text-muted">{{ request.overtimeDate | regionalDate:'d MMM y' }}</td>
+                  <td class="text-muted">
+                    <p class="text-dark fw-500 my-0">{{ request.startTime }}–{{ request.endTime }}</p>
+                    <p class="fs-10 fw-300 text-muted my-0">Break {{ request.breakDurationMinutes }}m</p>
+                  </td>
+                  <td class="text-muted">{{ formatDuration(request.netMinutes) }}</td>
+                  <td class="text-muted">{{ request.hourlyRateMultiplier }}× hourly rate</td>
+                  <td><span class="chip" [ngClass]="statusClass(request.status)">{{ request.status }}</span></td>
+                  <td>
+                    <button
+                      type="button"
+                      class="text-muted action-btn"
+                      mat-icon-button
+                      (click)="openRequestDetails(request)">
+                      <tabler-icon icon="eye"></tabler-icon>
+                    </button>
+                  </td>
+                </tr>
+              }
+              @if (filteredRequests.length === 0) {
+                <tr><td colspan="8" class="text-muted text-center py-4">No overtime requests match the selected filters.</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (selectedRequest; as request) {
+  <app-overtime-detail-dialog [request]="request" (closed)="closeRequestDetails()"></app-overtime-detail-dialog>
+}

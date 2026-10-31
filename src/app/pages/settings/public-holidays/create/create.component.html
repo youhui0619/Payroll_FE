@@ -93,7 +93,7 @@
             <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
             <mat-datepicker #startDate></mat-datepicker>
             @if (holidayForm.controls.startDate.hasError('required')) {
-              <mat-error>Start date is required.</mat-error>
+              <mat-error class="text-danger">Start date is required.</mat-error>
             }
           </mat-form-field>
         </div>
@@ -104,7 +104,7 @@
             <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
             <mat-datepicker #endDate></mat-datepicker>
             @if (holidayForm.controls.endDate.hasError('required')) {
-              <mat-error>End date is required.</mat-error>
+              <mat-error class="text-danger">End date is required.</mat-error>
             }
           </mat-form-field>
         </div>

@@ -62,9 +62,8 @@ export class SidebarComponent implements OnInit, OnChanges {
       ]
     },
     { label: 'Overtime', icon: 'akar-icons:shipping-box-01', children: [
-        { label: 'Overview', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
-        { label: 'OT Approvals', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
-        { label: 'OT History', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
+        { label: 'Overview', icon: 'codex:dot-circle', route: '/time-leave/overtime/overview', badge: 10 },
+        { label: 'OT Approvals', icon: 'codex:dot-circle', route: '/time-leave/overtime/approval', badge: 10 },
       ]
     },
     { header: 'Payroll' },

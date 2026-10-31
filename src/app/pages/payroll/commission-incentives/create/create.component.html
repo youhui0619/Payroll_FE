@@ -21,7 +21,7 @@
               }
             </mat-autocomplete>
             @if (employeeSearch.hasError('selectionRequired')) {
-              <mat-error>Select an employee from the list.</mat-error>
+              <mat-error class="text-danger">Select an employee from the list.</mat-error>
             }
           </mat-form-field>
         </div>
@@ -73,7 +73,7 @@
                   }
                 </mat-select>
                 @if (assignmentForm.controls.commissionSettingCode.hasError('required')) {
-                  <mat-error>
+                  <mat-error class="text-danger">
                     Select an eligible commission plan.
                   </mat-error>
                 }
@@ -91,10 +91,10 @@
                       <span matTextPrefix class="text-muted me-2">MYR</span>
                       <input type="number" min="0.01" matInput placeholder="Enter calculation basis" formControlName="calculationBasis">
                       @if (assignmentForm.controls.calculationBasis.hasError('required')) {
-                        <mat-error>Enter the calculation basis.</mat-error>
+                        <mat-error class="text-danger">Enter the calculation basis.</mat-error>
                       }
                       @if (assignmentForm.controls.calculationBasis.hasError('min')) {
-                        <mat-error>Enter an amount greater than zero.</mat-error>
+                        <mat-error class="text-danger">Enter an amount greater than zero.</mat-error>
                       }
                     </mat-form-field>
                   </div>

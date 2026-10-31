@@ -1,0 +1,77 @@
+<div class="dialog-backdrop" (click)="close()">
+  <section class="dialog-panel" role="dialog" aria-modal="true" aria-labelledby="overtime-dialog-title" (click)="$event.stopPropagation()">
+    <header class="dialog-header">
+      <div class="dialog-heading">
+        <div class="title-line">
+          <h2 id="overtime-dialog-title">{{ overtimeTypeLabel }} Overtime</h2>
+          <span class="chip" [ngClass]="statusClass">{{ request.status }}</span>
+        </div>
+        <p class="dialog-subtitle my-0 fw-300 text-muted">Overtime request · {{ request.id }}</p>
+      </div>
+      <button type="button" class="close-button" aria-label="Close dialog" (click)="close()">&times;</button>
+    </header>
+
+    <div class="dialog-content">
+      <section class="section-block">
+        <div class="section-heading"><h4 class="text-primary mb-0">Employee information</h4></div>
+        <div class="info-grid">
+          <div><p class="text-muted fs-10 my-0">Name</p><p class="text-dark my-0 fw-500">{{ request.employeeName }}</p></div>
+          <div><p class="text-muted fs-10 my-0">Employee ID</p><p class="text-dark my-0 fw-500">{{ request.employeeId }}</p></div>
+          <div><p class="text-muted fs-10 my-0">Department</p><p class="text-dark my-0 fw-500">{{ request.departmentName }}</p></div>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading"><h4 class="text-primary mb-0">Overtime details</h4></div>
+        <div class="detail-grid">
+          <div><p class="text-muted fs-10 my-0">Overtime type</p><p class="text-dark my-0 fw-500">{{ overtimeTypeLabel }}</p></div>
+          <div><p class="text-muted fs-10 my-0">Overtime date</p><p class="text-dark my-0 fw-500">{{ request.overtimeDate | regionalDate:'dd/MM/yyyy' }}</p></div>
+          <div><p class="text-muted fs-10 my-0">Request date</p><p class="text-dark my-0 fw-500">{{ request.requestDate | regionalDate:'dd/MM/yyyy' }}</p></div>
+          <div><p class="text-muted fs-10 my-0">Time</p><p class="text-dark my-0 fw-500">{{ request.startTime }}–{{ request.endTime }}</p></div>
+          <div><p class="text-muted fs-10 my-0">Total duration</p><p class="text-dark my-0 fw-500">{{ formatDuration(request.totalMinutes) }}</p></div>
+          <div><p class="text-muted fs-10 my-0">Break duration</p><p class="text-dark my-0 fw-500">{{ formatDuration(request.breakDurationMinutes) }}</p></div>
+          <div><p class="text-muted fs-10 my-0">Net overtime</p><p class="text-dark my-0 fw-500">{{ formatDuration(request.netMinutes) }}</p></div>
+          <div><p class="text-muted fs-10 my-0">Rate</p><p class="text-dark my-0 fw-500">{{ request.hourlyRateMultiplier }}× hourly rate</p></div>
+          <div><p class="text-muted fs-10 my-0">Earning code</p><p class="text-dark my-0 fw-500">{{ request.earningCode }}</p></div>
+          <div class="detail-full-width"><p class="text-muted fs-10 my-0">Description</p><p class="text-dark my-0 fw-500">{{ request.description || '—' }}</p></div>
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading"><h4 class="text-primary mb-0">Supporting documents</h4></div>
+        <div class="detail-grid">
+          @if (request.supportingDocuments.length) {
+            <div class="detail-full-width"><ul class="document-list">@for (document of request.supportingDocuments; track document) { <li>{{ document }}</li> }</ul></div>
+          } @else {
+            <div class="detail-full-width"><p class="text-dark my-0 fw-500">No documents attached.</p></div>
+          }
+        </div>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading"><h4 class="text-primary mb-0">Submission and approval</h4></div>
+        <div class="detail-grid">
+          <div><p class="text-muted fs-10 my-0">Submitted at</p><p class="text-dark my-0 fw-500">{{ request.submittedAt | regionalDate:'dd/MM/yyyy' }}, {{ request.submittedAt | regionalTime }}</p></div>
+          <div><p class="text-muted fs-10 my-0">Reviewed by</p><p class="text-dark my-0 fw-500">{{ request.approval.approver || '—' }}</p></div>
+          <div><p class="text-muted fs-10 my-0">Review date</p><p class="text-dark my-0 fw-500">{{ request.approval.approvedDate ? (request.approval.approvedDate | regionalDate:'dd/MM/yyyy') : '—' }}</p></div>
+          <div class="detail-full-width"><p class="text-muted fs-10 my-0">Comments</p><p class="text-dark my-0 fw-500">{{ request.approval.comments || '—' }}</p></div>
+        </div>
+      </section>
+
+      @if (showDecisionActions) {
+        <section class="decision-footer">
+          <div class="review-comment">
+            <mat-label for="overtime-review-comment" class="form-label">Approval comment <span class="text-danger">*</span></mat-label>
+            <mat-form-field appearance="outline" class="form-input w-100">
+              <textarea matInput id="overtime-review-comment" rows="2" [(ngModel)]="decisionComment" placeholder="Add a comment before approving"></textarea>
+            </mat-form-field>
+          </div>
+          <div class="decision-actions">
+            <button type="button" class="decision-button reject-button" (click)="decide('Rejected')"><tabler-icon icon="x" [size]="16"></tabler-icon> Reject</button>
+            <button type="button" class="decision-button approve-button" (click)="decide('Approved')" [disabled]="!decisionComment.trim()"><tabler-icon icon="check" [size]="16"></tabler-icon> Approve</button>
+          </div>
+        </section>
+      }
+    </div>
+  </section>
+</div>

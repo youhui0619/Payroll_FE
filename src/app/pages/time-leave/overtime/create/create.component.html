@@ -1,0 +1,228 @@
+<form [formGroup]="otForm" (ngSubmit)="onSubmit()">
+  <h4 class="text-primary">Employee Information</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Request Date <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput [matDatepicker]="requestDate" placeholder="Select request date" formControlName="requestDate">
+            <mat-datepicker-toggle matSuffix [for]="requestDate"></mat-datepicker-toggle>
+            <mat-datepicker #requestDate></mat-datepicker>
+            @if (otForm.controls.requestDate.hasError('required')) {
+              <mat-error class="text-danger">Request date is required.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Department <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <mat-select placeholder="Select department" formControlName="departmentId" (selectionChange)="onDepartmentChange()">
+              @for (department of departments; track department) {
+                <mat-option [value]="department.id">{{ department.name }}</mat-option>
+              }
+            </mat-select>
+            <mat-error class="text-danger">Department is required.</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-12 px-2">
+          <mat-label class="form-label">Employee <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput type="text" placeholder="Select department first, then search employee"
+              [formControl]="employeeSearch" [matAutocomplete]="employeeAuto"
+              [disabled]="!otForm.controls.departmentId.value" (input)="onEmployeeSearchInput()">
+            <mat-autocomplete #employeeAuto="matAutocomplete" [displayWith]="employeeDisplayName"
+              (optionSelected)="onEmployeeSelected($event.option.value)">
+              @for (employee of filteredEmployees; track employee) {
+                <mat-option [value]="employee">
+                  {{ employee.employeeId }} - {{ employee.employeeName }}
+                </mat-option>
+              }
+              @if (otForm.controls.departmentId.value && filteredEmployees.length === 0) {
+                <mat-option disabled>
+                  No employees found in this department.
+                </mat-option>
+              }
+            </mat-autocomplete>
+            @if (otForm.controls.employeeId.hasError('required') || otForm.controls.employeeId.hasError('selectionRequired')) {
+              <mat-error class="text-danger">
+                Select an employee from the list.
+              </mat-error>
+            }
+          </mat-form-field>
+          @if (selectedEmployee; as employee) {
+            <div class=" mt-2">
+              <div class="row mx-0">
+                <div class="col-sm-4 px-2 mb-3">
+                  <p class="text-dark fw-500">Employee ID</p>
+                  <p class="text-muted my-0">{{ employee.employeeId }}</p>
+                </div>
+                <div class="col-sm-8 px-2 mb-3">
+                  <p class="text-dark fw-500">Employee Name</p>
+                  <p class="text-muted my-0">{{ employee.employeeName }}</p>
+                </div>
+                <div class="col-sm-4 px-2 mb-3">
+                  <p class="text-dark fw-500">Department</p>
+                  <p class="text-muted my-0">{{ employee.department }}</p>
+                </div>
+                <div class="col-sm-8 px-2 mb-3">
+                  <p class="text-dark fw-500">Position</p>
+                  <p class="text-muted my-0">{{ employee.position }}</p>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4 class="text-primary">Overtime Details</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Overtime Date <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput [matDatepicker]="overtimeDate" placeholder="Select overtime date" formControlName="overtimeDate">
+            <mat-datepicker-toggle matSuffix [for]="overtimeDate"></mat-datepicker-toggle>
+            <mat-datepicker #overtimeDate></mat-datepicker>
+            @if (otForm.controls.overtimeDate.hasError('required')) {
+              <mat-error class="text-danger">Overtime date is required.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Overtime Type <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <mat-select placeholder="Select overtime type" formControlName="overtimeType">
+              @for (overtimeType of overtimeTypes; track overtimeType.value) {
+                <mat-option [value]="overtimeType.value">
+                  {{ overtimeType.label }} - {{ overtimeType.multiplier ?? 'Rate not set' }}{{ overtimeType.multiplier === null ? '' : '× hourly rate' }}
+                </mat-option>
+              }
+            </mat-select>
+            @if (otForm.controls.overtimeType.hasError('required')) {
+              <mat-error class="text-danger">Overtime type is required.</mat-error>
+            }
+            @if (otForm.controls.overtimeType.hasError('rateNotConfigured')) {
+              <mat-error class="text-danger">Configure a positive hourly rate for this overtime type in payroll settings.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row mx-0">
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Start Time <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput
+              [matTimepicker]="startTime" formControlName="startTime" placeholder="Select start time" >
+            <mat-timepicker #startTime/>
+            <mat-timepicker-toggle [for]="startTime" matSuffix/>
+            @if (otForm.controls.startTime.hasError('required')) {
+              <mat-error class="text-danger">Start time is required.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">End Time <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput
+              [matTimepicker]="endTime" formControlName="endTime" placeholder="Select end time" >
+            <mat-timepicker #endTime/>
+            <mat-timepicker-toggle [for]="endTime" matSuffix/>
+            @if (otForm.controls.endTime.hasError('required')) {
+              <mat-error class="text-danger">End time is required.</mat-error>
+            }
+            @if (otForm.controls.endTime.hasError('durationMustExceedBreak')) {
+              <mat-error class="text-danger">Overtime duration must be greater than the break duration.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Break Duration <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <mat-select placeholder="Select break duration" formControlName="breakDuration">
+              @for (duration of breakDurations; track duration) {
+                <mat-option [value]="duration">{{ duration }} minutes</mat-option>
+              }
+            </mat-select>
+            @if (otForm.controls.breakDuration.hasError('required')) {
+              <mat-error class="text-danger">Break duration is required.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-12 px-2">
+          <mat-label class="form-label">Description <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <textarea matInput rows="4" placeholder="Enter overtime description" formControlName="description"></textarea>
+            @if (otForm.controls.description.hasError('required')) {
+              <mat-error class="text-danger">Description is required.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4 class="text-primary">Documentation</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-12 px-2">
+          <mat-label class="form-label">Supporting Documents <span class="text-danger">*</span></mat-label>
+          <app-dropzone formControlName="supportingDocuments"
+            accept="application/pdf,image/jpeg,image/png"
+            [multiple]="true"
+            [maxSize]="10485760"
+            [headline]="'Drag files here or browse to upload'"
+          [description]="'PDF, JPG or PNG · Maximum 10 MB per file'"></app-dropzone>
+          @if (submitted && otForm.controls.supportingDocuments.hasError('minlength')) {
+            <div class="text-danger">
+              Upload at least one supporting document.
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  <h4 class="text-primary">Overtime Summary</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-12 px-2">
+          @if(overtimeTypeLabel){
+            <div class="d-flex justify-content-between align-items-center py-2">
+              <p class="text-dark fw-500">Overtime type</p>
+              <p>{{ overtimeTypeLabel }}</p>
+            </div>
+          }
+          <div class="d-flex justify-content-between align-items-center py-2">
+            <p class="text-dark fw-500">Total overtime</p>
+            <p>{{ totalOvertimeLabel }}</p>
+          </div>
+          <div class="d-flex justify-content-between align-items-center py-2">
+            <p class="text-dark fw-500">Break duration</p>
+            <p>{{ breakDurationLabel }}</p>
+          </div>
+          <hr/>
+          <div class="d-flex justify-content-between align-items-center py-2">
+            <p class="text-dark fw-550">Net OT hours</p>
+            <h4 class="text-primary">{{ netOvertimeLabel }}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+  @if (createdOvertime) {
+    <p class="text-success" role="status">Overtime request {{ createdOvertime.id }} submitted for approval.</p>
+  }
+  <div class="d-flex align-items-center justify-content-end gap-3">
+    <button type="submit" mat-flat-button color="primary"><tabler-icon icon="check" [size]="16"></tabler-icon>Submit</button>
+  </div>
+</form>
