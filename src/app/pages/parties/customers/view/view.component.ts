@@ -7,7 +7,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import {MatRadioModule} from '@angular/material/radio';
-import {provideNativeDateAdapter} from '@angular/material/core';
 import {DateRange, MatDatepickerModule} from '@angular/material/datepicker';
 import { TablerIconComponent } from '@tabler/icons-angular';
 
@@ -18,11 +17,12 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { NavigationService } from '../../../../services/navigation.service';
+import { MaterialProviders } from '../../../../shared/material-imports';
 
 @Component({
   selector: 'app-view',
   imports: [FormsModule, ReactiveFormsModule, TablerIconComponent, MatFormFieldModule, MatSelectModule, MatInputModule, MatButtonModule, MatCheckboxModule, MatRadioModule, MatDatepickerModule, MatSort, MatPaginator, MatMenuModule, MatSlideToggleModule, MatTabsModule, MatTooltipModule],
-  providers: [provideNativeDateAdapter()],
+  providers: [...MaterialProviders],
   templateUrl: './view.component.html',
   styleUrl: './view.component.scss'
 })

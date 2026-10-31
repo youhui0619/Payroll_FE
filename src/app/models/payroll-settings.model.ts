@@ -23,10 +23,10 @@ export interface PayrollSettings {
   normalWorkingDayMultiplier: number | null;
   normalWorkingDayEarningCode: string;
   configureRestDayRates: boolean;
-  restDayWorkingHoursPerDay: number | null;
+  restDayOvertimeMultiplier: number | null;
   restDayEarningCode: string;
   configurePublicHolidayRates: boolean;
-  publicHolidayWorkingHoursPerDay: number | null;
+  publicHolidayOvertimeMultiplier: number | null;
   publicHolidayEarningCode: string;
   deductionProrationMethod: DeductionProrationMethod;
   includeEpf: boolean;

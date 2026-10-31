@@ -211,7 +211,7 @@
               @if (payrollForm.controls.configureRestDayRates.value) {
                 <div class="col-sm-6 px-2">
                   <mat-form-field appearance="outline" class="form-input w-100">
-                    <input type="number" min="0" matInput placeholder="Enter Rest day working hours per day" formControlName="restDayWorkingHoursPerDay">
+                    <input type="number" min="0" matInput placeholder="Enter Rest day overtime multiplier" formControlName="restDayOvertimeMultiplier">
                     <span matTextSurfix class="text-muted ms-2 text-nowrap">× hourly rate</span>
                   </mat-form-field>
                 </div>
@@ -227,7 +227,7 @@
               @if (payrollForm.controls.configurePublicHolidayRates.value) {
                 <div class="col-sm-6 px-2">
                   <mat-form-field appearance="outline" class="form-input w-100">
-                    <input type="number" min="0" matInput placeholder="Enter Public holiday working hours per day" formControlName="publicHolidayWorkingHoursPerDay">
+                    <input type="number" min="0" matInput placeholder="Enter Public holiday overtime multiplier" formControlName="publicHolidayOvertimeMultiplier">
                     <span matTextSurfix class="text-muted ms-2 text-nowrap">× hourly rate</span>
                   </mat-form-field>
                 </div>

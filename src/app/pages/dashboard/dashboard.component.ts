@@ -8,7 +8,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import {MatRadioModule} from '@angular/material/radio';
-import {provideNativeDateAdapter} from '@angular/material/core';
 import {DateRange, MatDatepickerModule} from '@angular/material/datepicker';
 import { TablerIconComponent } from '@tabler/icons-angular';
 
@@ -31,6 +30,7 @@ import { employees } from '../../data/employees';
 import type { LeaveApplication, LeaveRecord } from '../../models/leave.model';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
 import { AlertService } from '../../shared/components/alert/alert.service';
+import { MaterialProviders } from '../../shared/material-imports';
 
 interface DashboardCalendarCell {
   date: Date;
@@ -49,7 +49,7 @@ interface DashboardLeaveEntry {
   selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, TablerIconComponent, LeaveDetailDialogComponent, MatFormFieldModule, MatSelectModule, MatInputModule, MatButtonModule, MatCheckboxModule, MatRadioModule, MatDatepickerModule, MatSort, MatPaginator, MatMenuModule, MatSlideToggleModule, MatTabsModule, MatAutocompleteModule, NgxDropzoneModule, MatStepperModule, NgApexchartsModule],
-  providers: [provideNativeDateAdapter()],
+  providers: [...MaterialProviders],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -183,6 +183,16 @@ export class DashboardComponent {
     );
   }
 
+  get pendingLeaveRequests() {
+    return leaveApplications
+      .filter(application => application.status === 'Pending')
+      .slice(0, 5)
+      .map(application => ({
+        application,
+        employeeName: employees.find(employee => employee.employeeId === application.employeeId)?.employeeName ?? application.employeeId,
+      }));
+  }
+
   leaveMarkersForDate(dateKey: string): string[] {
     return [...new Set(this.monthLeaveEntries
       .filter(entry => dateKey >= entry.record.startDate && dateKey <= entry.record.endDate)
@@ -258,6 +268,34 @@ export class DashboardComponent {
         reason: application?.reason ?? entry.record.reason,
       },
       approval: entry.record.approval,
+    };
+  }
+
+  openPendingLeaveDetails(application: LeaveApplication): void {
+    const employee = employees.find(item => item.employeeId === application.employeeId);
+    if (!employee) return;
+
+    this.selectedLeave = {
+      title: application.leaveType,
+      subtitle: `Leave request · ${application.reference}`,
+      status: application.status,
+      statusClass: application.statusClass,
+      employeeInformation: {
+        name: employee.employeeName,
+        employeeId: employee.employeeId,
+        department: employee.department,
+        position: employee.position,
+        contactNo: employee.contactNo,
+        nricNo: employee.nricPassportNo,
+      },
+      details: {
+        leaveType: application.leaveType,
+        reference: application.reference,
+        date: application.dateRange,
+        duration: application.daysTaken,
+        reason: application.reason,
+      },
+      approval: application.approval,
     };
   }
 

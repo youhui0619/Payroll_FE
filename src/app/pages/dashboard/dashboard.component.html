@@ -297,37 +297,38 @@
         <a href="javascript:void(0)" routerLink="/time-leave/leave/approval">View All</a>
       </div>
       <div class="card-body">
-        @if (selectedDayLeaveEntries.length) {
+        @if (pendingLeaveRequests.length) {
           <div class="month-leave-entries">
-            @for (leave of selectedDayLeaveEntries; track leave.record.employeeId + leave.record.startDate + leave.record.code) {
+            @for (request of pendingLeaveRequests; track request.application.reference) {
               <div class="d-flex align-items-center justify-content-between py-1">
                 <div class="d-flex align-items-center">
-                    <div class="bg-light-danger text-danger text-end icon me-3">
+                    <div [class]="request.application.iconClass + ' text-end icon me-3'">
                       <tabler-icon icon="calendar"></tabler-icon>
                     </div>
                     <div>
-                      <p class="text-dark fw-500 my-0">{{ leave.employeeName }}</p>
-                      <p class="text-muted my-0 fs-10 fw-300">{{ leave.record.leaveType }} · {{ formatDateRange(leave.record.startDate, leave.record.endDate) }}</p>
+                      <p class="text-dark fw-500 my-0">{{ request.employeeName }}</p>
+                      <p class="text-muted my-0 fs-10 fw-300">{{ request.application.leaveType }} · {{ request.application.dateRange }}</p>
                     </div>
                   </div>
 
-                  <button class="text-muted action-btn" mat-icon-button  (click)="openLeaveDetails(leave)">
+                  <button class="text-muted action-btn" mat-icon-button (click)="openPendingLeaveDetails(request.application)">
                     <tabler-icon icon="eye"></tabler-icon>
                   </button>
               </div>
             }
           </div>
         } @else {
-          <p class="text-muted mb-0">No approved leave on this day.</p>
+          <p class="text-muted mb-0">No pending leave requests.</p>
         }
       </div>
     </div>
   </div>
 </div>
 
-@if (selectedLeave; as leave) {
+@if (selectedLeave; as detail) {
   <app-leave-detail-dialog
-    [data]="leave"
+    [data]="detail"
+    [showDecisionActions]="selectedLeave.status === 'Pending'"
     (closed)="selectedLeave = null">
   </app-leave-detail-dialog>
 }

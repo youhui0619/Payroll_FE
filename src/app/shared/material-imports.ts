@@ -15,7 +15,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { provideNativeDateAdapter } from '@angular/material/core';
+import { MAT_DATE_LOCALE, provideNativeDateAdapter, type MatDateFormats } from '@angular/material/core';
 import { FileInputDirective } from '@ngx-dropzone/cdk';
 import { MatDropzone } from '@ngx-dropzone/material';
 import { RegionalCurrencyPipe, RegionalCurrencySymbolPipe, RegionalDatePipe, RegionalNumberPipe, RegionalTimePipe } from './pipes/regional-format.pipes';
@@ -53,6 +53,16 @@ const tablerIconRegistry = Object.fromEntries(
 
 export const MaterialIconProviders = TablerIcons.provideTablerIcons(tablerIconRegistry);
 
+const APP_DATE_FORMATS: MatDateFormats = {
+  parse: { dateInput: { day: '2-digit', month: '2-digit', year: 'numeric' } },
+  display: {
+    dateInput: { day: '2-digit', month: '2-digit', year: 'numeric' },
+    monthYearLabel: { month: 'long', year: 'numeric' },
+    dateA11yLabel: { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' },
+    monthYearA11yLabel: { month: 'long', year: 'numeric' },
+  },
+};
+
 export const MaterialImports = [
   MatFormFieldModule,
   MatSelectModule,
@@ -82,5 +92,6 @@ export const MaterialImports = [
 ];
 
 export const MaterialProviders = [
-  provideNativeDateAdapter(),
+  ...provideNativeDateAdapter(APP_DATE_FORMATS),
+  { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
 ];

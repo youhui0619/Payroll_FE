@@ -7,7 +7,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import {MatRadioModule} from '@angular/material/radio';
-import {provideNativeDateAdapter} from '@angular/material/core';
 import {DateRange, MatDatepickerModule} from '@angular/material/datepicker';
 import { TablerIconComponent } from '@tabler/icons-angular';
 
@@ -21,12 +20,13 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatStepperModule } from '@angular/material/stepper';
 import { FileInputDirective } from '@ngx-dropzone/cdk';
 import { NgxDropzoneModule } from 'ngx-dropzone';
+import { MaterialProviders } from '../../shared/material-imports';
 
 @Component({
   selector: 'app-example',
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, TablerIconComponent, MatFormFieldModule, MatSelectModule, MatInputModule, MatButtonModule, MatCheckboxModule, MatRadioModule, MatDatepickerModule, MatSort, MatPaginator, MatMenuModule, MatSlideToggleModule, MatTabsModule, MatAutocompleteModule, NgxDropzoneModule, MatStepperModule],
-  providers: [provideNativeDateAdapter()],
+  providers: [...MaterialProviders],
   templateUrl: './example.component.html',
   styleUrls: ['./example.component.scss']
 })

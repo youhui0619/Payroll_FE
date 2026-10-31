@@ -5,7 +5,6 @@ import { MaterialImports, MaterialProviders } from '../../../../shared/material-
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
 import { FullCalendarModule, CalendarOptions } from '@fullcalendar/angular';
-import dayGridPlugin from '@fullcalendar/angular/daygrid';
 import interactionPlugin from '@fullcalendar/angular/interaction';
 import themePlugin from "@fullcalendar/angular/themes/monarch"; 
 import type { LeaveApplication } from '../../../../models/leave.model';
