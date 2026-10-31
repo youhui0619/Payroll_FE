@@ -30,6 +30,7 @@ import { attendanceRecords } from '../../data/attendance';
 import { employees } from '../../data/employees';
 import type { LeaveApplication, LeaveRecord } from '../../models/leave.model';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
+import { AlertService } from '../../shared/components/alert/alert.service';
 
 interface DashboardCalendarCell {
   date: Date;
@@ -55,6 +56,30 @@ interface DashboardLeaveEntry {
 export class DashboardComponent {
   selectedLeave: LeaveDialogData | null = null;
   private readonly ngZone = inject(NgZone);
+  private readonly alertService = inject(AlertService);
+
+  openDialog() {
+    this.alertService.show({
+      title: 'Payroll Report',
+      content: 'The payroll report is ready to review.',
+      approveLabel: 'Continue',
+      rejectLabel: 'Cancel',
+      onApprove: () => {
+        this.handleReportApprove()
+       },
+      onReject: () => {
+        this.handleReportReject()
+       }
+    });
+  }
+
+  handleReportApprove() {
+   console.log("approve")
+  }
+
+  handleReportReject() {
+   console.log("reject")
+  }
   calendarMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
   selectedCalendarDateKey = this.toDateKey(new Date());
   readonly weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];

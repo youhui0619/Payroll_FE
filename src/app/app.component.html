@@ -1,1 +1,13 @@
 <router-outlet />
+
+@if (alertService.currentAlert(); as alert) {
+  <app-alert
+    [title]="alert.title"
+    [message]="alert.content"
+    [approveLabel]="alert.approveLabel ?? 'Approve'"
+    [rejectLabel]="alert.rejectLabel ?? 'Cancel'"
+    (closed)="alertService.close()"
+    (approved)="alertService.approve()"
+    (rejected)="alertService.reject()">
+  </app-alert>
+}

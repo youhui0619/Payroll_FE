@@ -80,7 +80,8 @@
 
 .mat-mdc-unelevated-button[color="ghost"] {
   background: var(--transparent)!important;
-  border: 1px solid var(--light-disabled)!important;
+  color: var(--text)!important;
+  border: 1px solid var(--border)!important;
 }
 
 .mat-mdc-unelevated-button[color="disabled"] {

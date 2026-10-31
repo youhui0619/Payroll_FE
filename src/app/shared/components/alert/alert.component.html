@@ -1,0 +1,28 @@
+<div class="dialog-backdrop" (click)="close()">
+  <div class="dialog-panel" (click)="$event.stopPropagation()">
+    <div class="dialog-header mb-4">
+        <h4 class="mb-0">{{ title }}</h4>
+        <button type="button" class="close-button" aria-label="Close dialog" (click)="close()">&times;</button>
+    </div>
+
+    <div class="dialog-content">
+        <div class="row mx-0 pb-4">
+            <div class="col-sm-12 px-0 ">
+                <p class="text-muted my-0">{{ message }}</p>
+            </div>
+        </div>
+        <div class="pt-4 d-flex justify-content-end align-items-center gap-3">
+          <div class="decision-actions">
+            <button type="button" class="decision-button" mat-flat-button color="ghost" (click)="rejected.emit()">
+              <tabler-icon icon="x" [size]="16"></tabler-icon>
+              {{ rejectLabel }}
+            </button>
+            <button type="button" class="decision-button approve-button" mat-flat-button color="primary" (click)="approved.emit()">
+              <tabler-icon icon="check" [size]="16"></tabler-icon>
+              {{ approveLabel }}
+            </button>
+          </div>
+        </div>
+    </div>
+</div>
+</div>
