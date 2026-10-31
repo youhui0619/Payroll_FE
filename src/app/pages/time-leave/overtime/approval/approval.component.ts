@@ -48,7 +48,7 @@ export class ApprovalComponent {
 
   statusClass(status: OvertimeStatus): string {
     switch (status) {
-      case 'Pending': return 'bg-light-warning text-warning';
+      case 'Pending': return 'bg-light-info text-info';
       case 'Approved': return 'bg-light-primary text-primary';
       case 'Rejected': return 'bg-light-danger text-danger';
       case 'Paid': return 'bg-light-success text-success';

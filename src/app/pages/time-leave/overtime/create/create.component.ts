@@ -160,9 +160,7 @@ export class CreateComponent {
       return;
     }
 
-    const year = requestDate.getFullYear();
     const nextNumber = overtimeRequests.reduce((maximum, request) => {
-      if (!request.id.startsWith(`OT-${year}-`)) return maximum;
       const numberSuffix = Number(request.id.match(/-(\d+)$/)?.[1]);
       return Number.isFinite(numberSuffix) ? Math.max(maximum, numberSuffix) : maximum;
     }, 0) + 1;
@@ -173,7 +171,7 @@ export class CreateComponent {
         ? payrollSettings.restDayEarningCode
         : payrollSettings.publicHolidayEarningCode;
     const record: OvertimeRequestRecord = {
-      id: `OT-${year}-${String(nextNumber).padStart(4, '0')}`,
+      id: `${earningCode}-${String(nextNumber).padStart(4, '0')}`,
       requestDate: this.dateKey(requestDate),
       overtimeDate: this.dateKey(overtimeDate),
       employeeId: employee.employeeId,

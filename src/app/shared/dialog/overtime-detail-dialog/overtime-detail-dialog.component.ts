@@ -22,7 +22,7 @@ export class OvertimeDetailDialogComponent {
 
   get statusClass(): string {
     const classes: Record<OvertimeStatus, string> = {
-      Pending: 'bg-light-warning text-warning',
+      Pending: 'bg-light-pending text-pending',
       Approved: 'bg-light-primary text-primary',
       Rejected: 'bg-light-danger text-danger',
       Paid: 'bg-light-success text-success'

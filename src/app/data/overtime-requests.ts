@@ -2,7 +2,7 @@ import type { OvertimeRequestRecord } from '../models/overtime.model';
 
 export const overtimeRequests: OvertimeRequestRecord[] = [
   {
-    id: 'OT-2026-0001',
+    id: 'OT-0001',
     requestDate: '2026-10-05',
     overtimeDate: '2026-10-03',
     employeeId: 'EMP-0043',
@@ -24,7 +24,7 @@ export const overtimeRequests: OvertimeRequestRecord[] = [
     approval: { approver: '-', approvedDate: null, comments: '' }
   },
   {
-    id: 'OT-2026-0002',
+    id: 'OT-REST-0002',
     requestDate: '2026-10-12',
     overtimeDate: '2026-10-11',
     employeeId: 'EMP-0045',
@@ -44,5 +44,115 @@ export const overtimeRequests: OvertimeRequestRecord[] = [
     status: 'Approved',
     submittedAt: '2026-10-12T02:15:00.000Z',
     approval: { approver: 'Sarah Lim', approvedDate: '2026-10-13', comments: 'Approved.' }
+  },
+  {
+    id: 'OT-0003',
+    requestDate: '2026-10-16', overtimeDate: '2026-10-15',
+    employeeId: 'EMP-0042', employeeName: 'Aisyah Nur Abdullah', departmentId: 'DEP-0002', departmentName: 'Finance',
+    overtimeType: 'NORMAL_WORKING_DAY', startTime: '18:30', endTime: '20:30',
+    totalMinutes: 120, breakDurationMinutes: 0, netMinutes: 120,
+    hourlyRateMultiplier: 1.5, earningCode: 'OT',
+    description: 'Finalized monthly reconciliation entries.', supportingDocuments: ['reconciliation-summary.xlsx'],
+    status: 'Pending', submittedAt: '2026-10-16T10:05:00.000Z',
+    approval: { approver: '-', approvedDate: null, comments: '' }
+  },
+  {
+    id: 'OT-REST-0004',
+    requestDate: '2026-10-19', overtimeDate: '2026-10-18',
+    employeeId: 'EMP-0044', employeeName: 'Nurul Huda Ismail', departmentId: 'DEP-0004', departmentName: 'Human Resources',
+    overtimeType: 'REST_DAY', startTime: '10:00', endTime: '14:30',
+    totalMinutes: 270, breakDurationMinutes: 30, netMinutes: 240,
+    hourlyRateMultiplier: 2, earningCode: 'OT-REST',
+    description: 'Supported the weekend recruitment event.', supportingDocuments: ['event-attendance.pdf'],
+    status: 'Approved', submittedAt: '2026-10-19T03:45:00.000Z',
+    approval: { approver: 'Sarah Lim', approvedDate: '2026-10-20', comments: 'Approved. Event attendance verified.' }
+  },
+  {
+    id: 'OT-0005',
+    requestDate: '2026-10-21', overtimeDate: '2026-10-20',
+    employeeId: 'EMP-0046', employeeName: 'Hafiz Rahman', departmentId: 'DEP-0006', departmentName: 'Sales',
+    overtimeType: 'NORMAL_WORKING_DAY', startTime: '18:00', endTime: '19:45',
+    totalMinutes: 105, breakDurationMinutes: 0, netMinutes: 105,
+    hourlyRateMultiplier: 1.5, earningCode: 'OT',
+    description: 'Prepared a proposal for a prospective client.', supportingDocuments: [],
+    status: 'Rejected', submittedAt: '2026-10-21T11:20:00.000Z',
+    approval: { approver: 'Sarah Lim', approvedDate: '2026-10-22', comments: 'Please submit supporting client meeting details.' }
+  },
+  {
+    id: 'OT-0006',
+    requestDate: '2026-10-23', overtimeDate: '2026-10-22',
+    employeeId: 'EMP-0053', employeeName: 'Siti Amina Hassan', departmentId: 'DEP-0005', departmentName: 'Information Technology',
+    overtimeType: 'NORMAL_WORKING_DAY', startTime: '19:00', endTime: '23:00',
+    totalMinutes: 240, breakDurationMinutes: 30, netMinutes: 210,
+    hourlyRateMultiplier: 1.5, earningCode: 'OT',
+    description: 'Resolved a production issue and completed service checks.', supportingDocuments: ['incident-INC-2481.pdf'],
+    status: 'Pending', submittedAt: '2026-10-23T14:10:00.000Z',
+    approval: { approver: '-', approvedDate: null, comments: '' }
+  },
+  {
+    id: 'OT-REST-0007',
+    requestDate: '2026-09-08', overtimeDate: '2026-09-06',
+    employeeId: 'EMP-0048', employeeName: 'Suresh Kumar', departmentId: 'DEP-0008', departmentName: 'Customer Service',
+    overtimeType: 'REST_DAY', startTime: '09:00', endTime: '12:00',
+    totalMinutes: 180, breakDurationMinutes: 0, netMinutes: 180,
+    hourlyRateMultiplier: 2, earningCode: 'OT-REST',
+    description: 'Covered the weekend customer support shift.', supportingDocuments: ['shift-roster.pdf'],
+    status: 'Paid', submittedAt: '2026-09-08T01:30:00.000Z',
+    approval: { approver: 'Daniel Lim', approvedDate: '2026-09-09', comments: 'Approved and included in September payroll.' }
+  },
+  {
+    id: 'OT-0008',
+    requestDate: '2026-09-17', overtimeDate: '2026-09-16',
+    employeeId: 'EMP-0047', employeeName: 'Priya Nair', departmentId: 'DEP-0007', departmentName: 'Marketing',
+    overtimeType: 'NORMAL_WORKING_DAY', startTime: '18:15', endTime: '20:45',
+    totalMinutes: 150, breakDurationMinutes: 15, netMinutes: 135,
+    hourlyRateMultiplier: 1.5, earningCode: 'OT',
+    description: 'Completed campaign materials for the product launch.', supportingDocuments: ['campaign-deliverables.zip'],
+    status: 'Approved', submittedAt: '2026-09-17T09:00:00.000Z',
+    approval: { approver: 'Sarah Lim', approvedDate: '2026-09-18', comments: 'Approved.' }
+  },
+  {
+    id: 'OT-0009',
+    requestDate: '2026-09-25', overtimeDate: '2026-09-24',
+    employeeId: 'EMP-0049', employeeName: 'Farid Iskandar', departmentId: 'DEP-0009', departmentName: 'Procurement',
+    overtimeType: 'NORMAL_WORKING_DAY', startTime: '18:00', endTime: '21:00',
+    totalMinutes: 180, breakDurationMinutes: 30, netMinutes: 150,
+    hourlyRateMultiplier: 1.5, earningCode: 'OT',
+    description: 'Completed urgent supplier quotation comparisons.', supportingDocuments: ['supplier-comparison.xlsx'],
+    status: 'Pending', submittedAt: '2026-09-25T08:35:00.000Z',
+    approval: { approver: '-', approvedDate: null, comments: '' }
+  },
+  {
+    id: 'OT-PH-0010',
+    requestDate: '2026-10-27', overtimeDate: '2026-10-26',
+    employeeId: 'EMP-0051', employeeName: 'Jason Lee Wei Ming', departmentId: 'DEP-0001', departmentName: 'Corporate',
+    overtimeType: 'PUBLIC_HOLIDAY', startTime: '09:00', endTime: '13:00',
+    totalMinutes: 240, breakDurationMinutes: 0, netMinutes: 240,
+    hourlyRateMultiplier: 3, earningCode: 'OT-PH',
+    description: 'Supported the public holiday office relocation.', supportingDocuments: ['relocation-checklist.pdf'],
+    status: 'Pending', submittedAt: '2026-10-27T02:10:00.000Z',
+    approval: { approver: '-', approvedDate: null, comments: '' }
+  },
+  {
+    id: 'OT-0011',
+    requestDate: '2026-08-14', overtimeDate: '2026-08-13',
+    employeeId: 'EMP-0054', employeeName: 'Arjun Menon', departmentId: 'DEP-0005', departmentName: 'Information Technology',
+    overtimeType: 'NORMAL_WORKING_DAY', startTime: '18:00', endTime: '22:00',
+    totalMinutes: 240, breakDurationMinutes: 30, netMinutes: 210,
+    hourlyRateMultiplier: 1.5, earningCode: 'OT',
+    description: 'Performed scheduled server maintenance.', supportingDocuments: ['maintenance-log.pdf'],
+    status: 'Paid', submittedAt: '2026-08-14T07:50:00.000Z',
+    approval: { approver: 'Daniel Lim', approvedDate: '2026-08-15', comments: 'Approved and paid.' }
+  },
+  {
+    id: 'OT-0012',
+    requestDate: '2026-10-30', overtimeDate: '2026-10-29',
+    employeeId: 'EMP-0050', employeeName: 'Chloe Tan Mei Xin', departmentId: 'DEP-0010', departmentName: 'Legal and Compliance',
+    overtimeType: 'NORMAL_WORKING_DAY', startTime: '18:30', endTime: '20:30',
+    totalMinutes: 120, breakDurationMinutes: 0, netMinutes: 120,
+    hourlyRateMultiplier: 1.5, earningCode: 'OT',
+    description: 'Completed the quarterly compliance review.', supportingDocuments: ['compliance-review.pdf'],
+    status: 'Pending', submittedAt: '2026-10-30T11:40:00.000Z',
+    approval: { approver: '-', approvedDate: null, comments: '' }
   }
 ];
