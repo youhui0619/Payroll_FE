@@ -87,27 +87,25 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
-      <mat-select placeholder="Select Department" multiple>
-        <mat-option value="active">Active</mat-option>
-        <mat-option value="inactive">Inactive</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
-      <mat-select placeholder="Select Month">
-        @for (month of months; track month) {
-          <mat-option [value]="month.value">{{ month.label }}</mat-option>
+      <mat-select
+        placeholder="Select Department"
+        multiple
+        [value]="selectedDepartments"
+        (selectionChange)="selectedDepartments = $event.value">
+        @for (department of departments; track department) {
+          <mat-option [value]="department">{{ department }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
-      <mat-select placeholder="Select Year">
-        @for (year of years; track year) {
-          <mat-option [value]="year">{{ year }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+     <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+        <mat-date-range-input [rangePicker]="rangePicker">
+          <input matStartDate placeholder="Start date" (dateChange)="onStartDateChange($event.value)">
+          <input matEndDate placeholder="End date" (dateChange)="onEndDateChange($event.value)">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+        <mat-date-range-picker #rangePicker></mat-date-range-picker>
+      </mat-form-field>
   </div>
 </div>
 
@@ -117,9 +115,9 @@
     <div class="card">
       <div class="card-header">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-          <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">Pending ({{ leaveRequests.length }})</span>  |  Annual Leave ({{ leaveCount('Annual Leave') }})  |  Medical Leave ({{ leaveCount('Medical Leave') }})  |  Unpaid Leave ({{ leaveCount('Unpaid Leave') }})  |  Emergency Leave ({{ leaveCount('Emergency Leave') }})</h6>
+          <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">Pending ({{ filteredLeaveRequests.length }})</span>  |  Annual Leave ({{ leaveCount('Annual Leave') }})  |  Medical Leave ({{ leaveCount('Medical Leave') }})  |  Unpaid Leave ({{ leaveCount('Unpaid Leave') }})  |  Emergency Leave ({{ leaveCount('Emergency Leave') }})</h6>
           <div>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="x" [size]="16"></tabler-icon> Clear</button>
+            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2" (click)="clearFilters()"><tabler-icon icon="x" [size]="16"></tabler-icon> Clear</button>
             <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="upload" [size]="16"></tabler-icon> Import</button>
             <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <tabler-icon icon="download" [size]="16"></tabler-icon> Export</button>
           </div>
@@ -141,7 +139,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @for (leave of leaveRequests; track leave) {
+                  @for (leave of filteredLeaveRequests; track leave.reference) {
                     <tr>
                       <td>
                         <div class="d-flex align-items-center">
@@ -174,6 +172,13 @@
                   }
                 </tbody>
               </table>
+              @if (filteredLeaveRequests.length === 0) {
+                <div class="text-center text-muted py-4">
+                  No leave requests match the selected filters.
+                </div>
+              }
+              <mat-paginator [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>
+            
             </div>
           </div>
         </div>

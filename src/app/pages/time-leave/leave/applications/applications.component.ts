@@ -9,7 +9,7 @@ import dayGridPlugin from '@fullcalendar/angular/daygrid';
 import interactionPlugin from '@fullcalendar/angular/interaction';
 import themePlugin from "@fullcalendar/angular/themes/monarch"; 
 import type { LeaveApplication } from '../../../../models/leave.model';
-import { getEmployee } from '../../../../data/employees';
+import { employees, getEmployee } from '../../../../data/employees';
 import { leaveApplications } from '../../../../data/leave-applications';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
 
@@ -26,21 +26,58 @@ export class ApplicationsComponent {
   private activeLeave: LeaveApplication | null = null;
   readonly employee = getEmployee('EMP-0042');
   readonly leaveRequests: LeaveApplication[] = leaveApplications;
-  readonly months = [
-    { value: 1, label: 'January' },
-    { value: 2, label: 'February' },
-    { value: 3, label: 'March' },
-    { value: 4, label: 'April' },
-    { value: 5, label: 'May' },
-    { value: 6, label: 'June' },
-    { value: 7, label: 'July' },
-    { value: 8, label: 'August' },
-    { value: 9, label: 'September' },
-    { value: 10, label: 'October' },
-    { value: 11, label: 'November' },
-    { value: 12, label: 'December' }
-  ];
-  readonly years = Array.from({ length: 5 }, (_, index) => new Date().getFullYear() - index);
+  selectedDepartments: string[] = [];
+  selectedStartDate: Date | null = null;
+  selectedEndDate: Date | null = null;
+
+  get departments(): string[] {
+    return [...new Set(employees.map(employee => employee.department).filter(Boolean))]
+      .sort((first, second) => first.localeCompare(second));
+  }
+
+  get filteredLeaveRequests(): LeaveApplication[] {
+    return this.leaveRequests.filter(leave => {
+      if (this.selectedDepartments.length && !this.selectedDepartments.includes(getEmployee(leave.employeeId).department)) {
+        return false;
+      }
+
+      const [startText, endText = startText] = leave.dateRange.split('~').map(value => value.trim());
+      const leaveStart = this.parseLeaveDate(startText);
+      const leaveEnd = this.parseLeaveDate(endText);
+      if (!leaveStart || !leaveEnd) return false;
+
+      return (!this.selectedStartDate || leaveEnd >= this.startOfDay(this.selectedStartDate))
+        && (!this.selectedEndDate || leaveStart <= this.endOfDay(this.selectedEndDate));
+    });
+  }
+
+  onStartDateChange(date: Date | null): void {
+    this.selectedStartDate = date;
+  }
+
+  onEndDateChange(date: Date | null): void {
+    this.selectedEndDate = date;
+  }
+
+  clearFilters(): void {
+    this.selectedDepartments = [];
+    this.selectedStartDate = null;
+    this.selectedEndDate = null;
+  }
+
+  private parseLeaveDate(dateText: string): Date | null {
+    const [day, month, year] = dateText.split('/').map(Number);
+    if (!day || !month || !year) return null;
+    return new Date(year, month - 1, day);
+  }
+
+  private startOfDay(date: Date): Date {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  }
+
+  private endOfDay(date: Date): Date {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59, 999);
+  }
 
   leaveCount(leaveType: string): number {
     return this.leaveRequests.filter(leave => leave.leaveType === leaveType).length;

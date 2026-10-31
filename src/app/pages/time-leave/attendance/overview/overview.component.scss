@@ -104,7 +104,7 @@
   vertical-align: middle;
 }
 
-.leave-table .sticky-col-employee .avatar {
+.leave-table .sticky-col-employee .initial-avatar {
   flex: 0 0 36px;
 }
 
@@ -204,20 +204,6 @@
     flex-direction: column;
   }
 }
-
-.avatar {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: var(--light-primary);
-  color: var(--primary);
-  font-size: 14px;
-  font-weight: 600;
-}
-
 
 .sticky-col {
   position: sticky;

@@ -52,6 +52,20 @@ h4{
   display: block;
 }
 
+
+.initial-avatar {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--light-primary);
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .mat-mdc-menu-panel{
   border-radius: 12px !important;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
