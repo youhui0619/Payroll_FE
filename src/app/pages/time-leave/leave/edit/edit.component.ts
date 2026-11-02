@@ -189,7 +189,7 @@ export class EditComponent {
     this.updatedLeave = record;
   }
 
-  cancel(): void {
+  goBack(): void {
     void this.router.navigateByUrl('/time-leave/leave/applications');
   }
 

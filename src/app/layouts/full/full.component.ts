@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -18,6 +18,8 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 })
 export class FullComponent {
 
+  @ViewChild('mainContent') private mainContent?: ElementRef<HTMLElement>;
+
   sidebarCollapsed = false;
   mobileSidebarOpen = false;
   sidebarSubheader = 'Administration';
@@ -34,6 +36,13 @@ export class FullComponent {
 
     this.routerSub = this.router.events.subscribe((ev) => {
       if (ev instanceof NavigationEnd) {
+        requestAnimationFrame(() => {
+          const content = this.mainContent?.nativeElement;
+          if (content) {
+            content.scrollTop = 0;
+            content.scrollLeft = 0;
+          }
+        });
         // close sidebar on navigation when on small screens
         if (window.innerWidth < this.MOBILE_BREAKPOINT) {
           this.sidebarCollapsed = true;

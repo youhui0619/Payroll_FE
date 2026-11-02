@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { departments } from '../../../../data/workforce/departments.data';
 import { employees } from '../../../../data/workforce/employees.data';
@@ -38,7 +38,7 @@ export class CreateComponent {
     supportingDocuments: new FormControl<Array<File | string>>([], { nonNullable: true })
   });
 
-  constructor(private readonly route: ActivatedRoute) {
+  constructor(private readonly route: ActivatedRoute, private readonly router: Router) {
     this.route.queryParamMap.subscribe(params => {
       const employee = this.employees.find(item => item.employeeId === params.get('employeeId'));
       const selectedDate = this.dateFromKey(params.get('date'));
@@ -52,6 +52,10 @@ export class CreateComponent {
         this.leaveForm.controls.endDate.setValue(selectedDate);
       }
     });
+  }
+
+  goBack(): void {
+    void this.router.navigateByUrl('/time-leave/leave/applications');
   }
 
   get selectedEmployee(): EmployeeRecord | undefined {
