@@ -167,6 +167,16 @@
                           (click)="openLeaveDetails(leave)">
                           <tabler-icon icon="eye"></tabler-icon>
                         </button>
+                        @if (leave.status === 'Pending') {
+                          <button
+                            type="button"
+                            class="text-muted action-btn"
+                            mat-icon-button
+                            [routerLink]="['/time-leave/leave/edit', leave.reference]"
+                            [attr.aria-label]="'Edit leave request ' + leave.reference">
+                            <tabler-icon icon="edit"></tabler-icon>
+                          </button>
+                        }
                       </td>
                     </tr>
                   }

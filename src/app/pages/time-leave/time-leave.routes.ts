@@ -4,6 +4,8 @@ import { OverviewComponent as LeaveOverviewComponent } from './leave/overview/ov
 import { ViewComponent as LeaveViewComponent } from './leave/view/view.component';
 import { ApprovalComponent as LeaveApprovalComponent } from './leave/approval/approval.component';
 import { ApplicationsComponent as LeaveApplicationsComponent } from './leave/applications/applications.component';
+import { CreateComponent as LeaveCreateComponent } from './leave/create/create.component';
+import { EditComponent as LeaveEditComponent } from './leave/edit/edit.component';
 import { OverviewComponent as OvertimeOverviewComponent } from './overtime/overview/overview.component';
 import { ApprovalComponent as OvertimeApprovalComponent } from './overtime/approval/approval.component';
 import { CreateComponent as OvertimeCreateComponent } from './overtime/create/create.component';
@@ -19,7 +21,7 @@ export const TIME_LEAVE_ROUTES: Routes = [
     component: LeaveOverviewComponent
   },
   {
-    path: 'leave/:id/view',
+    path: 'leave/view/:id',
     component: LeaveViewComponent
   },
   {
@@ -29,6 +31,14 @@ export const TIME_LEAVE_ROUTES: Routes = [
   {
     path: 'leave/applications',
     component: LeaveApplicationsComponent
+  },
+  {
+    path: 'leave/create',
+    component: LeaveCreateComponent
+  },
+  {
+    path: 'leave/edit/:reference',
+    component: LeaveEditComponent
   },
   {
     path: 'overtime/overview',

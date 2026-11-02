@@ -48,6 +48,10 @@ export class OverviewComponent implements AfterViewInit {
     ].join('-');
   }
 
+  isFutureDate(dateKey: string): boolean {
+    return dateKey > this.todayDateKey;
+  }
+
   get departments(): string[] {
     return [...new Set(this.employees.map(employee => employee.department).filter(Boolean))]
       .sort((first, second) => first.localeCompare(second));

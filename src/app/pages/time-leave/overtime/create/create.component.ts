@@ -1,6 +1,7 @@
 
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { departments } from '../../../../data/workforce/departments.data';
 import { employees } from '../../../../data/workforce/employees.data';
@@ -54,6 +55,22 @@ export class CreateComponent {
       validators: [Validators.minLength(1)]
     })
   });
+
+  constructor(private readonly route: ActivatedRoute) {
+    this.route.queryParamMap.subscribe(params => {
+      const employee = this.employees.find(item => item.employeeId === params.get('employeeId'));
+      const overtimeDate = this.dateFromKey(params.get('date'));
+      if (employee) {
+        const department = this.departments.find(item => item.name === employee.department);
+        if (department) this.otForm.controls.departmentId.setValue(department.id);
+        this.onEmployeeSelected(employee);
+      }
+      if (overtimeDate) {
+        this.otForm.controls.requestDate.setValue(new Date());
+        this.otForm.controls.overtimeDate.setValue(overtimeDate);
+      }
+    });
+  }
 
   get netOvertimeMinutes(): number {
     const { startTime, endTime, breakDuration } = this.otForm.getRawValue();
@@ -213,6 +230,13 @@ export class CreateComponent {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  private dateFromKey(dateKey: string | null): Date | null {
+    if (!dateKey) return null;
+    const [year, month, day] = dateKey.split('-').map(Number);
+    if (!year || !month || !day) return null;
+    return new Date(year, month - 1, day);
   }
 
   private timeKey(time: Date): string {

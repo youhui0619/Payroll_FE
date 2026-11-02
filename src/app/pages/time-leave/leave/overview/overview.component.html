@@ -182,7 +182,7 @@
           <table matSort class="mat-sort table no-wrap w-100 text-left leave-balance-table" matSort>
             <thead>
               <tr>
-                <th class="text-dark sticky-col sticky-col-employee" mat-sort-header="assigned">Employee</th>
+                <th class="text-dark sticky-col sticky-col-employee border-right" mat-sort-header="assigned">Employee</th>
                 @if (isLeaveColumnVisible('annual')) {
                   <th class="text-dark text-nowrap text-center leave-group-header border-right" colspan="3">
                     <span>Annual Leave</span>
@@ -210,7 +210,7 @@
             <tbody>
               @for (employee of filteredEmployees; track employee.employeeId) {
                 <tr>
-                  <td class="text-muted sticky-col sticky-col-employee" [routerLink]="['/workforce/employees/view', employee.employeeId]">
+                  <td class="text-muted sticky-col sticky-col-employee border-right" [routerLink]="['/workforce/employees/view', employee.employeeId]">
                     <div class="d-flex align-items-center justify-content-start">
                       <div class="initial-avatar me-3">{{ employee.initials }}</div>
                       <div>

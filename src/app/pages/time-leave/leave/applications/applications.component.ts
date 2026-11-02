@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
@@ -14,7 +15,7 @@ import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../sh
 
 @Component({
   selector: 'app-applications',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, FullCalendarModule, LeaveDetailDialogComponent],
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, FullCalendarModule, LeaveDetailDialogComponent, RouterLink],
   providers: [...MaterialProviders, ToastrService],
   templateUrl: './applications.component.html',
   styleUrl: './applications.component.scss'
@@ -28,7 +29,6 @@ export class ApplicationsComponent {
   selectedDepartments: string[] = [];
   selectedStartDate: Date | null = null;
   selectedEndDate: Date | null = null;
-
   get departments(): string[] {
     return [...new Set(employees.map(employee => employee.department).filter(Boolean))]
       .sort((first, second) => first.localeCompare(second));

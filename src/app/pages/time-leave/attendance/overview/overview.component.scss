@@ -66,15 +66,21 @@
   background: var(--light-secondary);
 }
 
+.dot.upcoming {
+  background: #fff;
+  border: 1px solid var(--light-disabled);
+}
+
 .table-wrapper {
   --sticky-employee-width: 240px;
+  --calendar-day-width: 68px;
   display: flex;
   align-items: flex-start;
   overflow: auto;
 }
 
 .calendar-scroll-tail {
-  flex: 0 0 max(0px, calc(100% - var(--sticky-employee-width)));
+  flex: 0 0 max(0px, calc(100% - var(--sticky-employee-width) - var(--calendar-day-width)));
   height: 1px;
 }
 
@@ -113,13 +119,13 @@
 }
 
 .day-column {
-  width: 68px;
+  width: var(--calendar-day-width, 68px);
   text-align: center;
   color: var(--header);
 }
 .leave-cell {
   height: 68px;
-  width: 68px;
+  width: var(--calendar-day-width, 68px);
 }
 
 .weekend {
@@ -145,7 +151,7 @@
 .leave-badge:focus-visible {
   position: relative;
   z-index: 1;
-  outline: 2px solid var(--primary);
+  outline: none;
   outline-offset: -3px;
 }
 
@@ -156,6 +162,18 @@
   background: var(--light-primary);
   height: 100%;
   width: 100%;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+}
+
+.attendance-badge:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -3px;
+}
+
+.attendance-badge.future {
+  background: #fff;
 }
 
 .holiday-badge {

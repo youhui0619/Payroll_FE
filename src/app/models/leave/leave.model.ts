@@ -20,6 +20,7 @@ export interface LeaveRecord {
 
 export interface LeaveApplication {
   employeeId: string;
+  requestDate?: string;
   leaveType: string;
   reference: string;
   dateRange: string;
@@ -29,6 +30,7 @@ export interface LeaveApplication {
   iconClass: string;
   reason: string;
   approval: LeaveApproval;
+  supportingDocuments?: string[];
 }
 
 export interface LeaveApproval {

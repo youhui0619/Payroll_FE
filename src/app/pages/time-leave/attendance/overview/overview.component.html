@@ -144,6 +144,7 @@
             <span><i class="dot medical"></i>Medical leave</span>
             <span><i class="dot annual"></i>Annual leave</span>
             <span><i class="dot unpaid"></i>Unpaid leave</span>
+            <span><i class="dot upcoming"></i>Upcoming</span>
             <span><i class="dot weekend"></i>Weekend / Holiday</span>
           </div>
 
@@ -151,7 +152,7 @@
             <table class="leave-table">
               <thead>
                 <tr>
-                  <th class="text-dark text-nowrap sticky-col sticky-col-employee">Employee</th>
+                  <th class="text-dark text-nowrap sticky-col sticky-col-employee border-right">Employee</th>
                   @for (day of days; track day) {
                     <th class="day-column" [class.weekend]="day.isWeekend" [class.today]="day.isToday" [attr.data-today-column]="day.isToday ? '' : null" [attr.data-first-day-column]="day.date === 1 ? '' : null">
                       {{ day.date }}
@@ -163,9 +164,9 @@
               <tbody>
                 @for (employee of filteredEmployees; track employee) {
                   <tr>
-                    <td class="text-muted text-nowrap sticky-col sticky-col-employee cursor-pointer" [routerLink]="['/workforce/employees/view', employee.employeeId]">
+                    <td class="text-muted text-nowrap sticky-col sticky-col-employee cursor-pointer border-right" [routerLink]="['/workforce/employees/view', employee.employeeId]">
                       <div class="d-flex align-items-center justify-content-start">
-                        <div class="avatar me-3">{{ employee.initials }}</div>
+                        <div class="initial-avatar me-3">{{ employee.initials }}</div>
                         <div><p class="text-dark my-0">{{ employee.employeeName }}</p><p class="fs-10 fw-300 text-muted my-0">{{ employee.employeeId }}</p></div>
                       </div>
                     </td>
@@ -176,7 +177,6 @@
                             type="button"
                             class="leave-badge"
                             [ngClass]="leave.typeClass"
-                            [attr.aria-label]="'View ' + leave.leaveType + ' details for ' + employee.employeeName"
                             [title]="leave.leaveType"
                             (click)="openLeaveDetails(employee, day, leave)">
                             {{ leave.code }}
@@ -185,7 +185,13 @@
                           @if (getPublicHoliday(employee, day.dateKey); as holiday) {
                             <span class="holiday-badge bg-light-info text-info" [title]="holiday.name" [attr.aria-label]="holiday.name">PH</span>
                           } @else {
-                            <span class="attendance-badge"></span>
+                            <button
+                              type="button"
+                              class="attendance-badge calendar-cell-menu-trigger"
+                              [class.future]="isFutureDate(day.dateKey)"
+                              [matMenuTriggerFor]="calendarCellMenu"
+                              [matMenuTriggerData]="{ context: { employee: employee, day: day } }">
+                            </button>
                           }
                         }
                       </td>
@@ -206,6 +212,25 @@
     </div>
   </div>
 </div>
+
+<mat-menu #calendarCellMenu="matMenu" panelClass="calendar-cell-actions-menu">
+  <ng-template matMenuContent let-context="context">
+    <button
+      mat-menu-item
+      [routerLink]="['/time-leave/leave/create']"
+      [queryParams]="{ employeeId: context.employee.employeeId, date: context.day.dateKey }">
+      <tabler-icon icon="calendar-event" [size]="16" class="text-muted me-2"></tabler-icon>
+      <span class="text-muted">Create leave request</span>
+    </button>
+    <button
+      mat-menu-item
+      [routerLink]="['/time-leave/overtime/create']"
+      [queryParams]="{ employeeId: context.employee.employeeId, date: context.day.dateKey }">
+      <tabler-icon icon="clock" [size]="16" class="text-muted me-2"></tabler-icon>
+      <span class="text-muted">Create overtime request</span>
+    </button>
+  </ng-template>
+</mat-menu>
 
 @if (selectedLeave; as detail) {
   <app-leave-detail-dialog

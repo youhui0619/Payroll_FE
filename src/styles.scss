@@ -84,6 +84,21 @@ h4{
     color: var(--primary)!important
   }
 
+  .calendar-cell-actions-menu .mat-mdc-menu-item:first-child:not(.cdk-keyboard-focused) {
+    background-color: var(--white) !important;
+    color: var(--text) !important;
+  }
+
+  .calendar-cell-actions-menu .mat-mdc-menu-item.cdk-mouse-focused {
+    background-color: var(--white) !important;
+    color: var(--text) !important;
+  }
+
+  .calendar-cell-actions-menu .mat-mdc-menu-item:first-child.cdk-keyboard-focused {
+    background-color: var(--light-primary) !important;
+    color: var(--primary) !important;
+  }
+
   /* Pressed */
   .mat-mdc-menu-item:active {
     background-color: var(--light-primary) !important;
@@ -332,5 +347,3 @@ h4{
 .fs-9{
   font-size: 9px!important;
 }
-
-

@@ -1,0 +1,145 @@
+<div class="row justify-content-between mb-4">
+  <div class="col-sm-7">
+    <h3 class="text-dark my-0">Create Leave Request</h3>
+    <p class="fw-300 text-muted mb-0">Submit a leave application for an employee.</p>
+  </div>
+</div>
+
+<form [formGroup]="leaveForm" (ngSubmit)="onSubmit()">
+  <h4 class="text-primary">Employee Information</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Request Date <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput [matDatepicker]="requestDatePicker" placeholder="Select request date" formControlName="requestDate">
+            <mat-datepicker-toggle matSuffix [for]="requestDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #requestDatePicker></mat-datepicker>
+            @if (leaveForm.controls.requestDate.hasError('required')) { <mat-error class="text-danger">Request date is required.</mat-error> }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Department <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <mat-select placeholder="Select department" formControlName="departmentId" (selectionChange)="onDepartmentChange()">
+              @for (department of departments; track department.id) {
+                <mat-option [value]="department.id">{{ department.name }}</mat-option>
+              }
+            </mat-select>
+            @if (leaveForm.controls.departmentId.hasError('required')) { <mat-error class="text-danger">Department is required.</mat-error> }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-12 px-2">
+          <mat-label class="form-label">Employee <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput type="text" placeholder="Select department first, then search employee"
+              [formControl]="employeeSearch" [matAutocomplete]="employeeAuto"
+              [disabled]="!leaveForm.controls.departmentId.value" (input)="onEmployeeSearchInput()">
+            <mat-autocomplete #employeeAuto="matAutocomplete" [displayWith]="employeeDisplayName"
+              (optionSelected)="onEmployeeSelected($event.option.value)">
+              @for (employee of filteredEmployees; track employee.employeeId) {
+                <mat-option [value]="employee">{{ employee.employeeId }} - {{ employee.employeeName }}</mat-option>
+              }
+              @if (leaveForm.controls.departmentId.value && filteredEmployees.length === 0) {
+                <mat-option disabled>No employees found in this department.</mat-option>
+              }
+            </mat-autocomplete>
+            @if (leaveForm.controls.employeeId.hasError('required') || leaveForm.controls.employeeId.hasError('selectionRequired')) {
+              <mat-error class="text-danger">Select an employee from the list.</mat-error>
+            }
+          </mat-form-field>
+          @if (selectedEmployee; as employee) {
+            <div class="row mx-0 mt-2">
+              <div class="col-sm-4 px-2 mb-3"><p class="text-dark fw-500">Employee ID</p><p class="text-muted my-0">{{ employee.employeeId }}</p></div>
+              <div class="col-sm-8 px-2 mb-3"><p class="text-dark fw-500">Employee Name</p><p class="text-muted my-0">{{ employee.employeeName }}</p></div>
+              <div class="col-sm-4 px-2 mb-3"><p class="text-dark fw-500">Department</p><p class="text-muted my-0">{{ employee.department }}</p></div>
+              <div class="col-sm-8 px-2 mb-3"><p class="text-dark fw-500">Position</p><p class="text-muted my-0">{{ employee.position }}</p></div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4 class="text-primary">Leave Details</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Leave Type <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <mat-select placeholder="Select leave type" formControlName="leaveCode" (selectionChange)="onLeaveTypeChange()">
+              @for (policy of leaveTypeOptions; track policy.leaveCode) {
+                <mat-option [value]="policy.leaveCode">{{ policy.leaveName }}</mat-option>
+              }
+            </mat-select>
+            @if (leaveForm.controls.leaveCode.hasError('required')) { <mat-error class="text-danger">Leave type is required.</mat-error> }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Start Date <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput [matDatepicker]="startDatePicker" placeholder="Select start date" formControlName="startDate">
+            <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #startDatePicker></mat-datepicker>
+            @if (leaveForm.controls.startDate.hasError('required')) { <mat-error class="text-danger">Start date is required.</mat-error> }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">End Date <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput [matDatepicker]="endDatePicker" placeholder="Select end date" formControlName="endDate">
+            <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #endDatePicker></mat-datepicker>
+            @if (leaveForm.controls.endDate.hasError('required')) { <mat-error class="text-danger">End date is required.</mat-error> }
+            @if (leaveForm.controls.endDate.hasError('invalidRange')) { <mat-error class="text-danger">End date must be on or after the start date.</mat-error> }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-12 px-2">
+          <mat-label class="form-label">Reason <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <textarea matInput rows="4" placeholder="Enter the reason for this leave request" formControlName="reason"></textarea>
+            @if (leaveForm.controls.reason.hasError('required')) { <mat-error class="text-danger">Reason is required.</mat-error> }
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @if (selectedLeavePolicy?.requireSupportingDocuments) {
+    <h4 class="text-primary">Documentation</h4>
+    <div class="card mb-4">
+      <div class="card-body">
+        <mat-label class="form-label">Supporting Documents <span class="text-danger">*</span></mat-label>
+        <app-dropzone formControlName="supportingDocuments" accept="application/pdf,image/jpeg,image/png" [multiple]="true"
+          [maxSize]="10485760" [headline]="'Drag files here or browse to upload'"
+          [description]="'PDF, JPG or PNG · Maximum 10 MB per file'"></app-dropzone>
+        @if (submitted && leaveForm.controls.supportingDocuments.hasError('minlength')) {
+          <div class="text-danger">Upload at least one supporting document.</div>
+        }
+      </div>
+    </div>
+  }
+
+  <h4 class="text-primary">Leave Summary</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center py-2">
+        <p class="text-dark fw-500 mb-0">Leave type</p>
+        <p class="mb-0">{{ selectedLeavePolicy?.leaveName ?? '—' }}</p>
+      </div>
+      <div class="d-flex justify-content-between align-items-center py-2">
+        <p class="text-dark fw-500 mb-0">Requested duration</p>
+        <p class="mb-0">{{ requestedDaysLabel }}</p>
+      </div>
+    </div>
+  </div>
+
+  @if (createdLeave) {
+    <p class="text-success" role="status">Leave request {{ createdLeave.reference }} submitted for approval.</p>
+  }
+  <div class="d-flex align-items-center justify-content-end gap-3">
+    <button type="submit" mat-flat-button color="primary"><tabler-icon icon="check" [size]="16"></tabler-icon>Submit</button>
+  </div>
+</form>
