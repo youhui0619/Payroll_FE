@@ -1,3 +1,5 @@
+export type OvertimeCalculationBasis = 'HOURLY_RATE' | 'DAILY_RATE_CONVERTED' | 'MONTHLY_SALARY_CONVERTED';
+
 export interface EmployeeRecord {
   employeeId: string;
   employeeName: string;
@@ -37,6 +39,9 @@ export interface EmployeeRecord {
   hrdRegisterNo: string;
   statutoryEntitlementCodes: string[];
   commissionSettingCodes: string[];
+  includeOvertime: boolean;
+  overtimeCalculationBasis: OvertimeCalculationBasis;
+  overtimeHourlyRate: number | null;
   emergencyContactName: string;
   emergencyContactRelationship: string;
   emergencyContactNo: string;
@@ -89,6 +94,9 @@ export interface EmployeePayrollInfo {
   hrdRegisterNo: string | null;
   statutoryEntitlementCodes: string[];
   commissionSettingCodes: string[];
+  includeOvertime: boolean;
+  overtimeCalculationBasis: OvertimeCalculationBasis;
+  overtimeHourlyRate: number | null;
 }
 
 export interface EmployeeTaxInformation {
@@ -170,6 +178,9 @@ export const EMPTY_EMPLOYEE_FORM_DATA: EmployeeFormData = {
     hrdRegisterNo: '',
     statutoryEntitlementCodes: [],
     commissionSettingCodes: [],
+    includeOvertime: false,
+    overtimeCalculationBasis: 'HOURLY_RATE',
+    overtimeHourlyRate: null,
   },
   taxInformation: {
     agreeWithTerms: false,

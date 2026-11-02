@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -14,6 +14,7 @@ import { departments } from '../../../../data/departments';
 import { positions } from '../../../../data/positions';
 import type { Department } from '../../../../models/department.model';
 import type { Position } from '../../../../models/position.model';
+import type { OvertimeCalculationBasis } from '../../../../models/employee.model';
 import { getEmployee } from '../../../../data/employees';
 import { getEmployeeLeaveBalances } from '../../../../data/leave-balances';
 import { commissionIncentiveSettings } from '../../../../data/commission-incentive-settings';
@@ -51,6 +52,12 @@ export class EditComponent implements OnInit {
   readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');
   readonly commissionIncentiveSettings: CommissionIncentiveSetting[] = commissionIncentiveSettings;
   readonly availableStatutoryEntitlements = statutoryEntitlementOptions.filter(option => payrollSettings[option.setting]);
+  readonly overtimeEnabledInPayrollSettings = payrollSettings.includeOvertime;
+  readonly overtimeBasisOptions: { value: OvertimeCalculationBasis; label: string }[] = [
+    { value: 'HOURLY_RATE', label: 'Hourly rate' },
+    { value: 'DAILY_RATE_CONVERTED', label: 'Daily rate converted to hourly' },
+    { value: 'MONTHLY_SALARY_CONVERTED', label: 'Monthly salary converted to hourly' }
+  ];
 
   employeeForm = new FormGroup({
     personal: new FormGroup({
@@ -98,6 +105,9 @@ export class EditComponent implements OnInit {
       hrdRegisterNo: new FormControl(''),
       statutoryEntitlementCodes: new FormControl<string[]>([], { nonNullable: true }),
       commissionSettingCodes: new FormControl<string[]>([], { nonNullable: true }),
+      includeOvertime: new FormControl(false, { nonNullable: true }),
+      overtimeCalculationBasis: new FormControl<OvertimeCalculationBasis>('HOURLY_RATE', { nonNullable: true }),
+      overtimeHourlyRate: new FormControl<number | null>(null),
     }),
     taxInformation: new FormGroup({
       agreeWithTerms: new FormControl(false),
@@ -178,6 +188,38 @@ export class EditComponent implements OnInit {
     else selectedCodes.delete(code);
 
     codes.setValue([...selectedCodes]);
+  }
+
+  setOvertimeIncluded(selected: boolean): void {
+    const payroll = this.employeeForm.controls.payroll.controls;
+    payroll.includeOvertime.setValue(selected);
+    if (!selected) payroll.overtimeHourlyRate.setValue(null);
+    this.syncOvertimeHourlyRateValidation();
+  }
+
+  setOvertimeCalculationBasis(basis: OvertimeCalculationBasis): void {
+    this.employeeForm.controls.payroll.controls.overtimeCalculationBasis.setValue(basis);
+    if (basis !== 'HOURLY_RATE') this.employeeForm.controls.payroll.controls.overtimeHourlyRate.setValue(null);
+    this.syncOvertimeHourlyRateValidation();
+  }
+
+  get overtimeCalculationBasisLabel(): string {
+    const labels: Record<OvertimeCalculationBasis, string> = {
+      HOURLY_RATE: 'Hourly rate',
+      DAILY_RATE_CONVERTED: 'Daily rate converted to hourly',
+      MONTHLY_SALARY_CONVERTED: 'Monthly salary converted to hourly'
+    };
+    return labels[this.employeeForm.controls.payroll.controls.overtimeCalculationBasis.value];
+  }
+
+  private syncOvertimeHourlyRateValidation(): void {
+    const payroll = this.employeeForm.controls.payroll.controls;
+    if (payroll.includeOvertime.value && payroll.overtimeCalculationBasis.value === 'HOURLY_RATE') {
+      payroll.overtimeHourlyRate.setValidators([Validators.required, Validators.min(0.01)]);
+    } else {
+      payroll.overtimeHourlyRate.clearValidators();
+    }
+    payroll.overtimeHourlyRate.updateValueAndValidity();
   }
 
   isStatutoryEntitlementSelected(code: string): boolean {
@@ -281,6 +323,9 @@ export class EditComponent implements OnInit {
         hrdRegisterNo: employee.hrdRegisterNo ?? '',
         statutoryEntitlementCodes: employee.statutoryEntitlementCodes ?? this.availableStatutoryEntitlements.map(option => option.code),
         commissionSettingCodes: employee.commissionSettingCodes ?? [],
+        includeOvertime: payrollSettings.includeOvertime && (employee.includeOvertime ?? false),
+        overtimeCalculationBasis: employee.overtimeCalculationBasis ?? 'HOURLY_RATE',
+        overtimeHourlyRate: employee.overtimeHourlyRate ?? null,
       },
       leave: {
         leavePolicyCodes: ['AL', 'ML'],
@@ -295,6 +340,7 @@ export class EditComponent implements OnInit {
         contactNo: employee.emergencyContactNo,
       },
     });
+    this.syncOvertimeHourlyRateValidation();
   }
 
   private matchOption(value: string, options: string[]): string {
@@ -348,6 +394,11 @@ export class EditComponent implements OnInit {
     const availableCodes = new Set(this.availableCommissionSettings.map(setting => setting.code));
     const selectedCodes = this.employeeForm.controls.payroll.controls.commissionSettingCodes;
     selectedCodes.setValue(selectedCodes.value.filter(code => availableCodes.has(code)));
+    const overtimePayroll = this.employeeForm.controls.payroll.controls;
+    if (!payrollSettings.includeOvertime || !overtimePayroll.includeOvertime.value) {
+      overtimePayroll.includeOvertime.setValue(false);
+      overtimePayroll.overtimeHourlyRate.setValue(null);
+    }
     console.log('form.value', this.employeeForm.value);
   }
 

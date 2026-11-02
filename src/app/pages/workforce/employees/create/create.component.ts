@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
@@ -12,6 +12,7 @@ import { departments } from '../../../../data/departments';
 import { positions } from '../../../../data/positions';
 import type { Department } from '../../../../models/department.model';
 import type { Position } from '../../../../models/position.model';
+import type { OvertimeCalculationBasis } from '../../../../models/employee.model';
 import { commissionIncentiveSettings } from '../../../../data/commission-incentive-settings';
 import { payrollSettings } from '../../../../data/payroll-settings';
 import { NavigationService } from '../../../../services/navigation.service';
@@ -46,6 +47,12 @@ export class CreateComponent {
   readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');
   readonly commissionIncentiveSettings: CommissionIncentiveSetting[] = commissionIncentiveSettings;
   readonly availableStatutoryEntitlements = statutoryEntitlementOptions.filter(option => payrollSettings[option.setting]);
+  readonly overtimeEnabledInPayrollSettings = payrollSettings.includeOvertime;
+  readonly overtimeBasisOptions: { value: OvertimeCalculationBasis; label: string }[] = [
+    { value: 'HOURLY_RATE', label: 'Hourly rate' },
+    { value: 'DAILY_RATE_CONVERTED', label: 'Daily rate converted to hourly' },
+    { value: 'MONTHLY_SALARY_CONVERTED', label: 'Monthly salary converted to hourly' }
+  ];
 
   goBack() {
     return this.navigation.back('/workforce/employees/list');
@@ -97,6 +104,9 @@ export class CreateComponent {
       hrdRegisterNo: new FormControl(''),
       statutoryEntitlementCodes: new FormControl<string[]>(this.availableStatutoryEntitlements.map(option => option.code), { nonNullable: true }),
       commissionSettingCodes: new FormControl<string[]>([], { nonNullable: true }),
+      includeOvertime: new FormControl(false, { nonNullable: true }),
+      overtimeCalculationBasis: new FormControl<OvertimeCalculationBasis>('HOURLY_RATE', { nonNullable: true }),
+      overtimeHourlyRate: new FormControl<number | null>(null),
     }),
     taxInformation: new FormGroup({
       agreeWithTerms: new FormControl(false),
@@ -166,6 +176,39 @@ export class CreateComponent {
     else selectedCodes.delete(code);
 
     codes.setValue([...selectedCodes]);
+  }
+
+  setOvertimeIncluded(selected: boolean): void {
+    const payroll = this.employeeForm.controls.payroll.controls;
+    payroll.includeOvertime.setValue(selected);
+    if (selected && payroll.overtimeCalculationBasis.value === 'HOURLY_RATE') {
+      payroll.overtimeHourlyRate.setValidators([Validators.required, Validators.min(0.01)]);
+    } else {
+      payroll.overtimeHourlyRate.clearValidators();
+      if (!selected) payroll.overtimeHourlyRate.setValue(null);
+    }
+    payroll.overtimeHourlyRate.updateValueAndValidity();
+  }
+
+  setOvertimeCalculationBasis(basis: OvertimeCalculationBasis): void {
+    const payroll = this.employeeForm.controls.payroll.controls;
+    payroll.overtimeCalculationBasis.setValue(basis);
+    if (payroll.includeOvertime.value && basis === 'HOURLY_RATE') {
+      payroll.overtimeHourlyRate.setValidators([Validators.required, Validators.min(0.01)]);
+    } else {
+      payroll.overtimeHourlyRate.clearValidators();
+      payroll.overtimeHourlyRate.setValue(null);
+    }
+    payroll.overtimeHourlyRate.updateValueAndValidity();
+  }
+
+  get overtimeCalculationBasisLabel(): string {
+    const labels: Record<OvertimeCalculationBasis, string> = {
+      HOURLY_RATE: 'Hourly rate',
+      DAILY_RATE_CONVERTED: 'Daily rate converted to hourly',
+      MONTHLY_SALARY_CONVERTED: 'Monthly salary converted to hourly'
+    };
+    return labels[this.employeeForm.controls.payroll.controls.overtimeCalculationBasis.value];
   }
 
   isStatutoryEntitlementSelected(code: string): boolean {
@@ -269,6 +312,11 @@ export class CreateComponent {
     const availableCodes = new Set(this.availableCommissionSettings.map(setting => setting.code));
     const selectedCodes = this.employeeForm.controls.payroll.controls.commissionSettingCodes;
     selectedCodes.setValue(selectedCodes.value.filter(code => availableCodes.has(code)));
+    const overtimeControls = this.employeeForm.controls.payroll.controls;
+    if (!payrollSettings.includeOvertime || !overtimeControls.includeOvertime.value) {
+      overtimeControls.includeOvertime.setValue(false);
+      overtimeControls.overtimeHourlyRate.setValue(null);
+    }
     console.log('form.value', this.employeeForm.value);
   }
 

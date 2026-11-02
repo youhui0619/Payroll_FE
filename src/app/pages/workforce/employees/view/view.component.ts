@@ -14,12 +14,14 @@ import { getPublicHolidaysForLocation } from '../../../../data/public-holidays';
 import { getEmployeeLeaveBalances } from '../../../../data/leave-balances';
 import { leavePolicies } from '../../../../data/leave-policies';
 import { claims } from '../../../../data/claims';
+import { overtimeRequests } from '../../../../data/overtime-requests';
 import { getClaimTypeLabel } from '../../../../data/claim-types';
 import { commissionIncentiveSettings } from '../../../../data/commission-incentive-settings';
 import { LeaveApplication } from '../../../../models/leave.model';
 import type { ClaimStatus, ClaimType, ExpenseClaimRecord } from '../../../../models/claim.model';
 import type { LeavePolicy } from '../../../../models/leave-policy.model';
-import type { EmployeeRecord } from '../../../../models/employee.model';
+import type { EmployeeRecord, OvertimeCalculationBasis } from '../../../../models/employee.model';
+import type { OvertimeRequestRecord, OvertimeStatus, OvertimeType } from '../../../../models/overtime.model';
 import type {
   CommissionCalculationFrequency,
   CommissionCalculationMethod,
@@ -27,6 +29,7 @@ import type {
 } from '../../../../models/commission-incentive-setting.model';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
 import { ClaimDetailDialogComponent } from '../../../../shared/dialog/claim-detail-dialog/claim-detail-dialog.component';
+import { OvertimeDetailDialogComponent } from '../../../../shared/dialog/overtime-detail-dialog/overtime-detail-dialog.component';
 import { NavigationService } from '../../../../services/navigation.service';
 
 function dayAfter(dateString: string): string {
@@ -43,7 +46,7 @@ const leaveEventColors: Record<string, { background: string; text: string }> = {
 
 @Component({
   selector: 'app-view',
-  imports: [...MaterialImports, CommonModule, FullCalendarModule, RouterLink, LeaveDetailDialogComponent, ClaimDetailDialogComponent],
+  imports: [...MaterialImports, CommonModule, FullCalendarModule, RouterLink, LeaveDetailDialogComponent, ClaimDetailDialogComponent, OvertimeDetailDialogComponent],
   providers: [...MaterialProviders],
   templateUrl: './view.component.html',
   styleUrl: './view.component.scss'
@@ -58,12 +61,14 @@ export class ViewComponent {
   readonly commissionIncentiveSettings = commissionIncentiveSettings;
   employeeLeaveBalances!: ReturnType<typeof getEmployeeLeaveBalances>;
   claimRequests: ExpenseClaimRecord[] = [];
+  overtimeHistory: OvertimeRequestRecord[] = [];
   leaveRequests: LeaveApplication[] = [];
   attendanceEvents: EventInput[] = [];
   publicHolidayEvents: EventInput[] = [];
   selectedTabIndex = 0;
   selectedLeave: LeaveDialogData | null = null;
   selectedClaim: ExpenseClaimRecord | null = null;
+  selectedOvertimeRequest: OvertimeRequestRecord | null = null;
 
   get selectedCommissionSettings(): CommissionIncentiveSetting[] {
     const selectedCodes = new Set(this.employee?.commissionSettingCodes ?? []);
@@ -72,6 +77,15 @@ export class ViewComponent {
 
   hasStatutoryEntitlement(code: string): boolean {
     return (this.employee?.statutoryEntitlementCodes ?? []).includes(code);
+  }
+
+  overtimeCalculationBasisLabel(basis: OvertimeCalculationBasis): string {
+    const labels: Record<OvertimeCalculationBasis, string> = {
+      HOURLY_RATE: 'Hourly rate',
+      DAILY_RATE_CONVERTED: 'Daily rate converted to hourly',
+      MONTHLY_SALARY_CONVERTED: 'Monthly salary converted to hourly'
+    };
+    return labels[basis];
   }
 
   commissionCalculationLabel(setting: CommissionIncentiveSetting): string {
@@ -116,6 +130,7 @@ export class ViewComponent {
     this.employee = getEmployee(employeeId);
     this.employeeLeaveBalances = getEmployeeLeaveBalances(employeeId);
     this.claimRequests = claims.filter(claim => claim.employeeId === employeeId);
+    this.overtimeHistory = overtimeRequests.filter(request => request.employeeId === employeeId);
     this.leaveRequests = attendanceRecords
       .filter(record => record.employeeId === employeeId)
       .map(record => {
@@ -194,7 +209,7 @@ export class ViewComponent {
   }
 
   get isWideTab(): boolean {
-    return this.selectedTabIndex >= 3 && this.selectedTabIndex <= 5;
+    return this.selectedTabIndex >= 3 && (this.selectedTabIndex <= 5 || (this.employee?.includeOvertime === true && this.selectedTabIndex === 6));
   }
 
   leaveCount(leaveType: string): number {
@@ -247,6 +262,48 @@ export class ViewComponent {
 
   claimCount(status: ClaimStatus): number {
     return this.claimRequests.filter(claim => claim.status === status).length;
+  }
+
+  overtimeCount(status: OvertimeStatus): number {
+    return this.overtimeHistory.filter(request => request.status === status).length;
+  }
+
+  get overtimeNetMinutes(): number {
+    return this.overtimeHistory.reduce((total, request) => total + request.netMinutes, 0);
+  }
+
+  overtimeTypeLabel(type: OvertimeType): string {
+    const labels: Record<OvertimeType, string> = {
+      NORMAL_WORKING_DAY: 'Normal Working Day',
+      REST_DAY: 'Rest Day',
+      PUBLIC_HOLIDAY: 'Public Holiday'
+    };
+    return labels[type];
+  }
+
+  overtimeDuration(totalMinutes: number): string {
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    if (hours && minutes) return `${hours}h ${minutes}m`;
+    if (hours) return `${hours}h`;
+    return `${minutes}m`;
+  }
+
+  overtimeStatusClass(status: OvertimeStatus): string {
+    switch (status) {
+      case 'Pending': return 'bg-light-warning text-warning';
+      case 'Approved': return 'bg-light-primary text-primary';
+      case 'Rejected': return 'bg-light-danger text-danger';
+      case 'Paid': return 'bg-light-success text-success';
+    }
+  }
+
+  openOvertimeDetails(request: OvertimeRequestRecord): void {
+    this.selectedOvertimeRequest = request;
+  }
+
+  closeOvertimeDetails(): void {
+    this.selectedOvertimeRequest = null;
   }
 
   claimTypeLabel(type: ClaimType): string {

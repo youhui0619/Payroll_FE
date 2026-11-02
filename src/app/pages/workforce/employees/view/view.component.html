@@ -179,7 +179,7 @@
 }
 @else if(selectedTabIndex === 5){
 <div class="row">
-  <div class="col-sm-4 px-2">
+  <div class="col-sm-3 px-2">
     <div class="card">
       <div class="card-body">
         <div  class="d-flex align-items-center justify-content-between">
@@ -196,7 +196,7 @@
     </div>
   </div>
 
-  <div class="col-sm-4 px-2">
+  <div class="col-sm-3 px-2">
     <div class="card">
       <div class="card-body">
         <div  class="d-flex align-items-center justify-content-between">
@@ -208,6 +208,47 @@
           <div class="text-primary bg-light-primary text-end icon">
             <tabler-icon icon="users"></tabler-icon>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}
+@else if(selectedTabIndex === 6 && employee.includeOvertime){
+<div class="row">
+  <div class="col-sm-3 px-2">
+    <div class="card">
+      <div class="card-body d-flex align-items-center justify-content-between">
+        <div class="summary-info">
+          <p class="fs-12 text-muted">Overtime requests</p>
+          <h3 class="mb-0">{{ overtimeHistory.length }}</h3>
+        </div>
+        <div class="text-primary bg-light-primary text-end icon">
+          <tabler-icon icon="clock"></tabler-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3 px-2">
+    <div class="card">
+      <div class="card-body d-flex align-items-center justify-content-between">
+        <div class="summary-info"><p class="fs-12 text-muted">Pending approval
+          <h3 class="mb-0">{{ overtimeCount('Pending') }}</h3>
+        </div>
+        <div class="text-warning bg-light-warning text-end icon">
+          <tabler-icon icon="hourglass-empty"></tabler-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3 px-2">
+    <div class="card">
+      <div class="card-body d-flex align-items-center justify-content-between">
+        <div class="summary-info"><p class="fs-12 text-muted">Total net overtime
+          <h3 class="mb-0">{{ overtimeDuration(overtimeNetMinutes) }}</h3>
+        </div>
+        <div class="text-success bg-light-success text-end icon">
+          <tabler-icon icon="clock-24"></tabler-icon>
         </div>
       </div>
     </div>
@@ -524,6 +565,32 @@
               }
             </div>
           </div>
+
+          <h4 class="text-primary mt-4">Overtime</h4>
+          <div class="card mb-4">
+            <div class="card-body">
+              @if (employee.includeOvertime) {
+                <div class="row mx-0">
+                  <div class="col-sm-4 px-2 mb-3">
+                    <label class="text-dark fw-500">Overtime</label>
+                    <p class="text-muted">Enabled</p>
+                  </div>
+                  <div class="col-sm-8 px-2 mb-3">
+                    <label class="text-dark fw-500">Calculation basis</label>
+                    <p class="text-muted">{{ overtimeCalculationBasisLabel(employee.overtimeCalculationBasis) }}</p>
+                  </div>
+                  @if (employee.overtimeCalculationBasis === 'HOURLY_RATE') {
+                    <div class="col-sm-4 px-2 mb-3">
+                      <label class="text-dark fw-500">Hourly rate</label>
+                      <p class="text-muted">{{ employee.overtimeHourlyRate !== null ? (employee.overtimeHourlyRate | regionalCurrency:'1.2-2':'MYR') : '—' }}</p>
+                    </div>
+                  }
+                </div>
+              } @else {
+                <p class="text-muted mb-0">Overtime is not enabled for this employee.</p>
+              }
+            </div>
+          </div>
         </div>
       </mat-tab>
       <mat-tab label="Attendance">
@@ -735,6 +802,52 @@
         </div>
       </mat-tab>
 
+      @if (employee.includeOvertime) {
+      <mat-tab label="Overtime">
+        <div class="px-2 mt-3">
+          <div class="row mx-0 mb-3">
+            <div class="col-sm-12 px-2">
+              <h4 class="text-primary my-0">Overtime history</h4>
+              <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
+            </div>
+          </div>
+          <div class="row mx-0">
+            <div class="col-sm-12 px-2">
+              <div class="card">
+                <div class="card-header"><h6 class="fs-14 fw-400 text-muted my-0">Requests ({{ overtimeHistory.length }})</h6></div>
+                <div class="card-body">
+                  <div class="material-datatables table-responsive">
+                    <table class="table no-wrap w-100 text-left">
+                      <thead><tr>
+                        <th class="text-dark">Type / Ref</th><th class="text-dark">Overtime Date</th><th class="text-dark">Time</th>
+                        <th class="text-dark">Net Duration</th><th class="text-dark">Rate</th><th class="text-dark">Status</th><th class="text-dark">Action</th>
+                      </tr></thead>
+                      <tbody>
+                        @for (request of overtimeHistory; track request.id) {
+                          <tr>
+                            <td><p class="text-dark fw-500 my-0">{{ overtimeTypeLabel(request.overtimeType) }}</p><p class="fs-10 fw-300 text-muted my-0">{{ request.id }}</p></td>
+                            <td class="text-muted">{{ request.overtimeDate | regionalDate:'d MMM y' }}</td>
+                            <td class="text-muted">{{ request.startTime }}–{{ request.endTime }}<small class="d-block">Break {{ request.breakDurationMinutes }}m</small></td>
+                            <td class="text-muted">{{ overtimeDuration(request.netMinutes) }}</td>
+                            <td class="text-muted">{{ request.hourlyRateMultiplier }}× hourly rate</td>
+                            <td><span class="chip" [ngClass]="overtimeStatusClass(request.status)">{{ request.status }}</span></td>
+                            <td><button type="button" mat-icon-button class="text-muted action-btn" (click)="openOvertimeDetails(request)" [attr.aria-label]="'View overtime request ' + request.id"><tabler-icon icon="eye"></tabler-icon></button></td>
+                          </tr>
+                        }
+                        @if (overtimeHistory.length === 0) {
+                          <tr><td colspan="7" class="text-muted text-center py-4">No overtime requests found for this employee.</td></tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      }
+
       <mat-tab label="Documentations">
         <div class="px-2 mt-3">
           <div class="row mx-0">
@@ -762,3 +875,7 @@
   </div>
 </div> -->
 </div>
+
+@if (selectedOvertimeRequest; as request) {
+  <app-overtime-detail-dialog [request]="request" (closed)="closeOvertimeDetails()"></app-overtime-detail-dialog>
+}

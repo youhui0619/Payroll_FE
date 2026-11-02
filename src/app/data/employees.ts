@@ -1,4 +1,4 @@
-import type { EmployeeRecord } from '../models/employee.model';
+import type { EmployeeRecord, OvertimeCalculationBasis } from '../models/employee.model';
 import { payrollSettings } from './payroll-settings';
 
 type SampleEmployeeInput = Pick<EmployeeRecord,
@@ -6,6 +6,9 @@ type SampleEmployeeInput = Pick<EmployeeRecord,
   'religion' | 'department' | 'position' | 'basicSalary' | 'contactNo'> & {
     reportingManager?: string;
     commissionSettingCodes?: string[];
+    includeOvertime?: boolean;
+    overtimeCalculationBasis?: OvertimeCalculationBasis;
+    overtimeHourlyRate?: number | null;
     epfRate?: string;
     contributionCategory?: string;
     hrdRegisterNo?: string;
@@ -64,6 +67,11 @@ function createSampleEmployee(input: SampleEmployeeInput): EmployeeRecord {
     hrdRegisterNo: hasHrdCorpLevy ? (input.hrdRegisterNo ?? `HRD-${employeeNumber}`) : '',
     statutoryEntitlementCodes,
     commissionSettingCodes: input.commissionSettingCodes ?? [],
+    includeOvertime: input.includeOvertime ?? false,
+    overtimeCalculationBasis: input.overtimeCalculationBasis ?? 'HOURLY_RATE',
+    overtimeHourlyRate: input.includeOvertime && (input.overtimeCalculationBasis ?? 'HOURLY_RATE') === 'HOURLY_RATE'
+      ? input.overtimeHourlyRate ?? null
+      : null,
     emergencyContactName: `Family of ${input.employeeName.split(' ')[0]}`,
     emergencyContactRelationship: 'Family member',
     emergencyContactNo: input.contactNo
@@ -110,6 +118,9 @@ export const employees: EmployeeRecord[] = [
     hrdRegisterNo: '',
     statutoryEntitlementCodes: [...defaultStatutoryEntitlementCodes],
     commissionSettingCodes: [],
+    includeOvertime: true,
+    overtimeCalculationBasis: 'HOURLY_RATE',
+    overtimeHourlyRate: 32,
     emergencyContactName: 'Nur Abdullah',
     emergencyContactRelationship: 'Parent',
     emergencyContactNo: '+60 12-111 2222'
@@ -153,6 +164,9 @@ export const employees: EmployeeRecord[] = [
     hrdRegisterNo: '',
     statutoryEntitlementCodes: [...defaultStatutoryEntitlementCodes],
     commissionSettingCodes: [],
+    includeOvertime: true,
+    overtimeCalculationBasis: 'DAILY_RATE_CONVERTED',
+    overtimeHourlyRate: null,
     emergencyContactName: 'Lim Wei Ming',
     emergencyContactRelationship: 'Sibling',
     emergencyContactNo: '+60 16-222 3333'
@@ -160,12 +174,14 @@ export const employees: EmployeeRecord[] = [
   createSampleEmployee({
     employeeId: 'EMP-0044', employeeName: 'Nurul Huda Ismail', nricPassportNo: '910212-01-5678',
     gender: 'Female', race: 'Malay', religion: 'Islam', department: 'Human Resources',
-    position: 'HR Executive', basicSalary: 4200, contactNo: '+60 12-444 0001'
+    position: 'HR Executive', basicSalary: 4200, contactNo: '+60 12-444 0001',
+    includeOvertime: true, overtimeCalculationBasis: 'MONTHLY_SALARY_CONVERTED'
   }),
   createSampleEmployee({
     employeeId: 'EMP-0045', employeeName: 'Kelvin Wong Jun Kai', nricPassportNo: '900630-14-6789',
     gender: 'Male', race: 'Chinese', religion: 'Buddhism', department: 'Information Technology',
-    position: 'IT Support Executive', basicSalary: 4800, contactNo: '+60 12-444 0002'
+    position: 'IT Support Executive', basicSalary: 4800, contactNo: '+60 12-444 0002',
+    includeOvertime: true, overtimeCalculationBasis: 'HOURLY_RATE', overtimeHourlyRate: 28.5
   }),
   createSampleEmployee({
     employeeId: 'EMP-0046', employeeName: 'Hafiz Rahman', nricPassportNo: '920811-10-7890',
@@ -201,7 +217,8 @@ export const employees: EmployeeRecord[] = [
   createSampleEmployee({
     employeeId: 'EMP-0052', employeeName: 'Marcus Tan', nricPassportNo: '870312-10-3456',
     gender: 'Male', race: 'Chinese', religion: 'Christianity', department: 'Information Technology',
-    position: 'IT Manager', basicSalary: 8500, contactNo: '+60 12-444 0009', reportingManager: 'Operations Manager'
+    position: 'IT Manager', basicSalary: 8500, contactNo: '+60 12-444 0009', reportingManager: 'Operations Manager',
+    includeOvertime: true, overtimeCalculationBasis: 'HOURLY_RATE', overtimeHourlyRate: 50
   }),
   createSampleEmployee({
     employeeId: 'EMP-0053', employeeName: 'Siti Amina Hassan', nricPassportNo: '950624-01-4567',

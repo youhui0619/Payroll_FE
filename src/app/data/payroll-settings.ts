@@ -12,7 +12,6 @@ export const payrollSettings: PayrollSettings = {
   includeClaimsAndAllowance: true,
   includeBonus: true,
   includeCommissionAndIncentives: true,
-  overtimeCalculationBasis: 'HOURLY_RATE',
   standardWorkingHoursPerDay: 8,
   normalWorkingDayMultiplier: 1.5,
   normalWorkingDayEarningCode: 'OT',

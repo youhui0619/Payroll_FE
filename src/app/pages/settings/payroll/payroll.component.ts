@@ -28,7 +28,6 @@ export class PayrollComponent implements OnInit {
     includeClaimsAndAllowance: new FormControl(true, { nonNullable: true }),
     includeBonus: new FormControl(true, { nonNullable: true }),
     includeCommissionAndIncentives: new FormControl(true, { nonNullable: true }),
-    overtimeCalculationBasis: new FormControl<PayrollSettings['overtimeCalculationBasis']>('HOURLY_RATE', { nonNullable: true, validators: [Validators.required] }),
     standardWorkingHoursPerDay: new FormControl<number | null>(null),
     normalWorkingDayMultiplier: new FormControl<number | null>(null),
     normalWorkingDayEarningCode: new FormControl('', { nonNullable: true }),

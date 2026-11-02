@@ -4,7 +4,6 @@ export type PayrollProrationMethod = 'CALENDAR_DAYS' | 'FIXED_26_DAYS' | 'WORKIN
 export type DeductionProrationMethod = PayrollProrationMethod | 'FOLLOW_SALARY_PRORATION';
 export type PayrollPaymentMethod = 'BANK_TRANSFER' | 'CASH' | 'OTHER';
 export type PayrollApprovalWorkflow = 'ONE_APPROVER' | 'TWO_STEP';
-export type OvertimeCalculationBasis = 'HOURLY_RATE' | 'DAILY_RATE_CONVERTED' | 'MONTHLY_SALARY_CONVERTED';
 
 export interface PayrollSettings {
   payrollFrequency: PayrollFrequency;
@@ -18,7 +17,6 @@ export interface PayrollSettings {
   includeClaimsAndAllowance: boolean;
   includeBonus: boolean;
   includeCommissionAndIncentives: boolean;
-  overtimeCalculationBasis: OvertimeCalculationBasis;
   standardWorkingHoursPerDay: number | null;
   normalWorkingDayMultiplier: number | null;
   normalWorkingDayEarningCode: string;

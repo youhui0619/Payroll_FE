@@ -62,8 +62,8 @@ export class SidebarComponent implements OnInit, OnChanges {
       ]
     },
     { label: 'Overtime', icon: 'akar-icons:shipping-box-01', children: [
-        { label: 'Overview', icon: 'codex:dot-circle', route: '/time-leave/overtime/overview', badge: 10 },
-        { label: 'OT Approvals', icon: 'codex:dot-circle', route: '/time-leave/overtime/approval', badge: 10 },
+        { label: 'Overview', icon: 'codex:dot-circle', route: '/time-leave/overtime/overview' },
+        { label: 'OT Approvals', icon: 'codex:dot-circle', route: '/time-leave/overtime/approval' },
       ]
     },
     { header: 'Payroll' },
@@ -96,11 +96,11 @@ export class SidebarComponent implements OnInit, OnChanges {
     { label: 'LHDN', icon: 'ant-design:shop-outlined', route: '/warehouses/list', badge: 10 },
     
     
-    { header: 'Reports' },
-    { label: 'Payroll Reports', icon: 'solar:chart-square-outline', route: '/warehouses/list', badge: 10 },
-    { label: 'Attendance Reports', icon: 'solar:chart-2-outline', route: '/warehouses/list', badge: 10},
-    { label: 'Leave Reports', icon: 'solar:clipboard-list-outline', route: '/warehouses/list', badge: 10 },
-    { label: 'Statutory Reports', icon: 'solar:document-text-outline', route: '/warehouses/list', badge: 10 },
+    // { header: 'Reports' },
+    // { label: 'Payroll Reports', icon: 'solar:chart-square-outline', route: '/warehouses/list', badge: 10 },
+    // { label: 'Attendance Reports', icon: 'solar:chart-2-outline', route: '/warehouses/list', badge: 10},
+    // { label: 'Leave Reports', icon: 'solar:clipboard-list-outline', route: '/warehouses/list', badge: 10 },
+    // { label: 'Statutory Reports', icon: 'solar:document-text-outline', route: '/warehouses/list', badge: 10 },
     
 
     { header: 'Setting' },
