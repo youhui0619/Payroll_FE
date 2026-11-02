@@ -33,4 +33,5 @@ export interface LeavePolicy {
   minimumAdvanceNotice: number | null;
   allowHalfDay: boolean;
   requireSupportingDocuments: boolean;
+  allowEmployeeSpecificSettings: boolean;
 }

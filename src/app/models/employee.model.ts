@@ -1,3 +1,5 @@
+import type { LeaveServiceEntitlementTier } from './leave-policy.model';
+
 export type OvertimeCalculationBasis = 'HOURLY_RATE' | 'DAILY_RATE_CONVERTED' | 'MONTHLY_SALARY_CONVERTED';
 
 export interface EmployeeRecord {
@@ -42,6 +44,9 @@ export interface EmployeeRecord {
   includeOvertime: boolean;
   overtimeCalculationBasis: OvertimeCalculationBasis;
   overtimeHourlyRate: number | null;
+  leavePolicyCodes?: string[];
+  leaveEntitlementOverrides?: Record<string, number | null>;
+  leaveServiceEntitlementTiers?: Record<string, LeaveServiceEntitlementTier[]>;
   emergencyContactName: string;
   emergencyContactRelationship: string;
   emergencyContactNo: string;
@@ -105,8 +110,8 @@ export interface EmployeeTaxInformation {
 
 export interface EmployeeLeaveInformation {
   leavePolicyCodes: string[];
-  annualLeaveEntitlement: number | null;
-  annualLeavePeriod: 'month' | 'year';
+  leaveEntitlementOverrides: Record<string, number | null>;
+  leaveServiceEntitlementTiers: Record<string, LeaveServiceEntitlementTier[]>;
   medicalLeaveEntitlement: number | null;
   medicalLeavePeriod: 'month' | 'year';
 }
@@ -187,8 +192,8 @@ export const EMPTY_EMPLOYEE_FORM_DATA: EmployeeFormData = {
   },
   leave: {
     leavePolicyCodes: ['AL', 'ML'],
-    annualLeaveEntitlement: null,
-    annualLeavePeriod: 'year',
+    leaveEntitlementOverrides: {},
+    leaveServiceEntitlementTiers: {},
     medicalLeaveEntitlement: null,
     medicalLeavePeriod: 'year',
   },

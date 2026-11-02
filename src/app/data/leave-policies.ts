@@ -24,7 +24,8 @@ export const leavePolicies: LeavePolicy[] = [
     approvalOverflow: 'MANAGER_HR',
     minimumAdvanceNotice: 3,
     allowHalfDay: true,
-    requireSupportingDocuments: false
+    requireSupportingDocuments: false,
+    allowEmployeeSpecificSettings: true
   },
   {
     leaveCode: 'ML',
@@ -44,7 +45,8 @@ export const leavePolicies: LeavePolicy[] = [
     approvalOverflow: 'MANAGER_HR',
     minimumAdvanceNotice: 0,
     allowHalfDay: true,
-    requireSupportingDocuments: true
+    requireSupportingDocuments: true,
+    allowEmployeeSpecificSettings: true
   },
   {
     leaveCode: 'HL',
@@ -64,7 +66,8 @@ export const leavePolicies: LeavePolicy[] = [
     approvalOverflow: 'MANAGER_HR',
     minimumAdvanceNotice: 0,
     allowHalfDay: false,
-    requireSupportingDocuments: true
+    requireSupportingDocuments: true,
+    allowEmployeeSpecificSettings: true
   },
   {
     leaveCode: 'MAT',
@@ -84,7 +87,8 @@ export const leavePolicies: LeavePolicy[] = [
     approvalOverflow: 'MANAGER_HR',
     minimumAdvanceNotice: 0,
     allowHalfDay: false,
-    requireSupportingDocuments: true
+    requireSupportingDocuments: true,
+    allowEmployeeSpecificSettings: true
   },
   {
     leaveCode: 'PAT',
@@ -104,7 +108,8 @@ export const leavePolicies: LeavePolicy[] = [
     approvalOverflow: 'MANAGER_HR',
     minimumAdvanceNotice: 0,
     allowHalfDay: false,
-    requireSupportingDocuments: true
+    requireSupportingDocuments: true,
+    allowEmployeeSpecificSettings: true
   },
   {
     leaveCode: 'UL',
@@ -124,6 +129,7 @@ export const leavePolicies: LeavePolicy[] = [
     approvalOverflow: 'MANAGER',
     minimumAdvanceNotice: 0,
     allowHalfDay: true,
-    requireSupportingDocuments: false
+    requireSupportingDocuments: false,
+    allowEmployeeSpecificSettings: true
   }
 ];

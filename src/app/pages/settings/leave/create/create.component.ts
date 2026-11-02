@@ -38,7 +38,8 @@ export class CreateComponent {
     approvalOverflow: new FormControl<'MANAGER' | 'MANAGER_HR' | 'HR_ONLY' | 'NO_APPROVAL'>('MANAGER', { nonNullable: true }),
     minimumAdvanceNotice: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
     allowHalfDay: new FormControl(true, { nonNullable: true }),
-    requireSupportingDocuments: new FormControl(true, { nonNullable: true })
+    requireSupportingDocuments: new FormControl(true, { nonNullable: true }),
+    allowEmployeeSpecificSettings: new FormControl(true, { nonNullable: true })
   });
 
   submittedLeavePolicy: LeavePolicy | null = null;
@@ -64,6 +65,10 @@ export class CreateComponent {
 
   get serviceEntitlementTiers(): FormArray<ServiceEntitlementTierForm> {
     return this.leaveForm.controls.serviceEntitlementTiers;
+  }
+
+  onAllowEmployeeSpecificSettingsChange(enabled: boolean): void {
+    this.leaveForm.controls.allowEmployeeSpecificSettings.setValue(enabled);
   }
 
   addServiceEntitlementTier(): void {

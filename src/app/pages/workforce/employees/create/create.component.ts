@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, FormRecord, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
 import { defaultLeaveEntitlements } from '../../../../data/leave-balances';
 import { leavePolicies } from '../../../../data/leave-policies';
 import type { LeaveEntitlementPeriod } from '../../../../models/leave.model';
-import type { LeavePolicy } from '../../../../models/leave-policy.model';
+import type { LeavePolicy, LeaveServiceEntitlementTier } from '../../../../models/leave-policy.model';
 import { departments } from '../../../../data/departments';
 import { positions } from '../../../../data/positions';
 import type { Department } from '../../../../models/department.model';
@@ -30,6 +30,20 @@ const statutoryEntitlementOptions = [
   { code: 'HRD_CORP_LEVY', name: 'HRD Corp Levy', setting: 'includeHrdCorpLevy' },
 ] as const;
 
+type LeaveServiceTierForm = FormGroup<{
+  serviceFrom: FormControl<number | null>;
+  serviceTo: FormControl<number | null>;
+  daysPerYear: FormControl<number | null>;
+}>;
+
+function createLeaveServiceTierForm(tier: LeaveServiceEntitlementTier): LeaveServiceTierForm {
+  return new FormGroup({
+    serviceFrom: new FormControl<number | null>(tier.serviceFrom, [Validators.required, Validators.min(0)]),
+    serviceTo: new FormControl<number | null>(tier.serviceTo, [Validators.min(0)]),
+    daysPerYear: new FormControl<number | null>(tier.daysPerYear, [Validators.required, Validators.min(0)])
+  });
+}
+
 
 @Component({
   selector: 'app-create',
@@ -41,6 +55,22 @@ const statutoryEntitlementOptions = [
 export class CreateComponent {
 
   private navigation = inject(NavigationService);
+  private readonly editingLeavePolicyCodes = new Set<string>();
+
+  constructor() {
+    for (const policy of this.leavePolicies) {
+      if (policy.entitlementCalculationMethod === 'SERVICE') {
+        const tiers = new FormArray<LeaveServiceTierForm>((policy.serviceEntitlementTiers ?? []).map(createLeaveServiceTierForm));
+        this.employeeForm.controls.leave.controls.leaveServiceEntitlementTiers.addControl(policy.leaveCode, tiers);
+        this.updateLeaveServiceToValidators(policy.leaveCode);
+      } else {
+        this.employeeForm.controls.leave.controls.leaveEntitlementOverrides.addControl(
+          policy.leaveCode,
+          new FormControl<number | null>(policy.defaultEntitlement, [Validators.min(0)])
+        );
+      }
+    }
+  }
 
   readonly departments: Department[] = departments.filter(department => department.status === 'Active');
   readonly positions: Position[] = positions;
@@ -113,8 +143,8 @@ export class CreateComponent {
     }),
     leave: new FormGroup({
       leavePolicyCodes: new FormControl<string[]>(['AL', 'ML'], { nonNullable: true }),
-      annualLeaveEntitlement: new FormControl<number | null>(defaultLeaveEntitlements.annual.amount),
-      annualLeavePeriod: new FormControl<LeaveEntitlementPeriod>(defaultLeaveEntitlements.annual.period, { nonNullable: true }),
+      leaveEntitlementOverrides: new FormRecord<FormControl<number | null>>({}),
+      leaveServiceEntitlementTiers: new FormRecord<FormArray<LeaveServiceTierForm>>({}),
       medicalLeaveEntitlement: new FormControl<number | null>(defaultLeaveEntitlements.medical.amount),
       medicalLeavePeriod: new FormControl<LeaveEntitlementPeriod>(defaultLeaveEntitlements.medical.period, { nonNullable: true }),
     }),
@@ -272,13 +302,6 @@ export class CreateComponent {
     return this.leavePolicies.filter(policy => selectedCodes.has(policy.leaveCode));
   }
 
-  get annualLeaveYearlyEntitlement(): number {
-    return this.toYearlyEntitlement(
-      this.employeeForm.controls.leave.controls.annualLeaveEntitlement.value,
-      this.employeeForm.controls.leave.controls.annualLeavePeriod.value
-    );
-  }
-
   get medicalLeaveYearlyEntitlement(): number {
     return this.toYearlyEntitlement(
       this.employeeForm.controls.leave.controls.medicalLeaveEntitlement.value,
@@ -291,6 +314,40 @@ export class CreateComponent {
     return Math.max(0, amount) * (period === 'month' ? 12 : 1);
   }
 
+  serviceEntitlementTiers(leaveCode: string): FormArray<LeaveServiceTierForm> {
+    return this.employeeForm.controls.leave.controls.leaveServiceEntitlementTiers.controls[leaveCode];
+  }
+
+  addLeaveServiceTier(leaveCode: string): void {
+    const tiers = this.serviceEntitlementTiers(leaveCode);
+    const previousTier = tiers.at(tiers.length - 1);
+    tiers.push(createLeaveServiceTierForm({
+      serviceFrom: previousTier?.controls.serviceTo.value ?? 0,
+      serviceTo: null,
+      daysPerYear: null
+    }));
+    this.updateLeaveServiceToValidators(leaveCode);
+  }
+
+  removeLeaveServiceTier(leaveCode: string, index: number): void {
+    const tiers = this.serviceEntitlementTiers(leaveCode);
+    if (tiers.length <= 1) return;
+    tiers.removeAt(index);
+    this.updateLeaveServiceToValidators(leaveCode);
+  }
+
+  private updateLeaveServiceToValidators(leaveCode: string): void {
+    const tiers = this.serviceEntitlementTiers(leaveCode);
+    tiers.controls.forEach((tier, index) => {
+      tier.controls.serviceTo.setValidators(
+        index < tiers.length - 1
+          ? [Validators.required, Validators.min(0)]
+          : [Validators.min(0)]
+      );
+      tier.controls.serviceTo.updateValueAndValidity({ emitEvent: false });
+    });
+  }
+
   isLeavePolicySelected(leaveCode: string): boolean {
     return this.employeeForm.controls.leave.controls.leavePolicyCodes.value.includes(leaveCode);
   }
@@ -300,9 +357,66 @@ export class CreateComponent {
     const selectedCodes = new Set(codes.value);
 
     if (selected) selectedCodes.add(leaveCode);
-    else selectedCodes.delete(leaveCode);
+    else {
+      selectedCodes.delete(leaveCode);
+      this.editingLeavePolicyCodes.delete(leaveCode);
+    }
 
     codes.setValue([...selectedCodes]);
+  }
+
+  isEditingLeavePolicy(leaveCode: string): boolean {
+    return this.editingLeavePolicyCodes.has(leaveCode);
+  }
+
+  toggleLeavePolicyEditor(leaveCode: string): void {
+    if (this.editingLeavePolicyCodes.has(leaveCode)) this.editingLeavePolicyCodes.delete(leaveCode);
+    else this.editingLeavePolicyCodes.add(leaveCode);
+  }
+
+  employeeEntitlementLabel(policy: LeavePolicy): string {
+    const entitlement = this.employeeLeaveEntitlement(policy);
+    if (entitlement === null) return policy.entitlementCalculationMethod === 'SERVICE' ? 'Enter joined date or entitlement' : 'Set employee entitlement';
+    return `${entitlement} ${this.entitlementUnitLabel(policy)} per year`;
+  }
+
+  employeeEntitlementRulesLabel(policy: LeavePolicy): string {
+    if (policy.entitlementCalculationMethod === 'SERVICE') {
+      const tiers = this.serviceEntitlementTiers(policy.leaveCode).getRawValue()
+        .filter(tier => tier.serviceFrom !== null && tier.daysPerYear !== null)
+        .map(tier => {
+          const range = tier.serviceTo === null
+            ? `${tier.serviceFrom}+ years`
+            : `${tier.serviceFrom}–${tier.serviceTo} years`;
+          return `${range}: ${tier.daysPerYear} ${this.entitlementUnitLabel(policy)} per year`;
+        });
+      return tiers.length > 0 ? tiers.join(' · ') : 'Based on length of service';
+    }
+    return this.employeeEntitlementLabel(policy);
+  }
+
+  private employeeLeaveEntitlement(policy: LeavePolicy): number | null {
+    if (policy.entitlementCalculationMethod !== 'SERVICE') {
+      return this.employeeForm.controls.leave.controls.leaveEntitlementOverrides.controls[policy.leaveCode]?.value ?? null;
+    }
+    const yearsOfService = this.yearsOfService();
+    if (yearsOfService === null) return null;
+    const tier = (this.serviceEntitlementTiers(policy.leaveCode)?.getRawValue() ?? []).find(item =>
+      item.serviceFrom !== null
+      && yearsOfService >= item.serviceFrom
+      && (item.serviceTo === null || yearsOfService < item.serviceTo)
+    );
+    return tier?.daysPerYear ?? null;
+  }
+
+  private yearsOfService(): number | null {
+    const joinedDate = this.employeeForm.controls.employment.controls.joinedDate.value;
+    if (!joinedDate || Number.isNaN(joinedDate.getTime())) return null;
+    const today = new Date();
+    let years = today.getFullYear() - joinedDate.getFullYear();
+    if (today.getMonth() < joinedDate.getMonth()
+      || (today.getMonth() === joinedDate.getMonth() && today.getDate() < joinedDate.getDate())) years--;
+    return Math.max(0, years);
   }
 
   onSubmit(): void {
@@ -338,34 +452,11 @@ export class CreateComponent {
   }
 
   leaveBalanceLabel(policy: LeavePolicy): string {
-    const isServiceBased = policy.entitlementCalculationMethod === 'SERVICE';
-    const entitlement = isServiceBased ? this.serviceBasedEntitlement(policy) : policy.defaultEntitlement;
+    const entitlement = this.employeeLeaveEntitlement(policy);
 
-    if (isServiceBased && entitlement === null) return 'Enter joined date';
-    if (entitlement === null || (policy.entitlementGrantMethod === 'MANUAL' && policy.defaultEntitlement === null)) {
-      return '—';
-    }
+    if (entitlement === null) return policy.entitlementCalculationMethod === 'SERVICE' ? 'Enter joined date' : '—';
 
     return `${entitlement} ${this.entitlementUnitLabel(policy)}`;
-  }
-
-  private serviceBasedEntitlement(policy: LeavePolicy): number | null {
-    const joinedDate = this.employeeForm.controls.employment.controls.joinedDate.value;
-    if (!joinedDate || Number.isNaN(joinedDate.getTime())) return null;
-
-    const today = new Date();
-    let yearsOfService = today.getFullYear() - joinedDate.getFullYear();
-    const beforeAnniversary = today.getMonth() < joinedDate.getMonth()
-      || (today.getMonth() === joinedDate.getMonth() && today.getDate() < joinedDate.getDate());
-    if (beforeAnniversary) yearsOfService--;
-    yearsOfService = Math.max(0, yearsOfService);
-
-    const tier = policy.serviceEntitlementTiers.find(item =>
-      item.serviceFrom !== null
-      && yearsOfService >= item.serviceFrom
-      && (item.serviceTo === null || yearsOfService < item.serviceTo)
-    );
-    return tier?.daysPerYear ?? null;
   }
 
   private entitlementUnitLabel(policy: LeavePolicy): string {
