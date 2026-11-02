@@ -1,0 +1,132 @@
+:host {
+  display: block;
+}
+
+.work-schedule-section-heading,
+.schedule-card-heading,
+.schedule-card-list-heading,
+.schedule-override-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.work-schedule-section-heading {
+  margin-bottom: 16px;
+}
+
+.schedule-default-badge {
+  flex: 0 0 auto;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--light-primary);
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.schedule-card .card-body {
+  padding: 20px;
+}
+
+.schedule-card-heading,
+.schedule-card-list-heading {
+  margin-bottom: 16px;
+}
+
+.same-schedule-option {
+  padding: 14px 16px;
+  border-radius: 8px;
+}
+
+
+.same-schedule-message {
+  padding: 14px 16px;
+  border-radius: 8px;
+  background: var(--light-disabled);
+  color: var(--text-muted, #6c757d);
+  font-size: 13px;
+}
+
+.schedule-grid-scroll {
+  overflow-x: auto;
+}
+
+.schedule-grid {
+  display: grid;
+  grid-template-columns: minmax(145px, 1.1fr) repeat(4, minmax(105px, 1fr));
+  align-items: center;
+  column-gap: 12px;
+  min-width: 680px;
+}
+
+.schedule-grid-header {
+  padding: 0 12px 8px;
+  color: var(--text-muted, #6c757d);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.schedule-grid-row {
+  min-height: 58px;
+  padding: 6px 12px;
+  border-top: 1px solid var(--light-disabled);
+}
+
+.schedule-day-name {
+  min-width: 0;
+}
+
+.schedule-time-field {
+  margin: 0;
+}
+
+.schedule-day-off {
+  background: var(--light-disabled);
+  border-radius: 8px;
+}
+
+.schedule-day-off-label {
+  grid-column: 2 / -1;
+  color: var(--text-muted, #6c757d);
+  font-size: 13px;
+}
+
+.schedule-override-list {
+  display: grid;
+  gap: 12px;
+}
+
+.schedule-override-card {
+  padding: 16px 18px;
+  border: 1px solid var(--light-disabled);
+  border-radius: 10px;
+  background: var(--white, #fff);
+}
+
+.schedule-override-active {
+  border-color: var(--primary);
+}
+
+.schedule-override-grid {
+  margin-top: 16px;
+}
+
+@media (max-width: 767.98px) {
+  .work-schedule-section-heading,
+  .schedule-override-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .schedule-card .card-body {
+    padding: 16px;
+  }
+
+  .schedule-override-card {
+    padding: 14px;
+  }
+}

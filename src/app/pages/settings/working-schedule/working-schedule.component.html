@@ -1,0 +1,136 @@
+<div class="row justify-content-between mb-4">
+  <div class="col-sm-7">
+    <h3 class="text-dark my-0">Working Schedule</h3>
+    <p class="fw-300 text-muted mb-0">Manage company hours and employment type schedules.</p>
+  </div>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<section class="work-schedule-section mb-4" aria-labelledby="working-schedule-title">
+  <div class="work-schedule-section-heading">
+    <div>
+      <h4 id="working-schedule-title" class="text-primary mb-1">Employment Working Schedules</h4>
+      <p class="text-muted mb-0">Set working and break times for each day of the week.</p>
+    </div>
+    <span class="schedule-default-badge">By employment type</span>
+  </div>
+
+  <div class="card schedule-card mb-4">
+    <div class="card-body">
+      <div class="d-flex align-items-center justify-content-between gap-3">
+        <div>
+          <h5 class="text-dark mb-1">Use one schedule for everyone</h5>
+          <p class="text-muted mb-0">When enabled, changes to the shared schedule apply to every employment type.</p>
+        </div>
+        <mat-slide-toggle color="primary"
+          [checked]="form.controls.allEmploymentTypesSameSchedule.value"
+          (change)="setAllEmploymentTypesSameSchedule($event.checked)"
+          aria-label="All employment types use the same schedule">
+        </mat-slide-toggle>
+      </div>
+    </div>
+  </div>
+
+  @if (form.controls.allEmploymentTypesSameSchedule.value) {
+    <div class="card schedule-card mb-4">
+      <div class="card-body">
+        <div class="schedule-card-heading">
+          <div>
+            <h5 class="text-dark mb-1">Shared Schedule</h5>
+            <p class="text-muted mb-0">This schedule is saved for every employment type.</p>
+          </div>
+        </div>
+        <div class="schedule-grid-scroll" formGroupName="commonWorkingSchedule">
+          <div class="schedule-grid schedule-grid-header" aria-hidden="true">
+            <span>Day</span><span>Start</span><span>End</span><span>Break starts</span><span>Break ends</span>
+          </div>
+          <div formArrayName="days">
+            @for (day of commonScheduleDayControls; track day.controls.day.value; let i = $index) {
+              <div class="schedule-grid schedule-grid-row" [class.schedule-day-off]="!day.controls.isWorkingDay.value" [formGroupName]="i">
+                <div class="schedule-day-name">
+                  <mat-checkbox class="form-checkbox" color="primary" [checked]="day.controls.isWorkingDay.value"
+                    (change)="setWorkingDayEnabled(day, $event.checked)" [attr.aria-label]="'Set ' + day.controls.day.value + ' as a working day'">
+                    {{ day.controls.day.value }}
+                  </mat-checkbox>
+                </div>
+                @if (day.controls.isWorkingDay.value) {
+                  <mat-form-field appearance="outline" class="form-input w-100 schedule-time-field" subscriptSizing="dynamic">
+                    <input matInput type="time" formControlName="startTime" [attr.aria-label]="day.controls.day.value + ' start time'">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" class="form-input w-100 schedule-time-field" subscriptSizing="dynamic">
+                    <input matInput type="time" formControlName="endTime" [attr.aria-label]="day.controls.day.value + ' end time'">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" class="form-input w-100 schedule-time-field" subscriptSizing="dynamic">
+                    <input matInput type="time" formControlName="breakStartTime" [attr.aria-label]="day.controls.day.value + ' break start time'">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" class="form-input w-100 schedule-time-field" subscriptSizing="dynamic">
+                    <input matInput type="time" formControlName="breakEndTime" [attr.aria-label]="day.controls.day.value + ' break end time'">
+                  </mat-form-field>
+                } @else {
+                  <span class="schedule-day-off-label">Non-working day</span>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="schedule-card-list-heading">
+      <div>
+        <h5 class="text-dark mb-1">Schedules by Employment Type</h5>
+        <p class="text-muted mb-0">Each employment type has its own daily schedule.</p>
+      </div>
+    </div>
+    <div class="schedule-override-list" formArrayName="workingSchedule">
+      @for (schedule of employmentTypeScheduleControls; track employmentTypes[$index].value; let i = $index) {
+        <article class="schedule-override-card schedule-override-active" [formGroupName]="i">
+          <div class="schedule-override-heading">
+            <div>
+              <h6 class="text-dark mb-1">{{ employmentTypes[i].label }}</h6>
+              <p class="text-muted mb-0">Working hours by day</p>
+            </div>
+          </div>
+          <div class="schedule-grid-scroll schedule-override-grid" formGroupName="schedule">
+            <div class="schedule-grid schedule-grid-header" aria-hidden="true">
+              <span>Day</span><span>Start</span><span>End</span><span>Break starts</span><span>Break ends</span>
+            </div>
+            <div formArrayName="days">
+              @for (day of employmentScheduleDayControls(i); track day.controls.day.value; let dayIndex = $index) {
+                <div class="schedule-grid schedule-grid-row" [class.schedule-day-off]="!day.controls.isWorkingDay.value" [formGroupName]="dayIndex">
+                  <div class="schedule-day-name">
+                    <mat-checkbox class="form-checkbox" color="primary" [checked]="day.controls.isWorkingDay.value"
+                      (change)="setWorkingDayEnabled(day, $event.checked)" [attr.aria-label]="'Set ' + day.controls.day.value + ' as a working day'">
+                      {{ day.controls.day.value }}
+                    </mat-checkbox>
+                  </div>
+                  @if (day.controls.isWorkingDay.value) {
+                    <mat-form-field appearance="outline" class="form-input w-100 schedule-time-field" subscriptSizing="dynamic">
+                      <input matInput type="time" formControlName="startTime" [attr.aria-label]="day.controls.day.value + ' start time'">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="form-input w-100 schedule-time-field" subscriptSizing="dynamic">
+                      <input matInput type="time" formControlName="endTime" [attr.aria-label]="day.controls.day.value + ' end time'">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="form-input w-100 schedule-time-field" subscriptSizing="dynamic">
+                      <input matInput type="time" formControlName="breakStartTime" [attr.aria-label]="day.controls.day.value + ' break start time'">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="form-input w-100 schedule-time-field" subscriptSizing="dynamic">
+                      <input matInput type="time" formControlName="breakEndTime" [attr.aria-label]="day.controls.day.value + ' break end time'">
+                    </mat-form-field>
+                  } @else {
+                    <span class="schedule-day-off-label">Non-working day</span>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</section>
+
+  <div class="d-flex align-items-center justify-content-end gap-3">
+    <button type="submit" mat-flat-button color="primary"><tabler-icon icon="check" [size]="16"></tabler-icon>Save Schedule</button>
+  </div>
+</form>

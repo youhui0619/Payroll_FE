@@ -22,7 +22,6 @@ export class OverviewComponent {
   selectedPayroll: typeof payrollList[number] | null = null;
   readonly columnOptions = [
     { id: 'employee', label: 'Employee' },
-    { id: 'employeeId', label: 'Employee ID' },
     { id: 'basicPay', label: 'Basic Pay' },
     { id: 'overtime', label: 'Overtime' },
     { id: 'deduction', label: 'Deduction' },
@@ -46,7 +45,7 @@ export class OverviewComponent {
     { id: 'status', label: 'Status' },
     { id: 'action', label: 'Action' }
   ];
-  readonly requiredColumns = ['employee', 'employeeId', 'status', 'action'];
+  readonly requiredColumns = ['employee', 'status', 'action'];
   selectedColumns = this.columnOptions.map(column => column.id);
 
   isRequiredColumn(id: string): boolean {
@@ -85,7 +84,6 @@ export class OverviewComponent {
   columnWidth(id: string): number {
     const widths: Record<string, number> = {
       employee: 240,
-      employeeId: 130,
       basicPay: 110,
       overtime: 110,
       deduction: 110,

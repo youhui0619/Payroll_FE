@@ -16,6 +16,7 @@ import { CreateComponent as CommissionCreateComponent } from './payroll/commissi
 import { EditComponent as CommissionEditComponent } from './payroll/commission-incentives/edit/edit.component';
 import { RegionalPreferencesComponent } from './preferences/regional-preferences/regional-preferences.component';
 import { NotificationsComponent } from './preferences/notifications/notifications.component';
+import { WorkingScheduleComponent } from './working-schedule/working-schedule.component';
 
 
 export const SETTINGS_ROUTES: Routes = [
@@ -23,6 +24,11 @@ export const SETTINGS_ROUTES: Routes = [
     path: 'company/profile',
     title: 'Company Profile',
     component: CompanyProfileComponent
+  },
+  {
+    path: 'working-schedule',
+    title: 'Working Schedule',
+    component: WorkingScheduleComponent
   },
   {
     path: 'public-holidays/list',

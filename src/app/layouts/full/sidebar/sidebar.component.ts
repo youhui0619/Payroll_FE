@@ -106,7 +106,7 @@ export class SidebarComponent implements OnInit, OnChanges {
     { header: 'Setting' },
     { label: 'Company', icon: 'solar:settings-outline', children: [
         { label: 'Company Profile', icon: 'codex:dot-circle', route: '/settings/company/profile' },
-        { label: 'Work Schedule', icon: 'codex:dot-circle', route: '/roles/create', badge: 10 },
+        { label: 'Working Schedule', icon: 'codex:dot-circle', route: '/settings/working-schedule' },
         { label: 'Public Holidays', icon: 'codex:dot-circle', route: '/settings/public-holidays/list' },
         { label: 'Leave Settings', icon: 'codex:dot-circle', route: '/settings/leave-settings/overview' },
         { label: 'Claim Settings', icon: 'codex:dot-circle', route: '/settings/claim-settings/overview' },

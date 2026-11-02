@@ -1,6 +1,134 @@
-<form [formGroup]="companyForm" (ngSubmit)="onSubmit(companyForm)">
-    <app-forms [fields]="companyFields" [form]="companyForm"></app-forms>
-    <div class="d-flex align-items-center justify-content-end gap-3">
-        <button type="submit" mat-flat-button color="primary"><tabler-icon icon="check"></tabler-icon>Submit</button>
+<div class="row justify-content-between mb-4">
+  <div class="col-sm-7">
+    <h3 class="text-dark my-0">Company Profile</h3>
+    <p class="fw-300 text-muted mb-0">Manage your company details, business address and working schedule.</p>
+  </div>
+</div>
+
+<form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
+  <h4 class="text-primary">Company Information</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-12 px-2">
+          <mat-label class="form-label">Company Logo URL</mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput placeholder="Enter company logo URL" formControlName="logo">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-8 px-2">
+          <mat-label class="form-label">Company Name <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput placeholder="Enter company name" formControlName="name">
+            @if (companyForm.controls.name.hasError('required')) { <mat-error>Company name is required.</mat-error> }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Registration No. <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput placeholder="Enter registration number" formControlName="registrationNo">
+            @if (companyForm.controls.registrationNo.hasError('required')) { <mat-error>Registration number is required.</mat-error> }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Contact No. <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput placeholder="Enter contact number" formControlName="contactNo">
+            @if (companyForm.controls.contactNo.hasError('required')) { <mat-error>Contact number is required.</mat-error> }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Email <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput type="email" placeholder="Enter email" formControlName="email">
+            @if (companyForm.controls.email.hasError('required')) { <mat-error>Email is required.</mat-error> }
+            @if (companyForm.controls.email.hasError('email')) { <mat-error>Enter a valid email address.</mat-error> }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Website</mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput placeholder="Enter website" formControlName="website">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">SST No.</mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput placeholder="Enter SST number" formControlName="sstNo">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Tax No.</mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput placeholder="Enter tax number" formControlName="taxNo">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Company Financial Starting Month <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <mat-select placeholder="Select starting month" formControlName="financialStartingMonth">
+              @for (month of financialMonths; track month.value) {
+                <mat-option [value]="month.value">{{ month.label }}</mat-option>
+              }
+            </mat-select>
+            @if (companyForm.controls.financialStartingMonth.hasError('required')) { <mat-error>Select the financial starting month.</mat-error> }
+          </mat-form-field>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <h4 class="text-primary">Business Address</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Address Line 1 <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput placeholder="Enter address line 1" formControlName="businessAddressLine1">
+            @if (companyForm.controls.businessAddressLine1.hasError('required')) { <mat-error>Address line 1 is required.</mat-error> }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Address Line 2</mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput placeholder="Enter address line 2" formControlName="businessAddressLine2">
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3 px-2">
+          <mat-label class="form-label">City <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput placeholder="Enter city" formControlName="businessCity">
+            @if (companyForm.controls.businessCity.hasError('required')) { <mat-error>City is required.</mat-error> }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3 px-2">
+          <mat-label class="form-label">Postcode <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput placeholder="Enter postcode" formControlName="businessPostcode">
+            @if (companyForm.controls.businessPostcode.hasError('required')) { <mat-error>Postcode is required.</mat-error> }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3 px-2">
+          <mat-label class="form-label">State <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput placeholder="Enter state" formControlName="businessState">
+            @if (companyForm.controls.businessState.hasError('required')) { <mat-error>State is required.</mat-error> }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3 px-2">
+          <mat-label class="form-label">Country <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <mat-select formControlName="businessCountry">
+              <mat-option value="MALAYSIA">Malaysia</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex align-items-center justify-content-end gap-3">
+    <button type="submit" mat-flat-button color="primary"><tabler-icon icon="check" [size]="16"></tabler-icon>Submit</button>
+  </div>
 </form>
