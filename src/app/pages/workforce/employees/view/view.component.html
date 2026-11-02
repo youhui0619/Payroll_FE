@@ -449,7 +449,7 @@
                 </div>
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Confirmation Date</label>
-                  <p class="text-muted">{{ employee.confirmationDate | regionalDate:'dd/MM/yyyy' }}</p>
+                  <p class="text-muted">{{ employee.confirmationDate ? (employee.confirmationDate | regionalDate:'dd/MM/yyyy') : '-' }}</p>
                 </div>
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Resignation Date</label>

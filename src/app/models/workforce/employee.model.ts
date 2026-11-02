@@ -26,7 +26,7 @@ export interface EmployeeRecord {
   employmentStatus: EmploymentStatus;
   employmentType: EmploymentType;
   joinedDate: string;
-  confirmationDate: string;
+  confirmationDate: string | null;
   resignationDate: string | null;
   workingSchedule: WorkingSchedule;
   basicSalary: number;
