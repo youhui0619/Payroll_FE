@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormRecord, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { getNotificationPreferenceGroups, NOTIFICATION_PREFERENCE_VALUES } from '../../../../data/notification-preferences.data';
+import { getNotificationPreferenceGroups, NOTIFICATION_PREFERENCE_VALUES } from '../../../../data/notifications/notification-preferences.data';
 
 @Component({
   selector: 'app-notifications',

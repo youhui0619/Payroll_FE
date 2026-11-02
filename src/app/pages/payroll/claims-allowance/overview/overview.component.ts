@@ -3,10 +3,10 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { departments } from '../../../../data/departments';
-import { claims } from '../../../../data/claims';
-import { getClaimTypeLabel } from '../../../../data/claim-types';
-import type { ClaimPaymentMethod, ClaimStatus, ClaimType, ExpenseClaimRecord } from '../../../../models/claim.model';
+import { departments } from '../../../../data/workforce/departments.data';
+import { claims } from '../../../../data/claims/claims.data';
+import { getClaimTypeLabel } from '../../../../data/claims/claim-types.data';
+import type { ClaimPaymentMethod, ClaimStatus, ClaimType, ExpenseClaimRecord } from '../../../../models/claims/claim.model';
 import { ClaimDetailDialogComponent } from '../../../../shared/dialog/claim-detail-dialog/claim-detail-dialog.component';
 
 @Component({

@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { getEmployee } from '../../../data/employees';
-import type { CommissionPayrollRecord } from '../../../models/commission-payroll-record.model';
+import { getEmployee } from '../../../data/workforce/employees.data';
+import type { CommissionPayrollRecord } from '../../../models/commission/commission-payroll-record.model';
 import { MaterialImports, MaterialProviders } from '../../material-imports';
 
 @Component({

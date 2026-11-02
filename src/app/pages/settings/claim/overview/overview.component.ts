@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { claimTypes } from '../../../../data/claim-types';
+import { claimTypes } from '../../../../data/claims/claim-types.data';
 
 @Component({
   selector: 'app-overview',

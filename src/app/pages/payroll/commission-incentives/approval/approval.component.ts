@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { commissionPayrollRecords } from '../../../../data/commission-payroll-records';
-import type { CommissionPayrollRecord } from '../../../../models/commission-payroll-record.model';
+import { commissionPayrollRecords } from '../../../../data/commission/commission-payroll-records.data';
+import type { CommissionPayrollRecord } from '../../../../models/commission/commission-payroll-record.model';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { CommissionDetailDialogComponent } from '../../../../shared/dialog/commission-detail-dialog/commission-detail-dialog.component';
 

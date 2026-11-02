@@ -1,6 +1,6 @@
 import { getCurrencySymbol } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { REGIONAL_PREFERENCE_VALUES } from '../data/regional-preferences.data';
+import { REGIONAL_PREFERENCE_VALUES } from '../data/settings/regional-preferences.data';
 
 export type RegionalPreferenceValues = Record<string, string>;
 

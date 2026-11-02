@@ -2,8 +2,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../shared/material-imports';
-import { payslipSettings } from '../../../data/payslip-settings';
-import type { PayslipSettings } from '../../../models/payslip-settings.model';
+import { payslipSettings } from '../../../data/payroll/payslip-settings.data';
+import type { PayslipSettings } from '../../../models/payroll/payslip-settings.model';
 
 @Component({
   selector: 'app-payslip',

@@ -2,8 +2,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../shared/material-imports';
-import { payrollSettings } from '../../../data/payroll-settings';
-import type { PayrollSettings } from '../../../models/payroll-settings.model';
+import { payrollSettings } from '../../../data/payroll/payroll-settings.data';
+import type { PayrollSettings } from '../../../models/payroll/payroll-settings.model';
 
 @Component({
   selector: 'app-payroll',

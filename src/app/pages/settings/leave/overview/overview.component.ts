@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { RouterLink } from '@angular/router';
-import { leavePolicies } from '../../../../data/leave-policies';
-import type { LeavePolicy } from '../../../../models/leave-policy.model';
+import { leavePolicies } from '../../../../data/leave/leave-policies.data';
+import type { LeavePolicy } from '../../../../models/leave/leave-policy.model';
 
 @Component({
   selector: 'app-overview',

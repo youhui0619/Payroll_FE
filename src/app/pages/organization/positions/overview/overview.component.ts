@@ -3,10 +3,10 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { positions } from '../../../../data/positions';
-import { departments } from '../../../../data/departments';
-import { employees } from '../../../../data/employees';
-import type { Position, PositionJobLevel } from '../../../../models/position.model';
+import { positions } from '../../../../data/workforce/positions.data';
+import { departments } from '../../../../data/workforce/departments.data';
+import { employees } from '../../../../data/workforce/employees.data';
+import type { Position, PositionJobLevel } from '../../../../models/workforce/position.model';
 
 @Component({
   selector: 'app-overview',

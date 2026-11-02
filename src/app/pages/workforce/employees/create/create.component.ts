@@ -4,25 +4,25 @@ import { FormArray, FormControl, FormGroup, FormRecord, FormsModule, ReactiveFor
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
-import { defaultLeaveEntitlements } from '../../../../data/leave-balances';
-import { leavePolicies } from '../../../../data/leave-policies';
-import type { LeaveEntitlementPeriod } from '../../../../models/leave.model';
-import type { LeavePolicy, LeaveServiceEntitlementTier } from '../../../../models/leave-policy.model';
-import { departments } from '../../../../data/departments';
-import { positions } from '../../../../data/positions';
-import type { Department } from '../../../../models/department.model';
-import type { Position } from '../../../../models/position.model';
-import type { OvertimeCalculationBasis } from '../../../../models/employee.model';
-import type { EmploymentStatus, EmploymentType } from '../../../../models/employment-status.model';
-import { employmentStatuses, employmentTypes } from '../../../../data/employment-options';
-import { commissionIncentiveSettings } from '../../../../data/commission-incentive-settings';
-import { payrollSettings } from '../../../../data/payroll-settings';
+import { defaultLeaveEntitlements } from '../../../../data/leave/leave-balances.data';
+import { leavePolicies } from '../../../../data/leave/leave-policies.data';
+import type { LeaveEntitlementPeriod } from '../../../../models/leave/leave.model';
+import type { LeavePolicy, LeaveServiceEntitlementTier } from '../../../../models/leave/leave-policy.model';
+import { departments } from '../../../../data/workforce/departments.data';
+import { positions } from '../../../../data/workforce/positions.data';
+import type { Department } from '../../../../models/workforce/department.model';
+import type { Position } from '../../../../models/workforce/position.model';
+import type { OvertimeCalculationBasis } from '../../../../models/workforce/employee.model';
+import type { EmploymentStatus, EmploymentType } from '../../../../models/workforce/employment-status.model';
+import { employmentStatuses, employmentTypes } from '../../../../data/workforce/options/employment-options.data';
+import { commissionIncentiveSettings } from '../../../../data/commission/commission-incentive-settings.data';
+import { payrollSettings } from '../../../../data/payroll/payroll-settings.data';
 import { NavigationService } from '../../../../services/navigation.service';
 import type {
   CommissionCalculationFrequency,
   CommissionCalculationMethod,
   CommissionIncentiveSetting
-} from '../../../../models/commission-incentive-setting.model';
+} from '../../../../models/commission/commission-incentive-setting.model';
 
 const statutoryEntitlementOptions = [
   { code: 'EPF', name: 'EPF / KWSP', setting: 'includeEpf' },

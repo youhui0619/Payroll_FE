@@ -8,8 +8,8 @@ import { FullCalendarModule, CalendarOptions } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/angular/daygrid';
 import interactionPlugin from '@fullcalendar/angular/interaction';
 import themePlugin from "@fullcalendar/angular/themes/monarch"; 
-import { LeaveApplication } from '../../../../models/leave.model';
-import { getEmployee } from '../../../../data/employees';
+import { LeaveApplication } from '../../../../models/leave/leave.model';
+import { getEmployee } from '../../../../data/workforce/employees.data';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
 import { NavigationService } from '../../../../services/navigation.service';
 

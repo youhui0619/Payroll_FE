@@ -3,8 +3,8 @@ import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { publicHolidays } from '../../../../data/public-holidays';
-import type { PublicHolidayRecord } from '../../../../models/public-holiday.model';
+import { publicHolidays } from '../../../../data/settings/public-holidays.data';
+import type { PublicHolidayRecord } from '../../../../models/settings/public-holiday.model';
 import { NavigationService } from '../../../../services/navigation.service';
 
 @Component({

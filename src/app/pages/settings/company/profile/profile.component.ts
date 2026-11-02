@@ -5,8 +5,8 @@ import { MaterialImports, MaterialProviders } from '../../../../shared/material-
 import { RouterLink } from '@angular/router';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { createFormGroupFromFields, FormConfig, FormFieldConfig, FormsComponent } from '../../../../shared/forms/forms.component';
-import { COMPANY_PROFILE } from '../../../../data/company.data';
-import { Company } from '../../../../models/company.model';
+import { COMPANY_PROFILE } from '../../../../data/company/company.data';
+import { Company } from '../../../../models/company/company.model';
 
 @Component({
   selector: 'app-profile',

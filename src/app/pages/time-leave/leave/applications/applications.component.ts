@@ -7,9 +7,9 @@ import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.componen
 import { FullCalendarModule, CalendarOptions } from '@fullcalendar/angular';
 import interactionPlugin from '@fullcalendar/angular/interaction';
 import themePlugin from "@fullcalendar/angular/themes/monarch"; 
-import type { LeaveApplication } from '../../../../models/leave.model';
-import { employees, getEmployee } from '../../../../data/employees';
-import { leaveApplications } from '../../../../data/leave-applications';
+import type { LeaveApplication } from '../../../../models/leave/leave.model';
+import { employees, getEmployee } from '../../../../data/workforce/employees.data';
+import { leaveApplications } from '../../../../data/leave/leave-applications.data';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
 
 @Component({

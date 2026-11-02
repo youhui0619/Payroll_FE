@@ -6,23 +6,23 @@ import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
-import { leavePolicies } from '../../../../data/leave-policies';
-import type { LeavePolicy, LeaveServiceEntitlementTier } from '../../../../models/leave-policy.model';
-import { departments } from '../../../../data/departments';
-import { positions } from '../../../../data/positions';
-import type { Department } from '../../../../models/department.model';
-import type { Position } from '../../../../models/position.model';
-import type { OvertimeCalculationBasis } from '../../../../models/employee.model';
-import type { EmploymentStatus, EmploymentType } from '../../../../models/employment-status.model';
-import { employmentStatuses, employmentTypes } from '../../../../data/employment-options';
-import { getEmployee } from '../../../../data/employees';
-import { commissionIncentiveSettings } from '../../../../data/commission-incentive-settings';
-import { payrollSettings } from '../../../../data/payroll-settings';
+import { leavePolicies } from '../../../../data/leave/leave-policies.data';
+import type { LeavePolicy, LeaveServiceEntitlementTier } from '../../../../models/leave/leave-policy.model';
+import { departments } from '../../../../data/workforce/departments.data';
+import { positions } from '../../../../data/workforce/positions.data';
+import type { Department } from '../../../../models/workforce/department.model';
+import type { Position } from '../../../../models/workforce/position.model';
+import type { OvertimeCalculationBasis } from '../../../../models/workforce/employee.model';
+import type { EmploymentStatus, EmploymentType } from '../../../../models/workforce/employment-status.model';
+import { employmentStatuses, employmentTypes } from '../../../../data/workforce/options/employment-options.data';
+import { getEmployee } from '../../../../data/workforce/employees.data';
+import { commissionIncentiveSettings } from '../../../../data/commission/commission-incentive-settings.data';
+import { payrollSettings } from '../../../../data/payroll/payroll-settings.data';
 import type {
   CommissionCalculationFrequency,
   CommissionCalculationMethod,
   CommissionIncentiveSetting
-} from '../../../../models/commission-incentive-setting.model';
+} from '../../../../models/commission/commission-incentive-setting.model';
 import { NavigationService } from '../../../../services/navigation.service';
 
 const statutoryEntitlementOptions = [

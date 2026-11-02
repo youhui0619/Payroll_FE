@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { departments } from '../../../../data/departments';
-import { employees } from '../../../../data/employees';
-import type { Department, DepartmentStatus } from '../../../../models/department.model';
+import { departments } from '../../../../data/workforce/departments.data';
+import { employees } from '../../../../data/workforce/employees.data';
+import type { Department, DepartmentStatus } from '../../../../models/workforce/department.model';
 
 @Component({
   selector: 'app-overview',

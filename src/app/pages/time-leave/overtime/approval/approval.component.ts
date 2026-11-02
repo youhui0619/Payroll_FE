@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { overtimeRequests } from '../../../../data/overtime-requests';
-import type { OvertimeRequestRecord, OvertimeStatus, OvertimeType } from '../../../../models/overtime.model';
+import { overtimeRequests } from '../../../../data/overtime/overtime-requests.data';
+import type { OvertimeRequestRecord, OvertimeStatus, OvertimeType } from '../../../../models/overtime/overtime.model';
 import { OvertimeDetailDialogComponent } from '../../../../shared/dialog/overtime-detail-dialog/overtime-detail-dialog.component';
 
 @Component({

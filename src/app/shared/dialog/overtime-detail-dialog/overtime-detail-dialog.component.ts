@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../material-imports';
-import type { OvertimeRequestRecord, OvertimeStatus, OvertimeType } from '../../../models/overtime.model';
+import type { OvertimeRequestRecord, OvertimeStatus, OvertimeType } from '../../../models/overtime/overtime.model';
 
 @Component({
   selector: 'app-overtime-detail-dialog',

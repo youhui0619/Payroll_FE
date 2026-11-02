@@ -2,16 +2,16 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../../shared/material-imports';
-import { commissionIncentiveSettings } from '../../../../../data/commission-incentive-settings';
-import { departments } from '../../../../../data/departments';
-import { employees } from '../../../../../data/employees';
-import { positions } from '../../../../../data/positions';
+import { commissionIncentiveSettings } from '../../../../../data/commission/commission-incentive-settings.data';
+import { departments } from '../../../../../data/workforce/departments.data';
+import { employees } from '../../../../../data/workforce/employees.data';
+import { positions } from '../../../../../data/workforce/positions.data';
 import type {
   CommissionCalculationFrequency,
   CommissionIncentiveSetting,
   CommissionIncentiveType,
   CommissionPayoutTiming
-} from '../../../../../models/commission-incentive-setting.model';
+} from '../../../../../models/commission/commission-incentive-setting.model';
 
 @Component({
   selector: 'app-overview',

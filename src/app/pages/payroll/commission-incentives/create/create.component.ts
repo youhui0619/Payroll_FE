@@ -1,18 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { employees } from '../../../../data/employees';
-import { departments } from '../../../../data/departments';
-import { positions } from '../../../../data/positions';
-import { commissionIncentiveSettings } from '../../../../data/commission-incentive-settings';
-import { commissionPayrollRecords } from '../../../../data/commission-payroll-records';
-import type { EmployeeRecord } from '../../../../models/employee.model';
+import { employees } from '../../../../data/workforce/employees.data';
+import { departments } from '../../../../data/workforce/departments.data';
+import { positions } from '../../../../data/workforce/positions.data';
+import { commissionIncentiveSettings } from '../../../../data/commission/commission-incentive-settings.data';
+import { commissionPayrollRecords } from '../../../../data/commission/commission-payroll-records.data';
+import type { EmployeeRecord } from '../../../../models/workforce/employee.model';
 import type {
   CommissionCalculationFrequency,
   CommissionCalculationMethod,
   CommissionIncentiveSetting
-} from '../../../../models/commission-incentive-setting.model';
-import type { CommissionPayrollRecord } from '../../../../models/commission-payroll-record.model';
+} from '../../../../models/commission/commission-incentive-setting.model';
+import type { CommissionPayrollRecord } from '../../../../models/commission/commission-payroll-record.model';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 
 @Component({

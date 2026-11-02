@@ -6,10 +6,10 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { FullCalendarModule, CalendarOptions } from '@fullcalendar/angular';
-import { departments } from '../../../../data/departments';
-import { employees as employeeRecords } from '../../../../data/employees';
-import type { Department } from '../../../../models/department.model';
-import type { EmployeeRecord } from '../../../../models/employee.model';
+import { departments } from '../../../../data/workforce/departments.data';
+import { employees as employeeRecords } from '../../../../data/workforce/employees.data';
+import type { Department } from '../../../../models/workforce/department.model';
+import type { EmployeeRecord } from '../../../../models/workforce/employee.model';
 import { NavigationService } from '../../../../services/navigation.service';
 
 interface DepartmentTreeNode {

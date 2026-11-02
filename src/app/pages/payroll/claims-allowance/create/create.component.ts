@@ -2,12 +2,12 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { departments } from '../../../../data/departments';
-import { employees } from '../../../../data/employees';
-import { claims } from '../../../../data/claims';
-import { claimTypes as claimTypeSettings } from '../../../../data/claim-types';
-import type { ClaimPaymentMethod, ClaimType, ExpenseClaimRecord } from '../../../../models/claim.model';
-import type { EmployeeRecord } from '../../../../models/employee.model';
+import { departments } from '../../../../data/workforce/departments.data';
+import { employees } from '../../../../data/workforce/employees.data';
+import { claims } from '../../../../data/claims/claims.data';
+import { claimTypes as claimTypeSettings } from '../../../../data/claims/claim-types.data';
+import type { ClaimPaymentMethod, ClaimType, ExpenseClaimRecord } from '../../../../models/claims/claim.model';
+import type { EmployeeRecord } from '../../../../models/workforce/employee.model';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
 
 @Component({

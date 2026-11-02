@@ -4,8 +4,8 @@ import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } fr
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { leavePolicies } from '../../../../data/leave-policies';
-import type { LeavePolicy, LeaveServiceEntitlementTier } from '../../../../models/leave-policy.model';
+import { leavePolicies } from '../../../../data/leave/leave-policies.data';
+import type { LeavePolicy, LeaveServiceEntitlementTier } from '../../../../models/leave/leave-policy.model';
 
 type ServiceEntitlementTierForm = FormGroup<{
   serviceFrom: FormControl<number | null>;

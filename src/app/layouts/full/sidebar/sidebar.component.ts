@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChange
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { commissionPayrollRecords } from '../../../data/commission-payroll-records';
+import { commissionPayrollRecords } from '../../../data/commission/commission-payroll-records.data';
 
 interface MenuItem {
   id?: number;

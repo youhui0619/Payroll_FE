@@ -8,7 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { TablerIconComponent } from '@tabler/icons-angular';
-import { employees } from '../../../../data/employees';
+import { employees } from '../../../../data/workforce/employees.data';
 
 @Component({
   selector: 'app-list',

@@ -2,12 +2,12 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { departments } from '../../../../data/departments';
-import { employees } from '../../../../data/employees';
-import { overtimeRequests } from '../../../../data/overtime-requests';
-import { payrollSettings } from '../../../../data/payroll-settings';
-import type { EmployeeRecord } from '../../../../models/employee.model';
-import type { OvertimeRequestRecord, OvertimeType } from '../../../../models/overtime.model';
+import { departments } from '../../../../data/workforce/departments.data';
+import { employees } from '../../../../data/workforce/employees.data';
+import { overtimeRequests } from '../../../../data/overtime/overtime-requests.data';
+import { payrollSettings } from '../../../../data/payroll/payroll-settings.data';
+import type { EmployeeRecord } from '../../../../models/workforce/employee.model';
+import type { OvertimeRequestRecord, OvertimeType } from '../../../../models/overtime/overtime.model';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
 
 @Component({

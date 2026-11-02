@@ -3,9 +3,9 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { departments } from '../../../../data/departments';
-import { overtimeRequests } from '../../../../data/overtime-requests';
-import type { OvertimeRequestRecord, OvertimeStatus, OvertimeType } from '../../../../models/overtime.model';
+import { departments } from '../../../../data/workforce/departments.data';
+import { overtimeRequests } from '../../../../data/overtime/overtime-requests.data';
+import type { OvertimeRequestRecord, OvertimeStatus, OvertimeType } from '../../../../models/overtime/overtime.model';
 import { OvertimeDetailDialogComponent } from '../../../../shared/dialog/overtime-detail-dialog/overtime-detail-dialog.component';
 
 @Component({

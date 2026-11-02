@@ -3,11 +3,11 @@ import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { departments } from '../../../../data/departments';
-import { employees } from '../../../../data/employees';
-import { positions } from '../../../../data/positions';
-import type { EmployeeRecord } from '../../../../models/employee.model';
-import type { Position } from '../../../../models/position.model';
+import { departments } from '../../../../data/workforce/departments.data';
+import { employees } from '../../../../data/workforce/employees.data';
+import { positions } from '../../../../data/workforce/positions.data';
+import type { EmployeeRecord } from '../../../../models/workforce/employee.model';
+import type { Position } from '../../../../models/workforce/position.model';
 import { NavigationService } from '../../../../services/navigation.service';
 
 interface PositionTreeNode {

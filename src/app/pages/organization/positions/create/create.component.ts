@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { createFormGroupFromFields, type FormConfig, FormsComponent } from '../../../../shared/forms/forms.component';
-import { departments as departmentData } from '../../../../data/departments';
+import { departments as departmentData } from '../../../../data/workforce/departments.data';
 
 @Component({
   selector: 'app-create',

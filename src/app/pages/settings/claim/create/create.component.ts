@@ -3,8 +3,8 @@ import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { claimTypes } from '../../../../data/claim-types';
-import type { ClaimTypeSetting, ClaimTypeSettingStatus } from '../../../../models/claim-setting.model';
+import { claimTypes } from '../../../../data/claims/claim-types.data';
+import type { ClaimTypeSetting, ClaimTypeSettingStatus } from '../../../../models/claims/claim-setting.model';
 import { NavigationService } from '../../../../services/navigation.service';
 
 @Component({

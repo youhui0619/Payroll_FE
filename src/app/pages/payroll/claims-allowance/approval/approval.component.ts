@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { claims } from '../../../../data/claims';
-import { getClaimTypeLabel } from '../../../../data/claim-types';
-import { getEmployee } from '../../../../data/employees';
-import type { ClaimStatus, ClaimType, ExpenseClaimRecord } from '../../../../models/claim.model';
+import { claims } from '../../../../data/claims/claims.data';
+import { getClaimTypeLabel } from '../../../../data/claims/claim-types.data';
+import { getEmployee } from '../../../../data/workforce/employees.data';
+import type { ClaimStatus, ClaimType, ExpenseClaimRecord } from '../../../../models/claims/claim.model';
 import { ClaimDetailDialogComponent } from '../../../../shared/dialog/claim-detail-dialog/claim-detail-dialog.component';
 
 @Component({

@@ -4,10 +4,10 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../../shared/material-imports';
-import { departments } from '../../../../../data/departments';
-import { employees } from '../../../../../data/employees';
-import { positions } from '../../../../../data/positions';
-import { commissionIncentiveSettings } from '../../../../../data/commission-incentive-settings';
+import { departments } from '../../../../../data/workforce/departments.data';
+import { employees } from '../../../../../data/workforce/employees.data';
+import { positions } from '../../../../../data/workforce/positions.data';
+import { commissionIncentiveSettings } from '../../../../../data/commission/commission-incentive-settings.data';
 import type {
   CommissionCalculationFrequency,
   CommissionCalculationMethod,
@@ -15,7 +15,7 @@ import type {
   CommissionIncentiveSetting,
   CommissionIncentiveType,
   CommissionPayoutTiming
-} from '../../../../../models/commission-incentive-setting.model';
+} from '../../../../../models/commission/commission-incentive-setting.model';
 
 @Component({
   selector: 'app-create',

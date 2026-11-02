@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormControl, FormRecord, ReactiveFormsModule } from '@angular/forms';
-import { REGIONAL_PREFERENCE_GROUPS, REGIONAL_PREFERENCE_VALUES } from '../../../../data/regional-preferences.data';
+import { REGIONAL_PREFERENCE_GROUPS, REGIONAL_PREFERENCE_VALUES } from '../../../../data/settings/regional-preferences.data';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { RegionalPreferencesService } from '../../../../services/regional-preferences.service';
 import { RegionalCurrencyPipe } from '../../../../shared/pipes/regional-format.pipes';

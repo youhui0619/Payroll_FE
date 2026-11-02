@@ -4,11 +4,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { RouterLink } from '@angular/router';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
-import { CalendarDay, LeaveRecord } from '../../../../models/leave.model';
-import type { EmployeeRecord } from '../../../../models/employee.model';
-import { employees as employeeDirectory } from '../../../../data/employees';
-import { attendanceRecords } from '../../../../data/attendance';
-import { getPublicHolidaysForDate } from '../../../../data/public-holidays';
+import { CalendarDay, LeaveRecord } from '../../../../models/leave/leave.model';
+import type { EmployeeRecord } from '../../../../models/workforce/employee.model';
+import { employees as employeeDirectory } from '../../../../data/workforce/employees.data';
+import { attendanceRecords } from '../../../../data/attendance/attendance.data';
+import { getPublicHolidaysForDate } from '../../../../data/settings/public-holidays.data';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
 
 @Component({

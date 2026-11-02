@@ -1,0 +1,55 @@
+import type { ExpenseClaimRecord } from '../../models/claims/claim.model';
+
+export const claims: ExpenseClaimRecord[] = [
+  {
+    id: 'CLM-TRV-0001',
+    claimDate: '2026-10-02',
+    employeeId: 'EMP-0042',
+    employeeName: 'Aisyah Nur Abdullah',
+    departmentId: 'DEP-0002',
+    departmentName: 'Finance',
+    claimType: 'TRV',
+    description: 'Taxi fare for a client meeting.',
+    amount: 48.5,
+    currency: 'MYR',
+    paymentMethod: 'PAYROLL',
+    supportingDocuments: ['taxi-receipt.pdf'],
+    status: 'Pending',
+    submittedAt: '2026-10-03T09:15:00.000Z',
+    approval: { approver: '-', approvedDate: null, comments: '' }
+  },
+  {
+    id: 'CLM-COMM-0003',
+    claimDate: '2026-10-08',
+    employeeId: 'EMP-0045',
+    employeeName: 'Kelvin Wong Jun Kai',
+    departmentId: 'DEP-0005',
+    departmentName: 'Information Technology',
+    claimType: 'COMM',
+    description: 'Mobile data used for on-call support.',
+    amount: 60,
+    currency: 'MYR',
+    paymentMethod: 'PAYROLL',
+    supportingDocuments: ['mobile-bill.pdf'],
+    status: 'Paid',
+    submittedAt: '2026-10-09T02:10:00.000Z',
+    approval: { approver: 'Sarah Lim', approvedDate: '2026-10-10', comments: 'Approved and reimbursed through payroll.' }
+  },
+  {
+    id: 'CLM-TRV-0004',
+    claimDate: '2026-09-12',
+    employeeId: 'EMP-0042',
+    employeeName: 'Aisyah Nur Abdullah',
+    departmentId: 'DEP-0002',
+    departmentName: 'Finance',
+    claimType: 'TRV',
+    description: 'Ride fare to the September client meeting.',
+    amount: 42.5,
+    currency: 'MYR',
+    paymentMethod: 'BANK_TRANSFER',
+    supportingDocuments: ['september-travel-receipt.pdf'],
+    status: 'Paid',
+    submittedAt: '2026-09-13T04:30:00.000Z',
+    approval: { approver: 'Sarah Lim', approvedDate: '2026-09-14', comments: 'Receipt verified and reimbursed.' }
+  },
+];

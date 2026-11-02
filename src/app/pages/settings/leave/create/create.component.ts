@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import type { LeavePolicy } from '../../../../models/leave-policy.model';
+import type { LeavePolicy } from '../../../../models/leave/leave-policy.model';
 
 type ServiceEntitlementTierForm = FormGroup<{
   serviceFrom: FormControl<number | null>;

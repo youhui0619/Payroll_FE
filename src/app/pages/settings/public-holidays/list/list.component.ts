@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { publicHolidays } from '../../../../data/public-holidays';
-import type { PublicHolidayRecord } from '../../../../models/public-holiday.model';
+import { publicHolidays } from '../../../../data/settings/public-holidays.data';
+import type { PublicHolidayRecord } from '../../../../models/settings/public-holiday.model';
 
 @Component({
   selector: 'app-list',

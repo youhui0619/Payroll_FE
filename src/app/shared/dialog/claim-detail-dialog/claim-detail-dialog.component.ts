@@ -2,10 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../material-imports';
-import { getEmployee } from '../../../data/employees';
-import { getClaimTypeLabel } from '../../../data/claim-types';
-import type { ClaimPaymentMethod, ClaimType, ExpenseClaimRecord } from '../../../models/claim.model';
-import type { EmployeeRecord } from '../../../models/employee.model';
+import { getEmployee } from '../../../data/workforce/employees.data';
+import { getClaimTypeLabel } from '../../../data/claims/claim-types.data';
+import type { ClaimPaymentMethod, ClaimType, ExpenseClaimRecord } from '../../../models/claims/claim.model';
+import type { EmployeeRecord } from '../../../models/workforce/employee.model';
 
 @Component({
   selector: 'app-claim-detail-dialog',

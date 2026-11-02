@@ -4,11 +4,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { RouterLink } from '@angular/router';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
-import { CalendarDay, LeaveRecord } from '../../../../models/leave.model';
-import type { EmployeeRecord } from '../../../../models/employee.model';
-import { employees as employeeDirectory } from '../../../../data/employees';
-import { attendanceRecords } from '../../../../data/attendance';
-import { getEmployeeLeaveBalances } from '../../../../data/leave-balances';
+import { CalendarDay, LeaveRecord } from '../../../../models/leave/leave.model';
+import type { EmployeeRecord } from '../../../../models/workforce/employee.model';
+import { employees as employeeDirectory } from '../../../../data/workforce/employees.data';
+import { attendanceRecords } from '../../../../data/attendance/attendance.data';
+import { getEmployeeLeaveBalances } from '../../../../data/leave/leave-balances.data';
 
 @Component({
   selector: 'app-overview',
