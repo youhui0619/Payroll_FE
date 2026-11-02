@@ -17,7 +17,9 @@ import type { EmploymentStatus, EmploymentType } from '../../../../models/workfo
 import { employmentStatuses, employmentTypes } from '../../../../data/workforce/options/employment-options.data';
 import { commissionIncentiveSettings } from '../../../../data/commission/commission-incentive-settings.data';
 import { payrollSettings } from '../../../../data/payroll/payroll-settings.data';
+import { WORKING_SCHEDULE } from '../../../../data/working-schedule/working-schedule.data';
 import { NavigationService } from '../../../../services/navigation.service';
+import type { WorkingDayName, WorkingDaySchedule, WorkingSchedule } from '../../../../models/working-schedule/working-schedule.model';
 import type {
   CommissionCalculationFrequency,
   CommissionCalculationMethod,
@@ -43,6 +45,36 @@ function createLeaveServiceTierForm(tier: LeaveServiceEntitlementTier): LeaveSer
     serviceFrom: new FormControl<number | null>(tier.serviceFrom, [Validators.required, Validators.min(0)]),
     serviceTo: new FormControl<number | null>(tier.serviceTo, [Validators.min(0)]),
     daysPerYear: new FormControl<number | null>(tier.daysPerYear, [Validators.required, Validators.min(0)])
+  });
+}
+
+type EmployeeWorkingDayForm = FormGroup<{
+  day: FormControl<WorkingDayName>;
+  isWorkingDay: FormControl<boolean>;
+  startTime: FormControl<string>;
+  endTime: FormControl<string>;
+  breakStartTime: FormControl<string>;
+  breakEndTime: FormControl<string>;
+}>;
+
+type EmployeeWorkingScheduleForm = FormGroup<{
+  days: FormArray<EmployeeWorkingDayForm>;
+}>;
+
+function createWorkingDayForm(day: WorkingDaySchedule): EmployeeWorkingDayForm {
+  return new FormGroup({
+    day: new FormControl(day.day, { nonNullable: true }),
+    isWorkingDay: new FormControl(day.isWorkingDay, { nonNullable: true }),
+    startTime: new FormControl(day.startTime, { nonNullable: true }),
+    endTime: new FormControl(day.endTime, { nonNullable: true }),
+    breakStartTime: new FormControl(day.breakStartTime, { nonNullable: true }),
+    breakEndTime: new FormControl(day.breakEndTime, { nonNullable: true })
+  });
+}
+
+function createWorkingScheduleForm(schedule: WorkingSchedule): EmployeeWorkingScheduleForm {
+  return new FormGroup({
+    days: new FormArray(schedule.days.map(createWorkingDayForm))
   });
 }
 
@@ -115,6 +147,7 @@ export class CreateComponent {
     employment: new FormGroup({
       employmentStatus: new FormControl<EmploymentStatus | null>(null),
       employmentType: new FormControl<EmploymentType | null>(null),
+      workingSchedule: createWorkingScheduleForm(WORKING_SCHEDULE.Permanent),
       department: new FormControl(''),
       position: new FormControl(''),
       reportingManager: new FormControl(''),
@@ -292,6 +325,15 @@ export class CreateComponent {
 
   onDepartmentChange(): void {
     this.employeeForm.controls.employment.controls.position.setValue('');
+  }
+
+  onEmploymentTypeChange(type: EmploymentType | null): void {
+    if (!type) return;
+
+    const scheduleDays = this.employeeForm.controls.employment.controls.workingSchedule.controls.days;
+    WORKING_SCHEDULE[type].days.forEach((day, index) => {
+      scheduleDays.at(index)?.patchValue(day);
+    });
   }
 
   private isEffective(effectiveFrom: string | null, effectiveTo: string | null): boolean {

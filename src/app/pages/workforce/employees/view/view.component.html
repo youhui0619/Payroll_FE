@@ -458,6 +458,35 @@
               </div>
             </div>
           </div>
+          <h4 class="text-primary mt-4">Working Schedule</h4>
+          <div class="card mb-4">
+            <div class="card-body">
+              @if (employee.workingSchedule; as schedule) {
+                <div class="employee-working-schedule-scroll">
+                  <table class="table align-middle employee-working-schedule-table mb-0">
+                    <thead>
+                      <tr><th>Day</th><th>Working hours</th><th>Break</th></tr>
+                    </thead>
+                    <tbody>
+                      @for (day of schedule.days; track day.day) {
+                        <tr>
+                          <td class="fw-500">{{ day.day }}</td>
+                          @if (day.isWorkingDay) {
+                            <td>{{ day.startTime }}–{{ day.endTime }}</td>
+                            <td>{{ day.breakStartTime && day.breakEndTime ? day.breakStartTime + '–' + day.breakEndTime : 'No break set' }}</td>
+                          } @else {
+                            <td colspan="2" class="text-muted">Non-working day</td>
+                          }
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              } @else {
+                <p class="text-muted mb-0">No working schedule has been set for this employee.</p>
+              }
+            </div>
+          </div>
         </div>
       </mat-tab>
       <mat-tab label="Payroll & Tax">

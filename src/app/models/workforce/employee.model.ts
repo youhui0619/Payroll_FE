@@ -1,5 +1,6 @@
 import type { LeaveServiceEntitlementTier } from '../leave/leave-policy.model';
 import type { EmploymentStatus, EmploymentType } from './employment-status.model';
+import type { WorkingSchedule } from '../working-schedule/working-schedule.model';
 
 export type OvertimeCalculationBasis = 'HOURLY_RATE' | 'DAILY_RATE_CONVERTED' | 'MONTHLY_SALARY_CONVERTED';
 
@@ -27,6 +28,7 @@ export interface EmployeeRecord {
   joinedDate: string;
   confirmationDate: string;
   resignationDate: string | null;
+  workingSchedule: WorkingSchedule;
   basicSalary: number;
   salaryType: string;
   paymentMethod: string;
@@ -83,6 +85,7 @@ export interface EmployeeEmploymentInfo {
   joinedDate: Date | null;
   confirmationDate: Date | null;
   resignationDate: Date | null;
+  workingSchedule: WorkingSchedule | null;
 }
 
 export interface EmployeePayrollInfo {
@@ -168,6 +171,7 @@ export const EMPTY_EMPLOYEE_FORM_DATA: EmployeeFormData = {
     joinedDate: null,
     confirmationDate: null,
     resignationDate: null,
+    workingSchedule: null,
   },
   payroll: {
     basicSalary: null,

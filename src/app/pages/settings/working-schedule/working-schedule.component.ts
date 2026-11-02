@@ -170,10 +170,11 @@ export class WorkingScheduleComponent {
     }
 
     const { allEmploymentTypesSameSchedule, commonWorkingSchedule, workingSchedule } = this.form.getRawValue();
-    const schedules = (allEmploymentTypesSameSchedule
-      ? Object.fromEntries(employmentTypes.map(({ value }) => [value, cloneSchedule(commonWorkingSchedule)]))
-      : Object.fromEntries(workingSchedule.map(({ employmentType, schedule }) => [employmentType, schedule])))
-      as Record<EmploymentType, WorkingSchedule>;
+    const schedules = Object.fromEntries(
+      allEmploymentTypesSameSchedule
+        ? employmentTypes.map(({ value }) => [value, cloneSchedule(commonWorkingSchedule)])
+        : workingSchedule.map(({ employmentType, schedule }) => [employmentType, schedule])
+    ) as Record<EmploymentType, WorkingSchedule>;
     console.log('working schedule', schedules);
   }
 }

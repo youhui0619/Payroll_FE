@@ -1,9 +1,13 @@
 import type { EmployeeRecord, OvertimeCalculationBasis } from '../../models/workforce/employee.model';
+import type { WorkingDayName, WorkingDaySchedule, WorkingSchedule } from '../../models/working-schedule/working-schedule.model';
+import { WORKING_SCHEDULE } from '../working-schedule/working-schedule.data';
 import { payrollSettings } from '../payroll/payroll-settings.data';
 
 type SampleEmployeeInput = Pick<EmployeeRecord,
   'employeeId' | 'employeeName' | 'nricPassportNo' | 'gender' | 'race' |
   'religion' | 'department' | 'position' | 'basicSalary' | 'contactNo'> & {
+    employmentType?: EmployeeRecord['employmentType'];
+    workingSchedule?: WorkingSchedule;
     reportingManager?: string;
     commissionSettingCodes?: string[];
     includeOvertime?: boolean;
@@ -14,6 +18,25 @@ type SampleEmployeeInput = Pick<EmployeeRecord,
     hrdRegisterNo?: string;
     statutoryEntitlementCodes?: string[];
   };
+
+function cloneWorkingSchedule(schedule: WorkingSchedule): WorkingSchedule {
+  return { days: schedule.days.map(day => ({ ...day })) };
+}
+
+type WorkingDayScheduleOverride = Pick<WorkingDaySchedule, 'day'> & Partial<Omit<WorkingDaySchedule, 'day'>>;
+
+function createWorkingScheduleOverride(
+  baseSchedule: WorkingSchedule,
+  overrides: WorkingDayScheduleOverride[]
+): WorkingSchedule {
+  const overridesByDay = new Map<WorkingDayName, Partial<WorkingDaySchedule>>(
+    overrides.map(override => [override.day, override])
+  );
+
+  return {
+    days: baseSchedule.days.map(day => ({ ...day, ...overridesByDay.get(day.day) }))
+  };
+}
 
 const defaultStatutoryEntitlementCodes = [
   ...(payrollSettings.includeEpf ? ['EPF'] : []),
@@ -49,10 +72,11 @@ function createSampleEmployee(input: SampleEmployeeInput): EmployeeRecord {
     reportingManager: input.reportingManager ?? `${input.department} Manager`,
     workLocation: 'Johor Bahru Office',
     employmentStatus: 'Active',
-    employmentType: 'Permanent',
+    employmentType: input.employmentType ?? 'Permanent',
     joinedDate: '2023-01-15',
     confirmationDate: '2023-04-15',
     resignationDate: null,
+    workingSchedule: cloneWorkingSchedule(input.workingSchedule ?? WORKING_SCHEDULE[input.employmentType ?? 'Permanent']),
     salaryType: 'Monthly',
     paymentMethod: 'Transfer by bank',
     bank: 'Maybank',
@@ -103,6 +127,14 @@ export const employees: EmployeeRecord[] = [
     joinedDate: '2022-03-01',
     confirmationDate: '2022-06-01',
     resignationDate: null,
+    workingSchedule: createWorkingScheduleOverride(WORKING_SCHEDULE.Permanent, [
+      { day: 'Monday', startTime: '08:30', endTime: '17:30', breakStartTime: '12:30', breakEndTime: '13:30' },
+      { day: 'Tuesday', startTime: '08:30', endTime: '17:30', breakStartTime: '12:30', breakEndTime: '13:30' },
+      { day: 'Wednesday', startTime: '08:30', endTime: '17:30', breakStartTime: '12:30', breakEndTime: '13:30' },
+      { day: 'Thursday', startTime: '08:30', endTime: '17:30', breakStartTime: '12:30', breakEndTime: '13:30' },
+      { day: 'Friday', startTime: '08:30', endTime: '17:30', breakStartTime: '12:30', breakEndTime: '13:30' },
+      { day: 'Saturday', isWorkingDay: false }
+    ]),
     basicSalary: 4500,
     salaryType: 'Monthly',
     paymentMethod: 'Transfer by bank',
@@ -149,6 +181,14 @@ export const employees: EmployeeRecord[] = [
     joinedDate: '2021-07-15',
     confirmationDate: '2021-10-15',
     resignationDate: null,
+    workingSchedule: createWorkingScheduleOverride(WORKING_SCHEDULE.Permanent, [
+      { day: 'Monday', startTime: '08:00', endTime: '17:00', breakStartTime: '12:00', breakEndTime: '13:00' },
+      { day: 'Tuesday', startTime: '08:00', endTime: '17:00', breakStartTime: '12:00', breakEndTime: '13:00' },
+      { day: 'Wednesday', startTime: '08:00', endTime: '17:00', breakStartTime: '12:00', breakEndTime: '13:00' },
+      { day: 'Thursday', startTime: '08:00', endTime: '17:00', breakStartTime: '12:00', breakEndTime: '13:00' },
+      { day: 'Friday', startTime: '08:00', endTime: '17:00', breakStartTime: '12:00', breakEndTime: '13:00' },
+      { day: 'Saturday', startTime: '08:00', endTime: '12:00', breakStartTime: '', breakEndTime: '' }
+    ]),
     basicSalary: 5200,
     salaryType: 'Monthly',
     paymentMethod: 'Transfer by bank',

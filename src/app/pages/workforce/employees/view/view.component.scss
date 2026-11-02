@@ -63,3 +63,17 @@
 .claim-box:first-child {
   padding-top: 5px!important;
 }
+.employee-working-schedule-scroll {
+  overflow-x: auto;
+}
+
+.employee-working-schedule-table {
+  min-width: 520px;
+}
+
+.employee-working-schedule-table th {
+  color: var(--text-muted, #6c757d);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+}

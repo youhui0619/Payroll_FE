@@ -1,0 +1,23 @@
+.employee-working-schedule-scroll {
+  overflow-x: auto;
+}
+
+.employee-working-schedule-table {
+  min-width: 760px;
+}
+
+.employee-working-schedule-table th {
+  color: var(--text-muted, #6c757d);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.employee-working-schedule-table td {
+  min-width: 125px;
+  padding: 0.5rem;
+}
+
+.employee-working-schedule-table td:first-child {
+  min-width: 150px;
+}

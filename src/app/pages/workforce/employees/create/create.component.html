@@ -291,7 +291,8 @@
                       color="primary"
                       hideSingleSelectionIndicator
                       required
-                      formControlName="employmentType">
+                      formControlName="employmentType"
+                      (change)="onEmploymentTypeChange($event.value)">
                       @for (type of employmentTypes; track type.value) {
                         <mat-button-toggle [value]="type.value">{{ type.label }}</mat-button-toggle>
                       }
@@ -393,11 +394,53 @@
               </div>
             </div>
           </div>
+          <h4 class="text-primary mt-4">Working Schedule</h4>
+          <div class="card mb-4" formGroupName="workingSchedule">
+            <div class="card-body">
+              @if (employeeForm.controls.employment.controls.employmentType.value; as selectedEmploymentType) {
+                <p class="text-muted mb-3">Default schedule for {{ selectedEmploymentType }}. Adjust the hours for this employee below.</p>
+                <div class="employee-working-schedule-scroll" formArrayName="days">
+                  <table class="table align-middle employee-working-schedule-table mb-0">
+                    <thead>
+                      <tr>
+                        <th>Day</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Break starts</th>
+                        <th>Break ends</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (day of employeeForm.controls.employment.controls.workingSchedule.controls.days.controls; track day.controls.day.value; let i = $index) {
+                        <tr [formGroupName]="i">
+                          <td>
+                            <mat-checkbox class="form-checkbox" color="primary" formControlName="isWorkingDay">
+                              {{ day.controls.day.value }}
+                            </mat-checkbox>
+                          </td>
+                          @if (day.controls.isWorkingDay.value) {
+                            <td><input class="form-control" type="time" formControlName="startTime" [attr.aria-label]="day.controls.day.value + ' start time'"></td>
+                            <td><input class="form-control" type="time" formControlName="endTime" [attr.aria-label]="day.controls.day.value + ' end time'"></td>
+                            <td><input class="form-control" type="time" formControlName="breakStartTime" [attr.aria-label]="day.controls.day.value + ' break start time'"></td>
+                            <td><input class="form-control" type="time" formControlName="breakEndTime" [attr.aria-label]="day.controls.day.value + ' break end time'"></td>
+                          } @else {
+                            <td colspan="4" class="text-muted">Non-working day</td>
+                          }
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              } @else {
+                <p class="text-muted mb-0">Select an employment type to load its default schedule.</p>
+              }
+            </div>
+          </div>
           <div class="d-flex align-items-center justify-content-end gap-3">
             <button mat-flat-button color="primary-outline" type="button" matStepperPrevious>
               <tabler-icon icon="arrow-left" [size]="16"></tabler-icon>Back
             </button>
-            <button mat-flat-button color="primary" type="button" matStepperNext>Next</button>
+            <button mat-flat-button color="primary" type="button" matStepperNext><tabler-icon icon="arrow-right" [size]="16"></tabler-icon>Next</button>
           </div>
 
         </mat-step>
