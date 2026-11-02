@@ -1,4 +1,5 @@
 import type { LeaveServiceEntitlementTier } from './leave-policy.model';
+import type { EmploymentStatus, EmploymentType } from './employment-status.model';
 
 export type OvertimeCalculationBasis = 'HOURLY_RATE' | 'DAILY_RATE_CONVERTED' | 'MONTHLY_SALARY_CONVERTED';
 
@@ -21,8 +22,8 @@ export interface EmployeeRecord {
   position: string;
   reportingManager: string;
   workLocation: string;
-  employmentStatus: string;
-  employmentType: string;
+  employmentStatus: EmploymentStatus;
+  employmentType: EmploymentType;
   joinedDate: string;
   confirmationDate: string;
   resignationDate: string | null;
@@ -73,8 +74,8 @@ export interface EmployeePersonalInfo {
 }
 
 export interface EmployeeEmploymentInfo {
-  employmentStatus: string | null;
-  employmentType: string | null;
+  employmentStatus: EmploymentStatus | null;
+  employmentType: EmploymentType | null;
   department: string | null;
   position: string | null;
   reportingManager: string | null;
@@ -158,8 +159,8 @@ export const EMPTY_EMPLOYEE_FORM_DATA: EmployeeFormData = {
     country: '',
   },
   employment: {
-    employmentStatus: '',
-    employmentType: '',
+    employmentStatus: null,
+    employmentType: null,
     department: '',
     position: '',
     reportingManager: '',

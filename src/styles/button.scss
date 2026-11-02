@@ -150,6 +150,7 @@
 //toggle button
 .selection-group {
   display: flex;
+  flex-wrap: wrap;
   width: 100%;
   gap: 12px;
   border: 0 !important;
@@ -158,11 +159,26 @@
 }
 
 .selection-group mat-button-toggle {
-  flex: 1;
+  flex: 0 0 calc((100% - 36px) / 4);
+  max-width: calc((100% - 36px) / 4);
   min-width: 0;
   border: 0 !important;
   background: transparent;
   color: var(--text);
+}
+
+@media (max-width: 767.98px) {
+  .selection-group mat-button-toggle {
+    flex-basis: calc((100% - 12px) / 2);
+    max-width: calc((100% - 12px) / 2);
+  }
+}
+
+@media (max-width: 479.98px) {
+  .selection-group mat-button-toggle {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
 }
 
 .selection-group .mat-button-toggle-button {

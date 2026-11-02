@@ -311,10 +311,9 @@
                         hideSingleSelectionIndicator
                         required
                         formControlName="employmentStatus">
-                        <mat-button-toggle value="Active">Active</mat-button-toggle>
-                        <mat-button-toggle value="Probation">Probation</mat-button-toggle>
-                        <mat-button-toggle value="Resigned">Resigned</mat-button-toggle>
-                        <mat-button-toggle value="Terminated">Terminated</mat-button-toggle>
+                        @for (status of employmentStatuses; track status.value) {
+                          <mat-button-toggle [value]="status.value">{{ status.label }}</mat-button-toggle>
+                        }
                       </mat-button-toggle-group>
                       <!-- <mat-error class="text-danger">Gender is required</mat-error> -->
                     </div>
@@ -330,9 +329,9 @@
                         hideSingleSelectionIndicator
                         required
                         formControlName="employmentType">
-                        <mat-button-toggle value="Permanent">Permanent</mat-button-toggle>
-                        <mat-button-toggle value="Contract">Contract</mat-button-toggle>
-                        <mat-button-toggle value="Part-time">Part-time</mat-button-toggle>
+                        @for (type of employmentTypes; track type.value) {
+                          <mat-button-toggle [value]="type.value">{{ type.label }}</mat-button-toggle>
+                        }
                       </mat-button-toggle-group>
                     </div>
 

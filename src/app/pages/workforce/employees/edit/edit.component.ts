@@ -13,6 +13,8 @@ import { positions } from '../../../../data/positions';
 import type { Department } from '../../../../models/department.model';
 import type { Position } from '../../../../models/position.model';
 import type { OvertimeCalculationBasis } from '../../../../models/employee.model';
+import type { EmploymentStatus, EmploymentType } from '../../../../models/employment-status.model';
+import { employmentStatuses, employmentTypes } from '../../../../data/employment-options';
 import { getEmployee } from '../../../../data/employees';
 import { commissionIncentiveSettings } from '../../../../data/commission-incentive-settings';
 import { payrollSettings } from '../../../../data/payroll-settings';
@@ -74,6 +76,8 @@ export class EditComponent implements OnInit {
   
   readonly departments: Department[] = departments.filter(department => department.status === 'Active');
   readonly positions: Position[] = positions;
+  readonly employmentStatuses = employmentStatuses;
+  readonly employmentTypes = employmentTypes;
   readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');
   readonly commissionIncentiveSettings: CommissionIncentiveSetting[] = commissionIncentiveSettings;
   readonly availableStatutoryEntitlements = statutoryEntitlementOptions.filter(option => payrollSettings[option.setting]);
@@ -105,8 +109,8 @@ export class EditComponent implements OnInit {
       country: new FormControl(''),
     }),
     employment: new FormGroup({
-      employmentStatus: new FormControl(''),
-      employmentType: new FormControl(''),
+      employmentStatus: new FormControl<EmploymentStatus | null>(null),
+      employmentType: new FormControl<EmploymentType | null>(null),
       department: new FormControl(''),
       position: new FormControl(''),
       reportingManager: new FormControl(''),
@@ -320,8 +324,8 @@ export class EditComponent implements OnInit {
         addressLine2: addressLine2.join(', '),
       },
       employment: {
-        employmentStatus: this.matchOption(employee.employmentStatus, ['Active', 'Probation', 'Resigned', 'Terminated']),
-        employmentType: this.matchOption(employee.employmentType, ['Permanent', 'Contract', 'Part-time']),
+        employmentStatus: this.matchOption(employee.employmentStatus, this.employmentStatuses.map(option => option.value)),
+        employmentType: this.matchOption(employee.employmentType, this.employmentTypes.map(option => option.value)),
         department: employee.department,
         position: employee.position,
         reportingManager: employee.reportingManager,
@@ -377,8 +381,8 @@ export class EditComponent implements OnInit {
     this.syncOvertimeHourlyRateValidation();
   }
 
-  private matchOption(value: string, options: string[]): string {
-    return options.find(option => option.toLowerCase() === value.trim().toLowerCase()) ?? value;
+  private matchOption<T extends string>(value: string, options: readonly T[]): T | null {
+    return options.find(option => option.toLowerCase() === value.trim().toLowerCase()) ?? null;
   }
 
   readonly leaveYear = new Date().getFullYear();

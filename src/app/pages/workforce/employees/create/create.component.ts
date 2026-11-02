@@ -13,6 +13,8 @@ import { positions } from '../../../../data/positions';
 import type { Department } from '../../../../models/department.model';
 import type { Position } from '../../../../models/position.model';
 import type { OvertimeCalculationBasis } from '../../../../models/employee.model';
+import type { EmploymentStatus, EmploymentType } from '../../../../models/employment-status.model';
+import { employmentStatuses, employmentTypes } from '../../../../data/employment-options';
 import { commissionIncentiveSettings } from '../../../../data/commission-incentive-settings';
 import { payrollSettings } from '../../../../data/payroll-settings';
 import { NavigationService } from '../../../../services/navigation.service';
@@ -74,6 +76,8 @@ export class CreateComponent {
 
   readonly departments: Department[] = departments.filter(department => department.status === 'Active');
   readonly positions: Position[] = positions;
+  readonly employmentStatuses = employmentStatuses;
+  readonly employmentTypes = employmentTypes;
   readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');
   readonly commissionIncentiveSettings: CommissionIncentiveSetting[] = commissionIncentiveSettings;
   readonly availableStatutoryEntitlements = statutoryEntitlementOptions.filter(option => payrollSettings[option.setting]);
@@ -109,8 +113,8 @@ export class CreateComponent {
       country: new FormControl(''),
     }),
     employment: new FormGroup({
-      employmentStatus: new FormControl(''),
-      employmentType: new FormControl(''),
+      employmentStatus: new FormControl<EmploymentStatus | null>(null),
+      employmentType: new FormControl<EmploymentType | null>(null),
       department: new FormControl(''),
       position: new FormControl(''),
       reportingManager: new FormControl(''),
