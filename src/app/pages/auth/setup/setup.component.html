@@ -1,0 +1,69 @@
+<div class="bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12 pt-5">
+        <div>
+          <span class="small text-primary fw-semibold">LET’S GET YOU SETTLED</span>
+          <h1 id="setup-heading" class="text-dark fs-2 mt-2 mb-2" tabindex="-1">{{ currentSection.title }}</h1>
+          <p class="text-muted mb-0">{{ currentSection.description }}</p>
+        </div>
+
+        <div>
+          <div class="d-flex justify-content-end small text-muted mb-2">
+            <span>Step {{ currentStep + 1 }} of {{ setupSections.length }}</span>
+          </div>
+          <div
+            class="progress mb-4"
+            style="height: 8px"
+            role="progressbar"
+            [attr.aria-valuenow]="setupProgress"
+            aria-valuemin="0"
+            aria-valuemax="100">
+            <div class="progress-bar bg-primary" [style.width.%]="setupProgress"></div>
+          </div>
+
+        <section class="py-3">
+          <app-profile [showHeader]="false" [showSubmitButton]="false" [hidden]="currentStep !== 0"></app-profile>
+          <app-working-schedule [showHeader]="false" [showSubmitButton]="false" [hidden]="currentStep !== 1"></app-working-schedule>
+          <app-payroll [showSubmitButton]="false" [hidden]="currentStep !== 2"></app-payroll>
+          <app-regional-preferences [showSubmitButton]="false" [hidden]="currentStep !== 3"></app-regional-preferences>
+
+          <div class="d-flex flex-wrap justify-content-end gap-3 mt-4 pt-3">
+            @if (currentStep > 0) {
+              <button
+                mat-flat-button
+                color="primary-outline"
+                type="button"
+                (click)="previousStep()">
+                <tabler-icon icon="arrow-left" [size]="16"></tabler-icon>
+                Back
+              </button>
+            }
+
+            @if (currentStep < lastStep) {
+              <button
+                mat-flat-button
+                color="primary"
+                type="button"
+                (click)="nextStep()">
+                <tabler-icon icon="arrow-right" [size]="16"></tabler-icon>
+                Next
+              </button>
+            }
+
+            @if (currentStep === lastStep) {
+              <button
+                mat-flat-button
+                color="primary"
+                type="button"
+                (click)="completeSetup()">
+                <tabler-icon icon="check" [size]="16"></tabler-icon>
+                Finish setup
+              </button>
+            }
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

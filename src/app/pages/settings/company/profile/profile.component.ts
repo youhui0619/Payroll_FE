@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { COMPANY_PROFILE } from '../../../../data/company/company.data';
@@ -12,6 +12,8 @@ import type { CompanyFinancialYearStartMonth } from '../../../../models/company/
   templateUrl: './profile.component.html'
 })
 export class ProfileComponent {
+  @Input() showHeader = true;
+  @Input() showSubmitButton = true;
   readonly companyProfile = COMPANY_PROFILE;
   readonly financialMonths: { value: CompanyFinancialYearStartMonth; label: string }[] = [
     { value: 'JANUARY', label: 'January' },

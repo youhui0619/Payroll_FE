@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { WORKING_SCHEDULE } from '../../../data/working-schedule/working-schedule.data';
 import { employmentTypes } from '../../../data/workforce/options/employment-options.data';
@@ -122,6 +122,8 @@ export function createWorkingScheduleSettingsForm(settings: WorkingScheduleSetti
   styleUrl: './working-schedule.component.scss'
 })
 export class WorkingScheduleComponent {
+  @Input() showHeader = true;
+  @Input() showSubmitButton = true;
   readonly form = createWorkingScheduleSettingsForm(WORKING_SCHEDULE);
   readonly employmentTypes = employmentTypes;
   readonly workingDays = workingDays;

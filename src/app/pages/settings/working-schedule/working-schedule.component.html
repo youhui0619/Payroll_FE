@@ -1,21 +1,23 @@
-<div class="row justify-content-between mb-4">
-  <div class="col-sm-7">
-    <h3 class="text-dark my-0">Working Schedule</h3>
-    <p class="fw-300 text-muted mb-0">Manage company hours and employment type schedules.</p>
+@if (showHeader) {
+  <div class="row justify-content-between mb-4">
+    <div class="col-sm-7">
+      <h3 class="text-dark my-0">Working Schedule</h3>
+      <p class="fw-300 text-muted mb-0">Manage company hours and employment type schedules.</p>
+    </div>
   </div>
-</div>
+}
 
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
 <section class="work-schedule-section mb-4" aria-labelledby="working-schedule-title">
   <div class="work-schedule-section-heading">
     <div>
-      <h4 id="working-schedule-title" class="text-primary mb-1">Employment Working Schedules</h4>
+      <h4 class="text-primary mb-1">Employment Working Schedules</h4>
       <p class="text-muted mb-0">Set working and break times for each day of the week.</p>
     </div>
     <span class="schedule-default-badge">By employment type</span>
   </div>
 
-  <div class="card schedule-card mb-4">
+  <div class="card mb-4">
     <div class="card-body">
       <div class="d-flex align-items-center justify-content-between gap-3">
         <div>
@@ -32,7 +34,7 @@
   </div>
 
   @if (form.controls.allEmploymentTypesSameSchedule.value) {
-    <div class="card schedule-card mb-4">
+    <div class="card mb-4">
       <div class="card-body">
         <div class="schedule-card-heading">
           <div>
@@ -78,7 +80,7 @@
   } @else {
     <div class="schedule-card-list-heading">
       <div>
-        <h5 class="text-dark mb-1">Schedules by Employment Type</h5>
+        <h4 class="text-primary mb-1">Schedules by Employment Type</h4>
         <p class="text-muted mb-0">Each employment type has its own daily schedule.</p>
       </div>
     </div>
@@ -131,6 +133,8 @@
 </section>
 
   <div class="d-flex align-items-center justify-content-end gap-3">
-    <button type="submit" mat-flat-button color="primary"><tabler-icon icon="check" [size]="16"></tabler-icon>Save Schedule</button>
+    @if (showSubmitButton) {
+      <button type="submit" mat-flat-button color="primary"><tabler-icon icon="check" [size]="16"></tabler-icon>Save Schedule</button>
+    }
   </div>
 </form>

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { FormControl, FormRecord, ReactiveFormsModule } from '@angular/forms';
 import { REGIONAL_PREFERENCE_GROUPS, REGIONAL_PREFERENCE_VALUES } from '../../../../data/settings/regional-preferences.data';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
@@ -15,6 +15,7 @@ import { RegionalCurrencyPipe } from '../../../../shared/pipes/regional-format.p
   styleUrl: './regional-preferences.component.scss'
 })
 export class RegionalPreferencesComponent implements OnInit {
+  @Input() showSubmitButton = true;
   private readonly regionalPreferences = inject(RegionalPreferencesService);
   readonly preferenceGroups = REGIONAL_PREFERENCE_GROUPS;
   readonly preferencesForm = new FormRecord<FormControl<string>>({});

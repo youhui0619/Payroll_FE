@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../shared/material-imports';
 import { payrollSettings } from '../../../data/payroll/payroll-settings.data';
@@ -14,6 +14,7 @@ import type { PayrollSettings } from '../../../models/payroll/payroll-settings.m
   styleUrl: './payroll.component.scss'
 })
 export class PayrollComponent implements OnInit {
+  @Input() showSubmitButton = true;
   readonly daysOfMonth = Array.from({ length: 31 }, (_, index) => index + 1);
 
   readonly payrollForm = new FormGroup({
