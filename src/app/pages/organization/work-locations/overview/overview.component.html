@@ -1,0 +1,113 @@
+<div class="row justify-content-between mb-4">
+  <div class="col-sm-7">
+    <h3 class="text-dark my-0">Work Location Overview</h3>
+    <p class="fw-300 text-muted mb-0">Manage your company workplaces and their addresses.</p>
+  </div>
+  <div class="col-sm-5 d-flex align-items-center justify-content-end">
+    <button mat-flat-button color="primary" class="ms-2" routerLink="/organization/work-locations/create">
+      <tabler-icon icon="plus" [size]="16"></tabler-icon>
+      Create Work Location
+    </button>
+  </div>
+</div>
+
+<div class="row my-4">
+  <div class="col-sm-3 px-2">
+    <div class="card"><div class="card-body">
+      <div class="d-flex align-items-center justify-content-between">
+        <div><p class="fs-12 text-muted">Total Locations</p><h3 class="mb-0">{{ workLocations.length }}</h3></div>
+        <div class="text-primary bg-light-primary text-end icon"><tabler-icon icon="map-pin"></tabler-icon></div>
+      </div>
+    </div></div>
+  </div>
+  <div class="col-sm-3 px-2">
+    <div class="card"><div class="card-body">
+      <div class="d-flex align-items-center justify-content-between">
+        <div><p class="fs-12 text-muted">Offices</p><h3 class="mb-0">{{ countByType('OFFICE') }}</h3></div>
+        <div class="text-primary bg-light-primary text-end icon"><tabler-icon icon="building"></tabler-icon></div>
+      </div>
+    </div></div>
+  </div>
+  <div class="col-sm-3 px-2">
+    <div class="card"><div class="card-body">
+      <div class="d-flex align-items-center justify-content-between">
+        <div><p class="fs-12 text-muted">Branches</p><h3 class="mb-0">{{ countByType('BRANCH') }}</h3></div>
+        <div class="text-secondary bg-light-secondary text-end icon"><tabler-icon icon="building"></tabler-icon></div>
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-sm-12 px-2">
+    <div class="d-flex align-items-center flex-wrap gap-2">
+      <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+        <input type="text" matInput placeholder="Search work locations..." [(ngModel)]="searchTerm">
+        <span matTextPrefix class="text-muted me-2"><tabler-icon icon="search" [size]="16"></tabler-icon></span>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+        <mat-select placeholder="Select location type" multiple [(ngModel)]="selectedTypes">
+          @for (type of locationTypes; track type) {
+            <mat-option [value]="type">{{ locationTypeLabel(type) }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-sm-12 px-2">
+    <div class="card">
+      <div class="card-header mb-3">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <h6 class="fs-14 fw-400 text-muted my-0">
+            <span class="fw-550 text-primary">All ({{ filteredWorkLocations.length }})</span>
+          </h6>
+          <button mat-flat-button color="primary-outline" class="btn-sm px-2" type="button" (click)="clearFilters()">
+            <tabler-icon icon="x" [size]="16"></tabler-icon> Clear filters
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table no-wrap w-100 text-left">
+            <thead>
+              <tr>
+                <th class="text-dark">Location</th>
+                <th class="text-dark">Type</th>
+                <th class="text-dark">Address</th>
+                <th class="text-dark">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (location of filteredWorkLocations; track location.id) {
+                <tr>
+                  <td>
+                    <p class="text-dark my-0">{{ location.name }}</p>
+                    <p class="text-muted fw-300 fs-10 my-0">{{ location.code }}</p>
+                  </td>
+                  <td class="text-muted">{{ locationTypeLabel(location.type) }}</td>
+                  <td class="text-muted">{{ fullAddress(location) }}</td>
+                  <td>
+                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/organization/work-locations/view', location.id]" [attr.aria-label]="'View ' + location.name">
+                      <tabler-icon icon="eye"></tabler-icon>
+                    </button>
+                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/organization/work-locations/edit', location.id]" [attr.aria-label]="'Edit ' + location.name">
+                      <tabler-icon icon="edit"></tabler-icon>
+                    </button>
+                  </td>
+                </tr>
+              }
+              @if (filteredWorkLocations.length === 0) {
+                <tr>
+                  <td colspan="5" class="text-muted text-center py-4">No work locations match your search or filters.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
