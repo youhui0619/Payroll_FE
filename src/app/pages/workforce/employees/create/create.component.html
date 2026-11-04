@@ -337,13 +337,44 @@
                       <input
                         type="text"
                         matInput
-                        placeholder="Enter work location"
-                        [matAutocomplete]="auto" formControlName="workLocation">
-                      <mat-autocomplete #auto="matAutocomplete">
-                        <mat-option value="Disclosure">Disclosure</mat-option>
-                        <mat-option value="Other">Other</mat-option>
+                        placeholder="Search work locations"
+                        [formControl]="workLocationSearch"
+                        [matAutocomplete]="workLocationAuto"
+                        (input)="onWorkLocationSearchInput()">
+                      <mat-autocomplete
+                        #workLocationAuto="matAutocomplete"
+                        [displayWith]="workLocationDisplayName"
+                        (optionSelected)="onWorkLocationSelected($event.option.value)">
+                        @for (location of filteredWorkLocations; track location.id) {
+                          <mat-option [value]="location">
+                            {{ location.name }} — {{ location.city }}, {{ location.state }}
+                          </mat-option>
+                        }
                       </mat-autocomplete>
                     </mat-form-field>
+                    @if (selectedWorkLocation; as location) {
+                      <div class="row">
+                        <div class="col-sm-4 mb-3">
+                          <p class="text-dark fw-500 mb-1">Location Code</p>
+                          <p class="text-muted my-0">{{ location.code }}</p>
+                        </div>
+                        <div class="col-sm-4 mb-3">
+                          <p class="text-dark fw-500 mb-1">Location Name</p>
+                          <p class="text-muted my-0">{{ location.name }}</p>
+                        </div>
+                        <div class="col-sm-4 mb-3">
+                          <p class="text-dark fw-500 mb-1">Location Type</p>
+                          <p class="text-muted my-0">{{ location.type }}</p>
+                        </div>
+                        <div class="col-sm-12 mb-3">
+                          <p class="text-dark fw-500 mb-1">Address</p>
+                          <p class="text-muted my-0">
+                            {{ location.addressLine1 }}@if (location.addressLine2) {, {{ location.addressLine2 }}}<br>
+                            {{ location.city }}, {{ location.state }} {{ location.postcode }}, {{ location.country }}
+                          </p>
+                        </div>
+                      </div>
+                    }
                   </div>
                 </div>
               </div>

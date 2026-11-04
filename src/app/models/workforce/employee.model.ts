@@ -22,7 +22,7 @@ export interface EmployeeRecord {
   department: string;
   position: string;
   reportingManager: string;
-  workLocation: string;
+  workLocationId: string;
   employmentStatus: EmploymentStatus;
   employmentType: EmploymentType;
   joinedDate: string;
@@ -81,7 +81,7 @@ export interface EmployeeEmploymentInfo {
   department: string | null;
   position: string | null;
   reportingManager: string | null;
-  workLocation: string | null;
+  workLocationId: string | null;
   joinedDate: Date | null;
   confirmationDate: Date | null;
   resignationDate: Date | null;
@@ -167,7 +167,7 @@ export const EMPTY_EMPLOYEE_FORM_DATA: EmployeeFormData = {
     department: '',
     position: '',
     reportingManager: '',
-    workLocation: '',
+    workLocationId: '',
     joinedDate: null,
     confirmationDate: null,
     resignationDate: null,

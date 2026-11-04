@@ -9,6 +9,7 @@ import dayGridPlugin from '@fullcalendar/angular/daygrid';
 import interactionPlugin from '@fullcalendar/angular/interaction';
 import themePlugin from "@fullcalendar/angular/themes/monarch"; 
 import { getEmployee } from '../../../../data/workforce/employees.data';
+import { workLocations } from '../../../../data/workforce/work-locations.data';
 import { attendanceRecords } from '../../../../data/attendance/attendance.data';
 import { getPublicHolidaysForLocation } from '../../../../data/settings/public-holidays.data';
 import { getEmployeeLeaveBalances } from '../../../../data/leave/leave-balances.data';
@@ -56,6 +57,7 @@ export class ViewComponent {
   private navigation = inject(NavigationService);
   
   employee!: EmployeeRecord;
+  readonly workLocations = workLocations;
   readonly leaveYear = new Date().getFullYear();
   readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');
   readonly commissionIncentiveSettings = commissionIncentiveSettings;
@@ -68,6 +70,10 @@ export class ViewComponent {
   selectedTabIndex = 0;
   selectedLeave: LeaveDialogData | null = null;
   selectedClaim: ExpenseClaimRecord | null = null;
+
+  get selectedWorkLocation() {
+    return this.workLocations.find(location => location.id === this.employee?.workLocationId);
+  }
   selectedOvertimeRequest: OvertimeRequestRecord | null = null;
 
   get selectedCommissionSettings(): CommissionIncentiveSetting[] {
@@ -188,7 +194,8 @@ export class ViewComponent {
         }
       };
     });
-    this.publicHolidayEvents = getPublicHolidaysForLocation(`${this.employee.address} ${this.employee.workLocation}`).map(holiday => ({
+    const workLocation = this.selectedWorkLocation;
+    this.publicHolidayEvents = getPublicHolidaysForLocation(`${this.employee.address} ${workLocation?.city ?? ''} ${workLocation?.state ?? ''}`).map(holiday => ({
       id: holiday.id,
       title: holiday.name,
       start: holiday.startDate,

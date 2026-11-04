@@ -432,7 +432,35 @@
                 </div>
                 <div class="col-sm-12 px-2 mb-3">
                   <label class="text-dark fw-500">Work Location</label>
-                  <p class="text-muted">{{ employee.workLocation }}</p>
+                  @if (selectedWorkLocation; as location) {
+                    <div class="row mt-2">
+                      <div class="col-sm-4 mb-3">
+                        <label class="text-dark fw-500">Location Code</label>
+                        <p class="text-muted mb-0">{{ location.code }}</p>
+                      </div>
+                      <div class="col-sm-4 mb-3">
+                        <label class="text-dark fw-500">Location Name</label>
+                        <p class="text-muted mb-0">{{ location.name }}</p>
+                      </div>
+                      <div class="col-sm-4 mb-3">
+                        <label class="text-dark fw-500">Location Type</label>
+                        <p class="text-muted mb-0">{{ location.type }}</p>
+                      </div>
+                      <div class="col-sm-8 mb-3">
+                        <label class="text-dark fw-500">Address</label>
+                        <p class="text-muted mb-0">
+                          {{ location.addressLine1 }} {{ location.addressLine2 }}<br>
+                          {{ location.city }}, {{ location.state }} {{ location.postcode }}, {{ location.country }}
+                        </p>
+                      </div>
+                      <div class="col-sm-4 mb-3">
+                        <label class="text-dark fw-500">Remark</label>
+                        <p class="text-muted mb-0">{{ location.remark || '-' }}</p>
+                      </div>
+                    </div>
+                  } @else {
+                    <p class="text-muted">-</p>
+                  }
                 </div>
               </div>
             </div>

@@ -7,6 +7,7 @@ import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { CalendarDay, LeaveRecord } from '../../../../models/leave/leave.model';
 import type { EmployeeRecord } from '../../../../models/workforce/employee.model';
 import { employees as employeeDirectory } from '../../../../data/workforce/employees.data';
+import { workLocations } from '../../../../data/workforce/work-locations.data';
 import { attendanceRecords } from '../../../../data/attendance/attendance.data';
 import { getPublicHolidaysForDate } from '../../../../data/settings/public-holidays.data';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
@@ -172,7 +173,8 @@ export class OverviewComponent implements AfterViewInit {
   }
 
   getPublicHoliday(employee: EmployeeRecord, dateKey: string) {
-    return getPublicHolidaysForDate(dateKey, `${employee.address} ${employee.workLocation}`)[0];
+    const workLocation = workLocations.find(location => location.id === employee.workLocationId);
+    return getPublicHolidaysForDate(dateKey, `${employee.address} ${workLocation?.city ?? ''} ${workLocation?.state ?? ''}`)[0];
   }
 
   getInitials(name: string): string {

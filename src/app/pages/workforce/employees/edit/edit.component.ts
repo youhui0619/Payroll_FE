@@ -10,8 +10,10 @@ import { leavePolicies } from '../../../../data/leave/leave-policies.data';
 import type { LeavePolicy, LeaveServiceEntitlementTier } from '../../../../models/leave/leave-policy.model';
 import { departments } from '../../../../data/workforce/departments.data';
 import { positions } from '../../../../data/workforce/positions.data';
+import { workLocations } from '../../../../data/workforce/work-locations.data';
 import type { Department } from '../../../../models/workforce/department.model';
 import type { Position } from '../../../../models/workforce/position.model';
+import type { WorkLocation } from '../../../../models/workforce/work-location.model';
 import type { OvertimeCalculationBasis } from '../../../../models/workforce/employee.model';
 import type { EmploymentStatus, EmploymentType } from '../../../../models/workforce/employment-status.model';
 import { employmentStatuses, employmentTypes } from '../../../../data/workforce/options/employment-options.data';
@@ -102,6 +104,8 @@ export class EditComponent implements OnInit {
   
   readonly departments: Department[] = departments.filter(department => department.status === 'Active');
   readonly positions: Position[] = positions;
+  readonly workLocations = workLocations;
+  readonly workLocationSearch = new FormControl<WorkLocation | string>('', { nonNullable: true });
   readonly employmentStatuses = employmentStatuses;
   readonly employmentTypes = employmentTypes;
   readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');
@@ -113,6 +117,37 @@ export class EditComponent implements OnInit {
     { value: 'DAILY_RATE_CONVERTED', label: 'Daily rate converted to hourly' },
     { value: 'MONTHLY_SALARY_CONVERTED', label: 'Monthly salary converted to hourly' }
   ];
+
+  get selectedWorkLocation(): WorkLocation | undefined {
+    const locationId = this.employeeForm.controls.employment.controls.workLocationId.value;
+    return this.workLocations.find(location => location.id === locationId);
+  }
+
+  get filteredWorkLocations(): WorkLocation[] {
+    const searchValue = this.workLocationSearch.value;
+    const query = typeof searchValue === 'string' ? searchValue.trim().toLowerCase() : '';
+    return this.workLocations.filter(location => !query || [
+      location.name,
+      location.code,
+      location.city,
+      location.state
+    ].some(value => value.toLowerCase().includes(query)));
+  }
+
+  readonly workLocationDisplayName = (value: WorkLocation | string | null): string => {
+    return value && typeof value === 'object' ? value.name : value ?? '';
+  };
+
+  onWorkLocationSelected(location: WorkLocation): void {
+    this.employeeForm.controls.employment.controls.workLocationId.setValue(location.id);
+    this.workLocationSearch.setValue(location);
+  }
+
+  onWorkLocationSearchInput(): void {
+    if (typeof this.workLocationSearch.value === 'string') {
+      this.employeeForm.controls.employment.controls.workLocationId.setValue('');
+    }
+  }
 
   employeeForm = new FormGroup({
     personal: new FormGroup({
@@ -141,7 +176,7 @@ export class EditComponent implements OnInit {
       department: new FormControl(''),
       position: new FormControl(''),
       reportingManager: new FormControl(''),
-      workLocation: new FormControl(''),
+      workLocationId: new FormControl(''),
       joinedDate: new FormControl<Date | null>(null),
       confirmationDate: new FormControl<Date | null>(null),
       resignationDate: new FormControl<Date | null>(null),
@@ -364,7 +399,7 @@ export class EditComponent implements OnInit {
         department: employee.department,
         position: employee.position,
         reportingManager: employee.reportingManager,
-        workLocation: employee.workLocation,
+        workLocationId: employee.workLocationId,
         joinedDate: employee.joinedDate ? new Date(`${employee.joinedDate}T00:00:00`) : null,
         confirmationDate: employee.confirmationDate ? new Date(`${employee.confirmationDate}T00:00:00`) : null,
         resignationDate: employee.resignationDate ? new Date(`${employee.resignationDate}T00:00:00`) : null,
@@ -397,6 +432,7 @@ export class EditComponent implements OnInit {
         contactNo: employee.emergencyContactNo,
       },
     });
+    this.workLocationSearch.setValue(this.workLocations.find(location => location.id === employee.workLocationId) ?? '');
     for (const policy of this.leavePolicies) {
       if (policy.entitlementCalculationMethod === 'SERVICE') {
         const customTiers = employee.leaveServiceEntitlementTiers?.[policy.leaveCode];
