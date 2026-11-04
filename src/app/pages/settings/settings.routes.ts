@@ -17,6 +17,7 @@ import { EditComponent as CommissionEditComponent } from './payroll/commission-i
 import { RegionalPreferencesComponent } from './preferences/regional-preferences/regional-preferences.component';
 import { NotificationsComponent } from './preferences/notifications/notifications.component';
 import { WorkingScheduleComponent } from './working-schedule/working-schedule.component';
+import { CreateComponent as UserCreateComponent } from './access-controls/users/create/create.component';
 
 
 export const SETTINGS_ROUTES: Routes = [
@@ -111,6 +112,12 @@ export const SETTINGS_ROUTES: Routes = [
     title: 'Notifications',
     component: NotificationsComponent
   },
+  {
+    path: 'access-control/users/create',
+    title: 'User Create',
+    component: UserCreateComponent
+  },
+  
 
 
 ];

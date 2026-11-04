@@ -51,7 +51,7 @@ export class SidebarComponent implements OnInit, OnChanges {
     
     { header: 'Time & Leave' },
     { label: 'Attendance', icon: 'solar:calendar-mark-outline', children: [
-        { label: 'Overview', icon: 'codex:dot-circle', route: '/time-leave/attendance/overview' },
+        { label: 'Overview', icon: 'codex:dot-circle', route: '/time-leave/attendance/overview' }
        ]
     },
     { label: 'Leave', icon: 'solar:calendar-date-outline', children: [
@@ -124,7 +124,7 @@ export class SidebarComponent implements OnInit, OnChanges {
     },
 
     { label: 'Access Control', icon: 'solar:lock-keyhole-outline', children: [
-        { label: 'Users', icon: 'codex:dot-circle', route: '/roles', badge: 10 },
+        { label: 'Users', icon: 'codex:dot-circle', route: '/settings/access-control/users/create', badge: 10 },
         { label: 'Roles & Permissions', icon: 'codex:dot-circle', route: '/roles/create', badge: 10 },
       ] 
     }

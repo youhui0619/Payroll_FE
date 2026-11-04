@@ -1,0 +1,117 @@
+<div class="row justify-content-between align-items-center mb-4">
+  <div class="col-sm-7">
+    <h3 class="text-dark my-0">Create User</h3>
+    <p class="text-muted mb-0">Create a user account and choose what they can access.</p>
+  </div>
+  <div class="col-sm-5 d-flex justify-content-end">
+    <button type="button" mat-flat-button color="primary-outline" (click)="goBack()">
+      <tabler-icon icon="arrow-left" [size]="16"></tabler-icon>
+      Back
+    </button>
+  </div>
+</div>
+
+@if (createdUser) {
+  <div class="alert alert-success" role="status">
+    User <strong>{{ createdUser.fullName }}</strong> ({{ createdUser.id }}) has been created.
+  </div>
+}
+
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <h4 class="text-primary">User information</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Full name <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput formControlName="fullName" placeholder="Enter full name" autocomplete="name">
+            @if (userForm.controls.fullName.hasError('required')) {
+              <mat-error>Full name is required.</mat-error>
+            }
+            @if (userForm.controls.fullName.hasError('maxlength')) {
+              <mat-error>Use no more than 100 characters.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Email address <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput type="email" formControlName="email" placeholder="name@company.com" autocomplete="email">
+            @if (userForm.controls.email.hasError('required')) {
+              <mat-error>Email address is required.</mat-error>
+            }
+            @if (userForm.controls.email.hasError('email')) {
+              <mat-error>Enter a valid email address.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Role <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <mat-select formControlName="role" placeholder="Select a role">
+              @for (role of roles; track role) {
+                <mat-option [value]="role">{{ role }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Status</mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <mat-select formControlName="status">
+              <mat-option value="ACTIVE">Active</mat-option>
+              <mat-option value="INACTIVE">Inactive</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-end flex-wrap gap-3 mb-3">
+    <div>
+      <h4 class="text-primary mb-1">Permissions</h4>
+      <p class="text-muted mb-0">Choose which actions this user can perform in each project area.</p>
+    </div>
+    <mat-checkbox class="form-checkbox" color="primary" (change)="setAllPermissions($event.checked)">Select all permissions</mat-checkbox>
+  </div>
+
+  <div class="permission-groups mb-4" formArrayName="permissions">
+    @for (group of permissionGroups; track group.label) {
+      <section class="permission-group-card card mb-3">
+        <div class="card-body">
+          <div class="permission-group-heading d-flex align-items-center justify-content-between mb-2">
+            <h5 class="text-dark my-0">{{ group.label }}</h5>
+            <mat-checkbox class="form-checkbox" color="primary" (change)="setGroupPermissions(group.label, $event.checked)">
+              Select all permissions
+            </mat-checkbox>
+          </div>
+          @for (item of group.modules; track item.module.key) {
+            <div class="permission-module-row row align-items-center mx-0 py-3" [formGroupName]="item.index">
+              <div class="col-md-4 px-2">
+                <span class="text-dark fw-500">{{ item.module.label }}</span>
+              </div>
+              <div class="col-md-8 px-2">
+                <div class="d-flex flex-wrap justify-content-md-end gap-3 gap-lg-4">
+                  <mat-checkbox class="form-checkbox" color="primary" formControlName="view" [attr.aria-label]="'View ' + item.module.label">View</mat-checkbox>
+                  <mat-checkbox class="form-checkbox" color="primary" formControlName="create" [attr.aria-label]="'Create ' + item.module.label">Create</mat-checkbox>
+                  <mat-checkbox class="form-checkbox" color="primary" formControlName="edit" [attr.aria-label]="'Edit ' + item.module.label">Edit</mat-checkbox>
+                  <mat-checkbox class="form-checkbox" color="primary" formControlName="delete" [attr.aria-label]="'Delete ' + item.module.label">Delete</mat-checkbox>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+    }
+  </div>
+
+  <div class="d-flex justify-content-end gap-3">
+    <button type="button" mat-flat-button color="primary-outline" (click)="goBack()">Cancel</button>
+    <button type="submit" mat-flat-button color="primary">
+      <tabler-icon icon="check" [size]="16"></tabler-icon>
+      Create user
+    </button>
+  </div>
+</form>
