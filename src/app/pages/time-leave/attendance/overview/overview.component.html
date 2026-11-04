@@ -144,6 +144,7 @@
             <span><i class="dot medical"></i>Medical leave</span>
             <span><i class="dot annual"></i>Annual leave</span>
             <span><i class="dot unpaid"></i>Unpaid leave</span>
+            <span><i class="dot overtime"></i>Overtime (OT)</span>
             <span><i class="dot upcoming"></i>Upcoming</span>
             <span><i class="dot weekend"></i>Weekend / Holiday</span>
           </div>
@@ -172,28 +173,17 @@
                     </td>
                     @for (day of days; track day) {
                       <td class="leave-cell" [class.weekend]="day.isWeekend" [class.today]="day.isToday" [class.public-holiday]="getPublicHoliday(employee, day.dateKey)">
-                        @if (getLeave(employee.employeeId, day.dateKey); as leave) {
-                          <button
-                            type="button"
-                            class="leave-badge"
-                            [ngClass]="leave.typeClass"
-                            [title]="leave.leaveType"
-                            (click)="openLeaveDetails(employee, day, leave)">
-                            {{ leave.code }}
-                          </button>
-                        } @else {
-                          @if (getPublicHoliday(employee, day.dateKey); as holiday) {
-                            <span class="holiday-badge bg-light-info text-info" [title]="holiday.name" [attr.aria-label]="holiday.name">PH</span>
-                          } @else {
-                            <button
-                              type="button"
-                              class="attendance-badge calendar-cell-menu-trigger"
-                              [class.future]="isFutureDate(day.dateKey)"
-                              [matMenuTriggerFor]="calendarCellMenu"
-                              [matMenuTriggerData]="{ context: { employee: employee, day: day } }">
-                            </button>
-                          }
-                        }
+                        <button
+                          type="button"
+                          class="attendance-badge calendar-cell-menu-trigger"
+                          [ngClass]="attendanceBadgeClass(employee, day)"
+                          [title]="attendanceBadgeTitle(employee, day)"
+                          [attr.aria-label]="attendanceBadgeTitle(employee, day)"
+                          [matMenuTriggerFor]="hasAttendanceRecord(employee, day) ? null : calendarCellMenu"
+                          [matMenuTriggerData]="{ context: { employee: employee, day: day } }"
+                          (click)="onAttendanceBadgeClick(employee, day)">
+                          {{ attendanceBadgeLabel(employee, day) }}
+                        </button>
                       </td>
                     }
                   </tr>
@@ -238,4 +228,11 @@
     [data]="detail"
     (closed)="selectedLeave = null">
   </app-leave-detail-dialog>
+}
+
+@if (selectedOvertime; as request) {
+  <app-overtime-detail-dialog
+    [request]="request"
+    (closed)="selectedOvertime = null">
+  </app-overtime-detail-dialog>
 }

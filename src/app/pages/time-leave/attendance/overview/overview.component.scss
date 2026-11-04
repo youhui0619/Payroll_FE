@@ -66,6 +66,10 @@
   background: var(--light-secondary);
 }
 
+.dot.overtime {
+  background: var(--info);
+}
+
 .dot.upcoming {
   background: #fff;
   border: 1px solid var(--light-disabled);
@@ -124,9 +128,12 @@
   color: var(--header);
 }
 .leave-cell {
+  position: relative;
   height: 68px;
   width: var(--calendar-day-width, 68px);
 }
+
+
 
 .weekend {
   background: var(--light-disabled) !important;
@@ -134,25 +141,6 @@
 
 .today {
   background: var(--light-warning)
-}
-
-.leave-badge {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-  padding: 0;
-  border: 0;
-  font: inherit;
-  cursor: pointer;
-}
-
-.leave-badge:focus-visible {
-  position: relative;
-  z-index: 1;
-  outline: none;
-  outline-offset: -3px;
 }
 
 .attendance-badge {
@@ -164,6 +152,7 @@
   width: 100%;
   padding: 0;
   border: 0;
+  font: inherit;
   cursor: pointer;
 }
 
@@ -176,15 +165,11 @@
   background: #fff;
 }
 
-.holiday-badge {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
+.attendance-badge.public-holiday {
+  background: var(--light-info);
+  color: var(--info);
   font-size: 11px;
   font-weight: 600;
-  cursor: help;
 }
 
 .leave-cell.weekend .attendance-badge {
@@ -203,13 +188,19 @@
 }
 
 .emergency {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--light-warning);
+  color: var(--warning);
 }
 
 .unpaid {
   background: var(--light-secondary);
   color: var(--secondary);
+}
+
+
+.attendance-badge.overtime {
+  background: var(--light-info);
+  color: var(--info);
 }
 
 @media (max-width: 768px) {

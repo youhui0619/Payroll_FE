@@ -8,19 +8,23 @@ import { CalendarDay, LeaveRecord } from '../../../../models/leave/leave.model';
 import type { EmployeeRecord } from '../../../../models/workforce/employee.model';
 import { employees as employeeDirectory } from '../../../../data/workforce/employees.data';
 import { workLocations } from '../../../../data/workforce/work-locations.data';
+import { overtimeRequests } from '../../../../data/overtime/overtime-requests.data';
 import { attendanceRecords } from '../../../../data/attendance/attendance.data';
 import { getPublicHolidaysForDate } from '../../../../data/settings/public-holidays.data';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
+import { OvertimeDetailDialogComponent } from '../../../../shared/dialog/overtime-detail-dialog/overtime-detail-dialog.component';
+import type { OvertimeRequestRecord } from '../../../../models/overtime/overtime.model';
 
 @Component({
   selector: 'app-overview',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, RouterLink, LeaveDetailDialogComponent],
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, RouterLink, LeaveDetailDialogComponent, OvertimeDetailDialogComponent],
   providers: [...MaterialProviders, ToastrService],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
 export class OverviewComponent implements AfterViewInit {
   selectedLeave: LeaveDialogData | null = null;
+  selectedOvertime: OvertimeRequestRecord | null = null;
   @ViewChild('calendarScroller') private calendarScroller?: ElementRef<HTMLDivElement>;
   
   constructor(private readonly changeDetector: ChangeDetectorRef) {
@@ -39,6 +43,7 @@ export class OverviewComponent implements AfterViewInit {
   selectedDepartments: string[] = [];
 
   readonly leaveRecords: LeaveRecord[] = attendanceRecords;
+  readonly overtimeRecords = overtimeRequests;
 
   get todayDateKey(): string {
     const today = new Date();
@@ -175,6 +180,59 @@ export class OverviewComponent implements AfterViewInit {
   getPublicHoliday(employee: EmployeeRecord, dateKey: string) {
     const workLocation = workLocations.find(location => location.id === employee.workLocationId);
     return getPublicHolidaysForDate(dateKey, `${employee.address} ${workLocation?.city ?? ''} ${workLocation?.state ?? ''}`)[0];
+  }
+
+  getOvertimeRequest(employeeId: string, dateKey: string) {
+    return this.overtimeRecords.find(request =>
+      request.employeeId === employeeId &&
+      request.overtimeDate === dateKey &&
+      request.status === 'Approved'
+    );
+  }
+
+  attendanceBadgeClass(employee: EmployeeRecord, day: CalendarDay): string {
+    const leave = this.getLeave(employee.employeeId, day.dateKey);
+    if (leave) return leave.typeClass;
+    if (this.getOvertimeRequest(employee.employeeId, day.dateKey)) return 'overtime';
+    if (this.getPublicHoliday(employee, day.dateKey)) return 'public-holiday';
+    return this.isFutureDate(day.dateKey) ? 'future' : '';
+  }
+
+  attendanceBadgeLabel(employee: EmployeeRecord, day: CalendarDay): string {
+    const leave = this.getLeave(employee.employeeId, day.dateKey);
+    if (leave) return leave.code;
+    if (this.getOvertimeRequest(employee.employeeId, day.dateKey)) return 'OT';
+    if (this.getPublicHoliday(employee, day.dateKey)) return 'PH';
+    return '';
+  }
+
+  attendanceBadgeTitle(employee: EmployeeRecord, day: CalendarDay): string {
+    const leave = this.getLeave(employee.employeeId, day.dateKey);
+    if (leave) return leave.leaveType;
+    const overtime = this.getOvertimeRequest(employee.employeeId, day.dateKey);
+    if (overtime) return `Overtime · ${overtime.status}`;
+    return this.getPublicHoliday(employee, day.dateKey)?.name ?? 'Attendance actions';
+  }
+
+  hasAttendanceRecord(employee: EmployeeRecord, day: CalendarDay): boolean {
+    return !!this.getLeave(employee.employeeId, day.dateKey)
+      || !!this.getOvertimeRequest(employee.employeeId, day.dateKey)
+      || !!this.getPublicHoliday(employee, day.dateKey);
+  }
+
+  onAttendanceBadgeClick(employee: EmployeeRecord, day: CalendarDay): void {
+    const leave = this.getLeave(employee.employeeId, day.dateKey);
+    if (leave) {
+      this.openLeaveDetails(employee, day, leave);
+      return;
+    }
+
+    const overtime = this.getOvertimeRequest(employee.employeeId, day.dateKey);
+    if (overtime) this.openOvertimeDetails(overtime);
+  }
+
+  openOvertimeDetails(request: OvertimeRequestRecord): void {
+    this.selectedOvertime = request;
   }
 
   getInitials(name: string): string {
