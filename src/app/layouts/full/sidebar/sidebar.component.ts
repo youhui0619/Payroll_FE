@@ -52,7 +52,6 @@ export class SidebarComponent implements OnInit, OnChanges {
     { header: 'Time & Leave' },
     { label: 'Attendance', icon: 'solar:calendar-mark-outline', children: [
         { label: 'Overview', icon: 'codex:dot-circle', route: '/time-leave/attendance/overview' },
-        { label: 'Attendance Adjustments', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
        ]
     },
     { label: 'Leave', icon: 'solar:calendar-date-outline', children: [

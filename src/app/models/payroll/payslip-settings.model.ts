@@ -19,6 +19,9 @@ export interface PayslipSettings {
   employerContributions: boolean;
   yearToDateTotals: boolean;
   leaveBalance: boolean;
+  employeeExpensesList: boolean;
+  dailyAttendanceRecord: boolean;
+  leaveList: boolean;
   bankAccountDetails: boolean;
   maskBankAccountNumber: boolean;
   displayFooterMessage: boolean;

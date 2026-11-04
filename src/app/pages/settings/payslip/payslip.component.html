@@ -152,6 +152,24 @@
                 </div>
                 <div class="col-sm-6 px-2">
                     <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Employee expenses list</label>
+                        <mat-slide-toggle color="primary" formControlName="employeeExpensesList"></mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Daily attendance record</label>
+                        <mat-slide-toggle color="primary" formControlName="dailyAttendanceRecord"></mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                        <label class="text-dark my-0">Leave list</label>
+                        <mat-slide-toggle color="primary" formControlName="leaveList"></mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="col-sm-6 px-2">
+                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
                         <label class="text-dark my-0">Bank account details</label>
                         <mat-slide-toggle
                             color="primary" formControlName="bankAccountDetails">
@@ -174,12 +192,14 @@
                         </mat-slide-toggle>
                     </div>
                 </div>
-                <div class="col-sm-12 px-2">
-                    <mat-label class="form-label">Footer Text </mat-label>
-                    <mat-form-field appearance="outline" class="form-input w-100">
-                        <textarea matInput rows="3" placeholder="Enter footer text" formControlName="footerText"></textarea>
-                    </mat-form-field>
-                </div>
+                @if (payslipForm.controls.displayFooterMessage.value) {
+                    <div class="col-sm-12 px-2">
+                        <mat-label class="form-label">Footer Text</mat-label>
+                        <mat-form-field appearance="outline" class="form-input w-100">
+                            <textarea matInput rows="3" placeholder="Enter footer text" formControlName="footerText"></textarea>
+                        </mat-form-field>
+                    </div>
+                }
             </div>
         </div>
     </div>

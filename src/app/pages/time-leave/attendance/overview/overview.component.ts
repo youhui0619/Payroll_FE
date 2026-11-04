@@ -10,14 +10,16 @@ import { employees as employeeDirectory } from '../../../../data/workforce/emplo
 import { workLocations } from '../../../../data/workforce/work-locations.data';
 import { overtimeRequests } from '../../../../data/overtime/overtime-requests.data';
 import { attendanceRecords } from '../../../../data/attendance/attendance.data';
+import { dailyAttendanceRecords } from '../../../../data/attendance/daily-attendance.data';
 import { getPublicHolidaysForDate } from '../../../../data/settings/public-holidays.data';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
 import { OvertimeDetailDialogComponent } from '../../../../shared/dialog/overtime-detail-dialog/overtime-detail-dialog.component';
 import type { OvertimeRequestRecord } from '../../../../models/overtime/overtime.model';
+import { AttendanceMonthDetailDialogComponent, type DailyAttendanceRow } from '../../../../shared/dialog/attendance-month-detail-dialog/attendance-month-detail-dialog.component';
 
 @Component({
   selector: 'app-overview',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, RouterLink, LeaveDetailDialogComponent, OvertimeDetailDialogComponent],
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, RouterLink, LeaveDetailDialogComponent, OvertimeDetailDialogComponent, AttendanceMonthDetailDialogComponent],
   providers: [...MaterialProviders, ToastrService],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
@@ -25,6 +27,7 @@ import type { OvertimeRequestRecord } from '../../../../models/overtime/overtime
 export class OverviewComponent implements AfterViewInit {
   selectedLeave: LeaveDialogData | null = null;
   selectedOvertime: OvertimeRequestRecord | null = null;
+  selectedDailyRecordsEmployee: EmployeeRecord | null = null;
   @ViewChild('calendarScroller') private calendarScroller?: ElementRef<HTMLDivElement>;
   
   constructor(private readonly changeDetector: ChangeDetectorRef) {
@@ -66,6 +69,53 @@ export class OverviewComponent implements AfterViewInit {
   get filteredEmployees(): EmployeeRecord[] {
     if (this.selectedDepartments.length === 0) return this.employees;
     return this.employees.filter(employee => this.selectedDepartments.includes(employee.department));
+  }
+
+  get selectedEmployeeDailyRows(): DailyAttendanceRow[] {
+    const employee = this.selectedDailyRecordsEmployee;
+    if (!employee) return [];
+
+    return this.days
+      .filter(day => day.dateKey <= this.todayDateKey)
+      .map(day => {
+      const leave = this.getLeave(employee.employeeId, day.dateKey);
+      const holiday = this.getPublicHoliday(employee, day.dateKey);
+      const overtime = this.getOvertimeRequest(employee.employeeId, day.dateKey);
+      const attendance = dailyAttendanceRecords.find(record =>
+        record.employeeId === employee.employeeId && record.date === day.dateKey
+      );
+      const [year, month, date] = day.dateKey.split('-');
+
+      return {
+        dateKey: day.dateKey,
+        date: `${date}/${month}/${year}`,
+        day: day.dayName,
+        clockIn: attendance?.clockIn ?? '—',
+        clockOut: attendance?.clockOut ?? '—',
+        duration: attendance ? this.durationLabel(attendance.durationMinutes) : '—',
+        hoursOfWork: attendance ? this.durationLabel(attendance.hoursWorkedMinutes) : '—',
+        overtime: attendance?.overtimeMinutes
+          ? this.durationLabel(attendance.overtimeMinutes)
+          : overtime ? this.durationLabel(overtime.netMinutes) : '—',
+        remark: attendance?.remark ?? leave?.leaveType ?? holiday?.name ?? '—'
+      };
+    });
+  }
+
+  openMonthlyRecords(employee: EmployeeRecord): void {
+    this.selectedDailyRecordsEmployee = employee;
+  }
+
+  closeMonthlyRecords(): void {
+    this.selectedDailyRecordsEmployee = null;
+  }
+
+  private durationLabel(totalMinutes: number): string {
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    if (hours && minutes) return `${hours}h ${minutes}m`;
+    if (hours) return `${hours}h`;
+    return `${minutes}m`;
   }
 
   get medicalLeaveCount(): number {

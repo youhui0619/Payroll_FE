@@ -15,6 +15,9 @@ import type { CommissionPayrollRecord } from '../../../models/commission/commiss
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../leave-detail-dialog/leave-detail-dialog.component';
 import { ClaimDetailDialogComponent } from '../claim-detail-dialog/claim-detail-dialog.component';
 import { CommissionDetailDialogComponent } from '../commission-detail-dialog/commission-detail-dialog.component';
+import { payslipSettings } from '../../../data/payroll/payslip-settings.data';
+import { dailyAttendanceRecords } from '../../../data/attendance/daily-attendance.data';
+import type { DailyAttendanceRecord } from '../../../models/attendance/daily-attendance-record.model';
 
 @Component({
   selector: 'app-payroll-detail-dialog',
@@ -25,6 +28,7 @@ import { CommissionDetailDialogComponent } from '../commission-detail-dialog/com
   styleUrl: './payroll-detail-dialog.component.scss'
 })
 export class PayrollDetailDialogComponent {
+  readonly payslipSettings = payslipSettings;
   @Input({ required: true }) payroll!: typeof payrollList[number];
   @Output() closed = new EventEmitter<void>();
   selectedLeave: LeaveDialogData | null = null;
@@ -48,6 +52,21 @@ export class PayrollDetailDialogComponent {
 
   get claimReferenceRecords(): ExpenseClaimRecord[] {
     return claims.filter(item => this.payslip.claimReferences.includes(item.id));
+  }
+
+  get attendanceRecords(): DailyAttendanceRecord[] {
+    const [month, year] = this.payslip.period.split(' ');
+    const monthNumber = new Date(`${month} 1, ${year}`).getMonth() + 1;
+    const periodKey = `${year}-${String(monthNumber).padStart(2, '0')}`;
+    return dailyAttendanceRecords.filter(item =>
+      item.employeeId === this.payslip.employeeId && item.date.startsWith(periodKey)
+    );
+  }
+
+  minutesLabel(minutes: number): string {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return `${hours}h ${String(remainingMinutes).padStart(2, '0')}m`;
   }
 
   claimTypeLabel(type: ClaimType): string {

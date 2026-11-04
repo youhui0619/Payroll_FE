@@ -47,6 +47,7 @@
           </div>
         </section>
 
+        @if (payslipSettings.leaveBalance) {
         <section class="section-block">
           <div class="section-heading">
             <h4 class="text-primary mb-0">Leave balances</h4>
@@ -98,6 +99,7 @@
             </div>
           </div>
         </section>
+        }
 
         <section class="section-block">
           <div class="section-heading">
@@ -105,6 +107,7 @@
             <span>{{ payslip.period }}</span>
           </div>
           <div class="reference-grid">
+            @if (payslipSettings.leaveList) {
             <div class="reference-card mb-3">
               <h4 class="fs-14 fw-600 my-0">Leave</h4>
               @if (leaveReferenceRecords.length > 0) {
@@ -128,9 +131,11 @@
                 <p class="text-muted my-0">No leave references for this period.</p>
               }
             </div>
+            }
 
+            @if (payslipSettings.employeeExpensesList) {
             <div class="reference-card mb-3">
-              <h4 class="fs-14 fw-600  my-0">Claims</h4>
+              <h4 class="fs-14 fw-600 my-0">Employee expenses</h4>
               @if (claimReferenceRecords.length > 0) {
                 <div class="reference-list">
                   @for (claim of claimReferenceRecords; track claim) {
@@ -152,6 +157,7 @@
                 <p class="text-muted my-0">No claim references for this period.</p>
               }
             </div>
+            }
 
             <div class="reference-card mb-3">
               <h4 class="fs-14 fw-600 my-0">Commission &amp; incentives</h4>
@@ -178,6 +184,43 @@
             </div>
           </div>
         </section>
+
+        @if (payslipSettings.dailyAttendanceRecord) {
+          <section class="section-block">
+            <div class="section-heading">
+              <h4 class="text-primary mb-0">Daily attendance record</h4>
+              <span>{{ payslip.period }}</span>
+            </div>
+            @if (attendanceRecords.length > 0) {
+              <div class="table-responsive">
+                <table class="table align-middle">
+                  <thead>
+                    <tr>
+                      <th>Date</th><th>Day</th><th>Clock in</th><th>Clock out</th>
+                      <th>Duration</th><th>Hours worked</th><th>Overtime</th><th>Remark</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (record of attendanceRecords; track record.date) {
+                      <tr>
+                        <td>{{ record.date | regionalDate:'d MMM y' }}</td>
+                        <td>{{ record.date | regionalDate:'EEEE' }}</td>
+                        <td>{{ record.clockIn }}</td>
+                        <td>{{ record.clockOut }}</td>
+                        <td>{{ minutesLabel(record.durationMinutes) }}</td>
+                        <td>{{ minutesLabel(record.hoursWorkedMinutes) }}</td>
+                        <td>{{ minutesLabel(record.overtimeMinutes) }}</td>
+                        <td>{{ record.remark }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            } @else {
+              <p class="text-muted my-0">No attendance records for this pay period.</p>
+            }
+          </section>
+        }
 
         <section class="section-block">
           <div class="section-heading">

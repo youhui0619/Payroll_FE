@@ -1,0 +1,60 @@
+<div class="attendance-dialog-backdrop" (click)="close()">
+  <section class="attendance-dialog-panel" role="dialog" aria-modal="true" aria-labelledby="attendance-dialog-title" (click)="$event.stopPropagation()">
+    <header class="attendance-dialog-header">
+      <div>
+        <h2 id="attendance-dialog-title" class="text-dark my-0">Monthly Attendance Records</h2>
+        <p class="text-muted mb-0">{{ employee.employeeName }} · {{ employee.employeeId }} · {{ monthLabel }}</p>
+      </div>
+      <button mat-icon-button type="button" aria-label="Close monthly records" (click)="close()">
+        <tabler-icon icon="x" [size]="20"></tabler-icon>
+      </button>
+    </header>
+
+    <div class="attendance-dialog-content">
+      <div class="table-responsive">
+        <table class="table no-wrap w-100 text-left">
+          <thead>
+            <tr>
+              <th class="text-dark">Date</th>
+              <th class="text-dark">Day</th>
+              <th class="text-dark">Clock In</th>
+              <th class="text-dark">Clock Out</th>
+              <th class="text-dark">Duration</th>
+              <th class="text-dark">Hours of Work</th>
+              <th class="text-dark">Overtime</th>
+              <th class="text-dark">Remark</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (record of records; track record.dateKey) {
+              <tr>
+                <td class="text-muted">{{ record.date }}</td>
+                <td class="text-muted">{{ record.day }}</td>
+                <td class="text-muted">{{ record.clockIn }}</td>
+                <td class="text-muted">{{ record.clockOut }}</td>
+                <td class="text-muted">{{ record.duration }}</td>
+                <td class="text-muted">{{ record.hoursOfWork }}</td>
+                <td class="text-muted">{{ record.overtime }}</td>
+                <td class="text-muted">{{ record.remark }}</td>
+              </tr>
+            }
+            @if (records.length === 0) {
+              <tr>
+                <td colspan="8" class="text-muted text-center py-4">No daily records to display.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="d-flex justify-content-between align-items-center">
+          <small class="text-muted">Clock details show when attendance records are available.</small>
+          <button type="button" mat-flat-button color="primary" class="download-button">
+            <tabler-icon icon="download" [size]="16"></tabler-icon>
+            Download
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

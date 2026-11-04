@@ -30,6 +30,9 @@ export class PayslipComponent implements OnInit {
     employerContributions: new FormControl(true, { nonNullable: true }),
     yearToDateTotals: new FormControl(true, { nonNullable: true }),
     leaveBalance: new FormControl(true, { nonNullable: true }),
+    employeeExpensesList: new FormControl(true, { nonNullable: true }),
+    dailyAttendanceRecord: new FormControl(true, { nonNullable: true }),
+    leaveList: new FormControl(true, { nonNullable: true }),
     bankAccountDetails: new FormControl(false, { nonNullable: true }),
     maskBankAccountNumber: new FormControl(true, { nonNullable: true }),
     displayFooterMessage: new FormControl(false, { nonNullable: true }),
@@ -61,5 +64,6 @@ export class PayslipComponent implements OnInit {
       return;
     }
     this.submittedPayslipSettings = this.payslipForm.getRawValue();
+    Object.assign(payslipSettings, this.submittedPayslipSettings);
   }
 }
