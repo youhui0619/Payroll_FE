@@ -82,8 +82,8 @@ export class SidebarComponent implements OnInit, OnChanges {
        ]
     },
     { label: 'Bonus', icon: 'solar:clock-circle-outline', children: [
-        { label: 'Overview', icon: 'codex:dot-circle', route: '/payroll/claims-allowance/overview' },
-        { label: 'Approvals', icon: 'codex:dot-circle', route: '/payroll/claims-allowance/approval' }
+        { label: 'Overview', icon: 'codex:dot-circle', route: '/payroll/claims-allowance/overview', badge: 10 },
+        { label: 'Approvals', icon: 'codex:dot-circle', route: '/payroll/claims-allowance/approval', badge: 10 }
       ]
     },
 
