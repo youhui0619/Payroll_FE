@@ -6,7 +6,7 @@
             <div class="card">
                 <div class="card-body">
                     @for (preference of group.preferences; track preference.id) {
-                    <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                    <div class="notification-row d-flex justify-content-between align-items-center gap-3 py-3">
                         <div class="d-flex align-items-center gap-3">
                             <div class="icon bg-light-primary text-primary flex-shrink-0">
                                 <tabler-icon [icon]="preference.icon"></tabler-icon>
@@ -14,6 +14,18 @@
                             <div>
                                 <label class="text-dark fw-550 my-0">{{ preference.title }}</label>
                                 <p class="text-muted mb-0">{{ preference.description }}</p>
+                                @if (preference.monthInterval && notificationForm.controls[preference.id].value) {
+                                    <div class="d-flex align-items-center gap-2 mt-2">
+                                        <span class="small text-muted">{{ preference.monthInterval.label }}</span>
+                                        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+                                            <input matInput type="number" step="1" [min]="preference.monthInterval.min" [max]="preference.monthInterval.max" [formControl]="probationConfirmationMonths" [attr.aria-label]="preference.title + ' reminder interval in months'">
+                                        </mat-form-field>
+                                        <span class="small text-muted">{{ preference.monthInterval.unit }}</span>
+                                    </div>
+                                    @if (probationConfirmationMonths.touched && probationConfirmationMonths.invalid) {
+                                        <div class="small text-danger">Choose a whole number from {{ preference.monthInterval.min }} to {{ preference.monthInterval.max }} months.</div>
+                                    }
+                                }
                             </div>
                         </div>
                         <mat-slide-toggle

@@ -1,16 +1,12 @@
 import { Component, inject } from '@angular/core';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../../shared/material-imports';
 import { NavigationService } from '../../../../../services/navigation.service';
 import { users } from '../../../../../data/access-control/users.data';
-import type { AccessControlPermission, AccessControlUser, UserRole, UserStatus } from '../../../../../models/access-control/user.model';
-
-type PermissionControls = {
-  view: FormControl<boolean>;
-  create: FormControl<boolean>;
-  edit: FormControl<boolean>;
-  delete: FormControl<boolean>;
-};
+import { roles } from '../../../../../data/access-control/roles.data';
+import { permissionModules } from '../../../../../data/access-control/permission-modules.data';
+import type { AccessControlRole } from '../../../../../models/access-control/role.model';
+import type { AccessControlUser, UserStatus } from '../../../../../models/access-control/user.model';
 
 @Component({
   selector: 'app-create-user',
@@ -18,75 +14,61 @@ type PermissionControls = {
   imports: [...MaterialImports, ReactiveFormsModule],
   providers: [...MaterialProviders],
   templateUrl: './create.component.html',
-  styleUrl: './create.component.scss',
+  styleUrl: './create.component.scss'
 })
 export class CreateComponent {
   private readonly navigation = inject(NavigationService);
 
-  readonly permissionModules = [
-    { key: 'dashboard', label: 'Dashboard', group: 'General' },
-    { key: 'employees', label: 'Employees', group: 'Workforce' },
-    { key: 'departments', label: 'Departments', group: 'Workforce' },
-    { key: 'positions', label: 'Positions', group: 'Workforce' },
-    { key: 'workLocations', label: 'Work locations', group: 'Workforce' },
-    { key: 'attendance', label: 'Attendance', group: 'Time & Leave' },
-    { key: 'leave', label: 'Leave', group: 'Time & Leave' },
-    { key: 'overtime', label: 'Overtime', group: 'Time & Leave' },
-    { key: 'payroll', label: 'Payroll', group: 'Payroll' },
-    { key: 'payslips', label: 'Payslips', group: 'Payroll' },
-    { key: 'employeeExpenses', label: 'Employee expenses', group: 'Payroll' },
-    { key: 'commissions', label: 'Commission & incentives', group: 'Payroll' },
-    { key: 'companySettings', label: 'Company and system settings', group: 'Settings' },
-    { key: 'accessControl', label: 'Users and access control', group: 'Settings' },
-  ] as const;
+  readonly roleOptions = roles.filter(role => role.status === 'ACTIVE');
 
-  readonly permissionGroups = [...new Set(this.permissionModules.map(module => module.group))].map(group => ({
-    label: group,
-    modules: this.permissionModules
-      .map((module, index) => ({ module, index }))
-      .filter(item => item.module.group === group)
-  }));
+  get selectedRoles(): AccessControlRole[] {
+    const selectedNames = this.userForm.controls.roles.value;
+    return this.roleOptions.filter(role => selectedNames.includes(role.name));
+  }
 
-  readonly roles: UserRole[] = ['Administrator', 'HR Manager', 'Payroll Manager', 'Manager', 'Employee'];
+  get grantedPermissionGroups(): {
+    label: string;
+    modules: { label: string; actions: { view: boolean; create: boolean; edit: boolean; delete: boolean } }[];
+  }[] {
+    const selectedRoles = this.selectedRoles;
+    if (selectedRoles.length === 0) return [];
+
+    return [...new Set(permissionModules.map(module => module.group))].map(group => ({
+      label: group,
+      modules: permissionModules
+        .filter(module => module.group === group)
+        .map(module => {
+          const permissions = selectedRoles
+            .map(role => role.permissions.find(item => item.module === module.key))
+            .filter((permission): permission is NonNullable<typeof permission> => !!permission);
+          const actions = {
+            view: permissions.some(permission => permission.view),
+            create: permissions.some(permission => permission.create),
+            edit: permissions.some(permission => permission.edit),
+            delete: permissions.some(permission => permission.delete)
+          };
+          return { label: module.label, actions };
+        })
+        .filter(module => Object.values(module.actions).some(Boolean))
+    })).filter(group => group.modules.length > 0);
+  }
+
+  get grantedPermissionCount(): number {
+    return this.grantedPermissionGroups.reduce((count, group) => count + group.modules.length, 0);
+  }
 
   readonly userForm = new FormGroup({
     fullName: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(100)] }),
     email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email, Validators.maxLength(150)] }),
-    role: new FormControl<UserRole>('Employee', { nonNullable: true, validators: [Validators.required] }),
-    status: new FormControl<UserStatus>('ACTIVE', { nonNullable: true }),
-    permissions: new FormArray<FormGroup<PermissionControls>>(
-      this.permissionModules.map(() => this.createPermissionControls())
-    )
+    roles: new FormControl<string[]>([], { nonNullable: true, validators: [Validators.required] }),
+    status: new FormControl<UserStatus>('ACTIVE', { nonNullable: true })
   });
 
   submitted = false;
   createdUser: AccessControlUser | null = null;
 
-  get permissionRows(): FormArray<FormGroup<PermissionControls>> {
-    return this.userForm.controls.permissions;
-  }
-
-  goBack(): void {
-    void this.navigation.back('/settings/company/profile');
-  }
-
-  setAllPermissions(checked: boolean): void {
-    this.permissionRows.controls.forEach(row => row.patchValue({
-      view: checked,
-      create: checked,
-      edit: checked,
-      delete: checked
-    }));
-  }
-
-  setGroupPermissions(groupLabel: string, checked: boolean): void {
-    const group = this.permissionGroups.find(item => item.label === groupLabel);
-    group?.modules.forEach(({ index }) => this.permissionRows.at(index).patchValue({
-      view: checked,
-      create: checked,
-      edit: checked,
-      delete: checked
-    }));
+  goBack(): Promise<boolean> {
+    return this.navigation.back('/settings/access-control/users/overview');
   }
 
   onSubmit(): void {
@@ -97,17 +79,12 @@ export class CreateComponent {
     }
 
     const value = this.userForm.getRawValue();
-    const permissions: AccessControlPermission[] = this.permissionModules.map((module, index) => ({
-      module: module.key,
-      ...this.permissionRows.at(index).getRawValue()
-    }));
     const user: AccessControlUser = {
       id: `USR-${String(users.length + 1).padStart(4, '0')}`,
       fullName: value.fullName.trim(),
       email: value.email.trim().toLowerCase(),
-      role: value.role,
-      status: value.status,
-      permissions
+      roles: value.roles,
+      status: value.status
     };
 
     users.push(user);
@@ -115,18 +92,8 @@ export class CreateComponent {
     this.userForm.reset({
       fullName: '',
       email: '',
-      role: 'Employee',
+      roles: [],
       status: 'ACTIVE'
-    });
-    this.permissionRows.controls.forEach(row => row.reset({ view: false, create: false, edit: false, delete: false }));
-  }
-
-  private createPermissionControls(): FormGroup<PermissionControls> {
-    return new FormGroup({
-      view: new FormControl(false, { nonNullable: true }),
-      create: new FormControl(false, { nonNullable: true }),
-      edit: new FormControl(false, { nonNullable: true }),
-      delete: new FormControl(false, { nonNullable: true })
     });
   }
 }

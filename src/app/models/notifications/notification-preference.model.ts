@@ -3,6 +3,12 @@ export interface NotificationPreference {
   title: string;
   description: string;
   icon: string;
+  monthInterval?: {
+    label: string;
+    min: number;
+    max: number;
+    unit: string;
+  };
 }
 
 export interface NotificationPreferenceGroup {

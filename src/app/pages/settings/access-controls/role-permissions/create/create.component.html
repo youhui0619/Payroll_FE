@@ -1,0 +1,108 @@
+<div class="row justify-content-between mb-3">
+  <div class="col-sm-12 px-2">
+    <div class="d-flex align-items-center gap-2 cursor-pointer" (click)="goBack()">
+      <button mat-icon-button type="button" class="d-flex justify-content-center w-auto mb-0">
+        <tabler-icon icon="chevron-left" class="text-dark d-flex" [size]="16"></tabler-icon>
+      </button>
+      <p class="text-muted mb-0">Back to roles</p>
+    </div>
+  </div>
+</div>
+
+<div class="row justify-content-between mb-4">
+  <div class="col-sm-7">
+    <h3 class="text-dark my-0">Create Role</h3>
+    <p class="fw-300 text-muted mb-0">Create a role and choose the permissions assigned to its users.</p>
+  </div>
+</div>
+
+<form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
+  <h4 class="text-primary">Role Information</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-8 px-2">
+          <mat-label class="form-label">Role Name <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput formControlName="name" placeholder="e.g. HR Manager">
+            @if (roleForm.controls.name.hasError('required')) {
+              <mat-error class="text-danger">Role name is required.</mat-error>
+            }
+            @if (roleForm.controls.name.hasError('maxlength')) {
+              <mat-error class="text-danger">Use no more than 60 characters.</mat-error>
+            }
+            @if (roleForm.controls.name.hasError('duplicate')) {
+              <mat-error class="text-danger">A role with this name already exists.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Status <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <mat-select formControlName="status">
+              <mat-option value="ACTIVE">Active</mat-option>
+              <mat-option value="INACTIVE">Inactive</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-12 px-2">
+          <mat-label class="form-label">Description</mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <textarea matInput rows="3" formControlName="description" placeholder="Describe what this role is responsible for"></textarea>
+            @if (roleForm.controls.description.hasError('maxlength')) {
+              <mat-error class="text-danger">Use no more than 250 characters.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-4 overflow-hidden">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 p-3 border-bottom bg-light">
+      <div>
+        <h4 class="text-dark mb-1">Permissions</h4>
+        <p class="text-muted mb-0">Choose the actions users assigned to this role can perform.</p>
+      </div>
+      <mat-checkbox class="form-checkbox" color="primary" [checked]="allPermissionsSelected" [indeterminate]="allPermissionsIndeterminate" (change)="setAllPermissions($event.checked)">
+        Select all permissions
+      </mat-checkbox>
+    </div>
+
+    <div formArrayName="permissions">
+      @for (group of permissionGroups; track group.label) {
+        <section class="p-3 border-bottom">
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+            <h6 class="text-primary small fw-semibold my-0">{{ group.label }}</h6>
+            <mat-checkbox class="form-checkbox" color="primary" [checked]="groupPermissionsSelected(group.label)" [indeterminate]="groupPermissionsIndeterminate(group.label)" (change)="setGroupPermissions(group.label, $event.checked)">
+              Select all permissions
+            </mat-checkbox>
+          </div>
+          @for (item of group.modules; track item.module.key) {
+            <div class="row align-items-center mx-0 py-3 border-bottom" [class.border-bottom-0]="$last" [formGroupName]="item.index">
+              <div class="col-md-4 px-2">
+                <span class="text-dark fw-500">{{ item.module.label }}</span>
+              </div>
+              <div class="col-md-8 px-2">
+                <div class="d-flex flex-wrap justify-content-md-end gap-3 gap-lg-4">
+                  <mat-checkbox class="form-checkbox" color="primary" formControlName="view" [attr.aria-label]="'View ' + item.module.label">View</mat-checkbox>
+                  <mat-checkbox class="form-checkbox" color="primary" formControlName="create" [attr.aria-label]="'Create ' + item.module.label">Create</mat-checkbox>
+                  <mat-checkbox class="form-checkbox" color="primary" formControlName="edit" [attr.aria-label]="'Edit ' + item.module.label">Edit</mat-checkbox>
+                  <mat-checkbox class="form-checkbox" color="primary" formControlName="delete" [attr.aria-label]="'Delete ' + item.module.label">Delete</mat-checkbox>
+                </div>
+              </div>
+            </div>
+          }
+        </section>
+      }
+    </div>
+  </div>
+
+  <div class="d-flex align-items-center justify-content-end gap-3">
+    <button type="button" mat-flat-button color="primary-outline" (click)="goBack()">Cancel</button>
+    <button type="submit" mat-flat-button color="primary">
+      <tabler-icon icon="check" [size]="16"></tabler-icon>
+      Save Role
+    </button>
+  </div>
+</form>

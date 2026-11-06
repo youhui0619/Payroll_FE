@@ -1,13 +1,18 @@
+<div class="row justify-content-between mb-3">
+  <div class="col-sm-12 px-2">
+    <div class="d-flex align-items-center gap-2 cursor-pointer" (click)="goBack()">
+      <button mat-icon-button type="button" class="d-flex justify-content-center w-auto mb-0">
+        <tabler-icon icon="chevron-left" class="text-dark d-flex" [size]="16"></tabler-icon>
+      </button>
+      <p class="text-muted mb-0">Back to users list</p>
+    </div>
+  </div>
+</div>
+
 <div class="row justify-content-between align-items-center mb-4">
   <div class="col-sm-7">
     <h3 class="text-dark my-0">Create User</h3>
-    <p class="text-muted mb-0">Create a user account and choose what they can access.</p>
-  </div>
-  <div class="col-sm-5 d-flex justify-content-end">
-    <button type="button" mat-flat-button color="primary-outline" (click)="goBack()">
-      <tabler-icon icon="arrow-left" [size]="16"></tabler-icon>
-      Back
-    </button>
+    <p class="text-muted mb-0">Create a user account and assign a role to determine their access.</p>
   </div>
 </div>
 
@@ -27,10 +32,10 @@
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput formControlName="fullName" placeholder="Enter full name" autocomplete="name">
             @if (userForm.controls.fullName.hasError('required')) {
-              <mat-error>Full name is required.</mat-error>
+              <mat-error class="text-danger">Full name is required.</mat-error>
             }
             @if (userForm.controls.fullName.hasError('maxlength')) {
-              <mat-error>Use no more than 100 characters.</mat-error>
+              <mat-error class="text-danger">Use no more than 100 characters.</mat-error>
             }
           </mat-form-field>
         </div>
@@ -39,19 +44,19 @@
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput type="email" formControlName="email" placeholder="name@company.com" autocomplete="email">
             @if (userForm.controls.email.hasError('required')) {
-              <mat-error>Email address is required.</mat-error>
+              <mat-error class="text-danger">Email address is required.</mat-error>
             }
             @if (userForm.controls.email.hasError('email')) {
-              <mat-error>Enter a valid email address.</mat-error>
+              <mat-error class="text-danger">Enter a valid email address.</mat-error>
             }
           </mat-form-field>
         </div>
         <div class="col-sm-6 px-2">
-          <mat-label class="form-label">Role <span class="text-danger">*</span></mat-label>
+          <mat-label class="form-label">Roles <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
-            <mat-select formControlName="role" placeholder="Select a role">
-              @for (role of roles; track role) {
-                <mat-option [value]="role">{{ role }}</mat-option>
+            <mat-select formControlName="roles" placeholder="Select roles" multiple>
+              @for (role of roleOptions; track role.id) {
+                <mat-option [value]="role.name">{{ role.name }}</mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -66,49 +71,62 @@
           </mat-form-field>
         </div>
       </div>
-    </div>
-  </div>
-
-  <div class="d-flex justify-content-between align-items-end flex-wrap gap-3 mb-3">
-    <div>
-      <h4 class="text-primary mb-1">Permissions</h4>
-      <p class="text-muted mb-0">Choose which actions this user can perform in each project area.</p>
-    </div>
-    <mat-checkbox class="form-checkbox" color="primary" (change)="setAllPermissions($event.checked)">Select all permissions</mat-checkbox>
-  </div>
-
-  <div class="permission-groups mb-4" formArrayName="permissions">
-    @for (group of permissionGroups; track group.label) {
-      <section class="permission-group-card card mb-3">
-        <div class="card-body">
-          <div class="permission-group-heading d-flex align-items-center justify-content-between mb-2">
-            <h5 class="text-dark my-0">{{ group.label }}</h5>
-            <mat-checkbox class="form-checkbox" color="primary" (change)="setGroupPermissions(group.label, $event.checked)">
-              Select all permissions
-            </mat-checkbox>
-          </div>
-          @for (item of group.modules; track item.module.key) {
-            <div class="permission-module-row row align-items-center mx-0 py-3" [formGroupName]="item.index">
-              <div class="col-md-4 px-2">
-                <span class="text-dark fw-500">{{ item.module.label }}</span>
-              </div>
-              <div class="col-md-8 px-2">
-                <div class="d-flex flex-wrap justify-content-md-end gap-3 gap-lg-4">
-                  <mat-checkbox class="form-checkbox" color="primary" formControlName="view" [attr.aria-label]="'View ' + item.module.label">View</mat-checkbox>
-                  <mat-checkbox class="form-checkbox" color="primary" formControlName="create" [attr.aria-label]="'Create ' + item.module.label">Create</mat-checkbox>
-                  <mat-checkbox class="form-checkbox" color="primary" formControlName="edit" [attr.aria-label]="'Edit ' + item.module.label">Edit</mat-checkbox>
-                  <mat-checkbox class="form-checkbox" color="primary" formControlName="delete" [attr.aria-label]="'Delete ' + item.module.label">Delete</mat-checkbox>
-                </div>
-              </div>
+      @if (selectedRoles.length > 0) {
+        <div class="card mx-2 mt-2 overflow-hidden">
+          <div class="d-flex justify-content-between align-items-center gap-3 p-3 border-bottom bg-light">
+            <div class="d-flex align-items-center flex-wrap gap-2">
+              <h5 class="text-dark mb-1 me-2">Permissions</h5>
+                @for (role of selectedRoles; track role.id) {
+                  <span class="chip fw-500 bg-light-primary text-primary">{{ role.name }}</span>
+                }
             </div>
+          </div>
+          @if (grantedPermissionGroups.length > 0) {
+            @for (group of grantedPermissionGroups; track group.label) {
+              <section class="p-3 pb-0">
+                <h6 class="text-primary small fw-semibold mb-2 mt-3">{{ group.label }}</h6>
+                <div class="table-responsive">
+                  <table class="table table-sm align-middle mb-0">
+                    <colgroup>
+                      <col width="40%">
+                      <col width="15%">
+                      <col width="15%">
+                      <col width="15%">
+                      <col width="15%">
+                    </colgroup>
+                    <thead>
+                      <tr>
+                        <th scope="col">Project area</th>
+                        <th scope="col" class="text-center">View</th>
+                        <th scope="col" class="text-center">Create</th>
+                        <th scope="col" class="text-center">Edit</th>
+                        <th scope="col" class="text-center">Delete</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (module of group.modules; track module.label) {
+                        <tr>
+                          <td class="text-dark">{{ module.label }}</td>
+                          <td class="text-center"><span [class.text-primary]="module.actions.view" [class.text-muted]="!module.actions.view" [class.fw-bold]="module.actions.view">{{ module.actions.view ? '✓' : '-' }}</span></td>
+                          <td class="text-center"><span [class.text-primary]="module.actions.create" [class.text-muted]="!module.actions.create" [class.fw-bold]="module.actions.create">{{ module.actions.create ? '✓' : '-' }}</span></td>
+                          <td class="text-center"><span [class.text-primary]="module.actions.edit" [class.text-muted]="!module.actions.edit" [class.fw-bold]="module.actions.edit">{{ module.actions.edit ? '✓' : '-' }}</span></td>
+                          <td class="text-center"><span [class.text-primary]="module.actions.delete" [class.text-muted]="!module.actions.delete" [class.fw-bold]="module.actions.delete">{{ module.actions.delete ? '✓' : '-' }}</span></td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            }
+          } @else {
+            <p class="text-muted p-3 mb-0">This role has no permissions assigned.</p>
           }
         </div>
-      </section>
-    }
+      }
+    </div>
   </div>
 
   <div class="d-flex justify-content-end gap-3">
-    <button type="button" mat-flat-button color="primary-outline" (click)="goBack()">Cancel</button>
     <button type="submit" mat-flat-button color="primary">
       <tabler-icon icon="check" [size]="16"></tabler-icon>
       Create user

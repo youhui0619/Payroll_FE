@@ -68,7 +68,6 @@ export class SidebarComponent implements OnInit, OnChanges {
     { header: 'Payroll' },
     { label: 'Payroll', icon: 'solar:card-2-outline', children: [
         { label: 'Overview', icon: 'codex:dot-circle', route: '/payroll/overview' },
-        { label: 'Bonus', icon: 'codex:dot-circle', route: '/payroll/overview', badge: 10 },
        ]
        
     },
@@ -82,10 +81,9 @@ export class SidebarComponent implements OnInit, OnChanges {
         { label: 'Approval', icon: 'codex:dot-circle', route: '/payroll/commission-incentives/approval' },
        ]
     },
-    { label: 'Tax & PCB', icon: 'solar:calculator-minimalistic-outline', children: [
-        { label: 'PCB Calculation', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
-        { label: 'PCB Records', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
-        { label: 'Tax', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
+    { label: 'Bonus', icon: 'solar:clock-circle-outline', children: [
+        { label: 'Overview', icon: 'codex:dot-circle', route: '/payroll/claims-allowance/overview' },
+        { label: 'Approvals', icon: 'codex:dot-circle', route: '/payroll/claims-allowance/approval' }
       ]
     },
 
@@ -93,7 +91,12 @@ export class SidebarComponent implements OnInit, OnChanges {
     { label: 'EPF', icon: 'solar:shield-check-outline', route: '/warehouses/list', badge: 10 },
     { label: 'SOCSO', icon: 'ant-design:shop-outlined', route: '/warehouses/list', badge: 10 },
     { label: 'LHDN', icon: 'ant-design:shop-outlined', route: '/warehouses/list', badge: 10 },
-    
+    { label: 'Tax & PCB', icon: 'solar:calculator-minimalistic-outline', children: [
+        { label: 'PCB Calculation', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
+        { label: 'PCB Records', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
+        { label: 'Tax', icon: 'codex:dot-circle', route: '/inventory/list', badge: 10 },
+      ]
+    },
     
     // { header: 'Reports' },
     // { label: 'Payroll Reports', icon: 'solar:chart-square-outline', route: '/warehouses/list', badge: 10 },
@@ -124,8 +127,8 @@ export class SidebarComponent implements OnInit, OnChanges {
     },
 
     { label: 'Access Control', icon: 'solar:lock-keyhole-outline', children: [
-        { label: 'Users', icon: 'codex:dot-circle', route: '/settings/access-control/users/create', badge: 10 },
-        { label: 'Roles & Permissions', icon: 'codex:dot-circle', route: '/roles/create', badge: 10 },
+        { label: 'Users', icon: 'codex:dot-circle', route: '/settings/access-control/users/overview' },
+        { label: 'Roles & Permissions', icon: 'codex:dot-circle', route: '/settings/access-control/role-permissions/overview' },
       ] 
     }
   ];

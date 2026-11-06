@@ -22,29 +22,29 @@
           <mat-label class="form-label">Company Name <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput placeholder="Enter company name" formControlName="name">
-            @if (companyForm.controls.name.hasError('required')) { <mat-error>Company name is required.</mat-error> }
+            @if (companyForm.controls.name.hasError('required')) { <mat-error class="text-danger">Company name is required.</mat-error> }
           </mat-form-field>
         </div>
         <div class="col-sm-4 px-2">
           <mat-label class="form-label">Registration No. <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput placeholder="Enter registration number" formControlName="registrationNo">
-            @if (companyForm.controls.registrationNo.hasError('required')) { <mat-error>Registration number is required.</mat-error> }
+            @if (companyForm.controls.registrationNo.hasError('required')) { <mat-error class="text-danger">Registration number is required.</mat-error> }
           </mat-form-field>
         </div>
         <div class="col-sm-4 px-2">
           <mat-label class="form-label">Contact No. <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput placeholder="Enter contact number" formControlName="contactNo">
-            @if (companyForm.controls.contactNo.hasError('required')) { <mat-error>Contact number is required.</mat-error> }
+            @if (companyForm.controls.contactNo.hasError('required')) { <mat-error class="text-danger">Contact number is required.</mat-error> }
           </mat-form-field>
         </div>
         <div class="col-sm-4 px-2">
           <mat-label class="form-label">Email <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput type="email" placeholder="Enter email" formControlName="email">
-            @if (companyForm.controls.email.hasError('required')) { <mat-error>Email is required.</mat-error> }
-            @if (companyForm.controls.email.hasError('email')) { <mat-error>Enter a valid email address.</mat-error> }
+            @if (companyForm.controls.email.hasError('required')) { <mat-error class="text-danger">Email is required.</mat-error> }
+            @if (companyForm.controls.email.hasError('email')) { <mat-error class="text-danger">Enter a valid email address.</mat-error> }
           </mat-form-field>
         </div>
         <div class="col-sm-4 px-2">
@@ -73,7 +73,7 @@
                 <mat-option [value]="month.value">{{ month.label }}</mat-option>
               }
             </mat-select>
-            @if (companyForm.controls.financialStartingMonth.hasError('required')) { <mat-error>Select the financial starting month.</mat-error> }
+            @if (companyForm.controls.financialStartingMonth.hasError('required')) { <mat-error class="text-danger">Select the financial starting month.</mat-error> }
           </mat-form-field>
         </div>
       </div>
@@ -88,7 +88,7 @@
           <mat-label class="form-label">Address Line 1 <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput placeholder="Enter address line 1" formControlName="businessAddressLine1">
-            @if (companyForm.controls.businessAddressLine1.hasError('required')) { <mat-error>Address line 1 is required.</mat-error> }
+            @if (companyForm.controls.businessAddressLine1.hasError('required')) { <mat-error class="text-danger">Address line 1 is required.</mat-error> }
           </mat-form-field>
         </div>
         <div class="col-sm-6 px-2">
@@ -101,21 +101,21 @@
           <mat-label class="form-label">City <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput placeholder="Enter city" formControlName="businessCity">
-            @if (companyForm.controls.businessCity.hasError('required')) { <mat-error>City is required.</mat-error> }
+            @if (companyForm.controls.businessCity.hasError('required')) { <mat-error class="text-danger">City is required.</mat-error> }
           </mat-form-field>
         </div>
         <div class="col-sm-3 px-2">
           <mat-label class="form-label">Postcode <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput placeholder="Enter postcode" formControlName="businessPostcode">
-            @if (companyForm.controls.businessPostcode.hasError('required')) { <mat-error>Postcode is required.</mat-error> }
+            @if (companyForm.controls.businessPostcode.hasError('required')) { <mat-error class="text-danger">Postcode is required.</mat-error> }
           </mat-form-field>
         </div>
         <div class="col-sm-3 px-2">
           <mat-label class="form-label">State <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput placeholder="Enter state" formControlName="businessState">
-            @if (companyForm.controls.businessState.hasError('required')) { <mat-error>State is required.</mat-error> }
+            @if (companyForm.controls.businessState.hasError('required')) { <mat-error class="text-danger">State is required.</mat-error> }
           </mat-form-field>
         </div>
         <div class="col-sm-3 px-2">

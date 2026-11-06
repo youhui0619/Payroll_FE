@@ -18,6 +18,11 @@ import { RegionalPreferencesComponent } from './preferences/regional-preferences
 import { NotificationsComponent } from './preferences/notifications/notifications.component';
 import { WorkingScheduleComponent } from './working-schedule/working-schedule.component';
 import { CreateComponent as UserCreateComponent } from './access-controls/users/create/create.component';
+import { OverviewComponent as UserOverviewComponent } from './access-controls/users/overview/overview.component';
+import { EditComponent as UserEditComponent } from './access-controls/users/edit/edit.component';
+import { EditComponent as PermissionEditComponent } from './access-controls/role-permissions/edit/edit.component';
+import { CreateComponent as PermissionCreateComponent } from './access-controls/role-permissions/create/create.component';
+import { OverviewComponent as PermissionOverviewComponent } from './access-controls/role-permissions/overview/overview.component';
 
 
 export const SETTINGS_ROUTES: Routes = [
@@ -116,6 +121,31 @@ export const SETTINGS_ROUTES: Routes = [
     path: 'access-control/users/create',
     title: 'User Create',
     component: UserCreateComponent
+  },
+  {
+    path: 'access-control/users/overview',
+    title: 'Users',
+    component: UserOverviewComponent
+  },
+  {
+    path: 'access-control/users/edit/:id',
+    title: 'Edit User',
+    component: UserEditComponent
+  },
+  {
+    path: 'access-control/role-permissions/create',
+    title: 'Create Role',
+    component: PermissionCreateComponent
+  },
+  {
+    path: 'access-control/role-permissions/overview',
+    title: 'Roles & Permissions',
+    component: PermissionOverviewComponent
+  },
+  {
+    path: 'access-control/role-permissions/edit/:id',
+    title: 'Edit Role',
+    component: PermissionEditComponent
   },
   
 

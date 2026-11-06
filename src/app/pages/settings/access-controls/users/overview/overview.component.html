@@ -1,0 +1,136 @@
+<div class="row justify-content-between mb-4">
+  <div class="col-sm-7">
+    <h3 class="text-dark my-0">User List</h3>
+    <p class="fw-300 text-muted mb-0">Manage user accounts and their assigned roles.</p>
+  </div>
+  <div class="col-sm-5 d-flex align-items-center justify-content-end">
+    <button mat-flat-button color="primary" class="ms-2" routerLink="/settings/access-control/users/create">
+      <tabler-icon icon="plus" [size]="16"></tabler-icon>
+      Create User
+    </button>
+  </div>
+</div>
+
+<div class="row my-4">
+  <div class="col-sm-3 px-2">
+    <div class="card"><div class="card-body">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="summary-info"><p class="fs-12 text-muted">Total users</p><h3 class="mb-0">{{ users.length }}</h3></div>
+        <div class="text-primary bg-light-primary text-end icon"><tabler-icon icon="users"></tabler-icon></div>
+      </div>
+    </div></div>
+  </div>
+  <div class="col-sm-3 px-2">
+    <div class="card"><div class="card-body">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="summary-info"><p class="fs-12 text-muted">Active</p><h3 class="mb-0">{{ activeUserCount }}</h3></div>
+        <div class="text-primary bg-light-primary text-end icon"><tabler-icon icon="user-check"></tabler-icon></div>
+      </div>
+    </div></div>
+  </div>
+  <div class="col-sm-3 px-2">
+    <div class="card"><div class="card-body">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="summary-info"><p class="fs-12 text-muted">Inactive</p><h3 class="mb-0">{{ inactiveUserCount }}</h3></div>
+        <div class="text-primary bg-light-primary text-end icon"><tabler-icon icon="user-off"></tabler-icon></div>
+      </div>
+    </div></div>
+  </div>
+  <div class="col-sm-3 px-2">
+    <div class="card"><div class="card-body">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="summary-info"><p class="fs-12 text-muted">Role assignments</p><h3 class="mb-0">{{ roleAssignmentCount }}</h3></div>
+        <div class="text-primary bg-light-primary text-end icon"><tabler-icon icon="shield-check"></tabler-icon></div>
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="d-flex align-items-center flex-wrap gap-2">
+    <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+      <input type="text" matInput placeholder="Search users" [formControl]="searchControl">
+      <span matTextPrefix class="text-muted me-2"><tabler-icon icon="search" [size]="16"></tabler-icon></span>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+      <mat-select placeholder="Role" multiple [(value)]="selectedRoles">
+        @for (role of roleOptions; track role) {
+          <mat-option [value]="role">{{ role }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+      <mat-select placeholder="Status" multiple [(value)]="selectedStatuses">
+        @for (status of statuses; track status) {
+          <mat-option [value]="status">{{ status === 'ACTIVE' ? 'Active' : 'Inactive' }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-sm-12 px-2">
+    <div class="card">
+      <div class="card-header mb-3">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <h6 class="fs-14 fw-400 text-muted my-0">
+            <span class="fw-550 text-primary">All ({{ filteredUsers.length }})</span>
+            | Active ({{ filteredCountByStatus('ACTIVE') }})
+            | Inactive ({{ filteredCountByStatus('INACTIVE') }})
+          </h6>
+          <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2" type="button" (click)="clearFilters()">
+            <tabler-icon icon="x" [size]="16"></tabler-icon> Clear
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="material-datatables table-responsive">
+          <table matSort class="mat-sort table no-wrap w-100 text-left">
+            <thead>
+              <tr>
+                <th class="text-dark">User</th>
+                <th class="text-dark">Roles</th>
+                <th class="text-dark">Status</th>
+                <th class="text-dark">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (user of filteredUsers; track user.id) {
+                <tr>
+                  <td class="text-muted">
+                    <div class="d-flex align-items-center justify-content-start">
+                      <div class="initial-avatar me-3">{{ initials(user.fullName) }}</div>
+                      <div>
+                        <p class="text-dark my-0">{{ user.fullName }}</p>
+                        <p class="fs-10 fw-300 text-muted my-0">{{ user.email }} · {{ user.id }}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    {{ user.roles.slice(0, 2).join(', ') }}
+                    @if (user.roles.length > 2) {
+                      <span class="text-muted"> + {{ user.roles.length - 2 }} more roles</span>
+                    }
+                  </td>
+                  <td><span class="chip" [class.bg-light-success]="user.status === 'ACTIVE'" [class.text-success]="user.status === 'ACTIVE'" [class.bg-light-danger]="user.status === 'INACTIVE'" [class.text-danger]="user.status === 'INACTIVE'">{{ user.status === 'ACTIVE' ? 'Active' : 'Inactive' }}</span></td>
+                  <td>
+                    <button class="text-muted action-btn" mat-icon-button type="button" aria-label="View user">
+                      <tabler-icon icon="eye"></tabler-icon>
+                    </button>
+                    <button class="text-muted action-btn" mat-icon-button type="button" [routerLink]="['/settings/access-control/users/edit', user.id]" aria-label="Edit user">
+                      <tabler-icon icon="edit"></tabler-icon>
+                    </button>
+                  </td>
+                </tr>
+              }
+              @if (filteredUsers.length === 0) {
+                <tr><td colspan="4" class="text-center text-muted py-4">No users match these filters.</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

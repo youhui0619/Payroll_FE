@@ -9,7 +9,12 @@ export const NOTIFICATION_PREFERENCE_VALUES: Record<string, boolean> = {
   claims: true,
   attendanceOvertime: true,
   payrollPayslips: true,
-  statutoryCompliance: true
+  statutoryCompliance: true,
+  probationConfirmation: true
+};
+
+export const NOTIFICATION_PREFERENCE_MONTH_VALUES = {
+  probationConfirmation: 2
 };
 
 export function getNotificationPreferenceGroups(settings: PayrollSettings = payrollSettings): NotificationPreferenceGroup[] {
@@ -61,6 +66,18 @@ export function getNotificationPreferenceGroups(settings: PayrollSettings = payr
           title: 'Payroll & payslips',
           description: 'Payroll completed, payslip published or corrected.',
           icon: 'file-description'
+        },
+        {
+          id: 'probationConfirmation',
+          title: 'Probation confirmation',
+          description: 'Remind managers to confirm an employee’s probation outcome.',
+          icon: 'user-check',
+          monthInterval: {
+            label: 'Remind after',
+            min: 1,
+            max: 12,
+            unit: 'months'
+          }
         },
         ...(
           settings.includeEpf || settings.includeSocso || settings.includeEis ||

@@ -1,0 +1,31 @@
+.permission-group-card {
+  padding: 16px 20px;
+
+  .card-body {
+    padding: 0;
+  }
+}
+
+.permission-group-heading {
+  padding: 4px 8px 12px;
+  border-bottom: 1px solid var(--border);
+
+  h5 {
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
+
+.permission-module-row {
+  border-bottom: 1px solid var(--border);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .permission-module-row > div + div {
+    margin-top: 8px;
+  }
+}
