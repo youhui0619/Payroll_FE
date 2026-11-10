@@ -153,7 +153,7 @@
 
 .calendar-skeleton-weekday {
   width: 60%;
-  height: 44px;
+  height: 10px;
   justify-self: center;
   margin-bottom: 4px;
 }
@@ -162,6 +162,7 @@
   width: 100%;
   aspect-ratio: 1;
   border-radius: 6px;
+  height: 40px;
 }
 
 .chart-bar {
