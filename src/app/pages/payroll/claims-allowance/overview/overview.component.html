@@ -11,6 +11,13 @@
   </div>
 </div>
 
+@if (loading) {
+  <div class="row my-4">
+    <div class="col-12 px-2">
+      <app-skeleton-loader [rows]="0" [columns]="0" [summaryCards]="4"></app-skeleton-loader>
+    </div>
+  </div>
+} @else {
 <div class="row my-4">
   <div class="col-sm-3 px-2">
     <div class="card">
@@ -65,6 +72,7 @@
     </div>
   </div>
 </div>
+}
 
 <div class="row mt-4">
   <div class="d-flex align-items-center flex-wrap gap-2">
@@ -120,7 +128,10 @@
         <div class="row mx-0">
           <div class="col-sm-12 px-2">
             <div class="material-datatables table-responsive">
-              <table class="table no-wrap w-100 text-left">
+              @if (loading) {
+            <app-skeleton-loader [rows]="6" [columns]="7"></app-skeleton-loader>
+          } @else {
+<table class="table no-wrap w-100 text-left">
                 <thead>
                   <tr>
                     <th class="text-dark">Claim Type / Ref</th>
@@ -133,6 +144,7 @@
                   </tr>
                 </thead>
                 <tbody>
+
                   @for (claim of filteredClaims; track claim) {
                     <tr>
                       <td>
@@ -167,8 +179,9 @@
                       <td colspan="7" class="text-muted text-center py-4">No claims match the selected filters.</td>
                     </tr>
                   }
-                </tbody>
+            </tbody>
               </table>
+          }
             </div>
           </div>
         </div>

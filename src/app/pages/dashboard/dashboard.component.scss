@@ -26,6 +26,17 @@
   list-style: none;
 }
 
+.dashboard-chart-loader {
+  position: relative;
+  min-height: 240px;
+}
+
+.dashboard-chart-loader > app-skeleton-loader {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
 .team-overview-item,
 .team-overview-label {
   display: flex;

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { overtimeRequests } from '../../../../data/overtime/overtime-requests.data';
 import type { OvertimeRequestRecord, OvertimeStatus, OvertimeType } from '../../../../models/overtime/overtime.model';
@@ -8,12 +9,18 @@ import { OvertimeDetailDialogComponent } from '../../../../shared/dialog/overtim
 @Component({
   selector: 'app-approval',
   standalone: true,
-  imports: [...MaterialImports, CommonModule, OvertimeDetailDialogComponent],
+  imports: [...MaterialImports, CommonModule, OvertimeDetailDialogComponent, SkeletonLoaderComponent],
   providers: [...MaterialProviders],
   templateUrl: './approval.component.html',
   styleUrl: './approval.component.scss',
 })
-export class ApprovalComponent {
+export class ApprovalComponent implements OnInit {
+  loading = true;
+
+  ngOnInit(): void {
+    window.setTimeout(() => this.loading = false, 5000);
+  }
+
   readonly overtimeRequests = overtimeRequests;
   selectedRequest: OvertimeRequestRecord | null = null;
 

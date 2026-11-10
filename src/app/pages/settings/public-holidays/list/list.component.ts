@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
@@ -7,12 +8,18 @@ import type { PublicHolidayRecord } from '../../../../models/settings/public-hol
 
 @Component({
   selector: 'app-list',
-  imports: [CommonModule, ...MaterialImports, RouterLink],
+  imports: [CommonModule, ...MaterialImports, RouterLink, SkeletonLoaderComponent],
   providers: [...MaterialProviders],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
 })
-export class ListComponent {
+export class ListComponent implements OnInit {
+  loading = true;
+
+  ngOnInit(): void {
+    window.setTimeout(() => this.loading = false, 5000);
+  }
+
   readonly holidays: PublicHolidayRecord[] = publicHolidays;
   searchTerm = '';
   selectedYear = '';

@@ -1,5 +1,6 @@
+import { OnInit, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { RouterLink } from '@angular/router';
 import { commissionPayrollRecords } from '../../../../data/commission/commission-payroll-records.data';
 import type { CommissionPayrollRecord } from '../../../../models/commission/commission-payroll-record.model';
@@ -9,12 +10,18 @@ import { CommissionDetailDialogComponent } from '../../../../shared/dialog/commi
 @Component({
   selector: 'app-overview',
   standalone: true,
-  imports: [...MaterialImports, CommonModule, RouterLink, CommissionDetailDialogComponent],
+  imports: [...MaterialImports, CommonModule, RouterLink, CommissionDetailDialogComponent, SkeletonLoaderComponent],
   providers: [...MaterialProviders],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
-export class OverviewComponent {
+export class OverviewComponent implements OnInit {
+  loading = true;
+
+  ngOnInit(): void {
+    window.setTimeout(() => this.loading = false, 5000);
+  }
+
   readonly commissionRecords = commissionPayrollRecords;
   selectedRecord: CommissionPayrollRecord | null = null;
 

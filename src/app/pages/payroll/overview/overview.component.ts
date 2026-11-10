@@ -1,5 +1,6 @@
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { SkeletonLoaderComponent } from '../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../shared/material-imports';
 import { RouterLink } from '@angular/router';
@@ -10,12 +11,18 @@ import { PayrollDetailDialogComponent } from '../../../shared/dialog/payroll-det
 
 @Component({
   selector: 'app-overview',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, RouterLink, PayrollDetailDialogComponent],
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, RouterLink, PayrollDetailDialogComponent, SkeletonLoaderComponent],
   providers: [...MaterialProviders, ToastrService],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
-export class OverviewComponent {
+export class OverviewComponent implements OnInit {
+  loading = true;
+
+  ngOnInit(): void {
+    window.setTimeout(() => this.loading = false, 5000);
+  }
+
   payrollList = payrollList;
   readonly departmentOptions = Array.from(new Set(payrollList.map(row => row.department))).sort((a, b) => a.localeCompare(b));
   selectedDepartments: string[] = [];

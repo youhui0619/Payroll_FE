@@ -31,6 +31,7 @@ import type { LeaveApplication, LeaveRecord } from '../../models/leave/leave.mod
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
 import { AlertService } from '../../shared/components/alert/alert.service';
 import { MaterialProviders } from '../../shared/material-imports';
+import { SkeletonLoaderComponent } from '../../shared/components/skeleton-loader/skeleton-loader.component';
 
 interface DashboardCalendarCell {
   date: Date;
@@ -48,12 +49,20 @@ interface DashboardLeaveEntry {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, TablerIconComponent, LeaveDetailDialogComponent, MatFormFieldModule, MatSelectModule, MatInputModule, MatButtonModule, MatCheckboxModule, MatRadioModule, MatDatepickerModule, MatSort, MatPaginator, MatMenuModule, MatSlideToggleModule, MatTabsModule, MatAutocompleteModule, NgxDropzoneModule, MatStepperModule, NgApexchartsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, TablerIconComponent, LeaveDetailDialogComponent, SkeletonLoaderComponent, MatFormFieldModule, MatSelectModule, MatInputModule, MatButtonModule, MatCheckboxModule, MatRadioModule, MatDatepickerModule, MatSort, MatPaginator, MatMenuModule, MatSlideToggleModule, MatTabsModule, MatAutocompleteModule, NgxDropzoneModule, MatStepperModule, NgApexchartsModule],
   providers: [...MaterialProviders],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
+  loading = true;
+  private readonly readyCharts = new Set<string>();
+
+  onChartReady(chart: string): void {
+    this.readyCharts.add(chart);
+    this.loading = this.readyCharts.size < 3;
+  }
+
   selectedLeave: LeaveDialogData | null = null;
   private readonly ngZone = inject(NgZone);
   private readonly alertService = inject(AlertService);

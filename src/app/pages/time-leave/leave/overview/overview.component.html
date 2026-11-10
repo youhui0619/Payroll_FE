@@ -16,6 +16,13 @@
   </div>
 </div>
 
+@if (loading) {
+  <div class="row my-4">
+    <div class="col-12 px-2">
+      <app-skeleton-loader [rows]="0" [columns]="0" [summaryCards]="5"></app-skeleton-loader>
+    </div>
+  </div>
+} @else {
 <div class="row my-4">
   <div class="col-sm-3 px-2">
     <div class="card">
@@ -102,6 +109,7 @@
     </div>
   </div>
 </div>
+}
 
 <div class="row mt-4">
   <div class="d-flex align-items-center flex-wrap gap-2">
@@ -179,7 +187,10 @@
       </div>
       <div class="card-body">
         <div class="material-datatables table-responsive">
-          <table matSort class="mat-sort table no-wrap w-100 text-left leave-balance-table" matSort>
+          @if (loading) {
+            <app-skeleton-loader [rows]="7" [columns]="3 + (isLeaveColumnVisible('annual') ? 3 : 0) + (isLeaveColumnVisible('medical') ? 3 : 0)"></app-skeleton-loader>
+          } @else {
+<table matSort class="mat-sort table no-wrap w-100 text-left leave-balance-table" matSort>
             <thead>
               <tr>
                 <th class="text-dark sticky-col sticky-col-employee border-right" mat-sort-header="assigned">Employee</th>
@@ -208,6 +219,7 @@
               </tr>
             </thead>
             <tbody>
+
               @for (employee of filteredEmployees; track employee.employeeId) {
                 <tr>
                   <td class="text-muted sticky-col sticky-col-employee border-right" [routerLink]="['/workforce/employees/view', employee.employeeId]">
@@ -247,6 +259,7 @@
               }
             </tbody>
           </table>
+          }
           <mat-paginator [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>
         </div>
       </div>

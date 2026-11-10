@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { OnInit, Component } from '@angular/core';
+import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -9,12 +10,18 @@ import type { Department, DepartmentStatus } from '../../../../models/workforce/
 
 @Component({
   selector: 'app-overview',
-  imports: [CommonModule, FormsModule, ...MaterialImports, RouterLink],
+  imports: [CommonModule, FormsModule, ...MaterialImports, RouterLink, SkeletonLoaderComponent],
   providers: [...MaterialProviders],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
-export class OverviewComponent {
+export class OverviewComponent implements OnInit {
+  loading = true;
+
+  ngOnInit(): void {
+    window.setTimeout(() => this.loading = false, 5000);
+  }
+
   readonly departments = departments;
   readonly employees = employees;
   readonly statuses: DepartmentStatus[] = ['Active', 'Inactive', 'Draft'];

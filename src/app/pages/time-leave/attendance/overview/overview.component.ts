@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { RouterLink } from '@angular/router';
@@ -16,15 +16,22 @@ import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../sh
 import { OvertimeDetailDialogComponent } from '../../../../shared/dialog/overtime-detail-dialog/overtime-detail-dialog.component';
 import type { OvertimeRequestRecord } from '../../../../models/overtime/overtime.model';
 import { AttendanceMonthDetailDialogComponent, type DailyAttendanceRow } from '../../../../shared/dialog/attendance-month-detail-dialog/attendance-month-detail-dialog.component';
+import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-loader/skeleton-loader.component';
 
 @Component({
   selector: 'app-overview',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, RouterLink, LeaveDetailDialogComponent, OvertimeDetailDialogComponent, AttendanceMonthDetailDialogComponent],
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, RouterLink, LeaveDetailDialogComponent, OvertimeDetailDialogComponent, AttendanceMonthDetailDialogComponent, SkeletonLoaderComponent],
   providers: [...MaterialProviders, ToastrService],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
-export class OverviewComponent implements AfterViewInit {
+export class OverviewComponent implements AfterViewInit, OnInit {
+  loading = true;
+
+  ngOnInit(): void {
+    window.setTimeout(() => this.loading = false, 5000);
+  }
+
   selectedLeave: LeaveDialogData | null = null;
   selectedOvertime: OvertimeRequestRecord | null = null;
   selectedDailyRecordsEmployee: EmployeeRecord | null = null;

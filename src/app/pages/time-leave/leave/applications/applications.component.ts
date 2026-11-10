@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
@@ -15,12 +16,18 @@ import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../sh
 
 @Component({
   selector: 'app-applications',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, FullCalendarModule, LeaveDetailDialogComponent, RouterLink],
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, FullCalendarModule, LeaveDetailDialogComponent, RouterLink, SkeletonLoaderComponent],
   providers: [...MaterialProviders, ToastrService],
   templateUrl: './applications.component.html',
   styleUrl: './applications.component.scss'
 })
-export class ApplicationsComponent {
+export class ApplicationsComponent implements OnInit {
+  loading = true;
+
+  ngOnInit(): void {
+    window.setTimeout(() => this.loading = false, 5000);
+  }
+
 
   selectedLeave: LeaveDialogData | null = null;
   private activeLeave: LeaveApplication | null = null;

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { claims } from '../../../../data/claims/claims.data';
 import { getClaimTypeLabel } from '../../../../data/claims/claim-types.data';
@@ -10,12 +11,18 @@ import { ClaimDetailDialogComponent } from '../../../../shared/dialog/claim-deta
 @Component({
   selector: 'app-approval',
   standalone: true,
-  imports: [...MaterialImports, CommonModule, ClaimDetailDialogComponent],
+  imports: [...MaterialImports, CommonModule, ClaimDetailDialogComponent, SkeletonLoaderComponent],
   providers: [...MaterialProviders],
   templateUrl: './approval.component.html',
   styleUrl: './approval.component.scss'
 })
-export class ApprovalComponent {
+export class ApprovalComponent implements OnInit {
+  loading = true;
+
+  ngOnInit(): void {
+    window.setTimeout(() => this.loading = false, 5000);
+  }
+
   readonly claims = claims;
   selectedClaim: ExpenseClaimRecord | null = null;
 

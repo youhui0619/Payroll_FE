@@ -14,7 +14,10 @@
 <div class="card">
   <div class="card-body p-0">
     <div class="table-responsive">
-      <table class="table align-middle mb-0">
+      @if (loading) {
+            <app-skeleton-loader [rows]="6" [columns]="6"></app-skeleton-loader>
+          } @else {
+<table class="table align-middle mb-0">
         <thead>
           <tr>
             <th scope="col">Role</th>
@@ -26,6 +29,7 @@
           </tr>
         </thead>
         <tbody>
+
           @for (role of roles; track role.id) {
             <tr>
               <td class="text-dark fw-500">{{ role.name }}</td>
@@ -48,8 +52,9 @@
               <td colspan="6" class="text-center text-muted py-4">No roles have been created.</td>
             </tr>
           }
-        </tbody>
+            </tbody>
       </table>
+          }
     </div>
   </div>
 </div>

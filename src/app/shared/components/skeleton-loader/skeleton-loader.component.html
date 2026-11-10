@@ -1,0 +1,65 @@
+@if (variant === 'chart') {
+  <div class="chart-skeleton" role="status" aria-label="Loading chart" aria-busy="true">
+    <span class="visually-hidden">Loading chart…</span>
+    @if (chartType === 'donut') {
+      <div class="donut-skeleton" aria-hidden="true"><span></span></div>
+      <div class="donut-legend-skeleton" aria-hidden="true">
+        @for (item of [0, 1, 2, 3]; track item) {
+          <span class="skeleton"></span>
+        }
+      </div>
+    } @else {
+      <div class="bar-chart-skeleton" aria-hidden="true">
+        @for (bar of [0, 1, 2, 3, 4, 5, 6, 7]; track bar) {
+          <span [class]="'chart-bar chart-bar-' + bar"></span>
+        }
+      </div>
+    }
+  </div>
+} @else if (variant === 'calendar') {
+  <div class="calendar-skeleton" role="status" aria-label="Loading calendar" aria-busy="true">
+    <span class="visually-hidden">Loading calendar…</span>
+    @for (day of [0, 1, 2, 3, 4, 5, 6]; track day) {
+      <span class="skeleton calendar-skeleton-weekday" aria-hidden="true"></span>
+    }
+    @for (cell of listItems; track cell) {
+      <span class="skeleton calendar-skeleton-cell" aria-hidden="true"></span>
+    }
+  </div>
+} @else if (variant === 'list') {
+  <div class="list-skeleton" role="status" aria-label="Loading list" aria-busy="true">
+    <span class="visually-hidden">Loading list…</span>
+    @for (item of listItems; track item) {
+      <div class="list-skeleton-row" aria-hidden="true">
+        <span class="skeleton list-skeleton-icon"></span>
+        <span class="list-skeleton-copy">
+          <span class="skeleton list-skeleton-primary"></span>
+          <span class="skeleton list-skeleton-secondary"></span>
+        </span>
+        <span class="skeleton list-skeleton-action"></span>
+      </div>
+    }
+  </div>
+} @else {
+  <div class="skeleton-table" role="status" aria-label="Loading data" aria-busy="true"
+       [style.--skeleton-columns]="gridTemplateColumns">
+    <span class="visually-hidden">Loading data…</span>
+    @if (summaryCardItems.length > 0) {
+      <div class="skeleton-summary" aria-hidden="true">
+        @for (card of summaryCardItems; track card) {
+          <div class="skeleton-summary-card">
+            <span class="skeleton skeleton-summary-value"></span>
+            <span class="skeleton skeleton-summary-icon"></span>
+          </div>
+        }
+      </div>
+    }
+    @for (row of rowItems; track row) {
+      <div class="skeleton-row" aria-hidden="true">
+        @for (column of columnItems; track column) {
+          <span class="skeleton" [class.skeleton-identity]="column === 0"></span>
+        }
+      </div>
+    }
+  </div>
+}

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { RouterLink } from '@angular/router';
@@ -9,15 +9,22 @@ import type { EmployeeRecord } from '../../../../models/workforce/employee.model
 import { employees as employeeDirectory } from '../../../../data/workforce/employees.data';
 import { attendanceRecords } from '../../../../data/attendance/attendance.data';
 import { getEmployeeLeaveBalances } from '../../../../data/leave/leave-balances.data';
+import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-loader/skeleton-loader.component';
 
 @Component({
   selector: 'app-overview',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, RouterLink],
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, RouterLink, SkeletonLoaderComponent],
   providers: [...MaterialProviders, ToastrService],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
-export class OverviewComponent {
+export class OverviewComponent implements OnInit {
+  loading = true;
+
+  ngOnInit(): void {
+    window.setTimeout(() => this.loading = false, 5000);
+  }
+
   readonly leaveColumnOptions = [
     { id: 'annual', label: 'Annual Leave' },
     { id: 'medical', label: 'Medical Leave' }

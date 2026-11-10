@@ -1,5 +1,6 @@
+import { OnInit, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
@@ -12,12 +13,18 @@ import { ClaimDetailDialogComponent } from '../../../../shared/dialog/claim-deta
 @Component({
   selector: 'app-overview',
   standalone: true,
-  imports: [...MaterialImports, CommonModule, FormsModule, RouterLink, ClaimDetailDialogComponent],
+  imports: [...MaterialImports, CommonModule, FormsModule, RouterLink, ClaimDetailDialogComponent, SkeletonLoaderComponent],
   providers: [...MaterialProviders],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
-export class OverviewComponent {
+export class OverviewComponent implements OnInit {
+  loading = true;
+
+  ngOnInit(): void {
+    window.setTimeout(() => this.loading = false, 5000);
+  }
+
   readonly claims = claims;
   readonly departments = departments.filter(department => department.status === 'Active');
   readonly statuses: ClaimStatus[] = ['Pending', 'Approved', 'Rejected', 'Paid'];

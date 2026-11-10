@@ -83,6 +83,12 @@
   overflow: auto;
 }
 
+.table-wrapper app-skeleton-loader {
+  flex: 0 0 auto;
+  width: max-content;
+  min-width: 100%;
+}
+
 .calendar-scroll-tail {
   flex: 0 0 max(0px, calc(100% - var(--sticky-employee-width) - var(--calendar-day-width)));
   height: 1px;

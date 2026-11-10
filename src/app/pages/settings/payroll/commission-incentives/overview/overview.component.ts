@@ -1,5 +1,6 @@
+import { OnInit, Component } from '@angular/core';
 
-import { Component } from '@angular/core';
+import { SkeletonLoaderComponent } from '../../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../../shared/material-imports';
 import { commissionIncentiveSettings } from '../../../../../data/commission/commission-incentive-settings.data';
@@ -16,12 +17,18 @@ import type {
 @Component({
   selector: 'app-overview',
   standalone: true,
-  imports: [...MaterialImports, RouterLink],
+  imports: [...MaterialImports, RouterLink, SkeletonLoaderComponent],
   providers: [...MaterialProviders],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
-export class OverviewComponent {
+export class OverviewComponent implements OnInit {
+  loading = true;
+
+  ngOnInit(): void {
+    window.setTimeout(() => this.loading = false, 5000);
+  }
+
   readonly commissionIncentiveSettings = commissionIncentiveSettings;
 
   get approvalRequiredCount(): number {

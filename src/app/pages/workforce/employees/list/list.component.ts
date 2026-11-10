@@ -1,5 +1,5 @@
 
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,6 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { TablerIconComponent } from '@tabler/icons-angular';
 import { employees } from '../../../../data/workforce/employees.data';
+import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { departments } from '../../../../data/workforce/departments.data';
 import { employmentStatuses, employmentTypes } from '../../../../data/workforce/options/employment-options.data';
 import type { EmploymentStatus, EmploymentType } from '../../../../models/workforce/employment-status.model';
@@ -17,11 +18,12 @@ import type { EmploymentStatus, EmploymentType } from '../../../../models/workfo
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [MatButtonModule, MatFormFieldModule, MatInputModule, MatPaginator, MatSelectModule, MatSort, ReactiveFormsModule, RouterModule, TablerIconComponent],
+  imports: [MatButtonModule, MatFormFieldModule, MatInputModule, MatPaginator, MatSelectModule, MatSort, ReactiveFormsModule, RouterModule, SkeletonLoaderComponent, TablerIconComponent],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
 })
-export class ListComponent {
+export class ListComponent implements OnInit {
+  loading = true;
   readonly employees = employees;
   readonly departments = departments.filter(department => department.status === 'Active');
   readonly employmentTypes = employmentTypes;
@@ -30,6 +32,11 @@ export class ListComponent {
   selectedDepartments: string[] = [];
   selectedEmploymentTypes: EmploymentType[] = [];
   selectedEmploymentStatuses: EmploymentStatus[] = [];
+
+  ngOnInit(): void {
+    // Keep the initial loading state visible while this page uses local sample data.
+    window.setTimeout(() => this.loading = false, 5000);
+  }
 
   get filteredEmployees() {
     const query = this.searchControl.value.trim().toLowerCase();

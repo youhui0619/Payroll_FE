@@ -11,6 +11,13 @@
   </div>
 </div>
 
+@if (loading) {
+  <div class="row my-4">
+    <div class="col-12 px-2">
+      <app-skeleton-loader [rows]="0" [columns]="0" [summaryCards]="3"></app-skeleton-loader>
+    </div>
+  </div>
+} @else {
 <div class="row my-4">
   <div class="col-sm-4 px-2">
     <div class="card h-100">
@@ -46,6 +53,7 @@
     </div>
   </div>
 </div>
+}
 
 <div class="row mt-4">
   <div class="col-sm-12 px-2">
@@ -57,7 +65,10 @@
       </div>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table no-wrap w-100 text-left">
+          @if (loading) {
+            <app-skeleton-loader [rows]="6" [columns]="7"></app-skeleton-loader>
+          } @else {
+<table class="table no-wrap w-100 text-left">
             <thead>
               <tr>
                 <th class="text-dark">Record ID</th>
@@ -70,6 +81,7 @@
               </tr>
             </thead>
             <tbody>
+
               @for (record of commissionRecords; track record) {
                 <tr>
                   <td class="text-muted">
@@ -97,8 +109,9 @@
                     <td colspan="9" class="text-center text-muted py-4">No commission records found.</td>
                   </tr>
                 }
-              </tbody>
+            </tbody>
             </table>
+          }
           </div>
         </div>
       </div>

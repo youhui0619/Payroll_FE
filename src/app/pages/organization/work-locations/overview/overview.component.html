@@ -71,7 +71,10 @@
       </div>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table no-wrap w-100 text-left">
+          @if (loading) {
+            <app-skeleton-loader [rows]="6" [columns]="4"></app-skeleton-loader>
+          } @else {
+<table class="table no-wrap w-100 text-left">
             <thead>
               <tr>
                 <th class="text-dark">Location</th>
@@ -81,6 +84,7 @@
               </tr>
             </thead>
             <tbody>
+
               @for (location of filteredWorkLocations; track location.id) {
                 <tr>
                   <td>
@@ -106,6 +110,7 @@
               }
             </tbody>
           </table>
+          }
         </div>
       </div>
     </div>

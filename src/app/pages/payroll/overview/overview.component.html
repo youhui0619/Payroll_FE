@@ -12,6 +12,13 @@
 </div> -->
 </div>
 
+@if (loading) {
+  <div class="row my-4">
+    <div class="col-12 px-2">
+      <app-skeleton-loader [rows]="0" [columns]="0" [summaryCards]="3"></app-skeleton-loader>
+    </div>
+  </div>
+} @else {
 <div class="row align-items-stretch">
   <div class="col-sm-3 px-2 d-flex flex-column">
     <div class="card flex-grow-1 mb-4">
@@ -64,6 +71,7 @@
     </div>
   </div>
 </div>
+}
 
 
 <div class="row mt-4">
@@ -127,7 +135,10 @@
       </div>
       <div class="card-body">
         <div class="material-datatables table-responsive">
-          <table matSort class="mat-sort table no-wrap w-100 text-left" matSort>
+          @if (loading) {
+            <app-skeleton-loader [rows]="6" [columns]="16"></app-skeleton-loader>
+          } @else {
+<table matSort class="mat-sort table no-wrap w-100 text-left" matSort>
             <colgroup>
             @for (column of columnOptions; track column) {
               @if (isColumnVisible(column.id)) {
@@ -230,6 +241,7 @@
             </tr>
           </thead>
           <tbody>
+
             @for (row of filteredPayrollList; track row) {
               <tr>
                 @if (isColumnVisible('employee')) {
@@ -310,7 +322,7 @@
                 }
               </tr>
             }
-          </tbody>
+            </tbody>
           <tfoot>
             <tr class="payroll-total-row">
               @if (isColumnVisible('employee')) {
@@ -385,6 +397,7 @@
             </tr>
           </tfoot>
         </table>
+          }
         <mat-paginator [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>
       </div>
     </div>

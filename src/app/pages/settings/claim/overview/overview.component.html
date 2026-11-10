@@ -23,7 +23,10 @@
       </div>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table no-wrap w-100 text-left">
+          @if (loading) {
+            <app-skeleton-loader [rows]="6" [columns]="5"></app-skeleton-loader>
+          } @else {
+<table class="table no-wrap w-100 text-left">
             <thead>
               <tr>
                 <th class="text-dark">Claim Code</th>
@@ -34,6 +37,7 @@
               </tr>
             </thead>
             <tbody>
+
               @for (claimType of claimTypes; track claimType) {
                 <tr>
                   <td class="text-muted">{{ claimType.code }}</td>
@@ -58,6 +62,7 @@
               }
             </tbody>
           </table>
+          }
         </div>
       </div>
     </div>

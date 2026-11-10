@@ -1,3 +1,10 @@
+@if (loading) {
+  <div class="row align-items-stretch my-4">
+    <div class="col-12 px-2">
+      <app-skeleton-loader [rows]="0" [columns]="0" [summaryCards]="4"></app-skeleton-loader>
+    </div>
+  </div>
+} @else {
 <div class="row align-items-stretch">
   <div class="col-sm-3 px-2 d-flex flex-column">
     <div class="card flex-grow-1 mb-4">
@@ -69,6 +76,7 @@
     </div>
   </div>
 </div>
+}
 
 
 <div class="row">
@@ -87,6 +95,10 @@
       <div class="card-body">
         <div class="row mx-0">
           <div class="col-sm-8 px-2">
+            <div class="dashboard-chart-loader">
+              @if (loading) {
+                <app-skeleton-loader variant="chart" chartType="bar"></app-skeleton-loader>
+              }
             <apx-chart
               [series]="chartOptions.series!"
               [chart]="chartOptions.chart!"
@@ -100,9 +112,15 @@
               [legend]="chartOptions.legend!"
               [fill]="chartOptions.fill!"
               [tooltip]="chartOptions.tooltip!"
+              [style.visibility]="loading ? 'hidden' : 'visible'"
+              (chartReady)="onChartReady('payroll-trend')"
             ></apx-chart>
+            </div>
           </div>
           <div class="col-sm-4 px-2 my-auto">
+            @if (loading) {
+              <app-skeleton-loader [rows]="0" [columns]="0" [summaryCards]="1"></app-skeleton-loader>
+            } @else {
             <div class="d-flex align-items-center justify-content-start">
               <div class="text-primary bg-light-primary text-end icon me-3">
                 <tabler-icon icon="user-check"></tabler-icon>
@@ -120,6 +138,7 @@
               </div>
             </div>
             <button mat-flat-button color="primary" class="w-100 mt-4" (click)="openDialog()"><tabler-icon icon="logs" [size]="16"></tabler-icon>View Report</button>
+            }
           </div>
         </div>
       </div>
@@ -143,14 +162,23 @@
           <div class="card-body">
             <div class="row mx-0">
               <div class="col-sm-12 px-2">
+                <div class="dashboard-chart-loader">
+                  @if (loading) {
+                    <app-skeleton-loader variant="chart" chartType="donut"></app-skeleton-loader>
+                  }
               	<apx-chart [series]="doughnutChartOptions.series" [chart]="doughnutChartOptions.chart"
                   [xaxis]="doughnutChartOptions.xaxis" [yaxis]="doughnutChartOptions.yaxis" [grid]="doughnutChartOptions.grid"
                   [stroke]="doughnutChartOptions.stroke" [tooltip]="doughnutChartOptions.tooltip"
                   [plotOptions]="doughnutChartOptions.plotOptions" [dataLabels]="doughnutChartOptions.dataLabels"
-                  [legend]="doughnutChartOptions.legend" [colors]="doughnutChartOptions.colors" [markers]="doughnutChartOptions.markers">
+                  [legend]="doughnutChartOptions.legend" [colors]="doughnutChartOptions.colors" [markers]="doughnutChartOptions.markers"
+                  [style.visibility]="loading ? 'hidden' : 'visible'" (chartReady)="onChartReady('team-overview')">
                 </apx-chart>
+                </div>
               </div>
               <div class="col-sm-12 px-2 mt-3">
+                @if (loading) {
+                  <app-skeleton-loader variant="list" [items]="5"></app-skeleton-loader>
+                } @else {
                 <ul class="team-overview-list">
                   @for (team of teamOverview; track team.department; let i = $index) {
                     <li class="team-overview-item">
@@ -164,6 +192,7 @@
                     <li class="text-muted">No team data available.</li>
                   }
                 </ul>
+                }
               </div>
             </div>
           </div>
@@ -186,14 +215,23 @@
           <div class="card-body">
             <div class="row mx-0">
               <div class="col-sm-12 px-2">
+                <div class="dashboard-chart-loader">
+                  @if (loading) {
+                    <app-skeleton-loader variant="chart" chartType="donut"></app-skeleton-loader>
+                  }
               	<apx-chart [series]="doughnutChartOptions.series" [chart]="doughnutChartOptions.chart"
                   [xaxis]="doughnutChartOptions.xaxis" [yaxis]="doughnutChartOptions.yaxis" [grid]="doughnutChartOptions.grid"
                   [stroke]="doughnutChartOptions.stroke" [tooltip]="doughnutChartOptions.tooltip"
                   [plotOptions]="doughnutChartOptions.plotOptions" [dataLabels]="doughnutChartOptions.dataLabels"
-                  [legend]="doughnutChartOptions.legend" [colors]="doughnutChartOptions.colors" [markers]="doughnutChartOptions.markers">
+                  [legend]="doughnutChartOptions.legend" [colors]="doughnutChartOptions.colors" [markers]="doughnutChartOptions.markers"
+                  [style.visibility]="loading ? 'hidden' : 'visible'" (chartReady)="onChartReady('payroll-breakdown')">
                 </apx-chart>
+                </div>
               </div>
               <div class="col-sm-12 px-2 mt-3">
+                @if (loading) {
+                  <app-skeleton-loader variant="list" [items]="5"></app-skeleton-loader>
+                } @else {
                 <ul class="team-overview-list">
                   @for (team of teamOverview; track team.department; let i = $index) {
                     <li class="team-overview-item">
@@ -207,6 +245,7 @@
                     <li class="text-muted">No team data available.</li>
                   }
                 </ul>
+                }
               </div>
             </div>
           </div>
@@ -221,6 +260,9 @@
         <h4 class="mb-0">Leave Calendar</h4>
       </div>
       <div class="card-body">
+        @if (loading) {
+          <app-skeleton-loader variant="calendar" [items]="35"></app-skeleton-loader>
+        } @else {
         <div class="d-flex align-items-center justify-content-end">
           <button type="button" class="calendar-nav" aria-label="Previous month" (click)="changeCalendarMonth(-1)">‹</button>
           <strong>{{ calendarMonthLabel }}</strong>
@@ -288,6 +330,7 @@
             <p class="text-muted mb-0">No approved leave on this day.</p>
           }
         </div>
+        }
       </div>
     </div>
 
@@ -297,7 +340,9 @@
         <a href="javascript:void(0)" routerLink="/time-leave/leave/approval">View All</a>
       </div>
       <div class="card-body">
-        @if (pendingLeaveRequests.length) {
+        @if (loading) {
+          <app-skeleton-loader variant="list" [items]="4"></app-skeleton-loader>
+        } @else if (pendingLeaveRequests.length) {
           <div class="month-leave-entries">
             @for (request of pendingLeaveRequests; track request.application.reference) {
               <div class="d-flex align-items-center justify-content-between py-1">

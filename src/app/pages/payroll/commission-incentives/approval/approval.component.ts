@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { commissionPayrollRecords } from '../../../../data/commission/commission-payroll-records.data';
 import type { CommissionPayrollRecord } from '../../../../models/commission/commission-payroll-record.model';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
@@ -8,12 +9,18 @@ import { CommissionDetailDialogComponent } from '../../../../shared/dialog/commi
 @Component({
   selector: 'app-approval',
   standalone: true,
-  imports: [...MaterialImports, CommonModule, CommissionDetailDialogComponent],
+  imports: [...MaterialImports, CommonModule, CommissionDetailDialogComponent, SkeletonLoaderComponent],
   providers: [...MaterialProviders],
   templateUrl: './approval.component.html',
   styleUrl: './approval.component.scss'
 })
-export class ApprovalComponent {
+export class ApprovalComponent implements OnInit {
+  loading = true;
+
+  ngOnInit(): void {
+    window.setTimeout(() => this.loading = false, 5000);
+  }
+
   readonly commissionRecords = commissionPayrollRecords;
   selectedRecord: CommissionPayrollRecord | null = null;
 

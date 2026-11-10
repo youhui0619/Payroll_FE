@@ -23,7 +23,10 @@
         <div class="row mx-0">
           <div class="col-sm-12 px-2">
             <div class="material-datatables table-responsive">
-              <table matSort class="mat-sort table no-wrap w-100 text-left leave-balance-table" matSort>
+              @if (loading) {
+            <app-skeleton-loader [rows]="6" [columns]="6"></app-skeleton-loader>
+          } @else {
+<table matSort class="mat-sort table no-wrap w-100 text-left leave-balance-table" matSort>
                 <thead>
                   <tr>
                     <th class="text-dark">Leave Type / Ref</th>
@@ -68,6 +71,7 @@
                   }
                 </tbody>
               </table>
+          }
             </div>
           </div>
         </div>

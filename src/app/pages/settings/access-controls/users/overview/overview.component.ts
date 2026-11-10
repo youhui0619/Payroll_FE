@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { OnInit, Component } from '@angular/core';
+import { SkeletonLoaderComponent } from '../../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../../shared/material-imports';
@@ -8,12 +9,18 @@ import type { UserStatus } from '../../../../../models/access-control/user.model
 @Component({
   selector: 'app-overview',
   standalone: true,
-  imports: [...MaterialImports, ReactiveFormsModule, RouterLink],
+  imports: [...MaterialImports, ReactiveFormsModule, RouterLink, SkeletonLoaderComponent],
   providers: [...MaterialProviders],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
-export class OverviewComponent {
+export class OverviewComponent implements OnInit {
+  loading = true;
+
+  ngOnInit(): void {
+    window.setTimeout(() => this.loading = false, 5000);
+  }
+
   readonly users = users;
   readonly statuses: UserStatus[] = ['ACTIVE', 'INACTIVE'];
   readonly searchControl = new FormControl('', { nonNullable: true });

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
@@ -15,12 +16,18 @@ import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../sh
 
 @Component({
   selector: 'app-approval',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, FullCalendarModule, LeaveDetailDialogComponent],
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, FullCalendarModule, LeaveDetailDialogComponent, SkeletonLoaderComponent],
   providers: [...MaterialProviders, ToastrService],
   templateUrl: './approval.component.html',
   styleUrl: './approval.component.scss'
 })
-export class ApprovalComponent {
+export class ApprovalComponent implements OnInit {
+  loading = true;
+
+  ngOnInit(): void {
+    window.setTimeout(() => this.loading = false, 5000);
+  }
+
   selectedLeave: LeaveDialogData | null = null;
   private activeLeave: LeaveApplication | null = null;
   readonly employee = getEmployee('EMP-0042');
