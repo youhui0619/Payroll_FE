@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiURL: 'http://localhost:3001',
+  apiURL: 'http://localhost:3000/api/v1',
   // apiURL: 'https://mortgagebe.uhuidesignstudio.my',
   firebaseConfig: {
     apiKey: "AIzaSyAAIxXIKgxQmxo58TFlrHU_HkgAN_vlejs",

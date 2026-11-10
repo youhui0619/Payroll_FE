@@ -115,9 +115,6 @@
                   </td>
                   <td><span class="chip" [class.bg-light-success]="user.status === 'ACTIVE'" [class.text-success]="user.status === 'ACTIVE'" [class.bg-light-danger]="user.status === 'INACTIVE'" [class.text-danger]="user.status === 'INACTIVE'">{{ user.status === 'ACTIVE' ? 'Active' : 'Inactive' }}</span></td>
                   <td>
-                    <button class="text-muted action-btn" mat-icon-button type="button" aria-label="View user">
-                      <tabler-icon icon="eye"></tabler-icon>
-                    </button>
                     <button class="text-muted action-btn" mat-icon-button type="button" [routerLink]="['/settings/access-control/users/edit', user.id]" aria-label="Edit user">
                       <tabler-icon icon="edit"></tabler-icon>
                     </button>

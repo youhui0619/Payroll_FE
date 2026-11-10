@@ -16,15 +16,15 @@
         <h2>Welcome to your workspace</h2>
         <p class="login-description">Sign in to manage your employees, payroll, leave, and HR operations.</p>
 
-        <form class="login-form">
+        <form class="login-form" [formGroup]="form" (ngSubmit)="onSubmit(form)">
           <mat-label class="form-label" for="email">Email address <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input login-field">
-            <input matInput id="email" name="email" type="email" placeholder="Enter email address" required>
+            <input matInput id="email" name="email" type="email" placeholder="Enter email address" formControlName="email" required>
           </mat-form-field>
 
           <mat-label class="form-label" for="password">Password <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input login-field">
-            <input matInput id="password" name="password" [type]="hidePassword ? 'password' : 'text'" placeholder="Enter password" autocomplete="current-password" required>
+            <input matInput id="password" name="password" [type]="hidePassword ? 'password' : 'text'" placeholder="Enter password" formControlName="password" required>
             <button
               type="button"
               mat-icon-button
@@ -45,7 +45,7 @@
             <a href="#" (click)="$event.preventDefault()">Forgot password?</a>
           </div>
 
-          <button mat-flat-button color="primary" class="sign-in-button" routerLink="/setup">Sign in</button>
+          <button mat-flat-button color="primary" class="sign-in-button" [disabled]="!form.valid || submitting">{{ submitting ? 'Signing in…' : 'Sign In' }}</button>
         </form>
       </div>
     </div>
