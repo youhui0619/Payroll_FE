@@ -25,7 +25,6 @@ import type { DailyAttendanceRecord } from '../../../models/attendance/daily-att
   imports: [...MaterialImports, CommonModule, MatSidenavModule, LeaveDetailDialogComponent, ClaimDetailDialogComponent, CommissionDetailDialogComponent],
   providers: [...MaterialProviders],
   templateUrl: './payroll-detail-dialog.component.html',
-  styleUrl: './payroll-detail-dialog.component.scss'
 })
 export class PayrollDetailDialogComponent {
   readonly payslipSettings = payslipSettings;

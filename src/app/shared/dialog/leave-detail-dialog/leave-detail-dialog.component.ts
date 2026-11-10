@@ -37,7 +37,6 @@ export interface LeaveDialogData {
   imports: [...MaterialImports, CommonModule, FormsModule],
   providers: [...MaterialProviders],
   templateUrl: './leave-detail-dialog.component.html',
-  styleUrl: './leave-detail-dialog.component.scss'
 })
 export class LeaveDetailDialogComponent {
   @Input({ required: true }) data!: LeaveDialogData;

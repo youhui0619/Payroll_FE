@@ -20,7 +20,6 @@ export interface DailyAttendanceRow {
   imports: [...MaterialImports],
   providers: [...MaterialProviders],
   templateUrl: './attendance-month-detail-dialog.component.html',
-  styleUrl: './attendance-month-detail-dialog.component.scss'
 })
 export class AttendanceMonthDetailDialogComponent {
   @Input({ required: true }) employee!: EmployeeRecord;

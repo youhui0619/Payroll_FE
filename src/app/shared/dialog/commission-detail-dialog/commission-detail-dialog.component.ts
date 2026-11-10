@@ -11,7 +11,6 @@ import { MaterialImports, MaterialProviders } from '../../material-imports';
   imports: [...MaterialImports, CommonModule, FormsModule],
   providers: [...MaterialProviders],
   templateUrl: './commission-detail-dialog.component.html',
-  styleUrl: './commission-detail-dialog.component.scss'
 })
 export class CommissionDetailDialogComponent {
   @Input({ required: true }) record!: CommissionPayrollRecord;

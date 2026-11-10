@@ -8,7 +8,6 @@ import { MaterialImports, MaterialProviders } from '../../material-imports';
   imports: [...MaterialImports, CommonModule],
   providers: [...MaterialProviders],
   templateUrl: './alert.component.html',
-  styleUrl: './alert.component.scss',
 })
 export class AlertComponent {
 

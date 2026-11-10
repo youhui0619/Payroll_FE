@@ -13,7 +13,6 @@ import type { EmployeeRecord } from '../../../models/workforce/employee.model';
   imports: [...MaterialImports, CommonModule, FormsModule],
   providers: [...MaterialProviders],
   templateUrl: './claim-detail-dialog.component.html',
-  styleUrl: './claim-detail-dialog.component.scss'
 })
 export class ClaimDetailDialogComponent {
   @Input({ required: true }) claim!: ExpenseClaimRecord;

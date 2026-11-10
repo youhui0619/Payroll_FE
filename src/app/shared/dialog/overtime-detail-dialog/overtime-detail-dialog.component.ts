@@ -10,7 +10,6 @@ import type { OvertimeRequestRecord, OvertimeStatus, OvertimeType } from '../../
   imports: [...MaterialImports, CommonModule, FormsModule],
   providers: [...MaterialProviders],
   templateUrl: './overtime-detail-dialog.component.html',
-  styleUrl: './overtime-detail-dialog.component.scss'
 })
 export class OvertimeDetailDialogComponent {
   @Input({ required: true }) request!: OvertimeRequestRecord;
