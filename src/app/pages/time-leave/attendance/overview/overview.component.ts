@@ -29,7 +29,7 @@ export class OverviewComponent implements AfterViewInit, OnInit {
   loading = true;
 
   ngOnInit(): void {
-    window.setTimeout(() => this.loading = false, 5000);
+    window.setTimeout(() => this.loading = false, 3000);
   }
 
   selectedLeave: LeaveDialogData | null = null;

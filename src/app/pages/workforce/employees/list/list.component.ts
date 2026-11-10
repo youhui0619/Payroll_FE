@@ -35,7 +35,7 @@ export class ListComponent implements OnInit {
 
   ngOnInit(): void {
     // Keep the initial loading state visible while this page uses local sample data.
-    window.setTimeout(() => this.loading = false, 5000);
+    window.setTimeout(() => this.loading = false, 3000);
   }
 
   get filteredEmployees() {

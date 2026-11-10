@@ -25,7 +25,7 @@ export class ApplicationsComponent implements OnInit {
   loading = true;
 
   ngOnInit(): void {
-    window.setTimeout(() => this.loading = false, 5000);
+    window.setTimeout(() => this.loading = false, 3000);
   }
 
 

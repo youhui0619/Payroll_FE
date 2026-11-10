@@ -17,7 +17,7 @@ export class ListComponent implements OnInit {
   loading = true;
 
   ngOnInit(): void {
-    window.setTimeout(() => this.loading = false, 5000);
+    window.setTimeout(() => this.loading = false, 3000);
   }
 
   readonly holidays: PublicHolidayRecord[] = publicHolidays;
