@@ -24,7 +24,7 @@ import { RegionalCurrencyPipe, RegionalCurrencySymbolPipe, RegionalDatePipe, Reg
 import * as TablerIcons from '@tabler/icons-angular';
 
 const tablerIcons = [
-  TablerIcons.IconAdjustments, TablerIcons.IconAlertTriangle, TablerIcons.IconArrowLeft, TablerIcons.IconArrowNarrowRight, TablerIcons.IconArrowRight,
+  TablerIcons.IconAdjustments, TablerIcons.IconAlertCircle, TablerIcons.IconAlertTriangle, TablerIcons.IconArrowLeft, TablerIcons.IconArrowNarrowRight, TablerIcons.IconArrowRight,
   TablerIcons.IconArrowsExchange, TablerIcons.IconArticle, TablerIcons.IconBox, TablerIcons.IconBuilding,
   TablerIcons.IconBriefcase, TablerIcons.IconBuildingWarehouse, TablerIcons.IconCalendar, TablerIcons.IconCalendarDue, TablerIcons.IconCalendarEvent, TablerIcons.IconCash, TablerIcons.IconChartBar,
   TablerIcons.IconChartDonut, TablerIcons.IconCheck, TablerIcons.IconChevronLeft, TablerIcons.IconCircleCheck,
@@ -32,7 +32,7 @@ const tablerIcons = [
   TablerIcons.IconClock24, TablerIcons.IconCopy, TablerIcons.IconCreditCard, TablerIcons.IconCurrencyDollar,
   TablerIcons.IconDimensions, TablerIcons.IconDownload, TablerIcons.IconEdit, TablerIcons.IconEye,
   TablerIcons.IconEyeOff, TablerIcons.IconFile, TablerIcons.IconFileDescription, TablerIcons.IconFileTypePdf,
-  TablerIcons.IconFileText, TablerIcons.IconForklift, TablerIcons.IconGridDots, TablerIcons.IconHandClick, TablerIcons.IconHome, TablerIcons.IconHourglassEmpty,
+  TablerIcons.IconFileText, TablerIcons.IconForklift, TablerIcons.IconGridDots, TablerIcons.IconHandClick, TablerIcons.IconHome, TablerIcons.IconHourglassEmpty, TablerIcons.IconInfoCircle,
   TablerIcons.IconLanguage, TablerIcons.IconLayoutSidebarLeftCollapse, TablerIcons.IconLayoutSidebarLeftExpand, TablerIcons.IconLoader,
   TablerIcons.IconMedicalCross,
   TablerIcons.IconArrowNarrowUp,

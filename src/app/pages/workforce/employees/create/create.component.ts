@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormArray, FormControl, FormGroup, FormRecord, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
 import { defaultLeaveEntitlements } from '../../../../data/leave/leave-balances.data';
 import { leavePolicies } from '../../../../data/leave/leave-policies.data';
@@ -83,8 +82,8 @@ function createWorkingScheduleForm(schedule: WorkingSchedule): EmployeeWorkingSc
 
 @Component({
   selector: 'app-create',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule,  ToastrModule, DropzoneComponent],
-  providers: [...MaterialProviders, ToastrService],
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule,  DropzoneComponent],
+  providers: [...MaterialProviders],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'
 })

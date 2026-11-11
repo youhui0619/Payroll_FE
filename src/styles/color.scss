@@ -121,25 +121,3 @@
 .bg-light-disabled {
   background: var(--light-disabled)!important;
 }
-
-//
-  .toast-success {
-    background-color: var(--success)!important;
-  }
-
-  .toast-warning {
-    background-color: var(--warning)!important;
-  }
-
-  .toast-error {
-    background-color: var(--danger)!important;
-  }
-
-  .toast-info {
-    background-color: var(--info)!important;
-  }
-
-.toast-container .ngx-toastr{
-  border-radius: 9px!important;
-  box-shadow: var(--shadow)!important;
-}

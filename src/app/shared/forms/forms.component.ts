@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../material-imports';
-import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { DropzoneComponent } from '../dropzone/dropzone.component';
 
 
@@ -52,8 +51,8 @@ export function createFormGroupFromFields(sections: FormConfig[]): FormGroup {
 
 @Component({
   selector: 'app-forms',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, DropzoneComponent],
-  providers: [...MaterialProviders, ToastrService],
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, DropzoneComponent],
+  providers: [...MaterialProviders],
   templateUrl: './forms.component.html',
   styleUrl: './forms.component.scss'
 })

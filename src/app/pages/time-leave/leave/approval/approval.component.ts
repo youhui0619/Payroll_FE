@@ -3,7 +3,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
 import { FullCalendarModule, CalendarOptions } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/angular/daygrid';
@@ -16,8 +15,8 @@ import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../sh
 
 @Component({
   selector: 'app-approval',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, FullCalendarModule, LeaveDetailDialogComponent, SkeletonLoaderComponent],
-  providers: [...MaterialProviders, ToastrService],
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, FullCalendarModule, LeaveDetailDialogComponent, SkeletonLoaderComponent],
+  providers: [...MaterialProviders],
   templateUrl: './approval.component.html',
   styleUrl: './approval.component.scss'
 })

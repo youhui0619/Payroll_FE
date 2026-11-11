@@ -4,7 +4,6 @@ import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
 import { FullCalendarModule, CalendarOptions } from '@fullcalendar/angular';
 import interactionPlugin from '@fullcalendar/angular/interaction';
@@ -16,8 +15,8 @@ import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../sh
 
 @Component({
   selector: 'app-applications',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, FullCalendarModule, LeaveDetailDialogComponent, RouterLink, SkeletonLoaderComponent],
-  providers: [...MaterialProviders, ToastrService],
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, FullCalendarModule, LeaveDetailDialogComponent, RouterLink, SkeletonLoaderComponent],
+  providers: [...MaterialProviders],
   templateUrl: './applications.component.html',
   styleUrl: './applications.component.scss'
 })

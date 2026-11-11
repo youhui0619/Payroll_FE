@@ -4,7 +4,6 @@ import { FormArray, FormControl, FormGroup, FormRecord, FormsModule, ReactiveFor
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
 import { leavePolicies } from '../../../../data/leave/leave-policies.data';
 import type { LeavePolicy, LeaveServiceEntitlementTier } from '../../../../models/leave/leave-policy.model';
@@ -77,8 +76,8 @@ function createWorkingScheduleForm(schedule: WorkingSchedule) {
 
 @Component({
   selector: 'app-edit',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule,  ToastrModule, DropzoneComponent],
-  providers: [...MaterialProviders, ToastrService],
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule,  DropzoneComponent],
+  providers: [...MaterialProviders],
   templateUrl: './edit.component.html',
   styleUrl: './edit.component.scss'
 })

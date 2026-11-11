@@ -3,7 +3,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { RouterLink } from '@angular/router';
-import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { CalendarDay, LeaveRecord } from '../../../../models/leave/leave.model';
 import type { EmployeeRecord } from '../../../../models/workforce/employee.model';
 import { employees as employeeDirectory } from '../../../../data/workforce/employees.data';
@@ -13,8 +12,8 @@ import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-
 
 @Component({
   selector: 'app-overview',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, RouterLink, SkeletonLoaderComponent],
-  providers: [...MaterialProviders, ToastrService],
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, RouterLink, SkeletonLoaderComponent],
+  providers: [...MaterialProviders],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })

@@ -3,13 +3,12 @@ import { Component, OnDestroy } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { RouterLink } from '@angular/router';
-import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { createFormGroupFromFields, FormConfig, FormFieldConfig, FormsComponent } from '../../../../shared/forms/forms.component';
 
 @Component({
   selector: 'app-create',
-  imports: [...MaterialImports, FormsModule, ReactiveFormsModule, ToastrModule, FormsComponent],
-  providers: [...MaterialProviders, ToastrService],
+  imports: [...MaterialImports, FormsModule, ReactiveFormsModule, FormsComponent],
+  providers: [...MaterialProviders],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'
 })

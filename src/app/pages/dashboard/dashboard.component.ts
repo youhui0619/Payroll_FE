@@ -30,6 +30,7 @@ import { employees } from '../../data/workforce/employees.data';
 import type { LeaveApplication, LeaveRecord } from '../../models/leave/leave.model';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
 import { AlertService } from '../../shared/components/alert/alert.service';
+import { ToastService } from '../../shared/components/toast/toast.service';
 import { MaterialProviders } from '../../shared/material-imports';
 import { SkeletonLoaderComponent } from '../../shared/components/skeleton-loader/skeleton-loader.component';
 
@@ -66,6 +67,7 @@ export class DashboardComponent {
   selectedLeave: LeaveDialogData | null = null;
   private readonly ngZone = inject(NgZone);
   private readonly alertService = inject(AlertService);
+  private readonly toastService = inject(ToastService);
 
   openDialog() {
     this.alertService.show({
@@ -79,6 +81,32 @@ export class DashboardComponent {
       onReject: () => {
         this.handleReportReject()
        }
+    });
+  }
+
+  openToast(): void {
+    this.toastService.show({
+      title: 'Payroll report',
+      message: 'Your payroll report is ready to review.',
+      icon: 'success'
+    });
+
+     this.toastService.show({
+      title: 'Payroll report',
+      message: 'Your payroll report is ready to review.',
+      icon: 'danger'
+    });
+
+     this.toastService.show({
+      title: 'Payroll report',
+      message: 'Your payroll report is ready to review.',
+      icon: 'info'
+    });
+
+     this.toastService.show({
+      title: 'Payroll report',
+      message: 'Your payroll report is ready to review.',
+      icon: 'warning'
     });
   }
 

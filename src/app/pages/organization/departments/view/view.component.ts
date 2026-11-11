@@ -4,7 +4,6 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { FullCalendarModule, CalendarOptions } from '@fullcalendar/angular';
 import { departments } from '../../../../data/workforce/departments.data';
 import { employees as employeeRecords } from '../../../../data/workforce/employees.data';
@@ -19,8 +18,8 @@ interface DepartmentTreeNode {
 
 @Component({
   selector: 'app-view',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, FullCalendarModule, RouterLink],
-    providers: [...MaterialProviders, ToastrService],
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, FullCalendarModule, RouterLink],
+    providers: [...MaterialProviders],
     templateUrl: './view.component.html',
   styleUrl: './view.component.scss'
 })

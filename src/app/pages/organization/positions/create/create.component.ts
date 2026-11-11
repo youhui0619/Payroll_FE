@@ -1,15 +1,14 @@
 
 import { Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { createFormGroupFromFields, type FormConfig, FormsComponent } from '../../../../shared/forms/forms.component';
 import { departments as departmentData } from '../../../../data/workforce/departments.data';
 
 @Component({
   selector: 'app-create',
-  imports: [...MaterialImports, FormsModule, ReactiveFormsModule, ToastrModule, FormsComponent],
-  providers: [...MaterialProviders, ToastrService],
+  imports: [...MaterialImports, FormsModule, ReactiveFormsModule, FormsComponent],
+  providers: [...MaterialProviders],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'
 })

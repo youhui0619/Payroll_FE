@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
 import { FullCalendarModule, CalendarOptions } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/angular/daygrid';
@@ -15,8 +14,8 @@ import { NavigationService } from '../../../../services/navigation.service';
 
 @Component({
   selector: 'app-view',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, FullCalendarModule, LeaveDetailDialogComponent],
-  providers: [...MaterialProviders, ToastrService],
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, FullCalendarModule, LeaveDetailDialogComponent],
+  providers: [...MaterialProviders],
   templateUrl: './view.component.html',
   styleUrl: './view.component.scss'
 })

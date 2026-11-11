@@ -4,15 +4,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../shared/material-imports';
 import { RouterLink } from '@angular/router';
-import { ToastrService, ToastrModule } from 'ngx-toastr';
 import { payrollList } from '../../../data/payroll/payroll.data';
 import { payslips } from '../../../data/payroll/payslips.data';
 import { PayrollDetailDialogComponent } from '../../../shared/dialog/payroll-detail-dialog/payroll-detail-dialog.component';
 
 @Component({
   selector: 'app-overview',
-  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, ToastrModule, RouterLink, PayrollDetailDialogComponent, SkeletonLoaderComponent],
-  providers: [...MaterialProviders, ToastrService],
+  imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, RouterLink, PayrollDetailDialogComponent, SkeletonLoaderComponent],
+  providers: [...MaterialProviders],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })

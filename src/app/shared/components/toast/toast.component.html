@@ -1,0 +1,22 @@
+<div class="toast-container" aria-live="polite" aria-relevant="additions removals">
+  @for (toast of toastService.toasts(); track toast.id) {
+    <div class="toast-item"
+             [class.toast-danger]="toast.icon === 'danger'"
+             [class.toast-success]="toast.icon === 'success'"
+             [class.toast-warning]="toast.icon === 'warning'"
+             [class.toast-info]="toast.icon === 'info'"
+             [attr.role]="toast.icon === 'danger' ? 'alert' : 'status'">
+      <span class="toast-icon-badge" aria-hidden="true">
+        <tabler-icon class="toast-icon" [icon]="iconName(toast.icon)" [size]="20"></tabler-icon>
+      </span>
+      <div class="toast-copy">
+        <h2 class="toast-title">{{ toast.title }}</h2>
+        <p class="toast-message">{{ toast.message }}</p>
+      </div>
+      <button type="button" class="toast-close" aria-label="Dismiss notification"
+              (click)="toastService.dismiss(toast.id)">&times;</button>
+      <span class="toast-progress" aria-hidden="true"
+            [style.animation-duration.ms]="toast.duration ?? 5000"></span>
+    </div>
+  }
+</div>
