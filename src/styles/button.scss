@@ -2,6 +2,11 @@
   border-radius: 9px!important; 
   border: 1px solid var(--light-disabled)!important;
   color: #d9d9d9!important;
+  
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+  }
 }
 
 .mat-mdc-icon-button{
@@ -41,6 +46,7 @@
   color: var(--white)!important;
   background: var(--primary)!important;
   border: 1px solid var(--primary)!important;
+
 }
 
 .mat-mdc-unelevated-button[color="secondary"] {

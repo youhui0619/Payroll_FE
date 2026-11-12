@@ -3,6 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MaterialImports, MaterialProviders } from '../../../shared/material-imports';
 import { ApiService } from '../../../services/api.service';
 import { AuthService } from '../../../services/auth.service';
+import { ToastService } from '../../../shared/components/toast/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -14,22 +15,28 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class LoginComponent {
   constructor(
+    private toastService: ToastService,
     private apiService: ApiService,
     private authService: AuthService,
   ) { }
 
   form: FormGroup = new FormGroup({
-    email: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+      // Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/),
+    ]),
   });
+
   submitting: boolean = false;
-  hidePassword = true;
+  hidePassword: boolean = true;
 
   togglePasswordVisibility(): void {
     this.hidePassword = !this.hidePassword;
   }
 
-  private resetForm(){
+  resetForm(){
     this.submitting = false;
     this.form.reset();
     this.form.markAsPristine();
@@ -53,8 +60,13 @@ export class LoginComponent {
 
       },
       error: (error) => {
-          console.log("error", error)
-          this.submitting = false;
+        console.log("error", error)
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+        this.submitting = false;
       }
     })
   }

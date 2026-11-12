@@ -56,6 +56,14 @@ interface DashboardLeaveEntry {
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
+  constructor(
+    private toastService: ToastService,
+    private alertService: AlertService,
+    private ngZone: NgZone,
+  ){
+    
+  }
+  
   loading = true;
   private readonly readyCharts = new Set<string>();
 
@@ -69,9 +77,6 @@ export class DashboardComponent {
   }
 
   selectedLeave: LeaveDialogData | null = null;
-  private readonly ngZone = inject(NgZone);
-  private readonly alertService = inject(AlertService);
-  private readonly toastService = inject(ToastService);
 
   openDialog() {
     this.alertService.show({
