@@ -77,8 +77,12 @@ h4{
 
 .mat-mdc-menu-item:hover {
     background-color: var(--light-primary) !important;
+    color: var(--primary)!important
   }
 
+.mat-mdc-menu-item:hover .text-muted {
+    color: var(--primary) !important;
+}
   /* Focus */
   .mat-mdc-menu-item:focus {
     background-color: var(--light-primary) !important;;

@@ -26,7 +26,7 @@ import * as TablerIcons from '@tabler/icons-angular';
 const tablerIcons = [
   TablerIcons.IconAdjustments, TablerIcons.IconAlertCircle, TablerIcons.IconAlertTriangle, TablerIcons.IconArrowLeft, TablerIcons.IconArrowNarrowRight, TablerIcons.IconArrowRight,
   TablerIcons.IconArrowsExchange, TablerIcons.IconArticle, TablerIcons.IconBox, TablerIcons.IconBuilding,
-  TablerIcons.IconBriefcase, TablerIcons.IconBuildingWarehouse, TablerIcons.IconCalendar, TablerIcons.IconCalendarDue, TablerIcons.IconCalendarEvent, TablerIcons.IconCash, TablerIcons.IconChartBar,
+  TablerIcons.IconBriefcase, TablerIcons.IconBuildingWarehouse, TablerIcons.IconBell, TablerIcons.IconCalendar, TablerIcons.IconCalendarDue, TablerIcons.IconCalendarEvent, TablerIcons.IconCash, TablerIcons.IconChartBar,
   TablerIcons.IconChartDonut, TablerIcons.IconCheck, TablerIcons.IconChevronLeft, TablerIcons.IconCircleCheck,
   TablerIcons.IconCircleDashed, TablerIcons.IconCircleDot, TablerIcons.IconClipboardCheck, TablerIcons.IconClipboardList, TablerIcons.IconClock,
   TablerIcons.IconClock24, TablerIcons.IconCopy, TablerIcons.IconCreditCard, TablerIcons.IconCurrencyDollar,
@@ -43,7 +43,8 @@ const tablerIcons = [
   TablerIcons.IconProgressCheck, TablerIcons.IconReceipt, TablerIcons.IconSearch, TablerIcons.IconSettings, TablerIcons.IconShieldCheck,
   TablerIcons.IconStar, TablerIcons.IconTable, TablerIcons.IconTransfer, TablerIcons.IconTransferIn,
   TablerIcons.IconTransferOut, TablerIcons.IconTrash, TablerIcons.IconTruckDelivery, TablerIcons.IconUpload,
-  TablerIcons.IconUserCheck, TablerIcons.IconUserOff, TablerIcons.IconUsers, TablerIcons.IconWalletOff, TablerIcons.IconX,
+  TablerIcons.IconUserCheck, TablerIcons.IconUserCircle, TablerIcons.IconUserOff, TablerIcons.IconUsers, TablerIcons.IconWalletOff, TablerIcons.IconX,
+  TablerIcons.IconLogout,
 ];
 
 const tablerIconRegistry = Object.fromEntries(

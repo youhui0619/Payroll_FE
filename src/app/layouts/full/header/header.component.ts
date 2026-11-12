@@ -1,14 +1,10 @@
- import { Component, Output, EventEmitter, ElementRef, HostListener, Input } from '@angular/core';
-
-import { DropdownComponent } from '../../../shared/dropdown/dropdown.component';
-import { TablerIconComponent } from '@tabler/icons-angular';
-
-import { MatButtonModule } from '@angular/material/button';
+import { Component, Output, EventEmitter, ElementRef, HostListener, Input } from '@angular/core';
+import { MaterialImports } from '../../../shared/material-imports';
 import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [BreadcrumbComponent, DropdownComponent, TablerIconComponent, MatButtonModule],
+  imports: [...MaterialImports, BreadcrumbComponent, ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })

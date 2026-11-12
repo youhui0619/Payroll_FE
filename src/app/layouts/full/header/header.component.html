@@ -40,16 +40,21 @@
         <app-dropdown [(isOpen)]="isDropdownOpen" [notifications]="dropdownList"></app-dropdown>
       </div> -->
     <!-- User -->
-    <div class="user-profile profile" (click)="$event.stopPropagation(); toggleProfile($event)">
-      <div class="avatar">
+    <button type="button" class="user-profile profile" [matMenuTriggerFor]="menu" aria-label="Open user menu">
+      <div class="avatar" >
         Y
       </div>
-
-      <app-dropdown [(isOpen)]="isProfileOpen" mode="custom">
-        <div class="profile-item"><a class="profile-link" routerLink="/profile">Profile</a></div>
-        <div class="profile-item"><button class="profile-logout" (click)="onLogout()">Logout</button></div>
-      </app-dropdown>
-    </div>
+    </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item routerLink="/profile">
+          <tabler-icon icon="user-circle" [size]="16" class="text-muted me-2"></tabler-icon>
+          <span class="text-muted">Profile</span>
+        </button>
+        <button mat-menu-item (click)="onLogout()">
+          <tabler-icon icon="logout" [size]="16" class="text-muted me-2"></tabler-icon>
+          <span class="text-muted">Logout</span>
+        </button>
+      </mat-menu>
 
   </div>
 
