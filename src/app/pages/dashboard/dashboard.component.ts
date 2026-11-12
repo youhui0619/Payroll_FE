@@ -60,8 +60,12 @@ export class DashboardComponent {
   private readonly readyCharts = new Set<string>();
 
   onChartReady(chart: string): void {
-    this.readyCharts.add(chart);
-    this.loading = this.readyCharts.size < 3;
+    this.ngZone.run(() => {
+      this.readyCharts.add(chart);
+      // The dashboard content should not stay blocked if one chart fails to
+      // initialize. Show it as soon as the first chart is ready.
+      this.loading = false;
+    });
   }
 
   selectedLeave: LeaveDialogData | null = null;
