@@ -20,21 +20,21 @@
           <mat-label class="form-label" for="email">Email address <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput id="email" name="email" type="email" placeholder="Enter email address" formControlName="email" autocomplete="off">
-            @if (form.get('email')?.hasError('required')) {
-              <mat-error class="text-danger">Email is required.</mat-error>
-            } @else if (form.get('email')?.hasError('email')) {
-              <mat-error class="text-danger">Please enter a valid email address.</mat-error>
+            @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
+              <mat-error>Email is required.</mat-error>
+            } @else if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
+              <mat-error>Please enter a valid email address.</mat-error>
             }
           </mat-form-field>
 
           <mat-label class="form-label" for="password">Password <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput id="password" name="password" [type]="hidePassword ? 'password' : 'text'" placeholder="Enter password" formControlName="password" autocomplete="off">
-            @if (form.get('password')?.hasError('required')) {
+            @if (form.get('password')?.hasError('required') && form.get('password')?.touched) {
               <mat-error class="text-danger">
                 Password is required.
               </mat-error>
-            } @else if (form.get('password')?.hasError('minlength')) {
+            } @else if (form.get('password')?.hasError('minlength') && form.get('password')?.touched) {
               <mat-error class="text-danger">
                 Password must be at least 8 characters long.
               </mat-error>

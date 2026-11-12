@@ -43,7 +43,7 @@ export class LoginComponent {
     this.form.markAsUntouched();
   }
 
-  onSubmit(form: any) {
+  onSubmit(form: FormGroup) {
     if (form.invalid || this.submitting) {
       form.markAllAsTouched();
       return;

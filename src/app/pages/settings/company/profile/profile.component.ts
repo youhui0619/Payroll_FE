@@ -3,7 +3,9 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { COMPANY_PROFILE } from '../../../../data/company/company.data';
 import type { CompanyFinancialYearStartMonth } from '../../../../models/company/company.model';
-
+// import { ApiService } from '../../../../services/api.service';
+// import { AuthService } from '../../../../services/auth.service';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
 @Component({
   selector: 'app-profile',
   standalone: true,
@@ -12,10 +14,19 @@ import type { CompanyFinancialYearStartMonth } from '../../../../models/company/
   templateUrl: './profile.component.html'
 })
 export class ProfileComponent {
+  constructor(
+    private toastService: ToastService,
+    // private apiService: ApiService,
+    // private authService: AuthService,
+  ) { }
+
   @Input() showHeader = true;
   @Input() showSubmitButton = true;
-  readonly companyProfile = COMPANY_PROFILE;
-  readonly financialMonths: { value: CompanyFinancialYearStartMonth; label: string }[] = [
+  companyProfile = {};
+  readonly financialMonths: {
+    value: CompanyFinancialYearStartMonth;
+    label: string;
+  }[] = [
     { value: 'JANUARY', label: 'January' },
     { value: 'FEBRUARY', label: 'February' },
     { value: 'MARCH', label: 'March' },
@@ -30,30 +41,76 @@ export class ProfileComponent {
     { value: 'DECEMBER', label: 'December' }
   ];
 
-  readonly companyForm = new FormGroup({
-    name: new FormControl(this.companyProfile.name, { nonNullable: true, validators: [Validators.required] }),
-    registrationNo: new FormControl(this.companyProfile.registrationNo, { nonNullable: true, validators: [Validators.required] }),
-    contactNo: new FormControl(this.companyProfile.contactNo, { nonNullable: true, validators: [Validators.required] }),
-    email: new FormControl(this.companyProfile.email, { nonNullable: true, validators: [Validators.required, Validators.email] }),
-    sstNo: new FormControl(this.companyProfile.sstNo ?? '', { nonNullable: true }),
-    taxNo: new FormControl(this.companyProfile.taxNo ?? '', { nonNullable: true }),
-    website: new FormControl(this.companyProfile.website ?? '', { nonNullable: true }),
-    logo: new FormControl(this.companyProfile.logo ?? '', { nonNullable: true }),
-    financialStartingMonth: new FormControl<CompanyFinancialYearStartMonth>(this.companyProfile.financialStartingMonth, { nonNullable: true, validators: [Validators.required] }),
-    businessAddressLine1: new FormControl(this.companyProfile.businessAddressLine1, { nonNullable: true, validators: [Validators.required] }),
-    businessAddressLine2: new FormControl(this.companyProfile.businessAddressLine2, { nonNullable: true }),
-    businessCity: new FormControl(this.companyProfile.businessCity, { nonNullable: true, validators: [Validators.required] }),
-    businessPostcode: new FormControl(this.companyProfile.businessPostcode, { nonNullable: true, validators: [Validators.required] }),
-    businessState: new FormControl(this.companyProfile.businessState, { nonNullable: true, validators: [Validators.required] }),
-    businessCountry: new FormControl(this.companyProfile.businessCountry, { nonNullable: true, validators: [Validators.required] })
+  form: FormGroup = new FormGroup({
+    name: new FormControl('', [Validators.required]),
+    registrationNo: new FormControl('', [Validators.required]),
+    contactNo: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    sstNo: new FormControl(''),
+    taxNo: new FormControl( ''),
+    website: new FormControl(''),
+    logo: new FormControl(''),
+    financialStartingMonth: new FormControl<CompanyFinancialYearStartMonth>('JANUARY', [Validators.required]),
+    businessAddressLine1: new FormControl('', [Validators.required]),
+    businessAddressLine2: new FormControl(''),
+    businessCity: new FormControl('', [Validators.required]),
+    businessPostcode: new FormControl('', [Validators.required]),
+    businessState: new FormControl('', [Validators.required]),
+    businessCountry: new FormControl('', [Validators.required])
   });
+  submitting: boolean = false;
 
-  onSubmit(): void {
-    if (this.companyForm.invalid) {
-      this.companyForm.markAllAsTouched();
+  ngOnInit() {
+    this.getCompanyProfile()
+  }
+
+  getCompanyProfile(){
+    this.companyProfile = COMPANY_PROFILE
+    console.log("companyProfile", this.companyProfile)
+
+    if(this.companyProfile){
+      this.form.patchValue(this.companyProfile)
+    }
+
+  }
+  onSubmit(form: FormGroup) {
+    if (form.invalid) {
+      form.markAllAsTouched();
       return;
     }
 
-    console.log('company profile', this.companyForm.getRawValue());
-  }
+    const data = form.value;
+    this.submitting = true;
+    this.toastService.show({
+      title: "Success",
+      message: "Success Message",
+      icon: 'success'
+    })
+    this.submitting = false;
+
+    
+
+    // this.apiService.login(data).subscribe({
+    //   next: (response: any) => {
+    //    this.toastService.show({
+    //       title: error.error.code,
+    //       message: error.error.message,
+    //       icon: 'danger'
+    //     });
+    //     this.form.markAsPristine();
+  //       this.form.markAsUntouched();
+    //     this.authService.login(response)
+
+    //   },
+    //   error: (error) => {
+    //     console.log("error", error)
+    //     this.toastService.show({
+    //       title: error.error.code,
+    //       message: error.error.message,
+    //       icon: 'danger'
+    //     });
+    //     this.submitting = false;
+    //   }
+    // })
+    }
 }
