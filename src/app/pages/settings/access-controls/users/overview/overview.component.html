@@ -79,25 +79,38 @@
 
 <div class="row mt-4">
   <div class="col-sm-12 px-2">
-    <div class="card">
-      <div class="card-header mb-3">
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-          <h6 class="fs-14 fw-400 text-muted my-0">
-            <span class="fw-550 text-primary">All ({{ filteredUsers.length }})</span>
-            | Active ({{ filteredCountByStatus('ACTIVE') }})
-            | Inactive ({{ filteredCountByStatus('INACTIVE') }})
-          </h6>
-          <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2" type="button" (click)="clearFilters()">
-            <tabler-icon icon="x" [size]="16"></tabler-icon> Clear
-          </button>
+  <div class="card">
+    <div class="card-header mb-3">
+      <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
+        <h6 class="fs-14 fw-400 text-muted my-0">
+          <span class="fw-550 text-primary">All ({{ filteredUsers.length }})</span>
+          | Active ({{ filteredCountByStatus('ACTIVE') }})
+          | Inactive ({{ filteredCountByStatus('INACTIVE') }})
+        </h6>
+        <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center flex-lg-nowrap gap-2">
+          <div class="d-flex flex-wrap flex-lg-nowrap gap-2 ms-auto">
+              <button mat-flat-button color="primary-outline" class="btn-sm">
+                  <tabler-icon icon="x" [size]="16"></tabler-icon>
+                  Clear
+              </button>
+              <button mat-flat-button color="primary-outline" class="btn-sm">
+                  <tabler-icon icon="upload" [size]="16"></tabler-icon>
+                  Import
+              </button>
+              <button mat-flat-button color="primary-outline" class="btn-sm">
+                  <tabler-icon icon="download" [size]="16"></tabler-icon>
+                  Export
+              </button>
+          </div>
         </div>
       </div>
+    </div>
       <div class="card-body">
         <div class="material-datatables table-responsive">
           @if (loading) {
             <app-skeleton-loader [rows]="6" [columns]="4"></app-skeleton-loader>
           } @else {
-<table matSort class="mat-sort table no-wrap w-100 text-left">
+          <table matSort class="mat-sort table no-wrap w-100 text-left">
             <thead>
               <tr>
                 <th class="text-dark">User</th>
@@ -133,12 +146,15 @@
                   </td>
                 </tr>
               }
-              @if (filteredUsers.length === 0) {
-                <tr><td colspan="4" class="text-center text-muted py-4">No users match these filters.</td></tr>
+              @empty {
+                <tr>
+                  <td colspan="4" class="text-center text-muted py-4">No users match these filters...</td>
+                </tr>
               }
             </tbody>
           </table>
           }
+          <mat-paginator [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>
         </div>
       </div>
     </div>

@@ -1,3 +1,5 @@
+import { FormControl } from "@angular/forms";
+
 export type RoleStatus = 'ACTIVE' | 'INACTIVE';
 
 export interface RolePermission {
@@ -21,3 +23,11 @@ export interface PermissionModule {
   label: string;
   group: string;
 }
+
+
+export type PermissionControls = {
+  view: FormControl<boolean>;
+  create: FormControl<boolean>;
+  edit: FormControl<boolean>;
+  delete: FormControl<boolean>;
+};

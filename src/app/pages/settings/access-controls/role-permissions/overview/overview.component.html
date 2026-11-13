@@ -12,32 +12,60 @@
 </div>
 
 <div class="card">
-  <div class="card-body p-0">
-    <div class="table-responsive">
+  <div class="card-header mb-3">
+    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
+      <h6 class="fs-14 fw-400 text-muted my-0">
+        <span class="fw-550 text-primary">All (5)</span>
+        | Active (4) 
+        | Inactive (1) 
+      </h6>
+      <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center flex-lg-nowrap gap-2">
+        <div class="d-flex flex-wrap flex-lg-nowrap gap-2 ms-auto">
+            <button mat-flat-button color="primary-outline" class="btn-sm">
+                <tabler-icon icon="x" [size]="16"></tabler-icon>
+                Clear
+            </button>
+            <button mat-flat-button color="primary-outline" class="btn-sm">
+                <tabler-icon icon="upload" [size]="16"></tabler-icon>
+                Import
+            </button>
+            <button mat-flat-button color="primary-outline" class="btn-sm">
+                <tabler-icon icon="download" [size]="16"></tabler-icon>
+                Export
+            </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="material-datatables table-responsive">
       @if (loading) {
-            <app-skeleton-loader [rows]="6" [columns]="6"></app-skeleton-loader>
-          } @else {
-<table class="table align-middle mb-0">
+        <app-skeleton-loader [rows]="6" [columns]="6"></app-skeleton-loader>
+      } @else {
+      <table matSort class="mat-sort table no-wrap w-100 text-left">
         <thead>
           <tr>
-            <th scope="col">Role</th>
-            <th scope="col">Description</th>
-            <th scope="col">Users</th>
-            <th scope="col">Areas with access</th>
-            <th scope="col">Status</th>
-            <th scope="col">Action</th>
+            <th class="text-dark" scope="col">Role</th>
+            <th class="text-dark" scope="col">Description</th>
+            <th class="text-dark" scope="col">Users</th>
+            <th class="text-dark" scope="col">Areas with access</th>
+            <th class="text-dark" scope="col">Status</th>
+            <th class="text-dark" scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
-
           @for (role of roles; track role.id) {
             <tr>
-              <td class="text-dark fw-500">{{ role.name }}</td>
-              <td>{{ role.description }}</td>
-              <td>{{ assignedUsers(role.name) }}</td>
-              <td>{{ grantedPermissionCount(role) }} areas</td>
               <td>
-                <span class="badge" [class.bg-light-success]="role.status === 'ACTIVE'" [class.text-success]="role.status === 'ACTIVE'" [class.bg-light-secondary]="role.status === 'INACTIVE'">
+                <p class="text-dark fw-500">{{ role.name }}</p>
+                <p class="fs-10 text-muted fw-300">{{ role.id }}</p>
+              </td>
+              <td class="text-muted">{{ role.description }}</td>
+              <td class="text-muted">{{ assignedUsers(role.name) }}</td>
+              <td class="text-muted">{{ grantedPermissionCount(role) }} areas</td>
+              <td>
+                <span class="chip" [class.bg-light-success]="role.status === 'ACTIVE'" 
+                  [class.text-success]="role.status === 'ACTIVE'" [class.bg-light-danger]="role.status === 'INACTIVE'">
                   {{ role.status === 'ACTIVE' ? 'Active' : 'Inactive' }}
                 </span>
               </td>
@@ -49,12 +77,13 @@
             </tr>
           } @empty {
             <tr>
-              <td colspan="6" class="text-center text-muted py-4">No roles have been created.</td>
+              <td colspan="6" class="text-center text-muted py-4">No roles match these filters...</td>
             </tr>
           }
-            </tbody>
+        </tbody>
       </table>
-          }
+      }
+      <mat-paginator [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>
     </div>
   </div>
 </div>

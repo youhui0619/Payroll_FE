@@ -16,7 +16,7 @@
   </div>
 </div>
 
-<form [formGroup]="roleForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="form" (ngSubmit)="onSubmit(form)">
   <h4 class="text-primary">Role Information</h4>
   <div class="card mb-4">
     <div class="card-body">
@@ -24,15 +24,9 @@
         <div class="col-sm-8 px-2">
           <mat-label class="form-label">Role Name <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
-            <input matInput formControlName="name" placeholder="e.g. HR Manager">
-            @if (roleForm.controls.name.hasError('required')) {
+            <input matInput formControlName="name" placeholder="Enter role name">
+            @if (form.controls.name.hasError('required')) {
               <mat-error class="text-danger">Role name is required.</mat-error>
-            }
-            @if (roleForm.controls.name.hasError('maxlength')) {
-              <mat-error class="text-danger">Use no more than 60 characters.</mat-error>
-            }
-            @if (roleForm.controls.name.hasError('duplicate')) {
-              <mat-error class="text-danger">A role with this name already exists.</mat-error>
             }
           </mat-form-field>
         </div>
@@ -43,15 +37,15 @@
               <mat-option value="ACTIVE">Active</mat-option>
               <mat-option value="INACTIVE">Inactive</mat-option>
             </mat-select>
+            @if (form.controls.status.hasError('required')) {
+              <mat-error class="text-danger">Role name is required.</mat-error>
+            }
           </mat-form-field>
         </div>
         <div class="col-sm-12 px-2">
           <mat-label class="form-label">Description</mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <textarea matInput rows="3" formControlName="description" placeholder="Describe what this role is responsible for"></textarea>
-            @if (roleForm.controls.description.hasError('maxlength')) {
-              <mat-error class="text-danger">Use no more than 250 characters.</mat-error>
-            }
           </mat-form-field>
         </div>
       </div>
@@ -99,10 +93,7 @@
   </div>
 
   <div class="d-flex align-items-center justify-content-end gap-3">
-    <button type="button" mat-flat-button color="primary-outline" (click)="goBack()">Cancel</button>
-    <button type="submit" mat-flat-button color="primary">
-      <tabler-icon icon="check" [size]="16"></tabler-icon>
-      Save Role
-    </button>
+    <button mat-flat-button color="primary-outline" (click)="goBack()"><tabler-icon icon="x" [size]="16"></tabler-icon>Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="!form.valid || submitting"><tabler-icon icon="check" [size]="16"></tabler-icon>{{ submitting ? 'Submitting...' : 'Submit' }}</button>
   </div>
 </form>
