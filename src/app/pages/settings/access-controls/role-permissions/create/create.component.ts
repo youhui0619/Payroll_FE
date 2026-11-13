@@ -135,7 +135,6 @@ export class CreateComponent {
       icon: 'danger'
     });
     this.submitting = false;
-
     return this.router.navigate(['/settings/access-control/role-permissions/overview']);
   }
 

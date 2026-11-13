@@ -34,24 +34,17 @@ export class EditComponent {
       .filter(item => item.module.group === group)
   }));
 
-  form!: FormGroup<{
-    name: FormControl<string>;
-    description: FormControl<string>;
-    status: FormControl<RoleStatus>;
-    permissions: FormArray<FormGroup<PermissionControls>>;
-  }>;
+  form = new FormGroup({
+    name: new FormControl('', { nonNullable: true, validators: [Validators.required]}),
+    description: new FormControl('', { nonNullable: true, validators: [Validators.required]}),
+    status: new FormControl<RoleStatus>('ACTIVE', { nonNullable: true, validators: [Validators.required]}),
+    permissions: new FormArray<FormGroup<PermissionControls>>(
+      permissionModules.map(() => this.createPermissionControls())
+    )
+  });
   submitting: boolean = false;
 
   ngOnInit() {
-    this.form = new FormGroup({
-      name: new FormControl('', { nonNullable: true, validators: [Validators.required]}),
-      description: new FormControl('', { nonNullable: true, validators: [Validators.required]}),
-      status: new FormControl<RoleStatus>('ACTIVE', { nonNullable: true, validators: [Validators.required]}),
-      permissions: new FormArray<FormGroup<PermissionControls>>(
-        permissionModules.map(() => this.createPermissionControls())
-      )
-    });
-
     this.getRole()
     
   }

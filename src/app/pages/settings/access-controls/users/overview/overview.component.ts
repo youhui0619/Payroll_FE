@@ -34,7 +34,7 @@ export class OverviewComponent implements OnInit {
   get filteredUsers() {
     const query = this.searchControl.value.trim().toLowerCase();
     return this.users.filter(user => {
-      const matchesQuery = !query || [user.fullName, user.email, user.id, ...user.roles]
+      const matchesQuery = !query || [user.name, user.email, user.id, ...user.roles]
         .some(value => value.toLowerCase().includes(query));
       const matchesRole = this.selectedRoles.length === 0 || this.selectedRoles.some(role => user.roles.includes(role));
       const matchesStatus = this.selectedStatuses.length === 0 || this.selectedStatuses.includes(user.status);

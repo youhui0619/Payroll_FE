@@ -16,13 +16,7 @@
   </div>
 </div>
 
-@if (createdUser) {
-  <div class="alert alert-success" role="status">
-    User <strong>{{ createdUser.fullName }}</strong> ({{ createdUser.id }}) has been created.
-  </div>
-}
-
-<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="form" (ngSubmit)="onSubmit(form)">
   <h4 class="text-primary">User information</h4>
   <div class="card mb-4">
     <div class="card-body">
@@ -30,23 +24,20 @@
         <div class="col-sm-6 px-2">
           <mat-label class="form-label">Full name <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
-            <input matInput formControlName="fullName" placeholder="Enter full name" autocomplete="name">
-            @if (userForm.controls.fullName.hasError('required')) {
+            <input matInput formControlName="name" placeholder="Enter name">
+            @if (form.controls.name.hasError('required')) {
               <mat-error class="text-danger">Full name is required.</mat-error>
-            }
-            @if (userForm.controls.fullName.hasError('maxlength')) {
-              <mat-error class="text-danger">Use no more than 100 characters.</mat-error>
             }
           </mat-form-field>
         </div>
         <div class="col-sm-6 px-2">
           <mat-label class="form-label">Email address <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
-            <input matInput type="email" formControlName="email" placeholder="name@company.com" autocomplete="email">
-            @if (userForm.controls.email.hasError('required')) {
+            <input matInput type="email" formControlName="email" placeholder="Enter email">
+            @if (form.controls.email.hasError('required')) {
               <mat-error class="text-danger">Email address is required.</mat-error>
             }
-            @if (userForm.controls.email.hasError('email')) {
+            @if (form.controls.email.hasError('email')) {
               <mat-error class="text-danger">Enter a valid email address.</mat-error>
             }
           </mat-form-field>
@@ -126,10 +117,8 @@
     </div>
   </div>
 
-  <div class="d-flex justify-content-end gap-3">
-    <button type="submit" mat-flat-button color="primary">
-      <tabler-icon icon="check" [size]="16"></tabler-icon>
-      Create user
-    </button>
+  <div class="d-flex align-items-center justify-content-end gap-3">
+    <button mat-flat-button color="primary-outline" (click)="goBack()"><tabler-icon icon="x" [size]="16"></tabler-icon>Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="!form.valid || submitting"><tabler-icon icon="check" [size]="16"></tabler-icon>{{ submitting ? 'Submitting...' : 'Submit' }}</button>
   </div>
 </form>

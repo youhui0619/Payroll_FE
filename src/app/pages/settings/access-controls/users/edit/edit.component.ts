@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../../shared/material-imports';
 import { NavigationService } from '../../../../../services/navigation.service';
@@ -8,6 +8,7 @@ import { roles } from '../../../../../data/access-control/roles.data';
 import { users } from '../../../../../data/access-control/users.data';
 import type { AccessControlRole } from '../../../../../models/access-control/role.model';
 import type { AccessControlUser, UserStatus } from '../../../../../models/access-control/user.model';
+import { ToastService } from '../../../../../shared/components/toast/toast.service';
 
 @Component({
   selector: 'app-edit-user',
@@ -18,25 +19,39 @@ import type { AccessControlUser, UserStatus } from '../../../../../models/access
   styleUrl: './edit.component.scss'
 })
 export class EditComponent {
-  private readonly route = inject(ActivatedRoute);
-  private readonly navigation = inject(NavigationService);
-  readonly user: AccessControlUser | undefined = users.find(item => item.id === this.route.snapshot.paramMap.get('id'));
-  readonly roleOptions = roles.filter(role => role.status === 'ACTIVE');
-  saved = false;
-
-  readonly userForm = new FormGroup({
-    fullName: new FormControl(this.user?.fullName ?? '', { nonNullable: true, validators: [Validators.required, Validators.maxLength(100)] }),
-    email: new FormControl(this.user?.email ?? '', { nonNullable: true, validators: [Validators.required, Validators.email, Validators.maxLength(150)] }),
-    roles: new FormControl<string[]>([...(this.user?.roles ?? [])], { nonNullable: true, validators: [Validators.required] }),
-    status: new FormControl<UserStatus>(this.user?.status ?? 'ACTIVE', { nonNullable: true })
+  constructor(
+    private toastService: ToastService,
+    private navigation: NavigationService,
+    private router: Router,
+    private route: ActivatedRoute
+  ){}
+  user: any;
+  roleOptions = roles.filter(role => role.status === 'ACTIVE');
+  form = new FormGroup({
+    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    email: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    roles: new FormControl<string[]>([], { nonNullable: true, validators: [Validators.required] }),
+    status: new FormControl<UserStatus>('ACTIVE', { nonNullable: true })
   });
+  submitting: boolean = false;
 
-  get selectedRoles(): AccessControlRole[] {
-    const selectedNames = this.userForm.controls.roles.value;
-    return this.roleOptions.filter(role => selectedNames.includes(role.name));
+  ngOnInit() {
+    this.getUser()
   }
 
-  get permissionGroups(): {
+  getUser(){
+    this.user = users.find(item => item.id === this.route.snapshot.paramMap.get('id'));
+    console.log("this.user", this.user)
+    if(this.user){
+      this.form.patchValue(this.user)
+    }
+  }
+
+  get selectedRoles(): AccessControlRole[] {
+    const selectedNames = this.form.controls.roles.value;
+    return this.roleOptions.filter(role => selectedNames.includes(role.name));
+  }
+get grantedPermissionGroups(): {
     label: string;
     modules: { label: string; actions: { view: boolean; create: boolean; edit: boolean; delete: boolean } }[];
   }[] {
@@ -63,22 +78,38 @@ export class EditComponent {
     })).filter(group => group.modules.length > 0);
   }
 
+  get grantedPermissionCount(): number {
+    return this.grantedPermissionGroups.reduce((count, group) => count + group.modules.length, 0);
+  }
+
   goBack(): Promise<boolean> {
     return this.navigation.back('/settings/access-control/users/overview');
   }
 
-  onSubmit(): void {
+  onSubmit(form: FormGroup) {
     if (!this.user) return;
-    if (this.userForm.invalid) {
-      this.userForm.markAllAsTouched();
+    if (form.invalid) {
+      form.markAllAsTouched();
       return;
     }
 
-    const value = this.userForm.getRawValue();
-    this.user.fullName = value.fullName.trim();
-    this.user.email = value.email.trim().toLowerCase();
-    this.user.roles = [...value.roles];
-    this.user.status = value.status;
-    this.saved = true;
+    const value = form.getRawValue();
+    const data: AccessControlUser = {
+      id: `USR-${String(users.length + 1).padStart(4, '0')}`,
+      name: value.name.trim(),
+      email: value.email.trim().toLowerCase(),
+      roles: value.roles,
+      status: value.status
+    };
+
+    console.log("data", data)
+    this.toastService.show({
+      title: 'Success',
+      message: 'error.error.message',
+      icon: 'danger'
+    });
+    this.submitting = false;
+
+    return this.router.navigate(['/settings/access-control/users/overview']);
   }
 }

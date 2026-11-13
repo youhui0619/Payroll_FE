@@ -2,11 +2,13 @@ import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../../shared/material-imports';
 import { NavigationService } from '../../../../../services/navigation.service';
+import { Router } from '@angular/router';
 import { users } from '../../../../../data/access-control/users.data';
 import { roles } from '../../../../../data/access-control/roles.data';
 import { permissionModules } from '../../../../../data/access-control/permission-modules.data';
 import type { AccessControlRole } from '../../../../../models/access-control/role.model';
 import type { AccessControlUser, UserStatus } from '../../../../../models/access-control/user.model';
+import { ToastService } from '../../../../../shared/components/toast/toast.service';
 
 @Component({
   selector: 'app-create-user',
@@ -17,12 +19,24 @@ import type { AccessControlUser, UserStatus } from '../../../../../models/access
   styleUrl: './create.component.scss'
 })
 export class CreateComponent {
-  private readonly navigation = inject(NavigationService);
+  constructor(
+    private toastService: ToastService,
+    private navigation: NavigationService,
+    private router: Router
+  ){}
 
-  readonly roleOptions = roles.filter(role => role.status === 'ACTIVE');
+  roleOptions = roles.filter(role => role.status === 'ACTIVE');
+  form = new FormGroup({
+    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    email: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    roles: new FormControl<string[]>([], { nonNullable: true, validators: [Validators.required] }),
+    status: new FormControl<UserStatus>('ACTIVE', { nonNullable: true })
+  });
 
+  submitting = false;
+  
   get selectedRoles(): AccessControlRole[] {
-    const selectedNames = this.userForm.controls.roles.value;
+    const selectedNames = this.form.controls.roles.value;
     return this.roleOptions.filter(role => selectedNames.includes(role.name));
   }
 
@@ -57,43 +71,33 @@ export class CreateComponent {
     return this.grantedPermissionGroups.reduce((count, group) => count + group.modules.length, 0);
   }
 
-  readonly userForm = new FormGroup({
-    fullName: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(100)] }),
-    email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email, Validators.maxLength(150)] }),
-    roles: new FormControl<string[]>([], { nonNullable: true, validators: [Validators.required] }),
-    status: new FormControl<UserStatus>('ACTIVE', { nonNullable: true })
-  });
-
-  submitted = false;
-  createdUser: AccessControlUser | null = null;
-
   goBack(): Promise<boolean> {
     return this.navigation.back('/settings/access-control/users/overview');
   }
 
-  onSubmit(): void {
-    this.submitted = true;
-    if (this.userForm.invalid) {
-      this.userForm.markAllAsTouched();
+  onSubmit(form: FormGroup) {
+    this.submitting = true;
+    if (form.invalid) {
+      form.markAllAsTouched();
       return;
     }
 
-    const value = this.userForm.getRawValue();
-    const user: AccessControlUser = {
+    const value = form.getRawValue();
+    const data: AccessControlUser = {
       id: `USR-${String(users.length + 1).padStart(4, '0')}`,
-      fullName: value.fullName.trim(),
+      name: value.name.trim(),
       email: value.email.trim().toLowerCase(),
       roles: value.roles,
       status: value.status
     };
 
-    users.push(user);
-    this.createdUser = user;
-    this.userForm.reset({
-      fullName: '',
-      email: '',
-      roles: [],
-      status: 'ACTIVE'
+    console.log("data", data)
+    this.toastService.show({
+      title: 'Success',
+      message: 'error.error.message',
+      icon: 'danger'
     });
+    this.submitting = false;
+    return this.router.navigate(['/settings/access-control/users/overview']);
   }
 }
