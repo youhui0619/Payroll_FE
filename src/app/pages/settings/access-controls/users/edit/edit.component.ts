@@ -51,7 +51,7 @@ export class EditComponent {
     const selectedNames = this.form.controls.roles.value;
     return this.roleOptions.filter(role => selectedNames.includes(role.name));
   }
-get grantedPermissionGroups(): {
+  get grantedPermissionGroups(): {
     label: string;
     modules: { label: string; actions: { view: boolean; create: boolean; edit: boolean; delete: boolean } }[];
   }[] {

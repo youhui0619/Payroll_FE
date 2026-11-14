@@ -5,7 +5,6 @@ import { Router, RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { claimTypes } from '../../../../data/claims/claim-types.data';
 import type { ClaimTypeSetting, ClaimTypeSettingStatus } from '../../../../models/claims/claim-setting.model';
-import { NavigationService } from '../../../../services/navigation.service';
 
 @Component({
   selector: 'app-create',
@@ -16,46 +15,38 @@ import { NavigationService } from '../../../../services/navigation.service';
   styleUrl: './create.component.scss'
 })
 export class CreateComponent {
-  private readonly navigation = inject(NavigationService);
-  readonly claimForm = new FormGroup({
-    code: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.maxLength(20), Validators.pattern(/^[A-Za-z][A-Za-z0-9_-]*$/)]
-    }),
-    name: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(60)] }),
-    description: new FormControl('', { nonNullable: true, validators: [Validators.maxLength(250)] }),
+  constructor(
+    private router: Router,
+  ) {}
+
+  form = new FormGroup({
+    code: new FormControl('', { nonNullable: true,validators: [Validators.required]}),
+    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    description: new FormControl(''),
     status: new FormControl<ClaimTypeSettingStatus>('ACTIVE', { nonNullable: true })
   });
-  submitted = false;
+  submitting = false;
 
-  goBack(): void { void this.navigation.back('/settings/claim-settings/overview'); }
+  goBack() { 
+    return this.router.navigate(['/settings/claim-settings/overview'])
+   }
 
-  constructor(private readonly router: Router) {}
-
-  onSubmit(): void {
-    this.submitted = true;
-    const codeControl = this.claimForm.controls.code;
-    const normalizedCode = codeControl.value.trim().toUpperCase();
-    codeControl.setValue(normalizedCode, { emitEvent: false });
-
-    const duplicateCode = claimTypes.some(item => item.code.toUpperCase() === normalizedCode);
-    if (duplicateCode) {
-      codeControl.setErrors({ ...codeControl.errors, duplicate: true });
-    }
-
-    if (this.claimForm.invalid) {
-      this.claimForm.markAllAsTouched();
+  onSubmit(form: FormGroup) {
+    if (form.invalid) {
+      form.markAllAsTouched();
       return;
     }
 
-    const value = this.claimForm.getRawValue();
-    const newClaimType: ClaimTypeSetting = {
-      code: normalizedCode,
+    const value = form.getRawValue();
+    const data: ClaimTypeSetting = {
+      code: value.code.trim(),
       name: value.name.trim(),
       description: value.description.trim(),
       status: value.status
     };
-    claimTypes.push(newClaimType);
-    void this.router.navigateByUrl('/settings/claim-settings/overview');
+
+    console.log("data", data)
+    this.submitting = false;
+    return this.goBack()
   }
 }
