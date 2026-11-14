@@ -145,14 +145,15 @@
                   </td>
                 </tr>
               }
-              @if (claimTypes.length === 0) {
+              @empty {
                 <tr>
-                  <td colspan="5" class="text-center text-muted py-4">No claim types have been created.</td>
+                  <td colspan="4" class="text-center text-muted py-4">No claim types match these filters...</td>
                 </tr>
               }
             </tbody>
           </table>
           }
+          <mat-paginator [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>
         </div>
       </div>
     </div>

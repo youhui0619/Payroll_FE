@@ -1,5 +1,5 @@
 
-import { Component, DestroyRef, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -25,7 +25,7 @@ export class EditComponent implements OnInit {
   readonly leavePolicies = leavePolicies;
   leavePolicy: LeavePolicy | undefined;
 
-  readonly leaveForm = new FormGroup({
+  form = new FormGroup({
     leaveCode: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     leaveName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     description: new FormControl('', { nonNullable: true }),
@@ -47,46 +47,51 @@ export class EditComponent implements OnInit {
     allowEmployeeSpecificSettings: new FormControl(true, { nonNullable: true })
   });
 
-  submitted = false;
+  submitting = false;
 
-  constructor(private readonly route: ActivatedRoute, private readonly router: Router, private readonly destroyRef: DestroyRef) {
-    this.leaveForm.controls.serviceEntitlementTiers.disable({ emitEvent: false });
-    this.leaveForm.controls.carryForwardPolicy.valueChanges
+  constructor(
+    private route: ActivatedRoute, 
+    private router: Router, 
+  ) {
+    this.form.controls.serviceEntitlementTiers.disable({ emitEvent: false });
+    this.form.controls.carryForwardPolicy.valueChanges
       .pipe(takeUntilDestroyed())
       .subscribe(policy => this.updateMaximumCarryForwardValidation(policy));
-    this.leaveForm.controls.entitlementCalculationMethod.valueChanges
+    this.form.controls.entitlementCalculationMethod.valueChanges
       .pipe(takeUntilDestroyed())
       .subscribe(method => this.updateEntitlementValidation(method));
   }
 
-  ngOnInit(): void {
-    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
-      const leaveCode = params.get('leaveCode');
-      this.leavePolicy = this.leavePolicies.find(policy => policy.leaveCode === leaveCode);
+  ngOnInit() {
+    this.getLeavePolicy()
+  }
+  
+  getLeavePolicy(){
+    this.leavePolicy = leavePolicies.find(item => item.leaveCode === this.route.snapshot.paramMap.get('leaveCode'));
+    console.log("this.claimType", this.leavePolicy)
+    if(this.leavePolicy){
+      this.form.patchValue(this.leavePolicy)
+    }
+  }
 
-      if (!this.leavePolicy) {
-        void this.router.navigateByUrl('/settings/leave-settings/overview');
-        return;
-      }
-
-      this.patchLeaveForm(this.leavePolicy);
-    });
+  goBack() { 
+    return this.router.navigate(['/settings/claim-settings/overview'])
   }
 
   get showMaximumCarryForward(): boolean {
-    return this.leaveForm.controls.carryForwardPolicy.value === 'LIMITED';
+    return this.form.controls.carryForwardPolicy.value === 'LIMITED';
   }
 
   get isServiceBasedEntitlement(): boolean {
-    return this.leaveForm.controls.entitlementCalculationMethod.value === 'SERVICE';
+    return this.form.controls.entitlementCalculationMethod.value === 'SERVICE';
   }
 
   get serviceEntitlementTiers(): FormArray<ServiceEntitlementTierForm> {
-    return this.leaveForm.controls.serviceEntitlementTiers;
+    return this.form.controls.serviceEntitlementTiers;
   }
 
   onAllowEmployeeSpecificSettingsChange(enabled: boolean): void {
-    this.leaveForm.controls.allowEmployeeSpecificSettings.setValue(enabled);
+    this.form.controls.allowEmployeeSpecificSettings.setValue(enabled);
   }
 
   addServiceEntitlementTier(): void {
@@ -102,31 +107,10 @@ export class EditComponent implements OnInit {
     }
   }
 
-  onSubmit(): void {
-    this.submitted = true;
-    if (this.leaveForm.invalid || !this.leavePolicy) {
-      this.leaveForm.markAllAsTouched();
-      return;
-    }
-
-    const value = this.leaveForm.getRawValue();
-    const updatedPolicy: LeavePolicy = {
-      ...value,
-      defaultEntitlement: value.entitlementCalculationMethod === 'FIXED' ? value.defaultEntitlement : null,
-      serviceEntitlementTiers: value.entitlementCalculationMethod === 'SERVICE' ? value.serviceEntitlementTiers : [],
-      maximumCarryForward: value.carryForwardPolicy === 'LIMITED' ? value.maximumCarryForward : null
-    };
-    const policyIndex = this.leavePolicies.findIndex(policy => policy.leaveCode === this.leavePolicy?.leaveCode);
-    if (policyIndex < 0) return;
-
-    this.leavePolicies[policyIndex] = updatedPolicy;
-    this.leavePolicy = updatedPolicy;
-    void this.router.navigateByUrl('/settings/leave-settings/overview');
-  }
 
   private patchLeaveForm(policy: LeavePolicy): void {
     const { serviceEntitlementTiers, ...policyFields } = policy;
-    this.leaveForm.patchValue(policyFields, { emitEvent: false });
+    this.form.patchValue(policyFields, { emitEvent: false });
 
     this.serviceEntitlementTiers.clear({ emitEvent: false });
     const tiers: LeaveServiceEntitlementTier[] = serviceEntitlementTiers.length
@@ -162,8 +146,8 @@ export class EditComponent implements OnInit {
   }
 
   private updateEntitlementValidation(method: 'FIXED' | 'SERVICE'): void {
-    const defaultEntitlement = this.leaveForm.controls.defaultEntitlement;
-    const serviceEntitlementTiers = this.leaveForm.controls.serviceEntitlementTiers;
+    const defaultEntitlement = this.form.controls.defaultEntitlement;
+    const serviceEntitlementTiers = this.form.controls.serviceEntitlementTiers;
 
     if (method === 'SERVICE') {
       defaultEntitlement.reset(null, { emitEvent: false });
@@ -181,7 +165,7 @@ export class EditComponent implements OnInit {
   }
 
   private updateMaximumCarryForwardValidation(policy: 'NONE' | 'LIMITED' | 'UNLIMITED' | 'HR_REVIEW'): void {
-    const maximumCarryForward = this.leaveForm.controls.maximumCarryForward;
+    const maximumCarryForward = this.form.controls.maximumCarryForward;
     if (policy === 'LIMITED') {
       maximumCarryForward.enable({ emitEvent: false });
       maximumCarryForward.setValidators([Validators.required, Validators.min(0)]);
@@ -191,5 +175,23 @@ export class EditComponent implements OnInit {
       maximumCarryForward.disable({ emitEvent: false });
     }
     maximumCarryForward.updateValueAndValidity({ emitEvent: false });
+  }
+
+  onSubmit(form: FormGroup) {
+    this.submitting = true;
+    if (form.invalid || !this.leavePolicy) {
+      form.markAllAsTouched();
+      return;
+    }
+
+    const value = form.getRawValue();
+    const data = {
+      ...value,
+      defaultEntitlement: value.entitlementCalculationMethod === 'FIXED' ? value.defaultEntitlement : null,
+      serviceEntitlementTiers: value.entitlementCalculationMethod === 'SERVICE' ? value.serviceEntitlementTiers : [],
+      maximumCarryForward: value.carryForwardPolicy === 'LIMITED' ? value.maximumCarryForward : null
+    };
+    console.log("data", data)
+    return this.goBack()
   }
 }

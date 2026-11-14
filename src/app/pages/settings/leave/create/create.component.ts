@@ -4,6 +4,7 @@ import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } fr
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import type { LeavePolicy } from '../../../../models/leave/leave-policy.model';
+import { Router } from '@angular/router';
 
 type ServiceEntitlementTierForm = FormGroup<{
   serviceFrom: FormControl<number | null>;
@@ -20,10 +21,10 @@ type ServiceEntitlementTierForm = FormGroup<{
   styleUrl: './create.component.scss'
 })
 export class CreateComponent {
-  leaveForm = new FormGroup({
+  form = new FormGroup({
     leaveCode: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     leaveName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    description: new FormControl('', { nonNullable: true }),
+    description: new FormControl(''),
     status: new FormControl<'ACTIVE' | 'INACTIVE'>('ACTIVE', { nonNullable: true }),
     entitlementUnit: new FormControl<'DAILY' | 'HOURLY'>('DAILY', { nonNullable: true, validators: [Validators.required] }),
     leaveType: new FormControl<'PAID' | 'UNPAID'>('PAID', { nonNullable: true, validators: [Validators.required] }),
@@ -43,32 +44,38 @@ export class CreateComponent {
   });
 
   submittedLeavePolicy: LeavePolicy | null = null;
-  submitted = false;
+  submitting = false;
 
-  constructor() {
-    this.leaveForm.controls.serviceEntitlementTiers.disable({ emitEvent: false });
-    this.leaveForm.controls.carryForwardPolicy.valueChanges
+  constructor(
+    private router: Router,
+  ) {
+    this.form.controls.serviceEntitlementTiers.disable({ emitEvent: false });
+    this.form.controls.carryForwardPolicy.valueChanges
       .pipe(takeUntilDestroyed())
       .subscribe(policy => this.updateMaximumCarryForwardValidation(policy));
-    this.leaveForm.controls.entitlementCalculationMethod.valueChanges
+    this.form.controls.entitlementCalculationMethod.valueChanges
       .pipe(takeUntilDestroyed())
       .subscribe(method => this.updateEntitlementValidation(method));
   }
 
+  goBack() { 
+    return this.router.navigate(['/settings/claim-settings/overview'])
+  }
+
   get showMaximumCarryForward(): boolean {
-    return this.leaveForm.controls.carryForwardPolicy.value === 'LIMITED';
+    return this.form.controls.carryForwardPolicy.value === 'LIMITED';
   }
 
   get isServiceBasedEntitlement(): boolean {
-    return this.leaveForm.controls.entitlementCalculationMethod.value === 'SERVICE';
+    return this.form.controls.entitlementCalculationMethod.value === 'SERVICE';
   }
 
   get serviceEntitlementTiers(): FormArray<ServiceEntitlementTierForm> {
-    return this.leaveForm.controls.serviceEntitlementTiers;
+    return this.form.controls.serviceEntitlementTiers;
   }
 
   onAllowEmployeeSpecificSettingsChange(enabled: boolean): void {
-    this.leaveForm.controls.allowEmployeeSpecificSettings.setValue(enabled);
+    this.form.controls.allowEmployeeSpecificSettings.setValue(enabled);
   }
 
   addServiceEntitlementTier(): void {
@@ -83,22 +90,6 @@ export class CreateComponent {
       this.serviceEntitlementTiers.removeAt(index);
       this.updateServiceToValidators();
     }
-  }
-
-  onSubmit(): void {
-    this.submitted = true;
-    if (this.leaveForm.invalid) {
-      this.leaveForm.markAllAsTouched();
-      return;
-    }
-
-    const value = this.leaveForm.getRawValue();
-    this.submittedLeavePolicy = {
-      ...value,
-      defaultEntitlement: value.entitlementCalculationMethod === 'FIXED' ? value.defaultEntitlement : null,
-      serviceEntitlementTiers: value.entitlementCalculationMethod === 'SERVICE' ? value.serviceEntitlementTiers : [],
-      maximumCarryForward: value.carryForwardPolicy === 'LIMITED' ? value.maximumCarryForward : null
-    };
   }
 
   private createServiceEntitlementTier(serviceFrom: number | null = null): ServiceEntitlementTierForm {
@@ -122,8 +113,8 @@ export class CreateComponent {
   }
 
   private updateEntitlementValidation(method: 'FIXED' | 'SERVICE'): void {
-    const defaultEntitlement = this.leaveForm.controls.defaultEntitlement;
-    const serviceEntitlementTiers = this.leaveForm.controls.serviceEntitlementTiers;
+    const defaultEntitlement = this.form.controls.defaultEntitlement;
+    const serviceEntitlementTiers = this.form.controls.serviceEntitlementTiers;
 
     if (method === 'SERVICE') {
       defaultEntitlement.reset(null, { emitEvent: false });
@@ -141,7 +132,7 @@ export class CreateComponent {
   }
 
   private updateMaximumCarryForwardValidation(policy: 'NONE' | 'LIMITED' | 'UNLIMITED' | 'HR_REVIEW'): void {
-    const maximumCarryForward = this.leaveForm.controls.maximumCarryForward;
+    const maximumCarryForward = this.form.controls.maximumCarryForward;
     if (policy === 'LIMITED') {
       maximumCarryForward.enable({ emitEvent: false });
       maximumCarryForward.setValidators([Validators.required, Validators.min(0)]);
@@ -151,5 +142,24 @@ export class CreateComponent {
       maximumCarryForward.disable({ emitEvent: false });
     }
     maximumCarryForward.updateValueAndValidity({ emitEvent: false });
+  }
+
+  onSubmit(form: FormGroup) {
+    this.submitting = true;
+    if (form.invalid) {
+      form.markAllAsTouched();
+      return;
+    }
+
+    const value = form.getRawValue();
+    const data = {
+      ...value,
+      defaultEntitlement: value.entitlementCalculationMethod === 'FIXED' ? value.defaultEntitlement : null,
+      serviceEntitlementTiers: value.entitlementCalculationMethod === 'SERVICE' ? value.serviceEntitlementTiers : [],
+      maximumCarryForward: value.carryForwardPolicy === 'LIMITED' ? value.maximumCarryForward : null
+    };
+    console.log("data", data)
+
+    return this.goBack()
   }
 }

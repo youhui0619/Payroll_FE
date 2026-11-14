@@ -20,7 +20,7 @@ export class OverviewComponent implements OnInit {
     window.setTimeout(() => this.loading = false, 3000);
   }
 
-  readonly leavePolicies = leavePolicies;
+  leavePolicies = leavePolicies;
 
   entitlementLabel(policy: LeavePolicy): string {
     if (policy.entitlementCalculationMethod === 'SERVICE') {

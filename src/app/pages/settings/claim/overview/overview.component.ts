@@ -20,7 +20,7 @@ export class OverviewComponent implements OnInit {
     window.setTimeout(() => this.loading = false, 3000);
   }
 
-  readonly claimTypes = claimTypes;
+  claimTypes = claimTypes;
 
   get activeCount(): number {
     return this.claimTypes.filter(item => item.status === 'ACTIVE').length;
