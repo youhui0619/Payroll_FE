@@ -4,11 +4,11 @@ import { MaterialImports, MaterialProviders } from '../../../shared/material-imp
 import { ApiService } from '../../../services/api.service';
 import { AuthService } from '../../../services/auth.service';
 import { ToastService } from '../../../shared/components/toast/toast.service';
-
+import { RouterLink  } from '@angular/router';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [...MaterialImports, ReactiveFormsModule],
+  imports: [...MaterialImports, ReactiveFormsModule, RouterLink],
   providers: [...MaterialProviders, ApiService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -20,7 +20,7 @@ export class LoginComponent {
     private authService: AuthService,
   ) { }
 
-  form: FormGroup = new FormGroup({
+  form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [
       Validators.required,

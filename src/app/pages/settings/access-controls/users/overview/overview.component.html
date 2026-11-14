@@ -159,14 +159,14 @@
                       <div class="initial-avatar me-3">{{ initials(user.name) }}</div>
                       <div>
                         <p class="text-dark my-0">{{ user.name }}</p>
-                        <p class="fs-10 fw-300 text-muted my-0">{{ user.email }} · {{ user.id }}</p>
+                        <p class="fs-10 fw-300 text-muted my-0">{{ user.id }}</p>
                       </div>
                     </div>
                   </td>
-                  <td class="text-nowrap">
+                  <td class="text-muted text-nowrap">
                     {{ user.roles.slice(0, 2).join(', ') }}
                     @if (user.roles.length > 2) {
-                      <span class="text-muted"> + {{ user.roles.length - 2 }} more roles</span>
+                      <span> + {{ user.roles.length - 2 }} more roles</span>
                     }
                   </td>
                   <td><span class="chip" [class.bg-light-success]="user.status === 'ACTIVE'" [class.text-success]="user.status === 'ACTIVE'" [class.bg-light-danger]="user.status === 'INACTIVE'" [class.text-danger]="user.status === 'INACTIVE'">{{ user.status === 'ACTIVE' ? 'Active' : 'Inactive' }}</span></td>

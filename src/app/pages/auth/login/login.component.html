@@ -21,9 +21,9 @@
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput id="email" name="email" type="email" placeholder="Enter email address" formControlName="email" autocomplete="off">
             @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
-              <mat-error>Email is required.</mat-error>
+              <mat-error class="text-danger">Email is required.</mat-error>
             } @else if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
-              <mat-error>Please enter a valid email address.</mat-error>
+              <mat-error class="text-danger">Please enter a valid email address.</mat-error>
             }
           </mat-form-field>
 
@@ -56,7 +56,7 @@
               <input type="checkbox" name="remember">
               <span>Remember me</span>
             </label>
-            <a href="#" (click)="$event.preventDefault()">Forgot password?</a>
+            <a href="javascript:void(0)" routerLink="/forgot-password" >Forgot password?</a>
           </div>
 
           <button mat-flat-button color="primary" class="w-100" [disabled]="!form.valid || submitting">{{ submitting ? 'Signing in…' : 'Sign In' }}</button>

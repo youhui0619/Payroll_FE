@@ -5,7 +5,7 @@ export const users: AccessControlUser[] = [
     id: 'USR-0001',
     name: 'Alicia Tan',
     email: 'alicia.tan@example.com',
-    roles: ['HR Manager', 'Manager', 'Employee'],
+    roles: ['HR Manager', 'Manager'],
     status: 'ACTIVE'
   },
   {
@@ -19,7 +19,7 @@ export const users: AccessControlUser[] = [
     id: 'USR-0003',
     name: 'Mei Wong',
     email: 'mei.wong@example.com',
-    roles: ['Employee'],
+    roles: ['Payroll Manager'],
     status: 'INACTIVE'
   }
 ];

@@ -43,12 +43,5 @@ export const roles: AccessControlRole[] = [
     description: 'Views team information and manages team requests.',
     status: 'ACTIVE',
     permissions: makePermissions(['dashboard', 'employees', 'attendance', 'leave', 'overtime'], ['leave', 'overtime'])
-  },
-  {
-    id: 'ROLE-0005',
-    name: 'Employee',
-    description: 'Accesses personal attendance, leave, and payslip information.',
-    status: 'ACTIVE',
-    permissions: makePermissions(['dashboard', 'attendance', 'leave', 'overtime', 'payslips', 'employeeExpenses'], ['leave', 'overtime', 'employeeExpenses'])
   }
 ];
