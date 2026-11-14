@@ -29,7 +29,7 @@ export class CreateComponent {
 
   goBack() { 
     return this.router.navigate(['/settings/claim-settings/overview'])
-   }
+  }
 
   onSubmit(form: FormGroup) {
     if (form.invalid) {

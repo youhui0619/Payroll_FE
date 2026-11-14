@@ -1,5 +1,6 @@
 
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { departments } from '../../../../data/workforce/departments.data';
@@ -19,22 +20,25 @@ import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.componen
   styleUrl: './create.component.scss'
 })
 export class CreateComponent {
-  readonly departments = departments.filter(department => department.status === 'Active');
-  readonly employees = employees;
-  readonly claimTypes: { value: ClaimType; label: string }[] = claimTypeSettings
+  constructor(
+    private router: Router,
+  ) {}
+  
+  departments = departments.filter(department => department.status === 'Active');
+  employees = employees;
+  claimTypes: { value: ClaimType; label: string }[] = claimTypeSettings
     .filter(claimType => claimType.status === 'ACTIVE')
     .map(claimType => ({ value: claimType.code, label: claimType.name }));
-  readonly paymentMethods: { value: ClaimPaymentMethod; label: string }[] = [
+  paymentMethods: { value: ClaimPaymentMethod; label: string }[] = [
     { value: 'PAYROLL', label: 'Payroll' },
     { value: 'BANK_TRANSFER', label: 'Bank Transfer' },
     { value: 'CASH', label: 'Cash' }
   ];
 
-  readonly employeeSearch = new FormControl<EmployeeRecord | string>('');
-  submitted = false;
-  createdClaim: ExpenseClaimRecord | null = null;
+  employeeSearch = new FormControl<EmployeeRecord | string>('');
+  submitting = false;
 
-  readonly claimForm = new FormGroup({
+  form = new FormGroup({
     claimDate: new FormControl<Date | null>(null, Validators.required),
     departmentId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     employeeId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -48,8 +52,13 @@ export class CreateComponent {
     })
   });
 
+
+  goBack() { 
+    return this.router.navigate(['/settings/claim-settings/overview'])
+  }
+
   get filteredEmployees(): EmployeeRecord[] {
-    const departmentId = this.claimForm.controls.departmentId.value;
+    const departmentId = this.form.controls.departmentId.value;
     const searchValue = this.employeeSearch.value;
     const query = typeof searchValue === 'string' ? searchValue.trim().toLowerCase() : '';
     if (!departmentId) return [];
@@ -64,11 +73,11 @@ export class CreateComponent {
   }
 
   get selectedEmployee(): EmployeeRecord | undefined {
-    const employeeId = this.claimForm.controls.employeeId.value;
+    const employeeId = this.form.controls.employeeId.value;
     return this.employees.find(employee => employee.employeeId === employeeId);
   }
 
-  readonly employeeDisplayName = (value: EmployeeRecord | string | null): string => {
+  employeeDisplayName = (value: EmployeeRecord | string | null): string => {
     if (value && typeof value === 'object') return `${value.employeeId} - ${value.employeeName}`;
     if (!value) return '';
     const employee = this.employees.find(item => item.employeeId === value);
@@ -76,34 +85,34 @@ export class CreateComponent {
   };
 
   onDepartmentChange(): void {
-    this.claimForm.controls.employeeId.setValue('');
+    this.form.controls.employeeId.setValue('');
     this.employeeSearch.setValue('');
   }
 
   onEmployeeSelected(employee: EmployeeRecord): void {
-    this.claimForm.controls.employeeId.setValue(employee.employeeId);
+    this.form.controls.employeeId.setValue(employee.employeeId);
     this.employeeSearch.setValue(employee);
   }
 
   onEmployeeSearchInput(): void {
     if (typeof this.employeeSearch.value === 'string') {
-      this.claimForm.controls.employeeId.setValue('');
+      this.form.controls.employeeId.setValue('');
     }
   }
 
   onSubmit(form: any): void {
-    this.submitted = true;
+    this.submitting = true;
     if (form.invalid) {
       form.markAllAsTouched();
       this.employeeSearch.markAsTouched();
       return;
     }
 
-    const formValue = form.value;
-    const employee = this.employees.find(item => item.employeeId === formValue.employeeId);
-    const department = this.departments.find(item => item.id === formValue.departmentId);
-    if (!employee || !department || employee.department !== department.name || !formValue.claimDate) {
-      this.claimForm.controls.employeeId.setErrors({ selectionRequired: true });
+    const value = form.value;
+    const employee = this.employees.find(item => item.employeeId === value.employeeId);
+    const department = this.departments.find(item => item.id === value.departmentId);
+    if (!employee || !department || employee.department !== department.name || !value.claimDate) {
+      this.form.controls.employeeId.setErrors({ selectionRequired: true });
       return;
     }
 
@@ -111,28 +120,28 @@ export class CreateComponent {
       const numberSuffix = Number(claim.id.match(/-(\d+)$/)?.[1]);
       return Number.isFinite(numberSuffix) ? Math.max(maximum, numberSuffix) : maximum;
     }, 0) + 1;
-    const claimType = formValue.claimType as ClaimType;
+    const claimType = value.claimType as ClaimType;
     const data: ExpenseClaimRecord = {
       id: `CLM-${claimType}-${String(nextNumber).padStart(4, '0')}`,
-      claimDate: this.dateKey(formValue.claimDate),
+      claimDate: this.dateKey(value.claimDate),
       employeeId: employee.employeeId,
       employeeName: employee.employeeName,
       departmentId: department.id,
       departmentName: department.name,
       claimType,
-      description: formValue.description.trim(),
-      amount: formValue.amount!,
+      description: value.description.trim(),
+      amount: value.amount!,
       currency: 'MYR',
-      paymentMethod: formValue.paymentMethod!,
-      supportingDocuments: formValue.supportingDocuments.map((document: any) =>
+      paymentMethod: value.paymentMethod!,
+      supportingDocuments: value.supportingDocuments.map((document: any) =>
         typeof document === 'string' ? document : document.name
       ),
       status: 'Pending',
       submittedAt: new Date().toISOString(),
       approval: { approver: '-', approvedDate: null, comments: '' }
     };
-    claims.push(data);
-    this.createdClaim = data;
+
+    console.log("data", data)
   }
 
   private dateKey(date: Date): string {
