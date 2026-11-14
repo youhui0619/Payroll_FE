@@ -6,7 +6,7 @@
 
   <div class="col-sm-5 d-flex align-items-center justify-content-end">
     <button mat-flat-button color="primary" class="ms-2" routerLink="/settings/public-holidays/create">
-      <tabler-icon icon="plus"></tabler-icon>
+      <tabler-icon icon="plus" [size]="16"></tabler-icon>
       Create Holidays
     </button>
   </div>
@@ -17,54 +17,57 @@
     <app-skeleton-loader [rows]="0" [columns]="0" [summaryCards]="2"></app-skeleton-loader>
   </div></div>
 } @else {
-<div class="row my-4">
-  <div class="col-sm-3 px-2">
-    <div class="card">
-      <div class="card-body">
-        <div  class="d-flex align-items-center justify-content-between">
-          <div class="summary-info">
-            <p class="fs-12 text-muted">Total Holidays
-            </p>
-            <h3 class="mb-0">{{ holidays.length }}</h3>
-          </div>
-          <div class="text-primary bg-light-primary text-end icon">
-            <tabler-icon icon="users"></tabler-icon>
+  <div class="row align-items-stretch">
+    <div class="col-6 col-sm-3 px-2 d-flex flex-column">
+      <div class="card flex-grow-1 mb-4">
+        <div class="card-body">
+          <div class="d-flex flex-column-reverse flex-sm-row align-items-start justify-content-between">
+            <div class="summary-info">
+              <p class="fs-12 text-muted">Total Holidays
+              </p>
+              <h3 class="mb-0">{{ holidays.length }}</h3>
+            </div>
+            <div class="text-primary bg-light-primary text-end icon">
+              <tabler-icon icon="users"></tabler-icon>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="col-sm-3 px-2">
-    <div class="card">
-      <div class="card-body">
-        <div  class="d-flex align-items-center justify-content-between">
-          <div class="summary-info">
-            <p class="fs-12 text-muted">Upcoming
-            </p>
-            <h3 class="mb-0">{{ upcomingHolidayCount }}</h3>
-          </div>
-          <div class="text-primary bg-light-primary text-end icon">
-            <tabler-icon icon="user-check"></tabler-icon>
+    <div class="col-6 col-sm-3 px-2 d-flex flex-column">
+      <div class="card flex-grow-1 mb-4">
+        <div class="card-body">
+          <div class="d-flex flex-column-reverse flex-sm-row align-items-start justify-content-between">
+            <div class="summary-info">
+              <p class="fs-12 text-muted">Upcoming Holidays
+              </p>
+              <h3 class="mb-0">{{ upcomingHolidayCount }}</h3>
+            </div>
+            <div class="text-primary bg-light-primary text-end icon">
+              <tabler-icon icon="users"></tabler-icon>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 }
 
+<div class="row g-2 align-items-start">
+  <div class="col-12 col-sm-6 col-md-5 col-lg-5">
+      <mat-form-field appearance="outline"
+          class="form-input w-100"
+          subscriptSizing="dynamic">
+          <input type="text" matInput placeholder="Search...">
+          <span matTextPrefix class="text-muted me-2">
+              <tabler-icon icon="search" [size]="16"></tabler-icon>
+          </span>
+      </mat-form-field>
+  </div>
 
-<div class="row mt-4">
-  <div class="d-flex align-items-center flex-wrap gap-2">
-    <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
-      <input type="text" matInput placeholder="Search..." [value]="searchTerm" (input)="searchTerm = $any($event.target).value">
-      <span matTextPrefix class="text-muted me-2">
-        <tabler-icon icon="search" [size]="16"></tabler-icon>
-      </span>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+  <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+      <mat-form-field appearance="outline" class="form-input w-100" subscriptSizing="dynamic">
       <mat-select placeholder="Year" [value]="selectedYear" (selectionChange)="selectedYear = $event.value">
         <mat-option value="">All years</mat-option>
         @for (year of years; track year) {
@@ -72,20 +75,14 @@
         }
       </mat-select>
     </mat-form-field>
+  </div>
 
-    <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+  <div class="col-12 col-sm-6 col-md-3 col-lg-3">
+      <mat-form-field appearance="outline" class="form-input w-100" subscriptSizing="dynamic">
       <mat-select placeholder="Holiday Scope" [value]="selectedScope" (selectionChange)="selectedScope = $event.value">
         <mat-option value="">All scopes</mat-option>
         <mat-option value="National">National</mat-option>
         <mat-option value="State">State</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
-      <mat-select placeholder="Status" [value]="selectedStatus" (selectionChange)="selectedStatus = $event.value">
-        <mat-option value="">All statuses</mat-option>
-        <mat-option value="ACTIVE">Active</mat-option>
-        <mat-option value="INACTIVE">Inactive</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
