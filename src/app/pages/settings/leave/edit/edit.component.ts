@@ -1,7 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { leavePolicies } from '../../../../data/leave/leave-policies.data';
@@ -16,7 +16,7 @@ type ServiceEntitlementTierForm = FormGroup<{
 @Component({
   selector: 'app-edit',
   standalone: true,
-  imports: [...MaterialImports, ReactiveFormsModule, RouterLink],
+  imports: [...MaterialImports, ReactiveFormsModule],
   providers: [...MaterialProviders],
   templateUrl: './edit.component.html',
   styleUrl: './edit.component.scss'

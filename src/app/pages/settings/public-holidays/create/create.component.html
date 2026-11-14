@@ -1,4 +1,22 @@
-<form [formGroup]="holidayForm" (ngSubmit)="onSubmit()">
+<div class="row justify-content-between mb-3">
+  <div class="col-sm-12 px-2">
+    <div class="d-flex align-items-center gap-2 cursor-pointer" (click)="goBack()">
+      <button mat-icon-button type="button" class="d-flex justify-content-center w-auto mb-0">
+        <tabler-icon icon="chevron-left" class="text-dark d-flex" [size]="16"></tabler-icon>
+      </button>
+      <p class="text-muted mb-0">Back to leave settings</p>
+    </div>
+  </div>
+</div>
+
+<div class="row justify-content-between mb-4">
+  <div class="col-sm-7">
+    <h3 class="text-dark my-0">Create Leave Policies</h3>
+    <p class="fw-300 text-muted mb-0">Add an expense category employees can select when submitting a claim.</p>
+  </div>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit(form)">
   <h4 class="text-primary">Holiday Information</h4>
   <div class="card mb-4">
     <div class="card-body">
@@ -7,7 +25,9 @@
           <mat-label class="form-label">Holiday Name <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput placeholder="Enter holiday name" formControlName="name">
-            <mat-error class="text-danger">Holiday name is required.</mat-error>
+            @if (form.controls.name.hasError('required')) {
+              <mat-error class="text-danger">Holiday name is required.</mat-error>
+            }
           </mat-form-field>
         </div>
         <div class="col-sm-4 px-2">
@@ -19,7 +39,6 @@
               <mat-option value="ACTIVE">Active</mat-option>
               <mat-option value="INACTIVE">Inactive</mat-option>
             </mat-select>
-            <mat-error class="text-danger">Status is required</mat-error>
           </mat-form-field>
         </div>
         <div class="col-sm-12 px-2">
@@ -74,9 +93,6 @@
               </div>
             }
           </div>
-          @if (submitted && selectedRegions.length === 0) {
-            <div class="text-danger">Select at least one state or region.</div>
-          }
         </div>
       }
     </div>
@@ -92,7 +108,7 @@
             <input matInput [matDatepicker]="startDate" placeholder="Select start date" formControlName="startDate">
             <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
             <mat-datepicker #startDate></mat-datepicker>
-            @if (holidayForm.controls.startDate.hasError('required')) {
+            @if (form.controls.startDate.hasError('required')) {
               <mat-error class="text-danger">Start date is required.</mat-error>
             }
           </mat-form-field>
@@ -103,7 +119,7 @@
             <input matInput [matDatepicker]="endDate" placeholder="Select end date" formControlName="endDate">
             <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
             <mat-datepicker #endDate></mat-datepicker>
-            @if (holidayForm.controls.endDate.hasError('required')) {
+            @if (form.controls.endDate.hasError('required')) {
               <mat-error class="text-danger">End date is required.</mat-error>
             }
           </mat-form-field>
@@ -113,6 +129,7 @@
   </div>
 
   <div class="d-flex align-items-center justify-content-end gap-3">
-    <button type="submit" mat-flat-button color="primary"><tabler-icon icon="check"></tabler-icon>Submit</button>
+    <button mat-flat-button color="primary-outline" (click)="goBack()"><tabler-icon icon="x" [size]="16"></tabler-icon>Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="!form.valid || submitting"><tabler-icon icon="check" [size]="16"></tabler-icon>{{ submitting ? 'Submitting...' : 'Submit' }}</button>
   </div>
 </form>

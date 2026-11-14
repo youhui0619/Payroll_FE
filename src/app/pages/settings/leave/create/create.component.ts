@@ -21,6 +21,18 @@ type ServiceEntitlementTierForm = FormGroup<{
   styleUrl: './create.component.scss'
 })
 export class CreateComponent {
+  constructor(
+    private router: Router,
+  ) {
+    this.form.controls.serviceEntitlementTiers.disable({ emitEvent: false });
+    this.form.controls.carryForwardPolicy.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe(policy => this.updateMaximumCarryForwardValidation(policy));
+    this.form.controls.entitlementCalculationMethod.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe(method => this.updateEntitlementValidation(method));
+  }
+
   form = new FormGroup({
     leaveCode: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     leaveName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -42,24 +54,10 @@ export class CreateComponent {
     requireSupportingDocuments: new FormControl(true, { nonNullable: true }),
     allowEmployeeSpecificSettings: new FormControl(true, { nonNullable: true })
   });
-
-  submittedLeavePolicy: LeavePolicy | null = null;
   submitting = false;
 
-  constructor(
-    private router: Router,
-  ) {
-    this.form.controls.serviceEntitlementTiers.disable({ emitEvent: false });
-    this.form.controls.carryForwardPolicy.valueChanges
-      .pipe(takeUntilDestroyed())
-      .subscribe(policy => this.updateMaximumCarryForwardValidation(policy));
-    this.form.controls.entitlementCalculationMethod.valueChanges
-      .pipe(takeUntilDestroyed())
-      .subscribe(method => this.updateEntitlementValidation(method));
-  }
-
   goBack() { 
-    return this.router.navigate(['/settings/claim-settings/overview'])
+    return this.router.navigate(['/settings/leave-settings/overview'])
   }
 
   get showMaximumCarryForward(): boolean {

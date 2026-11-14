@@ -2,7 +2,7 @@
 import { Component } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-create',
   standalone: true,
@@ -12,13 +12,17 @@ import { MaterialImports, MaterialProviders } from '../../../../shared/material-
   styleUrl: './create.component.scss'
 })
 export class CreateComponent {
+  constructor(
+    private router: Router,
+  ) {}
+
   states = [
     'Johor', 'Kedah', 'Kelantan', 'Kuala Lumpur', 'Labuan', 'Melaka',
     'Negeri Sembilan', 'Pahang', 'Penang', 'Perak', 'Perlis', 'Putrajaya',
     'Sabah', 'Sarawak', 'Selangor', 'Terengganu'
   ];
 
-  holidayForm = new FormGroup({
+  form = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     status: new FormControl('ACTIVE', { nonNullable: true, validators: [Validators.required] }),
     description: new FormControl('', { nonNullable: true }),
@@ -28,42 +32,47 @@ export class CreateComponent {
     startDate: new FormControl<Date | null>(null, Validators.required),
     endDate: new FormControl<Date | null>(null, Validators.required)
   });
-  submitted = false;
+  submitting = false;
+
+  goBack() { 
+    return this.router.navigate(['/settings/public-holidays/overview'])
+  }
 
   get selectedScope(): 'National' | 'State' {
-    return this.holidayForm.controls.scope.value;
+    return this.form.controls.scope.value;
   }
 
   get selectedRegions(): string[] {
-    return this.holidayForm.controls.regions.value;
+    return this.form.controls.regions.value;
   }
 
   get allStatesSelected(): boolean {
-    return this.holidayForm.controls.stateSelections.controls.every(control => control.value);
+    return this.form.controls.stateSelections.controls.every(control => control.value);
   }
 
   syncSelectedRegions(): void {
-    const regions = this.states.filter((_, index) => this.holidayForm.controls.stateSelections.at(index).value);
-    this.holidayForm.controls.regions.setValue(regions);
-    this.holidayForm.controls.regions.markAsDirty();
+    const regions = this.states.filter((_, index) => this.form.controls.stateSelections.at(index).value);
+    this.form.controls.regions.setValue(regions);
+    this.form.controls.regions.markAsDirty();
   }
 
   toggleAllStates(checked: boolean): void {
-    this.holidayForm.controls.stateSelections.controls.forEach(control => control.setValue(checked));
+    this.form.controls.stateSelections.controls.forEach(control => control.setValue(checked));
     this.syncSelectedRegions();
   }
 
-  onSubmit(): void {
-    this.submitted = true;
+  onSubmit(form: FormGroup) {
+    this.submitting = true;
     if (this.selectedScope === 'State' && this.selectedRegions.length === 0) {
-      this.holidayForm.controls.regions.markAsTouched();
+      this.form.controls.regions.markAsTouched();
       return;
     }
-    if (this.holidayForm.invalid) {
-      this.holidayForm.markAllAsTouched();
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
-    const { stateSelections, ...holidayData } = this.holidayForm.getRawValue();
-    console.log('form.value', holidayData);
+    const { stateSelections, ...value } = form.getRawValue();
+    const data = value
+    console.log('data', data);
   }
 }

@@ -119,7 +119,6 @@
           <table class="table no-wrap w-100 text-left">
             <thead>
               <tr>
-                <th class="text-dark">Claim Code</th>
                 <th class="text-dark">Claim Type</th>
                 <th class="text-dark">Description</th>
                 <th class="text-dark">Status</th>
@@ -130,8 +129,10 @@
 
               @for (claimType of claimTypes; track claimType) {
                 <tr>
-                  <td class="text-muted">{{ claimType.code }}</td>
-                  <td class="text-dark fw-500">{{ claimType.name }}</td>
+                  <td class="text-nowrap">
+                    <p class="text-dark">{{ claimType.name }}</p>
+                    <p class="text-muted fw-300 fs-10 my-0">{{ claimType.code }}</p>
+                  </td>
                   <td class="text-muted">{{ claimType.description || '—' }}</td>
                   <td>
                     <span class="chip" [ngClass]="claimType.status === 'ACTIVE' ? 'bg-light-primary text-primary' : 'bg-light-secondary text-secondary'">
