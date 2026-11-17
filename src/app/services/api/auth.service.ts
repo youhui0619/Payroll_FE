@@ -1,24 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
-import { AuthService } from './auth.service';
-
-export interface FilingChange {
-  section: string;
-  variable: string;
-  value: string;
-  prior_value: string;
-  update_prior: boolean;
-}
-
-export interface FilingUpdatePayload {
-  changes: FilingChange[];
-}
+import { environment } from '../../../environments/environment';
+import { AuthService } from '../auth.service';
 
 @Injectable()
-export class ApiService {
-  
+export class AuthApiService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   private getHeaders(): HttpHeaders {
@@ -51,7 +38,7 @@ export class ApiService {
     });
   }
 
-  getData(): Observable<any> {
+  getProfile(): Observable<any> {
     return this.http.get(environment.apiURL + '/auth/me', {
       headers: this.getHeaders(),
     });

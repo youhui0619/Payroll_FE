@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../shared/material-imports';
-import { ApiService } from '../../../services/api.service';
+import { AuthApiService } from '../../../services/api/auth.service';
 import { AuthService } from '../../../services/auth.service';
 import { ToastService } from '../../../shared/components/toast/toast.service';
 import { RouterLink  } from '@angular/router';
@@ -10,14 +10,14 @@ import { NavigationService } from '../../../services/navigation.service';
 @Component({
   selector: 'app-forgot-password',
   imports: [...MaterialImports, ReactiveFormsModule],
-  providers: [...MaterialProviders, ApiService],
+  providers: [...MaterialProviders, AuthApiService],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.scss'
 })
 export class ForgotPasswordComponent {
   constructor(
     private toastService: ToastService,
-    private apiService: ApiService,
+    private apiService: AuthApiService,
     private authService: AuthService,
     private navigation: NavigationService
   ) { }

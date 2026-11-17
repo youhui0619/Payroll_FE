@@ -3,20 +3,20 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { COMPANY_PROFILE } from '../../../../data/company/company.data';
 import type { CompanyFinancialYearStartMonth } from '../../../../models/company/company.model';
-// import { ApiService } from '../../../../services/api.service';
 // import { AuthService } from '../../../../services/auth.service';
 import { ToastService } from '../../../../shared/components/toast/toast.service';
+import { CompanyApiService } from '../../../../services/api/company.service';
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [...MaterialImports, ReactiveFormsModule],
-  providers: [...MaterialProviders],
+  providers: [...MaterialProviders, CompanyApiService],
   templateUrl: './profile.component.html'
 })
 export class ProfileComponent {
   constructor(
     private toastService: ToastService,
-    // private apiService: ApiService,
+    private apiService: CompanyApiService,
     // private authService: AuthService,
   ) { }
 
@@ -61,10 +61,28 @@ export class ProfileComponent {
   submitting: boolean = false;
 
   ngOnInit() {
-    this.getCompanyProfile()
+    this.getCompany()
   }
 
-  getCompanyProfile(){
+  getCompany(){
+    // this.apiService.getCompany().subscribe({
+    //   next: (response) => {
+    //     this.companyProfile = response;
+    //     console.log("companyProfile:", this.companyProfile);
+
+    //     if(this.companyProfile){
+    //       this.form.patchValue(this.companyProfile)
+    //     }
+    //   },
+    //   error: (error) => {
+    //     this.toastService.show({
+    //       title: error.error.code,
+    //       message: error.error.message,
+    //       icon: 'danger'
+    //     });
+    //   },
+    // });
+
     this.companyProfile = COMPANY_PROFILE
     console.log("companyProfile", this.companyProfile)
 
@@ -90,27 +108,26 @@ export class ProfileComponent {
 
     
 
-    // this.apiService.login(data).subscribe({
-    //   next: (response: any) => {
-    //    this.toastService.show({
-    //       title: error.error.code,
-    //       message: error.error.message,
-    //       icon: 'danger'
-    //     });
-    //     this.form.markAsPristine();
-  //       this.form.markAsUntouched();
-    //     this.authService.login(response)
+    this.apiService.updateCompany(data).subscribe({
+      next: (response: any) => {
+       this.toastService.show({
+          title: `error.error.code`,
+          message: `error.error.message`,
+          icon: 'success'
+        });
+        this.form.markAsPristine();
+        this.form.markAsUntouched();
 
-    //   },
-    //   error: (error) => {
-    //     console.log("error", error)
-    //     this.toastService.show({
-    //       title: error.error.code,
-    //       message: error.error.message,
-    //       icon: 'danger'
-    //     });
-    //     this.submitting = false;
-    //   }
-    // })
+      },
+      error: (error) => {
+        console.log("error", error)
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+        this.submitting = false;
+      }
+    })
     }
 }
