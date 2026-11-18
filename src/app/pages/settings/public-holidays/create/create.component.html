@@ -57,20 +57,20 @@
       <mat-label class="form-label">Applicable Scope <span class="text-danger">*</span></mat-label>
       <mat-radio-group class="form-radio-group row mx-0" formControlName="scope">
         <div class="col-sm-6 px-2">
-          <mat-radio-button class="form-radio" color="primary" value="National">
+          <mat-radio-button class="form-radio" color="primary" value="NATIONAL">
             National
             <span class="d-block text-muted">Applies nationwide, subject to applicable holiday rules</span>
           </mat-radio-button>
         </div>
         <div class="col-sm-6 px-2">
-          <mat-radio-button class="form-radio" color="primary" value="State">
+          <mat-radio-button class="form-radio" color="primary" value="STATE">
             Selected States / Regions
             <span class="d-block text-muted">Applies only to selected locations</span>
           </mat-radio-button>
         </div>
       </mat-radio-group>
 
-      @if (selectedScope === 'State') {
+      @if (selectedScope === 'STATE') {
         <div class="mt-4">
           <div class="d-flex align-items-start justify-content-between flex-wrap gap-2 mb-3">
             <div>
@@ -85,10 +85,14 @@
             </mat-checkbox>
           </div>
           <div class="row" formArrayName="stateSelections">
-            @for (state of states; track state; let i = $index) {
+            @for (state of stateList; track state.value; let i = $index) {
               <div class="col-sm-6 col-md-4 col-lg-3 mb-2">
-                <mat-checkbox class="form-checkbox" color="primary" [formControlName]="i" (change)="syncSelectedRegions()">
-                  {{ state }}
+                <mat-checkbox
+                  class="form-checkbox"
+                  color="primary"
+                  [formControlName]="i"
+                  (change)="syncSelectedRegions()">
+                  {{ state.name }}
                 </mat-checkbox>
               </div>
             }

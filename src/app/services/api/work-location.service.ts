@@ -62,10 +62,4 @@ export class WorkLocationApiService {
       headers: this.getHeaders(),
     });
   }
-
-  getCompany(): Observable<any> {
-    return this.http.get(environment.apiURL + '/company', {
-      headers: this.getHeaders(),
-    });
-  }
 }
