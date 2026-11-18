@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { commissionPayrollRecords } from '../../../data/commission/commission-payroll-records.data';
+import { AuthApiService } from '../../../services/api/auth.service';
+import { ToastService } from '../../../shared/components/toast/toast.service';
 
 interface MenuItem {
   id?: number;
@@ -17,6 +19,7 @@ interface MenuItem {
   selector: 'app-sidebar',
   standalone: true,
   imports: [CommonModule, RouterLink, RouterLinkActive],
+  providers: [AuthApiService],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
@@ -24,6 +27,13 @@ interface MenuItem {
 
 export class SidebarComponent implements OnInit, OnChanges {
 
+  constructor(
+    private router: Router,
+    private apiService: AuthApiService,
+    private toastService: ToastService
+  ) {}
+
+  user: any;
   @Input() collapsed = false;
   @Input() mobileOpen = false;
   @Input() title = 'Admin Dashboard';
@@ -132,9 +142,22 @@ export class SidebarComponent implements OnInit, OnChanges {
       ] 
     }
   ];
-  constructor(private router: Router) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.user = localStorage.getItem('user')
+    this.apiService.getProfile().subscribe({
+      next: (response: any) => {
+        this.user = response
+        console.log("this.user", this.user)
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      }
+    })
     if (!this.menu || this.menu.length === 0) {
       this.menu = this.defaultMenu;
     }

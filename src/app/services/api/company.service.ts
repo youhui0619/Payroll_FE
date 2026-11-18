@@ -31,7 +31,7 @@ export class CompanyApiService {
   }
 
   updateCompany(data: any): Observable<any> {
-    return this.http.post(environment.apiURL + '/company', data, {
+    return this.http.patch(environment.apiURL + '/company', data, {
       headers: this.getHeaders(),
     });
   }

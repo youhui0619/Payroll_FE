@@ -66,8 +66,8 @@ export class CreateComponent {
       {
         name: 'Parent Department',
         type: 'select',
-        required: true, 
-        validation: true,
+        required: false, 
+        validation: false,
         formControlName: 'parentDepartment',
         options: [
           { value: 'MALAYSIA', label: 'Malaysia' }
@@ -81,8 +81,8 @@ export class CreateComponent {
       {
         name: 'Head of Department',
         type: 'select',
-        required: true, 
-        validation: true,
+        required: false, 
+        validation: false,
         formControlName: 'headOfDepartment',
         options: [
           { value: 'MALAYSIA', label: 'Malaysia' }

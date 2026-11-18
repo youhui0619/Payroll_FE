@@ -10,6 +10,7 @@ export class AuthApiService {
 
   private getHeaders(): HttpHeaders {
     const token = this.authService.getAuthToken();
+    console.log("token", token)
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
     if (token) {

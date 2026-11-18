@@ -5,9 +5,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private authTokenKey = 'access_token';
+  private authTokenKey = 'accessToken';
   private userKey = 'user';
-  private permissionsKey = 'user_permissions';
+  private permissionsKey = 'userPermissions';
   private userSubject = new BehaviorSubject<any>(this.getStoredUser());
   user$ = this.userSubject.asObservable();
 
@@ -39,8 +39,9 @@ export class AuthService {
   }
 
   private setUser(userData: any): void {
+    console.log("userData", userData)
     this.userSubject.next(userData);
-    sessionStorage.setItem(this.authTokenKey, userData.access_token);
+    sessionStorage.setItem(this.authTokenKey, userData.data.accessToken);
     sessionStorage.setItem(this.userKey, JSON.stringify(userData));
   }
 

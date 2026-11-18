@@ -65,69 +65,52 @@ export class ProfileComponent {
   }
 
   getCompany(){
-    // this.apiService.getCompany().subscribe({
-    //   next: (response) => {
-    //     this.companyProfile = response;
-    //     console.log("companyProfile:", this.companyProfile);
+    this.apiService.getCompany().subscribe({
+      next: (response) => {
+        this.companyProfile = response.data;
+        console.log("companyProfile:", this.companyProfile);
 
-    //     if(this.companyProfile){
-    //       this.form.patchValue(this.companyProfile)
-    //     }
-    //   },
-    //   error: (error) => {
-    //     this.toastService.show({
-    //       title: error.error.code,
-    //       message: error.error.message,
-    //       icon: 'danger'
-    //     });
-    //   },
-    // });
-
-    this.companyProfile = COMPANY_PROFILE
-    console.log("companyProfile", this.companyProfile)
-
-    if(this.companyProfile){
-      this.form.patchValue(this.companyProfile)
-    }
-
+        if(this.companyProfile){
+          this.form.patchValue(this.companyProfile)
+        }
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
+    });
   }
   onSubmit(form: FormGroup) {
     if (form.invalid) {
       form.markAllAsTouched();
       return;
     }
+    this.submitting = true
 
     const data = form.value;
-    this.submitting = true;
-    this.toastService.show({
-      title: "Success",
-      message: "Success Message",
-      icon: 'success'
-    })
-    this.submitting = false;
-
-    
-
+    console.log("Data", data)
     this.apiService.updateCompany(data).subscribe({
-      next: (response: any) => {
-       this.toastService.show({
-          title: `error.error.code`,
-          message: `error.error.message`,
+      next: (response) => {
+        console.log("response", response)
+        this.toastService.show({
+          title: "Success",
+          message: "Your company profile has been updated.",
           icon: 'success'
         });
         this.form.markAsPristine();
         this.form.markAsUntouched();
-
       },
       error: (error) => {
-        console.log("error", error)
         this.toastService.show({
           title: error.error.code,
           message: error.error.message,
           icon: 'danger'
         });
-        this.submitting = false;
-      }
-    })
-    }
+      },
+    });
+    this.submitting = false;
+  }
 }
