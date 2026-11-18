@@ -1,9 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, Input, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormGroupDirective } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { COMPANY_PROFILE } from '../../../../data/company/company.data';
 import type { CompanyFinancialYearStartMonth } from '../../../../models/company/company.model';
-// import { AuthService } from '../../../../services/auth.service';
 import { ToastService } from '../../../../shared/components/toast/toast.service';
 import { CompanyApiService } from '../../../../services/api/company.service';
 @Component({
@@ -41,6 +39,7 @@ export class ProfileComponent {
     { value: 'DECEMBER', label: 'December' }
   ];
 
+  @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
   form: FormGroup = new FormGroup({
     name: new FormControl('', [Validators.required]),
     registrationNo: new FormControl('', [Validators.required]),
@@ -95,13 +94,15 @@ export class ProfileComponent {
     this.apiService.updateCompany(data).subscribe({
       next: (response) => {
         console.log("response", response)
+
         this.toastService.show({
           title: "Success",
           message: "Your company profile has been updated.",
           icon: 'success'
         });
-        this.form.markAsPristine();
-        this.form.markAsUntouched();
+
+        this.formDirective.resetForm();
+        this.submitting = false;
       },
       error: (error) => {
         this.toastService.show({

@@ -20,7 +20,6 @@ import { MAT_DATE_LOCALE, provideNativeDateAdapter, type MatDateFormats } from '
 import { FileInputDirective } from '@ngx-dropzone/cdk';
 import { MatDropzone } from '@ngx-dropzone/material';
 import { RegionalCurrencyPipe, RegionalCurrencySymbolPipe, RegionalDatePipe, RegionalNumberPipe, RegionalTimePipe } from './pipes/regional-format.pipes';
-
 import * as TablerIcons from '@tabler/icons-angular';
 
 const tablerIcons = [

@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 import { AuthService } from '../auth.service';
 
 @Injectable()
-export class CompanyApiService {
+export class WorkLocationApiService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   private getHeaders(): HttpHeaders {
@@ -32,7 +32,7 @@ export class CompanyApiService {
 
   getAllWorkLocations(searchTerm: any): Observable<any> {
     console.log("searchTerm", searchTerm)
-    const params: any = searchTerm ? { search: searchTerm } : {};
+    const params: any = searchTerm || {};
     return this.http.get(environment.apiURL + '/work-locations', {
       headers: this.getHeaders(),
       params,

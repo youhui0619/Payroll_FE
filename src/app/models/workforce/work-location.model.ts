@@ -12,4 +12,5 @@ export interface WorkLocation {
   postcode: string;
   state: string;
   country: string;
+  active: boolean;
 }

@@ -12,7 +12,8 @@ export const workLocations: WorkLocation[] = [
     city: 'Kuala Lumpur',
     postcode: '50250',
     state: 'Wilayah Persekutuan Kuala Lumpur',
-    country: 'MALAYSIA'
+    country: 'MALAYSIA',
+    active: true
   },
   {
     id: 'LOC-0002',
@@ -25,7 +26,8 @@ export const workLocations: WorkLocation[] = [
     city: 'George Town',
     postcode: '10300',
     state: 'Pulau Pinang',
-    country: 'MALAYSIA'
+    country: 'MALAYSIA',
+    active: true
   },
   {
     id: 'LOC-0003',
@@ -38,6 +40,7 @@ export const workLocations: WorkLocation[] = [
     city: 'Johor Bahru',
     postcode: '81200',
     state: 'Johor',
-    country: 'MALAYSIA'
+    country: 'MALAYSIA',
+    active: true
   }
 ];

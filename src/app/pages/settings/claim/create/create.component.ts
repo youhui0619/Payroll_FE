@@ -1,7 +1,7 @@
 
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { claimTypes } from '../../../../data/claims/claim-types.data';
 import type { ClaimTypeSetting, ClaimTypeSettingStatus } from '../../../../models/claims/claim-setting.model';
@@ -9,7 +9,7 @@ import type { ClaimTypeSetting, ClaimTypeSettingStatus } from '../../../../model
 @Component({
   selector: 'app-create',
   standalone: true,
-  imports: [...MaterialImports, ReactiveFormsModule, RouterLink],
+  imports: [...MaterialImports, ReactiveFormsModule],
   providers: [...MaterialProviders],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'

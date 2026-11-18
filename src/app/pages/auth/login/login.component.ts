@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../shared/material-imports';
 import { AuthApiService } from '../../../services/api/auth.service';
 import { AuthService } from '../../../services/auth.service';
 import { ToastService } from '../../../shared/components/toast/toast.service';
-import { RouterLink  } from '@angular/router';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -20,6 +20,8 @@ export class LoginComponent {
     private authService: AuthService,
   ) { }
 
+
+  @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [
@@ -36,13 +38,6 @@ export class LoginComponent {
     this.hidePassword = !this.hidePassword;
   }
 
-  resetForm(){
-    this.submitting = false;
-    this.form.reset();
-    this.form.markAsPristine();
-    this.form.markAsUntouched();
-  }
-
   onSubmit(form: FormGroup) {
     if (form.invalid || this.submitting) {
       form.markAllAsTouched();
@@ -55,7 +50,8 @@ export class LoginComponent {
     this.apiService.login(data).subscribe({
       next: (response: any) => {
         sessionStorage.setItem("user", JSON.stringify(response))
-        this.resetForm()
+        this.formDirective.resetForm();
+        this.submitting = false;
         this.authService.login(response)
 
       },

@@ -1,64 +1,111 @@
-import { OnInit, Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { OnInit, Component, ViewChild, AfterViewInit } from '@angular/core';
 import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { workLocations } from '../../../../data/workforce/work-locations.data';
 import type { WorkLocation, WorkLocationType } from '../../../../models/workforce/work-location.model';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { WorkLocationApiService } from '../../../../services/api/work-location.service';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
+import { stateList } from '../../../../data/other/other.data';
 
 @Component({
   selector: 'app-overview',
   standalone: true,
-  imports: [...MaterialImports, FormsModule, RouterLink, SkeletonLoaderComponent],
-  providers: [...MaterialProviders],
+  imports: [...MaterialImports, FormsModule, RouterLink, SkeletonLoaderComponent, CommonModule],
+  providers: [...MaterialProviders, WorkLocationApiService],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
-export class OverviewComponent implements OnInit {
-  loading = true;
+export class OverviewComponent implements OnInit, AfterViewInit {
+  
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
-  ngOnInit(): void {
-    window.setTimeout(() => this.loading = false, 3000);
+  constructor(
+    private apiService: WorkLocationApiService,
+    private toastService: ToastService
+  ) {}
+
+  loading = true;
+  workLocations = new MatTableDataSource<WorkLocation>([]);;
+  locationTypes: WorkLocationType[] = ['OFFICE', 'BRANCH', 'WAREHOUSE', 'REMOTE'];
+  selectedTypes: WorkLocationType[] = [];
+  filter: any = {};
+  meta: any = {};
+  stateList: any = {};
+  
+  ngOnInit() {
+    this.stateList = stateList;
+    this.resetFilter();
   }
 
-  readonly workLocations = workLocations;
-  readonly locationTypes: WorkLocationType[] = ['OFFICE', 'BRANCH', 'WAREHOUSE', 'REMOTE'];
-
-  searchTerm = '';
-  selectedTypes: WorkLocationType[] = [];
-
-  get filteredWorkLocations(): WorkLocation[] {
-    const query = this.searchTerm.trim().toLowerCase();
-    return this.workLocations.filter(location => {
-      const matchesSearch = !query || [
-        location.code,
-        location.name,
-        location.remark,
-        location.city,
-        location.state,
-        location.country
-      ].some(value => value.toLowerCase().includes(query));
-      const matchesType = this.selectedTypes.length === 0 || this.selectedTypes.includes(location.type);
-      return matchesSearch && matchesType;
+  ngAfterViewInit() {
+    this.paginator.page.subscribe(() => {
+      this.meta.pageSize = this.paginator.pageSize;
+      this.meta.page = this.paginator.pageIndex + 1; 
+      console.log(this.meta, this.meta)
+      this.getWorkLocations();
     });
   }
 
-  countByType(type: WorkLocationType): number {
-    return this.workLocations.filter(location => location.type === type).length;
+  resetFilter(){
+    this.filter = {
+      search: "",
+    };
+    this.getWorkLocations();
   }
+
+  getWorkLocations(){
+    this.loading = true;
+    this.apiService.getAllWorkLocations(this.filter).subscribe({
+      next: (response) => {
+        console.log("response", response)
+        this.workLocations.data = response.data.length > 0 ? response.data : [];
+        this.meta.total = response.meta.total
+        this.loading = false;
+        console.log("work locations", this.workLocations)
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+        this.loading = false;
+      },
+    });
+  }
+
+  onSortChange(event: { active: string; direction: string }) {
+    this.meta.sortBy = event.active;
+    this.meta.sortDir = event.direction.toUpperCase() || 'ASC';
+    console.log("this.meta sort", this.meta)
+    this.getWorkLocations();
+  }
+  
+  applyFilter(event: any) {
+    const filterValue = event;
+    this.filter.search = filterValue;
+    console.log("this.filter.search", this.filter.search)
+    this.getWorkLocations(); 
+  }
+
+  // countByType(type: WorkLocationType): number {
+  //   return this.workLocations.filter(location => location.type === type).length;
+  // }
 
   locationTypeLabel(type: WorkLocationType): string {
     return type.charAt(0) + type.slice(1).toLowerCase();
   }
 
-  fullAddress(location: WorkLocation): string {
-    return [location.addressLine1, location.addressLine2, location.city, location.state, location.postcode]
+  fullAddress(location: WorkLocation) {
+    return [location.addressLine1, location.addressLine2, location.city, location.postcode, location.state, location.country]
       .filter(Boolean)
-      .join(', ');
-  }
-
-  clearFilters(): void {
-    this.searchTerm = '';
-    this.selectedTypes = [];
+      .join(', ')
+      .toLowerCase();
   }
 }
