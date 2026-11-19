@@ -150,12 +150,14 @@ export class CreateComponent {
     maximumCarryForward.updateValueAndValidity({ emitEvent: false });
   }
 
-  formatDate(date: Date | null): string | null {
+  formatDate(date: Date | string | null): string | null {
     if (!date) return null;
 
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const parsedDate = date instanceof Date ? date : new Date(date);
+    if (isNaN(parsedDate.getTime())) return null;
+    const year = parsedDate.getFullYear();
+    const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
+    const day = String(parsedDate.getDate()).padStart(2, '0');
 
     return `${year}-${month}-${day}`;
   }

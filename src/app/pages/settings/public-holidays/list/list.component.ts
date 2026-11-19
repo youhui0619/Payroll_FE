@@ -31,7 +31,7 @@ export class ListComponent implements OnInit, AfterViewInit {
   ) {}
 
   loading = true;
-  publicHolidays = new MatTableDataSource<PublicHoliday>([]);;
+  publicHolidays = new MatTableDataSource<PublicHoliday>([]);
   filter: any = {};
   meta: any = {};
   stateList: any = {};
@@ -96,18 +96,18 @@ export class ListComponent implements OnInit, AfterViewInit {
     this.getPublicHolidays(); 
   }
   get years(): number[] {
-  return [...new Set(
-    this.publicHolidays.data.flatMap(holiday => {
-      const startYear = Number(holiday.startDate.slice(0, 4));
-      const endYear = Number(holiday.endDate.slice(0, 4));
+    return [...new Set(
+      this.publicHolidays.data.flatMap(holiday => {
+        const startYear = Number(holiday.startDate.slice(0, 4));
+        const endYear = Number(holiday.endDate.slice(0, 4));
 
-      return Array.from(
-        { length: endYear - startYear + 1 },
-        (_, index) => startYear + index
-      );
-    })
-  )].sort((a, b) => b - a);
-}
+        return Array.from(
+          { length: endYear - startYear + 1 },
+          (_, index) => startYear + index
+        );
+      })
+    )].sort((a, b) => b - a);
+  }
 
   get activeHolidayCount(): number {
     return this.publicHolidays.data.filter(holiday => holiday.status === 'ACTIVE').length;

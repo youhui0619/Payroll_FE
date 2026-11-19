@@ -3,7 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormGroupDirective } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import type { ClaimType } from '../../../../models/claims/claim-setting.model';
+import type { ClaimType } from '../../../../models/claims/claim-type.model';
 import { ToastService } from '../../../../shared/components/toast/toast.service';
 import { ClaimTypeApiService } from '../../../../services/api/claim-type.service';
 
@@ -40,24 +40,27 @@ export class CreateComponent {
     return this.router.navigate(['/settings/claim-settings/overview'])
   }
 
-  formatDate(date: Date | null): string | null {
+  formatDate(date: Date | string | null): string | null {
     if (!date) return null;
 
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const parsedDate = date instanceof Date ? date : new Date(date);
+    if (isNaN(parsedDate.getTime())) return null;
+    const year = parsedDate.getFullYear();
+    const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
+    const day = String(parsedDate.getDate()).padStart(2, '0');
 
     return `${year}-${month}-${day}`;
   }
 
   onSubmit(form: FormGroup) {
+    this.submitting = true;
     if (form.invalid) {
       form.markAllAsTouched();
       return;
     }
 
     const value = form.value;
-    const data = {
+    const data: ClaimType = {
       ...value,
       maxAmount: value.maxAmount.toString(),
       effectiveFrom: this.formatDate(value.effectiveFrom),

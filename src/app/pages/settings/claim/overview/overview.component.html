@@ -25,7 +25,7 @@
         <div class="d-flex flex-column-reverse flex-sm-row align-items-start justify-content-between">
           <div class="summary-info">
             <p class="fs-12 text-muted">Total Claim Type</p>
-            <!-- <h3 class="mb-0">{{ claimTypes.length }}</h3> -->
+            <h3 class="mb-0">{{ claimTypes.data.length }}</h3>
           </div>
           <div class="text-primary bg-light-primary text-end icon mb-2">
             <tabler-icon icon="users"></tabler-icon>
@@ -89,7 +89,7 @@
       <div class="card-header mb-3">
         <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
           <h6 class="fs-14 fw-400 text-muted my-0">
-            <!-- <span class="fw-550 text-primary">All ({{ claimTypes.length }})</span> -->
+            <span class="fw-550 text-primary">All ({{ claimTypes.data.length }})</span>
             <!-- | Active ({{ activeCount }})
             | Inactive ({{ inactiveCount }}) -->
           </h6>
@@ -120,27 +120,32 @@
             <thead>
               <tr>
                 <th class="text-dark">Claim Type</th>
-                <th class="text-dark">Description</th>
+                <th class="text-dark">Max Amount</th>
+                <th class="text-dark">Receipt Required</th>
                 <th class="text-dark">Status</th>
                 <th class="text-dark">Action</th>
               </tr>
             </thead>
             <tbody>
-
-              <!-- @for (claimType of claimTypes; track claimType) {
+              @for (claimType of claimTypes.data; track claimType) {
                 <tr>
                   <td class="text-nowrap">
                     <p class="text-dark">{{ claimType.name }}</p>
                     <p class="text-muted fw-300 fs-10 my-0">{{ claimType.code }}</p>
                   </td>
-                  <td class="text-muted">{{ claimType.description || '—' }}</td>
+                  <td class="text-muted">MYR {{ claimType.maxAmount | number: '1.2-2' }}</td>
                   <td>
-                   <span class="chip" [ngClass]="claimType.status === 'ACTIVE' ? 'bg-light-primary text-primary' : 'bg-light-secondary text-secondary'">
-                      {{ claimType.status === 'ACTIVE' ? 'Active' : 'Inactive' }}
+                   <span class="chip" [ngClass]="claimType.receiptRequired ? 'bg-light-info text-info' : 'bg-light-secondary text-secondary'">
+                      {{ claimType.receiptRequired ? 'Yes' : 'No' }}
                     </span> 
                   </td>
                   <td>
-                    <button type="button" class="text-muted action-btn" mat-icon-button [routerLink]="['/settings/claim-settings/edit', claimType.code]" [attr.aria-label]="'Edit ' + claimType.name">
+                   <span class="chip" [ngClass]="claimType.active ? 'bg-light-primary text-primary' : 'bg-light-danger text-danger'">
+                      {{ claimType.active ? 'Active' : 'Inactive' }}
+                    </span> 
+                  </td>
+                  <td>
+                    <button type="button" class="text-muted action-btn" mat-icon-button [routerLink]="['/settings/claim-settings/edit', claimType.id]">
                       <tabler-icon icon="edit"></tabler-icon>
                     </button>
                   </td>
@@ -150,11 +155,17 @@
                 <tr>
                   <td colspan="4" class="text-center text-muted py-4">No claim types match these filters...</td>
                 </tr>
-              }-->
+              }
             </tbody>
           </table>
           }
-          <mat-paginator [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>
+          <!-- Pagination -->
+          <mat-paginator
+            [length]="meta.total" 
+            [pageSize]="meta.pageSize" 
+            [pageSizeOptions]="[5, 10 ,20]"
+            showFirstLastButtons>
+          </mat-paginator>
         </div>
       </div>
     </div>

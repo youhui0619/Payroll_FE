@@ -48,7 +48,7 @@ export const SETTINGS_ROUTES: Routes = [
     component: PublicHolidayCreateComponent
   },
   {
-    path: 'public-holidays/edit',
+    path: 'public-holidays/edit/:id',
     title: 'Edit Public Holidays',
     component: PublicHolidayEditComponent
   },
@@ -84,7 +84,7 @@ export const SETTINGS_ROUTES: Routes = [
     component: ClaimCreateComponent
   },
   {
-    path: 'claim-settings/edit/:claimCode',
+    path: 'claim-settings/edit/:id',
     title: 'Edit Claim Setting',
     component: ClaimEditComponent
   },

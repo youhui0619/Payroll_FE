@@ -22,7 +22,7 @@ type ServiceEntitlementTierForm = FormGroup<{
   styleUrl: './edit.component.scss'
 })
 export class EditComponent implements OnInit {
-  readonly leavePolicies = leavePolicies;
+  leavePolicies = leavePolicies;
   leavePolicy: LeavePolicy | undefined;
 
   form = new FormGroup({
