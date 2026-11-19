@@ -55,6 +55,9 @@ export class OverviewComponent implements OnInit, AfterViewInit {
   resetFilter(){
     this.filter = {
       search: "",
+      type: "",
+      state: "",
+      active: ""
     };
     this.getWorkLocations();
   }

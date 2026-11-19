@@ -30,9 +30,13 @@ export class PublicHolidayApiService {
     return headers;
   }
 
-  getAllPublicHolidays(searchTerm: any): Observable<any> {
-    console.log("searchTerm", searchTerm)
-    const params: any = searchTerm || {};
+  getAllPublicHolidays(searchTerms: any): Observable<any> {
+    const params: any = Object.fromEntries(
+      Object.entries(searchTerms || {}).filter(
+        ([key, value]) =>
+          value !== '' && value !== null && value !== undefined
+      ));
+
     return this.http.get(environment.apiURL + '/public-holidays', {
       headers: this.getHeaders(),
       params,

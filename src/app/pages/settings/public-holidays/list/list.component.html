@@ -25,7 +25,7 @@
             <div class="summary-info">
               <p class="fs-12 text-muted">Total Holidays
               </p>
-              <h3 class="mb-0">{{ holidays.length }}</h3>
+              <h3 class="mb-0">{{ publicHolidays.data.length }}</h3>
             </div>
             <div class="text-primary bg-light-primary text-end icon">
               <tabler-icon icon="users"></tabler-icon>
@@ -68,7 +68,7 @@
 
   <div class="col-12 col-sm-6 col-md-3 col-lg-3">
       <mat-form-field appearance="outline" class="form-input w-100" subscriptSizing="dynamic">
-      <mat-select placeholder="Year" [value]="selectedYear" (selectionChange)="selectedYear = $event.value">
+      <mat-select placeholder="Year" [value]="filter.year" (selectionChange)="filter.year = $event.value">
         <mat-option value="">All years</mat-option>
         @for (year of years; track year) {
           <mat-option [value]="year">{{ year }}</mat-option>
@@ -78,11 +78,11 @@
   </div>
 
   <div class="col-12 col-sm-6 col-md-3 col-lg-3">
-      <mat-form-field appearance="outline" class="form-input w-100" subscriptSizing="dynamic">
-      <mat-select placeholder="Holiday Scope" [value]="selectedScope" (selectionChange)="selectedScope = $event.value">
-        <mat-option value="">All scopes</mat-option>
-        <mat-option value="National">National</mat-option>
-        <mat-option value="State">State</mat-option>
+    <mat-form-field appearance="outline" class="form-input w-100" subscriptSizing="dynamic">
+      <mat-select placeholder="Select State" [(ngModel)]="filter.region" >
+        @for (state of stateList; track state.value) {
+          <mat-option [value]="state.value">{{ state.name }}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
   </div>
@@ -93,11 +93,22 @@
     <div class="card">
       <div class="card-header mb-3">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-          <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All ({{ filteredHolidays.length }})</span>  |  Active ({{ activeHolidayCount }})  |  Inactive ({{ inactiveHolidayCount }})</h6>
-          <div>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2" type="button" (click)="clearFilters()"><tabler-icon icon="x" [size]="16"></tabler-icon> Clear</button>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="upload" [size]="16"></tabler-icon> Import</button>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <tabler-icon icon="download" [size]="16"></tabler-icon> Export</button>
+          <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All ({{ publicHolidays.data.length }})</span>  |  Active ({{ activeHolidayCount }})  |  Inactive ({{ inactiveHolidayCount }})</h6>
+          <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center flex-lg-nowrap gap-2">
+            <div class="d-flex flex-wrap flex-lg-nowrap gap-2 ms-auto">
+                <button mat-flat-button color="primary-outline" class="btn-sm" (click)="resetFilter()">
+                    <tabler-icon icon="x" [size]="16"></tabler-icon>
+                    Clear
+                </button>
+                <button mat-flat-button color="primary-outline" class="btn-sm">
+                    <tabler-icon icon="upload" [size]="16"></tabler-icon>
+                    Import
+                </button>
+                <button mat-flat-button color="primary-outline" class="btn-sm">
+                    <tabler-icon icon="download" [size]="16"></tabler-icon>
+                    Export
+                </button>
+            </div>
           </div>
         </div>
       </div>
@@ -106,7 +117,7 @@
           @if (loading) {
             <app-skeleton-loader [rows]="6" [columns]="7"></app-skeleton-loader>
           } @else {
-<table class="table no-wrap w-100 text-left">
+          <table class="table no-wrap w-100 text-left" mat-table matSort (matSortChange)="onSortChange($event)">
             <thead>
               <tr>
 
@@ -120,34 +131,49 @@
               </tr>
             </thead>
             <tbody>
-              @for (holiday of filteredHolidays; track holiday) {
+              @for (holiday of publicHolidays.data; track holiday) {
                 <tr>
                   <td class="text-muted">
                     <p>{{ holiday.name }}</p>
                     <p class="fs-10 fw-300 my-0">{{ holiday.id }}</p>
                   </td>
-                  <td class="text-muted">{{ getHolidayDateLabel(holiday) }}</td>
-                  <td class="text-muted">{{ getHolidayDayLabel(holiday) }}</td>
+                  <td class="text-muted">{{ holiday.startDate === holiday.endDate ? (holiday.startDate | date: 'dd/MM/yyyy') : `${(holiday.startDate | date: 'dd/MM/yyyy')} ~ ${(holiday.endDate | date: 'dd/MM/yyyy')}` }}</td>
+                  <td class="text-muted">{{ holiday.startDate === holiday.endDate ? (holiday.startDate | date: 'EEE') : `${(holiday.startDate | date: 'EEE')} ~ ${(holiday.endDate | date: 'EEE')}` }}</td>
                   <td class="text-muted">
-                    <span class="chip text-info bg-light-info">{{ holiday.scope }}</span>
+                    <span class="chip" [ngClass]="holiday.scope === 'National' ? 'text-info bg-light-info' : 'text-secondary bg-light-secondary'">{{ holiday.scope }}</span>
                   </td>
-                  <td class="text-muted" [attr.title]="getHolidayRegionTitle(holiday)">{{ getHolidayRegionLabel(holiday) }}</td>
+                  <td class="text-muted">
+                     {{ holiday.regions.slice(0, 2).join(', ') }}
+                      @if (holiday.regions.length > 2) {
+                        <span> + {{ holiday.regions.length - 2 }} more regions</span>
+                      }
+                      
+                  </td>
                   <td class="text-muted">
                     <span class="chip" [ngClass]="holiday.status === 'ACTIVE' ? 'text-primary bg-light-primary' : 'text-muted bg-light-secondary'">{{ holiday.status === 'ACTIVE' ? 'Active' : 'Inactive' }}</span>
                   </td>
                   <td>
-                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/settings/public-holidays/view', holiday.id]">
-                      <tabler-icon icon="eye"></tabler-icon>
-                    </button>
-                    <button class="text-muted action-btn" mat-icon-button>
+                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/settings/public-holidays/edit', holiday.id]">
                       <tabler-icon icon="edit"></tabler-icon>
                     </button>
                   </td>
                 </tr>
               }
+              @if (publicHolidays.data.length === 0) {
+                <tr>
+                  <td colspan="7" class="text-muted text-center py-4">No public holidays match your search or filters.</td>
+                </tr>
+              }
             </tbody>
           </table>
           }
+          <!-- Pagination -->
+          <mat-paginator
+            [length]="meta.total" 
+            [pageSize]="meta.pageSize" 
+            [pageSizeOptions]="[5, 10 ,20]"
+            showFirstLastButtons>
+          </mat-paginator>
         </div>
       </div>
     </div>

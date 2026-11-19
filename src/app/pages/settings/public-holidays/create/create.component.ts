@@ -9,7 +9,7 @@ import { PublicHolidayApiService } from '../../../../services/api/public-holiday
   selector: 'app-create',
   standalone: true,
   imports: [...MaterialImports, ReactiveFormsModule],
-  providers: [...MaterialProviders],
+  providers: [...MaterialProviders, PublicHolidayApiService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'
 })
@@ -28,7 +28,7 @@ export class CreateComponent {
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     status: new FormControl('ACTIVE', { nonNullable: true, validators: [Validators.required] }),
     description: new FormControl('', { nonNullable: true }),
-    scope: new FormControl<'NATIONAL' | 'NATIONAL'>('NATIONAL', { nonNullable: true }),
+    scope: new FormControl<'NATIONAL' | 'STATE'>('NATIONAL', { nonNullable: true }),
     regions: new FormControl<string[]>([], { nonNullable: true }),
     stateSelections: new FormArray(this.stateList.map(() => new FormControl(false, { nonNullable: true }))),
     startDate: new FormControl<Date | null>(null, Validators.required),
@@ -65,7 +65,7 @@ export class CreateComponent {
   syncSelectedRegions() {
     const regions = this.stateList
     .filter((_: { name: string; value: string }, index: number) => this.form.controls.stateSelections.at(index).value)
-    .map((state: any) => state.value);
+    .map((state: any) => state.name);
     this.form.controls.regions.setValue(regions);
     this.form.controls.regions.markAsDirty();
   }
@@ -88,6 +88,7 @@ export class CreateComponent {
     const { stateSelections, ...value } = form.value;
     const data = {
       ...value,
+      scope: 'State',
       startDate: this.formatDate(value.startDate),
       endDate: this.formatDate(value.endDate)
     };

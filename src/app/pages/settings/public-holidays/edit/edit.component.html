@@ -1,0 +1,139 @@
+<div class="row justify-content-between mb-3">
+  <div class="col-sm-12 px-2">
+    <div class="d-flex align-items-center gap-2 cursor-pointer" (click)="goBack()">
+      <button mat-icon-button type="button" class="d-flex justify-content-center w-auto mb-0">
+        <tabler-icon icon="chevron-left" class="text-dark d-flex" [size]="16"></tabler-icon>
+      </button>
+      <p class="text-muted mb-0">Back to leave settings</p>
+    </div>
+  </div>
+</div>
+
+<div class="row justify-content-between mb-4">
+  <div class="col-sm-7">
+    <h3 class="text-dark my-0">Create Leave Policies</h3>
+    <p class="fw-300 text-muted mb-0">Add an expense category employees can select when submitting a claim.</p>
+  </div>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit(form)">
+  <h4 class="text-primary">Holiday Information</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-8 px-2">
+          <mat-label class="form-label">Holiday Name <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput placeholder="Enter holiday name" formControlName="name">
+            @if (form.controls.name.hasError('required')) {
+              <mat-error class="text-danger">Holiday name is required.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Status
+            <span class="text-danger">*</span>
+          </mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <mat-select placeholder="Select status" formControlName="status">
+              <mat-option value="ACTIVE">Active</mat-option>
+              <mat-option value="INACTIVE">Inactive</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-12 px-2">
+          <mat-label class="form-label">Description</mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <textarea matInput rows="4" placeholder="Enter description" formControlName="description"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4 class="text-primary">Holiday Scope</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <mat-label class="form-label">Applicable Scope <span class="text-danger">*</span></mat-label>
+      <mat-radio-group class="form-radio-group row mx-0" formControlName="scope">
+        <div class="col-sm-6 px-2">
+          <mat-radio-button class="form-radio" color="primary" value="NATIONAL">
+            National
+            <span class="d-block text-muted">Applies nationwide, subject to applicable holiday rules</span>
+          </mat-radio-button>
+        </div>
+        <div class="col-sm-6 px-2">
+          <mat-radio-button class="form-radio" color="primary" value="STATE">
+            Selected States / Regions
+            <span class="d-block text-muted">Applies only to selected locations</span>
+          </mat-radio-button>
+        </div>
+      </mat-radio-group>
+
+      @if (selectedScope === 'STATE') {
+        <div class="mt-4">
+          <div class="d-flex align-items-start justify-content-between flex-wrap gap-2 mb-3">
+            <div>
+              <mat-label class="form-label mb-1">States / Regions <span class="text-danger">*</span></mat-label>
+              <p class="text-muted mb-0">Select all locations where this holiday applies.</p>
+            </div>
+            <span class="text-muted">{{ selectedRegions.length }} selected</span>
+          </div>
+          <div class="mb-3">
+            <mat-checkbox class="form-checkbox" color="primary" [checked]="allStatesSelected" [indeterminate]="selectedRegions.length > 0 && !allStatesSelected" (change)="toggleAllStates($event.checked)">
+              Select all
+            </mat-checkbox>
+          </div>
+          <div class="row" formArrayName="stateSelections">
+            @for (state of stateList; track state.value; let i = $index) {
+              <div class="col-sm-6 col-md-4 col-lg-3 mb-2">
+                <mat-checkbox
+                  class="form-checkbox"
+                  color="primary"
+                  [formControlName]="i"
+                  (change)="syncSelectedRegions()">
+                  {{ state.name }}
+                </mat-checkbox>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <h4 class="text-primary">Holiday Date</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Start Date <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput [matDatepicker]="startDate" placeholder="Select start date" formControlName="startDate">
+            <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+            <mat-datepicker #startDate></mat-datepicker>
+            @if (form.controls.startDate.hasError('required')) {
+              <mat-error class="text-danger">Start date is required.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">End Date <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput [min]="form.controls.startDate.value" [matDatepicker]="endDate" placeholder="Select end date" formControlName="endDate">
+            <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+            <mat-datepicker #endDate></mat-datepicker>
+            @if (form.controls.endDate.hasError('required')) {
+              <mat-error class="text-danger">End date is required.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex align-items-center justify-content-end gap-3">
+    <button mat-flat-button color="primary-outline" (click)="goBack()"><tabler-icon icon="x" [size]="16"></tabler-icon>Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="!form.valid || submitting"><tabler-icon icon="check" [size]="16"></tabler-icon>{{ submitting ? 'Submitting...' : 'Submit' }}</button>
+  </div>
+</form>

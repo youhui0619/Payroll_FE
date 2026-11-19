@@ -1,6 +1,6 @@
-import type { PublicHolidayRecord } from '../../models/settings/public-holiday.model';
+import type { PublicHoliday } from '../../models/settings/public-holiday.model';
 
-export const publicHolidays: PublicHolidayRecord[] = [
+export const publicHolidays: PublicHoliday[] = [
   { id: 'PH-2026-001', name: "Lunar New Year's Day", description: 'Chinese New Year public holiday.', startDate: '2026-02-17', endDate: '2026-02-18', scope: 'National', regions: [], status: 'ACTIVE' },
   { id: 'PH-2026-002', name: 'Hari Raya Puasa', description: 'Hari Raya Puasa celebration.', startDate: '2026-03-21', endDate: '2026-03-22', scope: 'National', regions: [], status: 'ACTIVE' },
   { id: 'PH-2026-003', name: 'Labour Day', description: 'Annual Labour Day public holiday.', startDate: '2026-05-01', endDate: '2026-05-01', scope: 'National', regions: [], status: 'ACTIVE' },
@@ -13,11 +13,11 @@ export const publicHolidays: PublicHolidayRecord[] = [
   { id: 'PH-2026-010', name: 'Christmas Day', description: 'Christmas Day public holiday.', startDate: '2026-12-25', endDate: '2026-12-25', scope: 'National', regions: [], status: 'ACTIVE' }
 ];
 
-export function getPublicHolidaysForDate(date: string, location: string): PublicHolidayRecord[] {
+export function getPublicHolidaysForDate(date: string, location: string): PublicHoliday[] {
   return getPublicHolidaysForLocation(location).filter(holiday => holiday.startDate <= date && holiday.endDate >= date);
 }
 
-export function getPublicHolidaysForLocation(location: string): PublicHolidayRecord[] {
+export function getPublicHolidaysForLocation(location: string): PublicHoliday[] {
   const normalizedLocation = location.toLowerCase();
   return publicHolidays.filter(holiday => {
     if (holiday.status !== 'ACTIVE') return false;

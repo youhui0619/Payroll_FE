@@ -1,92 +1,134 @@
-import { Component, OnInit } from '@angular/core';
-import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { CommonModule } from '@angular/common';
+import { OnInit, Component, ViewChild, AfterViewInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { publicHolidays } from '../../../../data/settings/public-holidays.data';
-import type { PublicHolidayRecord } from '../../../../models/settings/public-holiday.model';
+import type { PublicHoliday } from '../../../../models/settings/public-holiday.model';
+import { PublicHolidayApiService } from '../../../../services/api/public-holiday.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
+import { stateList } from '../../../../data/other/other.data';
 
 @Component({
   selector: 'app-list',
-  imports: [CommonModule, ...MaterialImports, RouterLink, SkeletonLoaderComponent],
-  providers: [...MaterialProviders],
+  imports: [CommonModule, ...MaterialImports, RouterLink, SkeletonLoaderComponent, FormsModule],
+  providers: [...MaterialProviders, PublicHolidayApiService],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnInit, AfterViewInit {
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
+  constructor(
+    private apiService: PublicHolidayApiService,
+    private toastService: ToastService
+  ) {}
+
   loading = true;
+  publicHolidays = new MatTableDataSource<PublicHoliday>([]);;
+  filter: any = {};
+  meta: any = {};
+  stateList: any = {};
 
-  ngOnInit(): void {
-    window.setTimeout(() => this.loading = false, 3000);
+  ngOnInit() {
+    this.resetFilter();
+    this.stateList = stateList;
   }
 
-  readonly holidays: PublicHolidayRecord[] = publicHolidays;
-  searchTerm = '';
-  selectedYear = '';
-  selectedScope = '';
-  selectedStatus = '';
-
-  get years(): string[] {
-    return [...new Set(this.holidays.flatMap(holiday => {
-      const startYear = Number(holiday.startDate.slice(0, 4));
-      const endYear = Number(holiday.endDate.slice(0, 4));
-      return Array.from({ length: endYear - startYear + 1 }, (_, index) => String(startYear + index));
-    }))].sort();
-  }
-
-  get filteredHolidays(): PublicHolidayRecord[] {
-    const query = this.searchTerm.trim().toLowerCase();
-    return this.holidays.filter(holiday => {
-      const matchesSearch = !query || [holiday.name, holiday.id, holiday.description, holiday.startDate, holiday.endDate, holiday.scope, ...holiday.regions]
-        .some(value => value.toLowerCase().includes(query));
-      const matchesYear = !this.selectedYear || holiday.startDate.slice(0, 4) <= this.selectedYear && holiday.endDate.slice(0, 4) >= this.selectedYear;
-      const matchesScope = !this.selectedScope || holiday.scope === this.selectedScope;
-      const matchesStatus = !this.selectedStatus || holiday.status === this.selectedStatus;
-      return matchesSearch && matchesYear && matchesScope && matchesStatus;
+  ngAfterViewInit() {
+    this.paginator.page.subscribe(() => {
+      this.meta.pageSize = this.paginator.pageSize;
+      this.meta.page = this.paginator.pageIndex + 1; 
+      console.log(this.meta, this.meta)
+      this.getPublicHolidays();
     });
   }
 
+  resetFilter(){
+    this.filter = {
+      search: "",
+      scope: "",
+      year: new Date().getFullYear(),
+      region: "",
+      status: "",
+    };
+    this.getPublicHolidays();
+  }
+
+  getPublicHolidays(){
+    this.loading = true;
+    this.apiService.getAllPublicHolidays(this.filter).subscribe({
+      next: (response) => {
+        console.log("response", response)
+        this.publicHolidays.data = response.data.length > 0 ? response.data : [];
+        this.meta.total = response.meta.total
+        this.loading = false;
+        console.log("Public Holidays", this.publicHolidays)
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+        this.loading = false;
+      },
+    });
+  }
+
+  onSortChange(event: { active: string; direction: string }) {
+    this.meta.sortBy = event.active;
+    this.meta.sortDir = event.direction.toUpperCase() || 'ASC';
+    console.log("this.meta sort", this.meta)
+    this.getPublicHolidays();
+  }
+  
+  applyFilter(event: any) {
+    const filterValue = event;
+    this.filter.search = filterValue;
+    console.log("this.filter.search", this.filter.search)
+    this.getPublicHolidays(); 
+  }
+  get years(): number[] {
+  return [...new Set(
+    this.publicHolidays.data.flatMap(holiday => {
+      const startYear = Number(holiday.startDate.slice(0, 4));
+      const endYear = Number(holiday.endDate.slice(0, 4));
+
+      return Array.from(
+        { length: endYear - startYear + 1 },
+        (_, index) => startYear + index
+      );
+    })
+  )].sort((a, b) => b - a);
+}
+
   get activeHolidayCount(): number {
-    return this.holidays.filter(holiday => holiday.status === 'ACTIVE').length;
+    return this.publicHolidays.data.filter(holiday => holiday.status === 'ACTIVE').length;
   }
 
   get inactiveHolidayCount(): number {
-    return this.holidays.filter(holiday => holiday.status === 'INACTIVE').length;
+    return this.publicHolidays.data.filter(holiday => holiday.status === 'INACTIVE').length;
   }
+
 
   get upcomingHolidayCount(): number {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return this.holidays.filter(holiday => holiday.status === 'ACTIVE' && new Date(`${holiday.endDate}T00:00:00`) >= today).length;
+    return this.publicHolidays.data.filter(holiday => holiday.status === 'INACTIVE').length;
   }
 
-  getHolidayDateLabel(holiday: PublicHolidayRecord): string {
-    return holiday.startDate === holiday.endDate
-      ? holiday.startDate
-      : `${holiday.startDate} – ${holiday.endDate}`;
-  }
-
-  getHolidayDayLabel(holiday: PublicHolidayRecord): string {
-    const startDay = new Date(`${holiday.startDate}T00:00:00`).toLocaleDateString('en-MY', { weekday: 'long' });
-    if (holiday.startDate === holiday.endDate) return startDay;
-    const endDay = new Date(`${holiday.endDate}T00:00:00`).toLocaleDateString('en-MY', { weekday: 'long' });
-    return `${startDay} – ${endDay}`;
-  }
-
-  getHolidayRegionTitle(holiday: PublicHolidayRecord): string {
+  getHolidayRegionTitle(holiday: PublicHoliday): string {
     return holiday.scope === 'National' ? 'All States' : holiday.regions.join(', ');
   }
 
-  getHolidayRegionLabel(holiday: PublicHolidayRecord): string {
+  getHolidayRegionLabel(holiday: PublicHoliday): string {
     return holiday.scope === 'National'
-      ? 'All states'
+      ? 'All States'
       : `${holiday.regions.length} states`;
-  }
-
-  clearFilters(): void {
-    this.searchTerm = '';
-    this.selectedYear = '';
-    this.selectedScope = '';
-    this.selectedStatus = '';
   }
 }

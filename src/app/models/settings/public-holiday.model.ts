@@ -1,7 +1,7 @@
 export type PublicHolidayScope = 'National' | 'State';
 export type PublicHolidayStatus = 'ACTIVE' | 'INACTIVE';
 
-export interface PublicHolidayRecord {
+export interface PublicHoliday {
   id: string;
   name: string;
   description: string;

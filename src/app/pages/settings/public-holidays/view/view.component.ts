@@ -4,7 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { publicHolidays } from '../../../../data/settings/public-holidays.data';
-import type { PublicHolidayRecord } from '../../../../models/settings/public-holiday.model';
+import type { PublicHoliday } from '../../../../models/settings/public-holiday.model';
 import { NavigationService } from '../../../../services/navigation.service';
 
 @Component({
@@ -17,7 +17,7 @@ import { NavigationService } from '../../../../services/navigation.service';
 })
 export class ViewComponent {
   private readonly navigation = inject(NavigationService);
-  holiday: PublicHolidayRecord | undefined;
+  holiday: PublicHoliday | undefined;
 
   goBack(): void { void this.navigation.back('/settings/public-holidays/list'); }
 
