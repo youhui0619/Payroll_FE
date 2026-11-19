@@ -26,7 +26,7 @@
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput formControlName="code" placeholder="e.g. WELLNESS">
             @if (form.controls.code.hasError('required')) {
-              <mat-error class="text-dangera">Claim code is required.</mat-error>
+              <mat-error class="text-danger">Claim code is required.</mat-error>
             }
           </mat-form-field>
         </div>
@@ -35,9 +35,30 @@
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput formControlName="name" placeholder="Enter claim type name">
             @if (form.controls.name.hasError('required')) {
-              <mat-error class="text-dangera">Claim type name is required.</mat-error>
+              <mat-error class="text-danger">Claim type name is required.</mat-error>
             }
           </mat-form-field>
+        </div>
+        <div class="col-sm-4 px-2 mb-3">
+          <mat-label class="form-label">Status <span class="text-danger">*</span></mat-label>
+          <mat-button-toggle-group class="selection-group status-group" color="primary" hideSingleSelectionIndicator formControlName="active">
+            <mat-button-toggle [value]="true">Active</mat-button-toggle>
+            <mat-button-toggle [value]="false">Inactive</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+        <div class="col-sm-4 px-2 mb-3">
+          <mat-label class="form-label">Receipt Required <span class="text-danger">*</span></mat-label>
+          <mat-button-toggle-group class="selection-group status-group" color="primary" hideSingleSelectionIndicator formControlName="receiptRequired">
+            <mat-button-toggle [value]="true">Yes</mat-button-toggle>
+            <mat-button-toggle [value]="false">No</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+        <div class="col-sm-4 px-2 mb-3">
+          <mat-label class="form-label">Max Amount</mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+              <span matTextPrefix class="text-muted me-2">MYR</span>
+              <input type="number" matInput formControlName="maxAmount">
+            </mat-form-field>
         </div>
         <div class="col-sm-12 px-2">
           <mat-label class="form-label">Description</mat-label>
@@ -45,12 +66,31 @@
             <textarea matInput rows="3" formControlName="description" placeholder="Describe the expenses covered by this claim type"></textarea>
           </mat-form-field>
         </div>
-        <div class="col-sm-4 px-2 mb-3">
-          <mat-label class="form-label">Status <span class="text-danger">*</span></mat-label>
-          <mat-button-toggle-group class="selection-group status-group" color="primary" hideSingleSelectionIndicator formControlName="status">
-            <mat-button-toggle value="ACTIVE">Active</mat-button-toggle>
-            <mat-button-toggle value="INACTIVE">Inactive</mat-button-toggle>
-          </mat-button-toggle-group>
+      </div>
+    </div>
+  </div>
+  <h4 class="text-primary">Effective Date</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Effective From <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput [matDatepicker]="effectiveFrom" placeholder="Select Effective Date" formControlName="effectiveFrom">
+            <mat-datepicker-toggle matSuffix [for]="effectiveFrom"></mat-datepicker-toggle>
+            <mat-datepicker #effectiveFrom></mat-datepicker>
+            @if (form.controls.effectiveFrom.hasError('required')) {
+              <mat-error class="text-danger">Start date is required.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Effective To</mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput [min]="form.controls.effectiveFrom.value" [matDatepicker]="effectiveTo" placeholder="Select end date" formControlName="effectiveTo">
+            <mat-datepicker-toggle matSuffix [for]="effectiveTo"></mat-datepicker-toggle>
+            <mat-datepicker #effectiveTo></mat-datepicker>
+          </mat-form-field>
         </div>
       </div>
     </div>

@@ -6,7 +6,6 @@ import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { departments } from '../../../../data/workforce/departments.data';
 import { claims } from '../../../../data/claims/claims.data';
-import { getClaimTypeLabel } from '../../../../data/claims/claim-types.data';
 import type { ClaimPaymentMethod, ClaimStatus, ClaimType, ExpenseClaimRecord } from '../../../../models/claims/claim.model';
 import { ClaimDetailDialogComponent } from '../../../../shared/dialog/claim-detail-dialog/claim-detail-dialog.component';
 
@@ -53,23 +52,23 @@ export class OverviewComponent implements OnInit {
   selectedYear: number | null = null;
   selectedClaim: ExpenseClaimRecord | null = null;
 
-  get filteredClaims(): ExpenseClaimRecord[] {
-    const query = this.searchText.trim().toLowerCase();
-    return this.claims.filter(claim => {
-      const date = new Date(`${claim.claimDate}T00:00:00`);
-      const matchesQuery = !query || [
-        claim.id, claim.employeeName, claim.employeeId, claim.departmentName,
-        getClaimTypeLabel(claim.claimType), claim.description
-      ].some(value => value.toLowerCase().includes(query));
-      const matchesDepartment = this.selectedDepartmentIds.length === 0
-        || this.selectedDepartmentIds.includes(claim.departmentId);
-      const matchesStatus = this.selectedStatuses.length === 0
-        || this.selectedStatuses.includes(claim.status);
-      const matchesMonth = this.selectedMonth === null || date.getMonth() + 1 === this.selectedMonth;
-      const matchesYear = this.selectedYear === null || date.getFullYear() === this.selectedYear;
-      return matchesQuery && matchesDepartment && matchesStatus && matchesMonth && matchesYear;
-    });
-  }
+  // get filteredClaims(): ExpenseClaimRecord[] {
+  //   const query = this.searchText.trim().toLowerCase();
+  //   return this.claims.filter(claim => {
+  //     const date = new Date(`${claim.claimDate}T00:00:00`);
+  //     const matchesQuery = !query || [
+  //       claim.id, claim.employeeName, claim.employeeId, claim.departmentName,
+  //       getClaimTypeLabel("claim.claimType"), claim.description
+  //     ].some(value => value.toLowerCase().includes(query));
+  //     const matchesDepartment = this.selectedDepartmentIds.length === 0
+  //       || this.selectedDepartmentIds.includes(claim.departmentId);
+  //     const matchesStatus = this.selectedStatuses.length === 0
+  //       || this.selectedStatuses.includes(claim.status);
+  //     const matchesMonth = this.selectedMonth === null || date.getMonth() + 1 === this.selectedMonth;
+  //     const matchesYear = this.selectedYear === null || date.getFullYear() === this.selectedYear;
+  //     return matchesQuery && matchesDepartment && matchesStatus && matchesMonth && matchesYear;
+  //   });
+  // }
 
   get pendingCount(): number {
     return this.claims.filter(claim => claim.status === 'Pending').length;
@@ -88,7 +87,8 @@ export class OverviewComponent implements OnInit {
   }
 
   claimTypeLabel(type: ClaimType): string {
-    return getClaimTypeLabel(type);
+    return ""
+    // return getClaimTypeLabel(type);
   }
 
   paymentMethodLabel(method: ClaimPaymentMethod): string {

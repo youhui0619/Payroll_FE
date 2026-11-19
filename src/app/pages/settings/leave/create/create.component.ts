@@ -166,7 +166,7 @@ export class CreateComponent {
       return;
     }
 
-    const value = form.getRawValue();
+    const value = form.value;
     const data = {
       ...value,
       defaultEntitlement: value.entitlementCalculationMethod === 'FIXED' ? value.defaultEntitlement : null,

@@ -16,7 +16,6 @@ import { getEmployeeLeaveBalances } from '../../../../data/leave/leave-balances.
 import { leavePolicies } from '../../../../data/leave/leave-policies.data';
 import { claims } from '../../../../data/claims/claims.data';
 import { overtimeRequests } from '../../../../data/overtime/overtime-requests.data';
-import { getClaimTypeLabel } from '../../../../data/claims/claim-types.data';
 import { commissionIncentiveSettings } from '../../../../data/commission/commission-incentive-settings.data';
 import { LeaveApplication } from '../../../../models/leave/leave.model';
 import type { ClaimStatus, ClaimType, ExpenseClaimRecord } from '../../../../models/claims/claim.model';
@@ -314,7 +313,8 @@ export class ViewComponent {
   }
 
   claimTypeLabel(type: ClaimType): string {
-    return getClaimTypeLabel(type);
+    return ""
+    // return getClaimTypeLabel(type);
   }
 
   claimStatusClass(status: ClaimStatus): string {

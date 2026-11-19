@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { claims } from '../../../../data/claims/claims.data';
-import { getClaimTypeLabel } from '../../../../data/claims/claim-types.data';
 import { getEmployee } from '../../../../data/workforce/employees.data';
 import type { ClaimStatus, ClaimType, ExpenseClaimRecord } from '../../../../models/claims/claim.model';
 import { ClaimDetailDialogComponent } from '../../../../shared/dialog/claim-detail-dialog/claim-detail-dialog.component';
@@ -39,7 +38,8 @@ export class ApprovalComponent implements OnInit {
   }
 
   claimTypeLabel(type: ClaimType): string {
-    return getClaimTypeLabel(type);
+    return ""
+    // return getClaimTypeLabel(type);
   }
 
   paymentMethodLabel(method: ExpenseClaimRecord['paymentMethod']): string {

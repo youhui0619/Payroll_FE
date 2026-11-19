@@ -105,9 +105,9 @@
           <mat-label class="form-label">Claim Type <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <mat-select placeholder="Select claim type" formControlName="claimType">
-              @for (claimType of claimTypes; track claimType) {
+              <!-- @for (claimType of claimTypes; track claimType) {
                 <mat-option [value]="claimType.value">{{ claimType.label }}</mat-option>
-              }
+              } -->
             </mat-select>
             <mat-error class="text-danger">Claim type is required.</mat-error>
           </mat-form-field>

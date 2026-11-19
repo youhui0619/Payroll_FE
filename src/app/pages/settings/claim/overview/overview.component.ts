@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { claimTypes } from '../../../../data/claims/claim-types.data';
 
 @Component({
   selector: 'app-overview',
@@ -20,13 +19,13 @@ export class OverviewComponent implements OnInit {
     window.setTimeout(() => this.loading = false, 3000);
   }
 
-  claimTypes = claimTypes;
+  claimTypes = {};
 
-  get activeCount(): number {
-    return this.claimTypes.filter(item => item.status === 'ACTIVE').length;
-  }
+  // get activeCount(): number {
+  //   return this.claimTypes.filter(item => item.status === 'ACTIVE').length;
+  // }
 
-  get inactiveCount(): number {
-    return this.claimTypes.filter(item => item.status === 'INACTIVE').length;
-  }
+  // get inactiveCount(): number {
+  //   return this.claimTypes.filter(item => item.status === 'INACTIVE').length;
+  // }
 }

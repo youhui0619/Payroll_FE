@@ -7,7 +7,6 @@ import { payslips } from '../../../data/payroll/payslips.data';
 import type { Payslip } from '../../../models/payroll/payslip.model';
 import { leaveApplications } from '../../../data/leave/leave-applications.data';
 import { claims } from '../../../data/claims/claims.data';
-import { getClaimTypeLabel } from '../../../data/claims/claim-types.data';
 import { getEmployee } from '../../../data/workforce/employees.data';
 import type { LeaveApplication } from '../../../models/leave/leave.model';
 import type { ClaimStatus, ClaimType, ExpenseClaimRecord } from '../../../models/claims/claim.model';
@@ -69,7 +68,8 @@ export class PayrollDetailDialogComponent {
   }
 
   claimTypeLabel(type: ClaimType): string {
-    return getClaimTypeLabel(type);
+    return ""
+    // return getClaimTypeLabel(type);
   }
 
   claimStatusClass(status: ClaimStatus): string {

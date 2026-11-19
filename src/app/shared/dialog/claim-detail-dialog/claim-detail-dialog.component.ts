@@ -3,7 +3,6 @@ import { Component, EventEmitter, HostListener, Input, Output } from '@angular/c
 import { FormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../material-imports';
 import { getEmployee } from '../../../data/workforce/employees.data';
-import { getClaimTypeLabel } from '../../../data/claims/claim-types.data';
 import type { ClaimPaymentMethod, ClaimType, ExpenseClaimRecord } from '../../../models/claims/claim.model';
 import type { EmployeeRecord } from '../../../models/workforce/employee.model';
 
@@ -39,7 +38,8 @@ export class ClaimDetailDialogComponent {
   }
 
   claimTypeLabel(type: ClaimType): string {
-    return getClaimTypeLabel(type);
+    return ""
+    //return getClaimTypeLabel(type);
   }
 
   paymentMethodLabel(method: ClaimPaymentMethod): string {

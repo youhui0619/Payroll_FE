@@ -6,7 +6,6 @@ import { MaterialImports, MaterialProviders } from '../../../../shared/material-
 import { departments } from '../../../../data/workforce/departments.data';
 import { employees } from '../../../../data/workforce/employees.data';
 import { claims } from '../../../../data/claims/claims.data';
-import { claimTypes as claimTypeSettings } from '../../../../data/claims/claim-types.data';
 import type { ClaimPaymentMethod, ClaimType, ExpenseClaimRecord } from '../../../../models/claims/claim.model';
 import type { EmployeeRecord } from '../../../../models/workforce/employee.model';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
@@ -26,9 +25,8 @@ export class CreateComponent {
   
   departments = departments.filter(department => department.status === 'Active');
   employees = employees;
-  claimTypes: { value: ClaimType; label: string }[] = claimTypeSettings
-    .filter(claimType => claimType.status === 'ACTIVE')
-    .map(claimType => ({ value: claimType.code, label: claimType.name }));
+  // claimTypes: { value: ClaimType; label: string }[] = ClaimTypes
+  //   .map(claimType => ({ value: claimType.code, label: claimType.name }));
   paymentMethods: { value: ClaimPaymentMethod; label: string }[] = [
     { value: 'PAYROLL', label: 'Payroll' },
     { value: 'BANK_TRANSFER', label: 'Bank Transfer' },
