@@ -8,6 +8,6 @@ export interface Position {
   description: string;
   departmentId: string;
   reportsTo: string | null;
-  effectiveFrom: string | null;
+  effectiveFrom: string;
   effectiveTo: string | null;
 }

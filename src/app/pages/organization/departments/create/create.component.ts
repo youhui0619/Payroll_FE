@@ -27,7 +27,7 @@ export class CreateComponent {
     description: new FormControl(''),
     parentDepartmentId: new FormControl(''),
     headOfDepartmentId: new FormControl(''),
-    effectiveFrom: new FormControl(''),
+    effectiveFrom: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     effectiveTo: new FormControl(''),
   });
   submitting: boolean = false;

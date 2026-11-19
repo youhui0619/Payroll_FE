@@ -4,7 +4,7 @@
       <button mat-icon-button type="button" class="d-flex justify-content-center w-auto mb-0" aria-label="Go back">
         <tabler-icon icon="chevron-left" class="text-dark d-flex" [size]="16"></tabler-icon>
       </button>
-      <p class="text-muted mb-0">Back to work locations</p>
+      <p class="text-muted mb-0">Back to departments</p>
     </div>
   </div>
 </div>
@@ -101,7 +101,7 @@
   </div>
 
   <div class="d-flex align-items-center justify-content-end gap-3">
-    <button type="button" mat-flat-button color="primary-outline"><tabler-icon icon="circle-dashed" [size]="16"></tabler-icon>Draft</button>
-    <button type="submit" mat-flat-button color="primary"><tabler-icon icon="check" [size]="16"></tabler-icon>Submit</button>
+    <button mat-flat-button color="primary-outline" (click)="goBack()"><tabler-icon icon="x" [size]="16"></tabler-icon>Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="!form.valid || submitting"><tabler-icon icon="check" [size]="16"></tabler-icon>{{ submitting ? 'Submitting...' : 'Submit' }}</button>
   </div>
 </form>

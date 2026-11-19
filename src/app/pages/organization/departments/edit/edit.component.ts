@@ -32,7 +32,7 @@ export class EditComponent {
     description: new FormControl(''),
     parentDepartmentId: new FormControl(''),
     headOfDepartmentId: new FormControl(''),
-    effectiveFrom: new FormControl(''),
+    effectiveFrom: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     effectiveTo: new FormControl(''),
   });
   submitting: boolean = false;
@@ -41,14 +41,14 @@ export class EditComponent {
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id');
       if (this.id) {
-        this.getWorkLocation(this.id);
+        this.getDepartment(this.id);
       } else {
         console.error("🚨 No ID found in route!");
       }
     });  
   }
 
-  getWorkLocation(id: any){
+  getDepartment(id: any){
     console.log(id)
     this.apiService.getDepartment(id).subscribe({
       next: (response) => {

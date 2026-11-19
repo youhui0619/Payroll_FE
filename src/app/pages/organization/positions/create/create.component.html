@@ -1,4 +1,22 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<div class="row justify-content-between mb-3">
+  <div class="col-sm-12 px-2">
+    <div class="d-flex align-items-center gap-2 cursor-pointer" (click)="goBack()">
+      <button mat-icon-button type="button" class="d-flex justify-content-center w-auto mb-0" aria-label="Go back">
+        <tabler-icon icon="chevron-left" class="text-dark d-flex" [size]="16"></tabler-icon>
+      </button>
+      <p class="text-muted mb-0">Back to positions</p>
+    </div>
+  </div>
+</div>
+
+<div class="row justify-content-between mb-4">
+  <div class="col-sm-8">
+    <h3 class="text-dark my-0">Create Position</h3>
+    <p class="text-muted mb-0">Add a workplace and its address and contact details.</p>
+  </div>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit(form)">
   <h4 class="text-primary">Position Information</h4>
   <div class="card mb-4">
     <div class="card-body">
@@ -79,15 +97,22 @@
     <div class="card-body">
       <div class="row mx-0">
         <div class="col-sm-6 px-2">
-          <mat-label class="form-label">Effective From</mat-label>
+          <mat-label class="form-label">Effective From <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
-            <input matInput type="date" formControlName="effectiveFrom">
+            <input matInput [matDatepicker]="effectiveFrom" placeholder="Enter effective form" formControlName="effectiveFrom">
+            <mat-datepicker-toggle matSuffix [for]="effectiveFrom"></mat-datepicker-toggle>
+            <mat-datepicker #effectiveFrom></mat-datepicker>
+            @if (form.controls.effectiveFrom.hasError('required')) {
+              <mat-error class="text-danger">Start date is required.</mat-error>
+            }
           </mat-form-field>
         </div>
         <div class="col-sm-6 px-2">
           <mat-label class="form-label">Effective To</mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
-            <input matInput type="date" formControlName="effectiveTo">
+            <input matInput [min]="form.controls.effectiveFrom.value" [matDatepicker]="effectiveTo" placeholder="Enter effective to" formControlName="effectiveTo">
+            <mat-datepicker-toggle matSuffix [for]="effectiveTo"></mat-datepicker-toggle>
+            <mat-datepicker #effectiveTo></mat-datepicker>
           </mat-form-field>
         </div>
       </div>
@@ -95,11 +120,7 @@
   </div>
 
   <div class="d-flex align-items-center justify-content-end gap-3">
-    <button type="button" mat-flat-button color="primary-outline">
-      <tabler-icon icon="circle-dashed" [size]="16"></tabler-icon>Draft
-    </button>
-    <button type="submit" mat-flat-button color="primary">
-      <tabler-icon icon="check" [size]="16"></tabler-icon>Submit
-    </button>
+    <button mat-flat-button color="primary-outline" (click)="goBack()"><tabler-icon icon="x" [size]="16"></tabler-icon>Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="!form.valid || submitting"><tabler-icon icon="check" [size]="16"></tabler-icon>{{ submitting ? 'Submitting...' : 'Submit' }}</button>
   </div>
 </form>
