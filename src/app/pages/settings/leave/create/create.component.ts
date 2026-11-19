@@ -1,10 +1,12 @@
 
-import { Component } from '@angular/core';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators, FormGroupDirective } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import type { LeavePolicy } from '../../../../models/leave/leave-policy.model';
 import { Router } from '@angular/router';
+import { LeaveApiService } from '../../../../services/api/leave.service';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
 
 type ServiceEntitlementTierForm = FormGroup<{
   serviceFrom: FormControl<number | null>;
@@ -16,13 +18,15 @@ type ServiceEntitlementTierForm = FormGroup<{
   selector: 'app-create',
   standalone: true,
   imports: [...MaterialImports, ReactiveFormsModule],
-  providers: [...MaterialProviders],
+  providers: [...MaterialProviders, LeaveApiService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'
 })
 export class CreateComponent {
   constructor(
     private router: Router,
+    private toastService: ToastService,
+    private apiService: LeaveApiService,
   ) {
     this.form.controls.serviceEntitlementTiers.disable({ emitEvent: false });
     this.form.controls.carryForwardPolicy.valueChanges
@@ -33,13 +37,15 @@ export class CreateComponent {
       .subscribe(method => this.updateEntitlementValidation(method));
   }
 
+  @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
+
   form = new FormGroup({
-    leaveCode: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    leaveName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    code: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     description: new FormControl(''),
     status: new FormControl<'ACTIVE' | 'INACTIVE'>('ACTIVE', { nonNullable: true }),
     entitlementUnit: new FormControl<'DAILY' | 'HOURLY'>('DAILY', { nonNullable: true, validators: [Validators.required] }),
-    leaveType: new FormControl<'PAID' | 'UNPAID'>('PAID', { nonNullable: true, validators: [Validators.required] }),
+    paid: new FormControl<boolean>(true, { nonNullable: true, validators: [Validators.required] }),
     entitlementCalculationMethod: new FormControl<'FIXED' | 'SERVICE'>('FIXED', { nonNullable: true }),
     defaultEntitlement: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
     serviceEntitlementTiers: new FormArray<ServiceEntitlementTierForm>([this.createServiceEntitlementTier(0)]),
@@ -48,11 +54,13 @@ export class CreateComponent {
     leaveYear: new FormControl<'CALENDAR' | 'EMPLOYMENT_ANNIVERSARY' | 'FINANCIAL'>('CALENDAR', { nonNullable: true }),
     carryForwardPolicy: new FormControl<'NONE' | 'LIMITED' | 'UNLIMITED' | 'HR_REVIEW'>('NONE', { nonNullable: true }),
     maximumCarryForward: new FormControl<number | null>({ value: null, disabled: true }),
-    approvalOverflow: new FormControl<'MANAGER' | 'MANAGER_HR' | 'HR_ONLY' | 'NO_APPROVAL'>('MANAGER', { nonNullable: true }),
-    minimumAdvanceNotice: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
+    approval: new FormControl<'MANAGER' | 'MANAGER_HR' | 'HR_ONLY' | 'NO_APPROVAL'>('MANAGER', { nonNullable: true }),
+    noticeDays: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
     allowHalfDay: new FormControl(true, { nonNullable: true }),
     requireSupportingDocuments: new FormControl(true, { nonNullable: true }),
-    allowEmployeeSpecificSettings: new FormControl(true, { nonNullable: true })
+    allowEmployeeSpecificSettings: new FormControl(true, { nonNullable: true }),
+    effectiveFrom: new FormControl<Date | null>(null, Validators.required),
+    effectiveTo: new FormControl<Date | null>(null)
   });
   submitting = false;
 
@@ -142,6 +150,15 @@ export class CreateComponent {
     maximumCarryForward.updateValueAndValidity({ emitEvent: false });
   }
 
+  formatDate(date: Date | null): string | null {
+    if (!date) return null;
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
   onSubmit(form: FormGroup) {
     this.submitting = true;
     if (form.invalid) {
@@ -154,10 +171,49 @@ export class CreateComponent {
       ...value,
       defaultEntitlement: value.entitlementCalculationMethod === 'FIXED' ? value.defaultEntitlement : null,
       serviceEntitlementTiers: value.entitlementCalculationMethod === 'SERVICE' ? value.serviceEntitlementTiers : [],
-      maximumCarryForward: value.carryForwardPolicy === 'LIMITED' ? value.maximumCarryForward : null
+      maximumCarryForward: value.carryForwardPolicy === 'LIMITED' ? value.maximumCarryForward : null,
+      effectiveFrom: this.formatDate(value.effectiveFrom),
+      effectiveTo: this.formatDate(value.effectiveTo) || null
     };
+    delete data.status
     console.log("data", data)
+    this.apiService.createLeavePolicies(data).subscribe({
+      next: (response) => {
+        console.log("response", response);
 
-    return this.goBack()
+        this.toastService.show({
+          title: "Success",
+          message: "Leave Policy has been created.",
+          icon: 'success'
+        });
+
+        this.formDirective.resetForm();
+        this.submitting = false;
+        setTimeout(() => {
+          this.router.navigate(['/settings/leave-settings/overview']);
+        }, 1000);
+      },
+      error: (error) => {
+        console.log("Error:", error);
+        const errorResponse = error?.error;
+
+        if (errorResponse?.errors?.length) {
+          errorResponse.errors.forEach((err: any) => {
+            this.toastService.show({
+              title: errorResponse.code,
+              message: err.message,
+              icon: 'danger'
+            });
+          });
+        } else {
+          this.toastService.show({
+            title: errorResponse?.code || 'Error',
+            message: errorResponse?.message || 'Something went wrong.',
+            icon: 'danger'
+          });
+        }
+        this.submitting = false;
+      }
+    });
   }
 }
