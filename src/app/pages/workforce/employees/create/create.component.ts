@@ -107,7 +107,7 @@ export class CreateComponent {
     }
   }
 
-  readonly departments: Department[] = departments.filter(department => department.status === 'Active');
+  readonly departments: Department[] = departments.filter(department => department.status === 'ACTIVE');
   readonly positions: Position[] = positions;
   readonly workLocations = workLocations;
   readonly workLocationSearch = new FormControl<WorkLocation | string>('', { nonNullable: true });

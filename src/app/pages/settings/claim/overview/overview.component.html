@@ -116,7 +116,7 @@
           @if (loading) {
             <app-skeleton-loader [rows]="6" [columns]="5"></app-skeleton-loader>
           } @else {
-          <table class="table no-wrap w-100 text-left">
+          <table class="table no-wrap w-100 text-left" mat-table matSort (matSortChange)="onSortChange($event)">
             <thead>
               <tr>
                 <th class="text-dark">Claim Type</th>

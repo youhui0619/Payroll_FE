@@ -25,7 +25,7 @@ import type { EmploymentStatus, EmploymentType } from '../../../../models/workfo
 export class ListComponent implements OnInit {
   loading = true;
   readonly employees = employees;
-  readonly departments = departments.filter(department => department.status === 'Active');
+  readonly departments = departments.filter(department => department.status === 'ACTIVE');
   readonly employmentTypes = employmentTypes;
   readonly employmentStatuses = employmentStatuses;
   readonly searchControl = new FormControl('', { nonNullable: true });

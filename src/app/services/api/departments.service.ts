@@ -29,9 +29,13 @@ export class DepartmentsApiService {
 
     return headers;
   }
-  getAllDepartments(searchTerm: any): Observable<any> {
-    console.log("searchTerm", searchTerm)
-    const params: any = searchTerm ? { search: searchTerm } : {};
+  getAllDepartments(searchTerms: any): Observable<any> {
+   const params: any = Object.fromEntries(
+    Object.entries(searchTerms || {}).filter(
+      ([key, value]) =>
+        value !== '' && value !== null && value !== undefined
+    ));
+
     return this.http.get(environment.apiURL + '/departments', {
       headers: this.getHeaders(),
       params,

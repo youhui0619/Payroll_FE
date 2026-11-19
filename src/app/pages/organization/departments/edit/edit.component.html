@@ -1,0 +1,117 @@
+<div class="row justify-content-between mb-3">
+  <div class="col-sm-12 px-2">
+    <div class="d-flex align-items-center gap-2 cursor-pointer" (click)="goBack()">
+      <button mat-icon-button type="button" class="d-flex justify-content-center w-auto mb-0" aria-label="Go back">
+        <tabler-icon icon="chevron-left" class="text-dark d-flex" [size]="16"></tabler-icon>
+      </button>
+      <p class="text-muted mb-0">Back to work locations</p>
+    </div>
+  </div>
+</div>
+
+@if (department) {
+<div class="row justify-content-between mb-4">
+  <div class="col-sm-7">
+    <h3 class="text-dark my-0">Edit Department</h3>
+    <p class="text-muted mb-0">Update the details for {{ department.name || 'this department' }}.</p>
+  </div>
+
+  <div class="col-sm-5 d-flex align-items-center justify-content-end">
+    <button mat-flat-button color="danger" class="ms-2" (click)="deactivate(department.id)">
+      <tabler-icon icon="circle-dashed" [size]="16"></tabler-icon>
+      Deactivate
+    </button>
+  </div>
+</div>
+
+
+<form [formGroup]="form" (ngSubmit)="onSubmit(form)">
+  <h4 class="text-primary">Department Information</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Department Code <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput placeholder="Enter department code" formControlName="code">
+            @if (form.controls.code.hasError('required') && form.controls.code.touched) {
+              <mat-error class="text-danger">Department code is required.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4 px-2">
+          <mat-label class="form-label">Department Name <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput placeholder="Enter department name" formControlName="name">
+            @if (form.controls.name.hasError('required') && form.controls.name.touched) {
+              <mat-error class="text-danger">Department name is required.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-12 px-2">
+          <mat-label class="form-label">Description</mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <textarea matInput rows="3" placeholder="Enter description" formControlName="description"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4 class="text-primary">Organizational Structure</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Parent Department</mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <mat-select placeholder="Select parent department" formControlName="parentDepartmentId">
+              <mat-option value="1">Malaysia</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Head of Department</mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <mat-select placeholder="Select head of department" formControlName="headOfDepartmentId">
+              <mat-option value="1">Malaysia</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4 class="text-primary">Effective Period</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Effective From <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput [matDatepicker]="effectiveFrom" placeholder="Enter effective form" formControlName="effectiveFrom">
+            <mat-datepicker-toggle matSuffix [for]="effectiveFrom"></mat-datepicker-toggle>
+            <mat-datepicker #effectiveFrom></mat-datepicker>
+            @if (form.controls.effectiveFrom.hasError('required')) {
+              <mat-error class="text-danger">Start date is required.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Effective To</mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput [min]="form.controls.effectiveFrom.value" [matDatepicker]="effectiveTo" placeholder="Enter effective to" formControlName="effectiveTo">
+            <mat-datepicker-toggle matSuffix [for]="effectiveTo"></mat-datepicker-toggle>
+            <mat-datepicker #effectiveTo></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex align-items-center justify-content-end gap-3">
+    <button mat-flat-button color="primary-outline" (click)="goBack()"><tabler-icon icon="x" [size]="16"></tabler-icon>Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="!form.valid || submitting"><tabler-icon icon="check" [size]="16"></tabler-icon>{{ submitting ? 'Submitting...' : 'Submit' }}</button>
+  </div>
+</form>
+}

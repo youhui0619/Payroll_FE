@@ -72,7 +72,7 @@ export class CreateComponent {
     { value: 'SELECTED_EMPLOYEES', label: 'Selected employees' }
   ];
 
-  readonly departments = departments.filter(department => department.status === 'Active');
+  readonly departments = departments.filter(department => department.status === 'ACTIVE');
   readonly positions = positions.filter(position => position.effectiveTo === null);
   readonly employees = employees.filter(employee => employee.employmentStatus === 'Active');
 

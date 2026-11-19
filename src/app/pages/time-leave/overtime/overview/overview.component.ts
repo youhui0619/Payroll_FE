@@ -25,7 +25,7 @@ export class OverviewComponent implements OnInit {
   }
 
   readonly overtimeRequests = overtimeRequests;
-  readonly departments = departments.filter(department => department.status === 'Active');
+  readonly departments = departments.filter(department => department.status === 'ACTIVE');
   readonly statuses: OvertimeStatus[] = ['Pending', 'Approved', 'Rejected', 'Paid'];
 
   searchText = '';

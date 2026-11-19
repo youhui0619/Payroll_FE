@@ -410,14 +410,14 @@
   </div>
   </div>
 
-  <h4 class="text-primary">Effective Date</h4>
+  <h4 class="text-primary">Effective Period</h4>
   <div class="card mb-4">
     <div class="card-body">
       <div class="row mx-0">
         <div class="col-sm-6 px-2">
           <mat-label class="form-label">Effective From <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
-            <input matInput [matDatepicker]="effectiveFrom" placeholder="Select Effective Date" formControlName="effectiveFrom">
+            <input matInput [matDatepicker]="effectiveFrom" placeholder="Enter effective form" formControlName="effectiveFrom">
             <mat-datepicker-toggle matSuffix [for]="effectiveFrom"></mat-datepicker-toggle>
             <mat-datepicker #effectiveFrom></mat-datepicker>
             @if (form.controls.effectiveFrom.hasError('required')) {
@@ -428,7 +428,7 @@
         <div class="col-sm-6 px-2">
           <mat-label class="form-label">Effective To</mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
-            <input matInput [min]="form.controls.effectiveFrom.value" [matDatepicker]="effectiveTo" placeholder="Select end date" formControlName="effectiveTo">
+            <input matInput [min]="form.controls.effectiveFrom.value" [matDatepicker]="effectiveTo" placeholder="Enter effective to" formControlName="effectiveTo">
             <mat-datepicker-toggle matSuffix [for]="effectiveTo"></mat-datepicker-toggle>
             <mat-datepicker #effectiveTo></mat-datepicker>
           </mat-form-field>

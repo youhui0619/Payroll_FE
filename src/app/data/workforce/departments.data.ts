@@ -5,130 +5,120 @@ export const departments: Department[] = [
     id: 'DEP-0001',
     name: 'Corporate',
     code: 'CORP',
-    shortName: 'Corp',
-    remark: 'Company-wide administration and leadership.',
+    description: 'Company-wide administration and leadership.',
     parentDepartmentId: null,
     headOfDepartmentId: null,
     totalEmployees: 1,
     effectiveFrom: '2020-01-01',
     effectiveTo: null,
-    status: 'Active'
+    status: 'ACTIVE'
   },
   {
     id: 'DEP-0002',
     name: 'Finance',
     code: 'FIN',
-    shortName: 'Finance',
-    remark: 'Accounting, payroll, and financial reporting.',
+    description: 'Accounting, payroll, and financial reporting.',
     parentDepartmentId: 'DEP-0001',
     headOfDepartmentId: 'EMP-0042',
     totalEmployees: 1,
     effectiveFrom: '2020-01-01',
     effectiveTo: null,
-    status: 'Active'
+    status: 'ACTIVE'
   },
   {
     id: 'DEP-0003',
     name: 'Operations',
     code: 'OPS',
-    shortName: 'Ops',
-    remark: 'Daily business and service operations.',
+    description: 'Daily business and service operations.',
     parentDepartmentId: 'DEP-0001',
     headOfDepartmentId: 'EMP-0043',
     totalEmployees: 1,
     effectiveFrom: '2020-01-01',
     effectiveTo: null,
-    status: 'Active'
+    status: 'ACTIVE'
   },
   {
     id: 'DEP-0004',
     name: 'Human Resources',
     code: 'HR',
-    shortName: 'HR',
-    remark: 'People operations, hiring, and employee support.',
+    description: 'People operations, hiring, and employee support.',
     parentDepartmentId: 'DEP-0001',
     headOfDepartmentId: 'EMP-0042',
     totalEmployees: 1,
     effectiveFrom: '2021-01-01',
     effectiveTo: null,
-    status: 'Active'
+    status: 'ACTIVE'
   },
   {
     id: 'DEP-0005',
     name: 'Information Technology',
     code: 'IT',
-    shortName: 'IT',
-    remark: 'Internal systems and technical support.',
+    description: 'Internal systems and technical support.',
     parentDepartmentId: 'DEP-0003',
     headOfDepartmentId: 'EMP-0052',
     totalEmployees: 5,
     effectiveFrom: '2021-01-01',
     effectiveTo: null,
-    status: 'Active'
+    status: 'ACTIVE'
   },
   {
     id: 'DEP-0006',
     name: 'Sales',
     code: 'SLS',
-    shortName: 'Sales',
-    remark: 'Customer acquisition and account management.',
+    description: 'Customer acquisition and account management.',
     parentDepartmentId: 'DEP-0001',
     headOfDepartmentId: 'EMP-0043',
     totalEmployees: 1,
     effectiveFrom: '2021-01-01',
     effectiveTo: null,
-    status: 'Active'
+    status: 'ACTIVE'
   },
   {
     id: 'DEP-0007',
     name: 'Marketing',
     code: 'MKT',
-    shortName: 'Marketing',
-    remark: 'Brand, communications, and marketing campaigns.',
+    description: 'Brand, communications, and marketing campaigns.',
     parentDepartmentId: 'DEP-0001',
     headOfDepartmentId: 'EMP-0042',
     totalEmployees: 1,
     effectiveFrom: '2021-04-01',
     effectiveTo: null,
-    status: 'Active'
+    status: 'ACTIVE'
   },
   {
     id: 'DEP-0008',
     name: 'Customer Service',
     code: 'CS',
-    shortName: 'Support',
-    remark: 'Customer enquiries and after-sales support.',
+    description: 'Customer enquiries and after-sales support.',
     parentDepartmentId: 'DEP-0003',
     headOfDepartmentId: 'EMP-0043',
     totalEmployees: 1,
     effectiveFrom: '2022-01-01',
     effectiveTo: null,
-    status: 'Active'
+    status: 'ACTIVE'
   },
   {
     id: 'DEP-0009',
     name: 'Procurement',
     code: 'PRC',
-    shortName: 'Procurement',
-    remark: 'Supplier sourcing and purchasing operations.',
+    description: 'Supplier sourcing and purchasing operations.',
     parentDepartmentId: 'DEP-0003',
     headOfDepartmentId: 'EMP-0043',
     totalEmployees: 1,
     effectiveFrom: '2022-01-01',
     effectiveTo: null,
-    status: 'Active'
+    status: 'ACTIVE'
   },
   {
     id: 'DEP-0010',
     name: 'Legal and Compliance',
     code: 'LGL',
-    shortName: 'Legal',
-    remark: 'Legal affairs, governance, and regulatory compliance.',
+    description: 'Legal affairs, governance, and regulatory compliance.',
     parentDepartmentId: 'DEP-0001',
     headOfDepartmentId: 'EMP-0042',
     totalEmployees: 1,
     effectiveFrom: '2022-06-01',
     effectiveTo: null,
-    status: 'Active'
+    status: 'ACTIVE'
   }
 ];

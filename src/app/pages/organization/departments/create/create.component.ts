@@ -1,137 +1,107 @@
-
-import { Component, OnDestroy } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormGroupDirective } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { RouterLink } from '@angular/router';
-import { createFormGroupFromFields, FormConfig, FormFieldConfig, FormsComponent } from '../../../../shared/forms/forms.component';
+import { Router } from '@angular/router';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
+import { DepartmentsApiService } from '../../../../services/api/departments.service';
 
 @Component({
   selector: 'app-create',
-  imports: [...MaterialImports, FormsModule, ReactiveFormsModule, FormsComponent],
-  providers: [...MaterialProviders],
+  imports: [...MaterialImports, ReactiveFormsModule],
+  providers: [...MaterialProviders, DepartmentsApiService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'
 })
 export class CreateComponent {
-  departments: FormConfig[] = [
-    {
-      section: 'Department Information',
-      ordering: 0,
-      fields: [
-        {
-          name: 'Department Code',
-          type: 'text',
-          required: true, 
-          validation: true,
-          formControlName: 'code',
-          options: [],
-          errorMessage: "Department Code is required",
-          placeholder: "Enter Department Code",
-          size: 'col-sm-4',
-          surfix: '',
-          prefix: '',
-        },
-        {
-          name: 'Department Name',
-          type: 'text',
-          required: true, 
-          validation: true,
-          formControlName: 'name',
-          options: [],
-          errorMessage: "Department name is required",
-          placeholder: "Enter Department name",
-          size: 'col-sm-4',
-          surfix: '',
-          prefix: '',
-        },
-        {
-          name: 'Description',
-          type: 'textarea',
-          required: false, 
-          validation: false,
-          formControlName: 'description',
-          options: [],
-          errorMessage: "",
-          placeholder: "Enter description",
-          size: 'col-sm-12',
-          surfix: '',
-          prefix: '',
-        }
-      ]
-    },
-    {
-      section: 'Organizational Structure',
-      ordering: 1,
-      fields: [
-      {
-        name: 'Parent Department',
-        type: 'select',
-        required: false, 
-        validation: false,
-        formControlName: 'parentDepartment',
-        options: [
-          { value: 'MALAYSIA', label: 'Malaysia' }
-        ],
-        errorMessage: "Parent Department is required",
-        placeholder: "Enter Parent Department",
-        size: 'col-sm-6',
-        surfix: '',
-        prefix: '',
-      },
-      {
-        name: 'Head of Department',
-        type: 'select',
-        required: false, 
-        validation: false,
-        formControlName: 'headOfDepartment',
-        options: [
-          { value: 'MALAYSIA', label: 'Malaysia' }
-        ],
-        errorMessage: "Parent Department is required",
-        placeholder: "Enter Parent Department",
-        size: 'col-sm-6',
-        surfix: '',
-        prefix: '',
-      }
-      ]
-    },
-    {
-        section: 'Effective Period',
-        ordering: 2,
-        fields: [
-            {
-            name: 'Effective From',
-            type: 'date',
-            required: false, 
-            validation: false,
-            formControlName: 'effectiveFrom',
-            options: [],
-            errorMessage: "",
-            placeholder: "Enter Effective From",
-            size: 'col-sm-6',
-            surfix: '',
-            prefix: '',
-            },
-            {
-            name: 'Effective To',
-            type: 'date',
-            required: false, 
-            validation: false,
-            formControlName: 'effectiveTo',
-            options: [],
-            errorMessage: "",
-            placeholder: "Enter Effective To",
-            size: 'col-sm-6',
-            surfix: '',
-            prefix: '',
-            }
-        ]
+  constructor(
+    private router: Router,
+    private apiService: DepartmentsApiService,
+    private toastService: ToastService
+  ) {}
+  
+  @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
+  
+  form = new FormGroup({
+    code: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    description: new FormControl(''),
+    parentDepartmentId: new FormControl(''),
+    headOfDepartmentId: new FormControl(''),
+    effectiveFrom: new FormControl(''),
+    effectiveTo: new FormControl(''),
+  });
+  submitting: boolean = false;
+
+  goBack() {
+    return this.router.navigate(['/organization/work-locations/overview'])
+  }
+
+  formatDate(date: Date | string | null): string | null {
+    if (!date) return null;
+
+    const parsedDate = date instanceof Date ? date : new Date(date);
+    if (isNaN(parsedDate.getTime())) return null;
+    const year = parsedDate.getFullYear();
+    const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
+    const day = String(parsedDate.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  onSubmit(form: FormGroup) {
+    if (form.invalid) {
+      form.markAllAsTouched();
+      return;
     }
-  ];
 
-  departmentForm = createFormGroupFromFields(this.departments);
+    this.submitting = true;
 
-  onSubmit(form: any){
-    console.log("form.value", form.value)
+    const value = form.value;
+    const data = {
+      ...value,
+      status: "ACTIVE",
+      effectiveFrom: this.formatDate(value.effectiveFrom),
+      effectiveTo: this.formatDate(value.effectiveTo) || null
+    }
+    console.log("Data", data);
+
+    this.apiService.createDepartment(data).subscribe({
+      next: (response) => {
+        console.log("response", response);
+
+        this.toastService.show({
+          title: "Success",
+          message: "Department has been created.",
+          icon: 'success'
+        });
+
+        this.formDirective.resetForm();
+        this.submitting = false;
+        setTimeout(() => {
+          this.router.navigate(['/organization/departments/overview']);
+        }, 1000);
+      },
+      error: (error) => {
+        console.log("Error:", error);
+        const errorResponse = error?.error;
+
+        if (errorResponse?.errors?.length) {
+          errorResponse.errors.forEach((err: any) => {
+            this.toastService.show({
+              title: errorResponse.code,
+              message: err.message,
+              icon: 'danger'
+            });
+          });
+        } else {
+          this.toastService.show({
+            title: errorResponse?.code || 'Error',
+            message: errorResponse?.message || 'Something went wrong.',
+            icon: 'danger'
+          });
+        }
+        this.submitting = false;
+      }
+    });
   }
 }

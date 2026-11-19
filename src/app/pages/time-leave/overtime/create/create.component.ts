@@ -20,7 +20,7 @@ import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.componen
   styleUrl: './create.component.scss'
 })
 export class CreateComponent {
-  readonly departments = departments.filter(department => department.status === 'Active');
+  readonly departments = departments.filter(department => department.status === 'ACTIVE');
   readonly employees = employees;
   get overtimeTypes(): { value: OvertimeType; label: string; multiplier: number | null }[] {
     const types: { value: OvertimeType; label: string; multiplier: number | null }[] = [

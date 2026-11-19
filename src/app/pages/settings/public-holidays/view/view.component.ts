@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { publicHolidays } from '../../../../data/settings/public-holidays.data';
@@ -10,7 +10,7 @@ import { NavigationService } from '../../../../services/navigation.service';
 @Component({
   selector: 'app-view',
   standalone: true,
-  imports: [...MaterialImports, CommonModule, RouterLink],
+  imports: [...MaterialImports, CommonModule],
   providers: [...MaterialProviders],
   templateUrl: './view.component.html',
   styleUrl: './view.component.scss'

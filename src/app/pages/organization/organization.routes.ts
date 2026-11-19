@@ -2,9 +2,11 @@ import { Routes } from '@angular/router';
 import { OverviewComponent as DepartmentOverviewComponent } from './departments/overview/overview.component';
 import { CreateComponent as DepartmentCreateComponent } from './departments/create/create.component';
 import { ViewComponent as DepartmentViewComponent } from './departments/view/view.component';
+import { EditComponent as DepartmentEditComponent } from './departments/edit/edit.component';
 import { OverviewComponent as PositionOverviewComponent } from './positions/overview/overview.component';
 import { CreateComponent as PositionCreateComponent } from './positions/create/create.component';
 import { ViewComponent as PositionViewComponent } from './positions/view/view.component';
+import { EditComponent as PositionEditComponent } from './positions/edit/edit.component';
 import { OverviewComponent as WorkLocationOverviewComponent } from './work-locations/overview/overview.component';
 import { CreateComponent as WorkLocationCreateComponent } from './work-locations/create/create.component';
 import { EditComponent as WorkLocationEditComponent } from './work-locations/edit/edit.component';
@@ -25,12 +27,20 @@ export const ORGANIZATION_ROUTES: Routes = [
     component: DepartmentViewComponent
   },
   {
+    path: 'departments/edit/:id',
+    component: DepartmentEditComponent
+  },
+  {
     path: 'positions/create',
     component: PositionCreateComponent
   },
   {
     path: 'positions/overview',
     component: PositionOverviewComponent
+  },
+  {
+    path: 'positions/edit/:id',
+    component: PositionEditComponent
   },
   {
     path: 'positions/view/:id',
