@@ -63,12 +63,12 @@ export class ListComponent implements OnInit {
 
   employmentStatusClass(status: EmploymentStatus): string {
     const classes: Record<EmploymentStatus, string> = {
-      Active: 'bg-light-success text-success',
-      Probation: 'bg-light-warning text-warning',
-      Suspended: 'bg-light-danger text-danger',
-      Resigned: 'bg-light-secondary text-secondary',
-      Terminated: 'bg-light-danger text-danger',
-      Retired: 'bg-light-info text-info'
+      ACTIVE: 'bg-light-success text-success',
+      PROBATION: 'bg-light-warning text-warning',
+      SUSPENDED: 'bg-light-danger text-danger',
+      RESIGNED: 'bg-light-secondary text-secondary',
+      TERMINATED: 'bg-light-danger text-danger',
+      RETIRED: 'bg-light-info text-info'
     };
     return classes[status];
   }

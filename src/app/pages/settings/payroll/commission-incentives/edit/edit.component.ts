@@ -78,7 +78,7 @@ export class EditComponent implements OnInit {
 
   readonly departments = departments.filter(department => department.status === 'ACTIVE');
   readonly positions = positions.filter(position => position.effectiveTo === null);
-  readonly employees = employees.filter(employee => employee.employmentStatus === 'Active');
+  readonly employees = employees.filter(employee => employee.employmentStatus === 'ACTIVE');
 
   readonly commissionForm = new FormGroup({
     code: new FormControl('', {

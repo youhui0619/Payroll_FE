@@ -26,7 +26,7 @@ export const payrollSettings: PayrollSettings = {
   includeSocso: true,
   includeEis: true,
   includePcb: true,
-  includeHrdCorpLevy: false,
+  includeHrdCorpLevy: true,
   paymentMethod: 'BANK_TRANSFER',
   automaticallyCalculatePayroll: true,
   blockApprovalOnValidationErrors: true,

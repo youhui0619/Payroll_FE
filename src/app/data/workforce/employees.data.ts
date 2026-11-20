@@ -126,12 +126,12 @@ export const employees: EmployeeRecord[] = [
     position: 'Finance Executive',
     reportingManager: 'Finance Manager',
     workLocationId: 'LOC-0001',
-    employmentStatus: 'Active',
-    employmentType: 'Permanent',
+    employmentStatus: 'ACTIVE',
+    employmentType: 'PERMANENT',
     joinedDate: '2022-03-01',
     confirmationDate: '2022-06-01',
     resignationDate: null,
-    workingSchedule: createWorkingScheduleOverride(WORKING_SCHEDULE.Permanent, [
+    workingSchedule: createWorkingScheduleOverride(WORKING_SCHEDULE.PERMANENT, [
       { day: 'Monday', startTime: '08:30', endTime: '17:30', breakStartTime: '12:30', breakEndTime: '13:30' },
       { day: 'Tuesday', startTime: '08:30', endTime: '17:30', breakStartTime: '12:30', breakEndTime: '13:30' },
       { day: 'Wednesday', startTime: '08:30', endTime: '17:30', breakStartTime: '12:30', breakEndTime: '13:30' },
@@ -180,12 +180,12 @@ export const employees: EmployeeRecord[] = [
     position: 'Operations Executive',
     reportingManager: 'Operations Manager',
     workLocationId: 'LOC-0002',
-    employmentStatus: 'Active',
-    employmentType: 'Permanent',
+    employmentStatus: 'ACTIVE',
+    employmentType: 'PERMANENT',
     joinedDate: '2021-07-15',
     confirmationDate: '2021-10-15',
     resignationDate: null,
-    workingSchedule: createWorkingScheduleOverride(WORKING_SCHEDULE.Permanent, [
+    workingSchedule: createWorkingScheduleOverride(WORKING_SCHEDULE.PERMANENT, [
       { day: 'Monday', startTime: '08:00', endTime: '17:00', breakStartTime: '12:00', breakEndTime: '13:00' },
       { day: 'Tuesday', startTime: '08:00', endTime: '17:00', breakStartTime: '12:00', breakEndTime: '13:00' },
       { day: 'Wednesday', startTime: '08:00', endTime: '17:00', breakStartTime: '12:00', breakEndTime: '13:00' },
@@ -219,79 +219,79 @@ export const employees: EmployeeRecord[] = [
     employeeId: 'EMP-0044', employeeName: 'Nurul Huda Ismail', nricPassportNo: '910212-01-5678',
     gender: 'Female', race: 'Malay', religion: 'Islam', department: 'Human Resources',
     position: 'HR Executive', basicSalary: 4200, contactNo: '+60 12-444 0001',
-    employmentType: 'Contract', employmentStatus: 'Active',
+    employmentType: 'CONTRACT', employmentStatus: 'ACTIVE',
     includeOvertime: true, overtimeCalculationBasis: 'MONTHLY_SALARY_CONVERTED'
   }),
   createSampleEmployee({
     employeeId: 'EMP-0045', employeeName: 'Kelvin Wong Jun Kai', nricPassportNo: '900630-14-6789',
     gender: 'Male', race: 'Chinese', religion: 'Buddhism', department: 'Information Technology',
     position: 'IT Support Executive', basicSalary: 4800, contactNo: '+60 12-444 0002',
-    employmentType: 'Part-time', employmentStatus: 'Active',
+    employmentType: 'PART-TIME', employmentStatus: 'ACTIVE',
     includeOvertime: true, overtimeCalculationBasis: 'HOURLY_RATE', overtimeHourlyRate: 28.5
   }),
   createSampleEmployee({
     employeeId: 'EMP-0046', employeeName: 'Hafiz Rahman', nricPassportNo: '920811-10-7890',
     gender: 'Male', race: 'Malay', religion: 'Islam', department: 'Sales',
     position: 'Sales Executive', basicSalary: 4000, contactNo: '+60 12-444 0003',
-    employmentType: 'Intern', employmentStatus: 'Probation', confirmationDate: null,
+    employmentType: 'INTERN', employmentStatus: 'PROBATION', confirmationDate: null,
     commissionSettingCodes: ['SALES-COMM', 'NEW-CLIENT', 'QTR-PERF']
   }),
   createSampleEmployee({
     employeeId: 'EMP-0047', employeeName: 'Priya Nair', nricPassportNo: '930305-08-8901',
     gender: 'Female', race: 'Indian', religion: 'Hinduism', department: 'Marketing',
     position: 'Marketing Executive', basicSalary: 4100, contactNo: '+60 12-444 0004',
-    employmentType: 'Temporary', employmentStatus: 'Active'
+    employmentType: 'TEMPORARY', employmentStatus: 'ACTIVE'
   }),
   createSampleEmployee({
     employeeId: 'EMP-0048', employeeName: 'Suresh Kumar', nricPassportNo: '890924-05-9012',
     gender: 'Male', race: 'Indian', religion: 'Hinduism', department: 'Customer Service',
     position: 'Customer Support Executive', basicSalary: 3600, contactNo: '+60 12-444 0005',
-    employmentType: 'Trainee', employmentStatus: 'Probation', confirmationDate: null
+    employmentType: 'TRAINEE', employmentStatus: 'PROBATION', confirmationDate: null
   }),
   createSampleEmployee({
     employeeId: 'EMP-0049', employeeName: 'Farid Iskandar', nricPassportNo: '940117-01-0123',
     gender: 'Male', race: 'Malay', religion: 'Islam', department: 'Procurement',
     position: 'Procurement Executive', basicSalary: 3900, contactNo: '+60 12-444 0006',
-    employmentType: 'Freelance', employmentStatus: 'Active'
+    employmentType: 'FREELANCE', employmentStatus: 'ACTIVE'
   }),
   createSampleEmployee({
     employeeId: 'EMP-0050', employeeName: 'Chloe Tan Mei Xin', nricPassportNo: '950719-10-1234',
     gender: 'Female', race: 'Chinese', religion: 'Christianity', department: 'Legal and Compliance',
     position: 'Compliance Executive', basicSalary: 5000, contactNo: '+60 12-444 0007',
-    employmentType: 'Casual', employmentStatus: 'Active'
+    employmentType: 'CASUAL', employmentStatus: 'ACTIVE'
   }),
   createSampleEmployee({
     employeeId: 'EMP-0051', employeeName: 'Jason Lee Wei Ming', nricPassportNo: '911102-14-2345',
     gender: 'Male', race: 'Chinese', religion: 'Buddhism', department: 'Corporate',
     position: 'Administrative Executive', basicSalary: 3800, contactNo: '+60 12-444 0008',
-    employmentType: 'Contract', employmentStatus: 'Suspended'
+    employmentType: 'CONTRACT', employmentStatus: 'SUSPENDED'
   }),
   createSampleEmployee({
     employeeId: 'EMP-0052', employeeName: 'Marcus Tan', nricPassportNo: '870312-10-3456',
     gender: 'Male', race: 'Chinese', religion: 'Christianity', department: 'Information Technology',
     position: 'IT Manager', basicSalary: 8500, contactNo: '+60 12-444 0009', reportingManager: 'Operations Manager',
-    employmentType: 'Permanent', employmentStatus: 'Active',
+    employmentType: 'PERMANENT', employmentStatus: 'ACTIVE',
     includeOvertime: true, overtimeCalculationBasis: 'HOURLY_RATE', overtimeHourlyRate: 50
   }),
   createSampleEmployee({
     employeeId: 'EMP-0053', employeeName: 'Siti Amina Hassan', nricPassportNo: '950624-01-4567',
     gender: 'Female', race: 'Malay', religion: 'Islam', department: 'Information Technology',
     position: 'Software Developer', basicSalary: 6200, contactNo: '+60 12-444 0010', reportingManager: 'IT Manager',
-    employmentType: 'Permanent', employmentStatus: 'Resigned',
+    employmentType: 'PERMANENT', employmentStatus: 'RESIGNED',
     joinedDate: '2022-01-10', confirmationDate: '2022-04-10', resignationDate: '2025-06-30'
   }),
   createSampleEmployee({
     employeeId: 'EMP-0054', employeeName: 'Arjun Menon', nricPassportNo: '920815-08-5678',
     gender: 'Male', race: 'Indian', religion: 'Hinduism', department: 'Information Technology',
     position: 'Systems Administrator', basicSalary: 5800, contactNo: '+60 12-444 0011', reportingManager: 'IT Manager',
-    employmentType: 'Permanent', employmentStatus: 'Terminated', resignationDate: '2025-02-28',
+    employmentType: 'PERMANENT', employmentStatus: 'TERMINATED', resignationDate: '2025-02-28',
     statutoryEntitlementCodes: []
   }),
   createSampleEmployee({
     employeeId: 'EMP-0055', employeeName: 'Ethan Chua', nricPassportNo: '900927-10-6789',
     gender: 'Male', race: 'Chinese', religion: 'Buddhism', department: 'Information Technology',
     position: 'Network Engineer', basicSalary: 7000, contactNo: '+60 12-444 0012', reportingManager: 'IT Manager',
-    employmentType: 'Permanent', employmentStatus: 'Retired', dateOfBirth: '1964-09-27',
+    employmentType: 'PERMANENT', employmentStatus: 'RETIRED', dateOfBirth: '1964-09-27',
     joinedDate: '2000-03-01', confirmationDate: '2000-06-01', resignationDate: '2025-12-31',
     statutoryEntitlementCodes: []
   })

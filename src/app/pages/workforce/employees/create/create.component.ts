@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { FormArray, FormControl, FormGroup, FormRecord, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, ViewChild } from '@angular/core';
+import { AbstractControl, FormArray, FormControl, FormGroup, FormGroupDirective, FormRecord, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
 import { defaultLeaveEntitlements } from '../../../../data/leave/leave-balances.data';
@@ -8,6 +8,7 @@ import { leavePolicies } from '../../../../data/leave/leave-policies.data';
 import type { LeaveEntitlementPeriod } from '../../../../models/leave/leave.model';
 import type { LeavePolicy, LeaveServiceEntitlementTier } from '../../../../models/leave/leave-policy.model';
 import { departments } from '../../../../data/workforce/departments.data';
+import { employees } from '../../../../data/workforce/employees.data';
 import { positions } from '../../../../data/workforce/positions.data';
 import { workLocations } from '../../../../data/workforce/work-locations.data';
 import type { Department } from '../../../../models/workforce/department.model';
@@ -26,6 +27,10 @@ import type {
   CommissionCalculationMethod,
   CommissionIncentiveSetting
 } from '../../../../models/commission/commission-incentive-setting.model';
+import { EmployeesApiService } from '../../../../services/api/employees.service';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
+import { Router } from '@angular/router';
+import { stateList } from '../../../../data/other/other.data';
 
 const statutoryEntitlementOptions = [
   { code: 'EPF', name: 'EPF / KWSP', setting: 'includeEpf' },
@@ -79,27 +84,30 @@ function createWorkingScheduleForm(schedule: WorkingSchedule): EmployeeWorkingSc
   });
 }
 
-
 @Component({
   selector: 'app-create',
   imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule,  DropzoneComponent],
-  providers: [...MaterialProviders],
+  providers: [...MaterialProviders, EmployeesApiService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'
 })
 export class CreateComponent {
 
-  private navigation = inject(NavigationService);
-  private readonly editingLeavePolicyCodes = new Set<string>();
+  constructor(
+    private router: Router,
+    private apiService: EmployeesApiService,
+    private toastService: ToastService
+  ) {
+    this.updatePositionValidator();
+    this.updateStatutoryValidators();
 
-  constructor() {
     for (const policy of this.leavePolicies) {
       if (policy.entitlementCalculationMethod === 'SERVICE') {
         const tiers = new FormArray<LeaveServiceTierForm>((policy.serviceEntitlementTiers ?? []).map(createLeaveServiceTierForm));
-        this.employeeForm.controls.leave.controls.leaveServiceEntitlementTiers.addControl(policy.leaveCode, tiers);
+        this.form.controls.leave.controls.leaveServiceEntitlementTiers.addControl(policy.leaveCode, tiers);
         this.updateLeaveServiceToValidators(policy.leaveCode);
       } else {
-        this.employeeForm.controls.leave.controls.leaveEntitlementOverrides.addControl(
+        this.form.controls.leave.controls.leaveEntitlementOverrides.addControl(
           policy.leaveCode,
           new FormControl<number | null>(policy.defaultEntitlement, [Validators.min(0)])
         );
@@ -107,95 +115,76 @@ export class CreateComponent {
     }
   }
 
-  readonly departments: Department[] = departments.filter(department => department.status === 'ACTIVE');
-  readonly positions: Position[] = positions;
-  readonly workLocations = workLocations;
-  readonly workLocationSearch = new FormControl<WorkLocation | string>('', { nonNullable: true });
-  readonly employmentStatuses = employmentStatuses;
-  readonly employmentTypes = employmentTypes;
-  readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');
-  readonly commissionIncentiveSettings: CommissionIncentiveSetting[] = commissionIncentiveSettings;
-  readonly availableStatutoryEntitlements = statutoryEntitlementOptions.filter(option => payrollSettings[option.setting]);
-  readonly overtimeEnabledInPayrollSettings = payrollSettings.includeOvertime;
-  readonly overtimeBasisOptions: { value: OvertimeCalculationBasis; label: string }[] = [
+  markStepTouched(control: AbstractControl): void {
+    control.markAllAsTouched();
+    console.log('Step validation result:', {
+      valid: control.valid,
+      status: control.status,
+      value: control.getRawValue(),
+    });
+  }
+
+  @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
+
+  private editingLeavePolicyCodes = new Set<string>();
+
+  stateList: any =stateList
+  departments: Department[] = departments.filter(department => department.status === 'ACTIVE');
+  positions: Position[] = positions;
+  managers = employees.filter(employee => employee.employmentStatus === 'ACTIVE');
+  workLocations = workLocations;
+  workLocationSearch = new FormControl<WorkLocation | string>('', { nonNullable: true });
+  employmentStatuses = employmentStatuses;
+  employmentTypes = employmentTypes;
+  leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');
+  commissionIncentiveSettings: CommissionIncentiveSetting[] = commissionIncentiveSettings;
+  availableStatutoryEntitlements = statutoryEntitlementOptions.filter(option => payrollSettings[option.setting]);
+  overtimeEnabledInPayrollSettings = payrollSettings.includeOvertime;
+  overtimeBasisOptions: { value: OvertimeCalculationBasis; label: string }[] = [
     { value: 'HOURLY_RATE', label: 'Hourly rate' },
     { value: 'DAILY_RATE_CONVERTED', label: 'Daily rate converted to hourly' },
     { value: 'MONTHLY_SALARY_CONVERTED', label: 'Monthly salary converted to hourly' }
   ];
 
-  get selectedWorkLocation(): WorkLocation | undefined {
-    const locationId = this.employeeForm.controls.employment.controls.workLocationId.value;
-    return this.workLocations.find(location => location.id === locationId);
-  }
 
-  get filteredWorkLocations(): WorkLocation[] {
-    const searchValue = this.workLocationSearch.value;
-    const query = typeof searchValue === 'string' ? searchValue.trim().toLowerCase() : '';
-    return this.workLocations.filter(location => !query || [
-      location.name,
-      location.code,
-      location.city,
-      location.state
-    ].some(value => value.toLowerCase().includes(query)));
-  }
-
-  readonly workLocationDisplayName = (value: WorkLocation | string | null): string => {
-    return value && typeof value === 'object' ? value.name : value ?? '';
-  };
-
-  onWorkLocationSelected(location: WorkLocation): void {
-    this.employeeForm.controls.employment.controls.workLocationId.setValue(location.id);
-    this.workLocationSearch.setValue(location);
-  }
-
-  onWorkLocationSearchInput(): void {
-    if (typeof this.workLocationSearch.value === 'string') {
-      this.employeeForm.controls.employment.controls.workLocationId.setValue('');
-    }
-  }
-
-  goBack() {
-    return this.navigation.back('/workforce/employees/list');
-  }
-
-  employeeForm = new FormGroup({
+  form = new FormGroup({
     personal: new FormGroup({
-      employeeId: new FormControl(''),
-      employeeName: new FormControl(''),
-      nricPassportNo: new FormControl(''),
-      dateOfBirth: new FormControl<Date | null>(null),
-      gender: new FormControl(''),
-      nationality: new FormControl(''),
-      race: new FormControl(''),
-      religion: new FormControl(''),
-      maritalStatus: new FormControl(''),
-      email: new FormControl(''),
-      contactNo: new FormControl(''),
-      addressLine1: new FormControl(''),
+      employeeNo: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      nricPassportNo: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      dateOfBirth: new FormControl<Date | null>(null, Validators.required),
+      gender: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      nationality: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      race: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      religion: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      maritalStatus: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
+      contactNo: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      addressLine1: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
       addressLine2: new FormControl(''),
-      city: new FormControl(''),
-      postcode: new FormControl(''),
-      state: new FormControl(''),
-      country: new FormControl(''),
+      city: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      postcode: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      state: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      country: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     }),
     employment: new FormGroup({
-      employmentStatus: new FormControl<EmploymentStatus | null>(null),
-      employmentType: new FormControl<EmploymentType | null>(null),
-      workingSchedule: createWorkingScheduleForm(WORKING_SCHEDULE.Permanent),
-      department: new FormControl(''),
-      position: new FormControl(''),
-      reportingManager: new FormControl(''),
-      workLocationId: new FormControl(''),
-      joinedDate: new FormControl<Date | null>(null),
+      employmentStatus: new FormControl<EmploymentStatus | null>(null, Validators.required),
+      employmentType: new FormControl<EmploymentType | null>(null, Validators.required),
+      workingSchedule: createWorkingScheduleForm(WORKING_SCHEDULE.PERMANENT),
+      departmentId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      positionId: new FormControl(''),
+      managerId: new FormControl(''),
+      locationId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      joinedDate: new FormControl<Date | null>(null, Validators.required),
       confirmationDate: new FormControl<Date | null>(null),
       resignationDate: new FormControl<Date | null>(null),
     }),
     payroll: new FormGroup({
-      basicSalary: new FormControl<number | null>(null),
-      salaryType: new FormControl(''),
-      paymentMethod: new FormControl(''),
-      bank: new FormControl(''),
-      bankAccount: new FormControl(''),
+      basicSalary: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
+      salaryType: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      paymentMethod: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      bank: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      bankAccount: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
       epfEmployeeNo: new FormControl(''),
       epfEmployerNo: new FormControl(''),
       epfRate: new FormControl(''),
@@ -210,7 +199,6 @@ export class CreateComponent {
       overtimeHourlyRate: new FormControl<number | null>(null),
     }),
     taxInformation: new FormGroup({
-      agreeWithTerms: new FormControl(false),
     }),
     leave: new FormGroup({
       leavePolicyCodes: new FormControl<string[]>(['AL', 'ML'], { nonNullable: true }),
@@ -220,21 +208,57 @@ export class CreateComponent {
       medicalLeavePeriod: new FormControl<LeaveEntitlementPeriod>(defaultLeaveEntitlements.medical.period, { nonNullable: true }),
     }),
     emergencyContact: new FormGroup({
-      contactName: new FormControl(''),
-      relationship: new FormControl(''),
-      contactNo: new FormControl(''),
-      addressLine1: new FormControl(''),
-      addressLine2: new FormControl(''),
-      city: new FormControl(''),
-      postcode: new FormControl(''),
-      state: new FormControl(''),
-      country: new FormControl(''),
+      emergencyContactName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      emergencyContactRelationship: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      emergencyContactNo: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      emergencyContactAddressLine1: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      emergencyContactAddressLine2: new FormControl(''),
+      emergencyContactCity: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      emergencyContactPostcode: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      emergencyContactState: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      emergencyContactCountry: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     }),
   });
+  submitting: boolean = false;
+
+  get selectedWorkLocation(): WorkLocation | undefined {
+    const locationId = this.form.controls.employment.controls.locationId.value;
+    return this.workLocations.find(location => location.id === locationId);
+  }
+
+  get filteredWorkLocations(): WorkLocation[] {
+    const searchValue = this.workLocationSearch.value;
+    const query = typeof searchValue === 'string' ? searchValue.trim().toLowerCase() : '';
+    return this.workLocations.filter(location => !query || [
+      location.name,
+      location.code,
+      location.city,
+      location.state
+    ].some(value => value.toLowerCase().includes(query)));
+  }
+
+  workLocationDisplayName = (value: WorkLocation | string | null): string => {
+    return value && typeof value === 'object' ? value.name : value ?? '';
+  };
+
+  onWorkLocationSelected(location: WorkLocation): void {
+    this.form.controls.employment.controls.locationId.setValue(location.id);
+    this.workLocationSearch.setValue(location);
+  }
+
+  onWorkLocationSearchInput(): void {
+    if (typeof this.workLocationSearch.value === 'string') {
+      this.form.controls.employment.controls.locationId.setValue('');
+    }
+  }
+
+  goBack() {
+    return this.router.navigate(['/workforce/employees/list'])
+  }
 
   get availablePositions(): Position[] {
-    const departmentName = this.employeeForm.controls.employment.controls.department.value;
-    const department = this.departments.find(item => item.name === departmentName);
+    const departmentId = this.form.controls.employment.controls.departmentId.value;
+    const department = this.departments.find(item => item.id === departmentId);
     if (!department) return [];
 
     return this.positions.filter(position =>
@@ -246,10 +270,10 @@ export class CreateComponent {
     return this.availablePositions.length > 0;
   }
 
-  get availableCommissionSettings(): CommissionIncentiveSetting[] {
-    const employeeId = (this.employeeForm.controls.personal.controls.employeeId.value ?? '').trim();
-    const department = this.departments.find(item => item.name === this.employeeForm.controls.employment.controls.department.value);
-    const position = this.positions.find(item => item.title === this.employeeForm.controls.employment.controls.position.value);
+  get availableCommissionSettings(): any[] {
+    const employeeNo = (this.form.controls.personal.controls.employeeNo.value ?? '').trim();
+    const department = this.departments.find(item => item.id === this.form.controls.employment.controls.departmentId.value);
+    const position = this.positions.find(item => item.id === this.form.controls.employment.controls.positionId.value);
 
     return this.commissionIncentiveSettings.filter(setting => {
       switch (setting.eligibleEmployees) {
@@ -260,17 +284,17 @@ export class CreateComponent {
         case 'SELECTED_POSITIONS':
           return !!position && setting.eligiblePositionIds.includes(position.id);
         case 'SELECTED_EMPLOYEES':
-          return !!employeeId && setting.eligibleEmployeeIds.includes(employeeId);
+          return !!employeeNo && setting.eligibleEmployeeIds.includes(employeeNo);
       }
     });
   }
 
   isCommissionSelected(code: string): boolean {
-    return this.employeeForm.controls.payroll.controls.commissionSettingCodes.value.includes(code);
+    return this.form.controls.payroll.controls.commissionSettingCodes.value.includes(code);
   }
 
   setCommissionSelected(code: string, selected: boolean): void {
-    const codes = this.employeeForm.controls.payroll.controls.commissionSettingCodes;
+    const codes = this.form.controls.payroll.controls.commissionSettingCodes;
     const selectedCodes = new Set(codes.value);
 
     if (selected) selectedCodes.add(code);
@@ -280,7 +304,7 @@ export class CreateComponent {
   }
 
   setOvertimeIncluded(selected: boolean): void {
-    const payroll = this.employeeForm.controls.payroll.controls;
+    const payroll = this.form.controls.payroll.controls;
     payroll.includeOvertime.setValue(selected);
     if (selected && payroll.overtimeCalculationBasis.value === 'HOURLY_RATE') {
       payroll.overtimeHourlyRate.setValidators([Validators.required, Validators.min(0.01)]);
@@ -292,7 +316,7 @@ export class CreateComponent {
   }
 
   setOvertimeCalculationBasis(basis: OvertimeCalculationBasis): void {
-    const payroll = this.employeeForm.controls.payroll.controls;
+    const payroll = this.form.controls.payroll.controls;
     payroll.overtimeCalculationBasis.setValue(basis);
     if (payroll.includeOvertime.value && basis === 'HOURLY_RATE') {
       payroll.overtimeHourlyRate.setValidators([Validators.required, Validators.min(0.01)]);
@@ -309,21 +333,39 @@ export class CreateComponent {
       DAILY_RATE_CONVERTED: 'Daily rate converted to hourly',
       MONTHLY_SALARY_CONVERTED: 'Monthly salary converted to hourly'
     };
-    return labels[this.employeeForm.controls.payroll.controls.overtimeCalculationBasis.value];
+    return labels[this.form.controls.payroll.controls.overtimeCalculationBasis.value];
   }
 
   isStatutoryEntitlementSelected(code: string): boolean {
-    return this.employeeForm.controls.payroll.controls.statutoryEntitlementCodes.value.includes(code);
+    return this.form.controls.payroll.controls.statutoryEntitlementCodes.value.includes(code);
   }
 
   setStatutoryEntitlementSelected(code: string, selected: boolean): void {
-    const codes = this.employeeForm.controls.payroll.controls.statutoryEntitlementCodes;
+    const codes = this.form.controls.payroll.controls.statutoryEntitlementCodes;
     const selectedCodes = new Set(codes.value);
 
     if (selected) selectedCodes.add(code);
     else selectedCodes.delete(code);
 
     codes.setValue([...selectedCodes]);
+    this.updateStatutoryValidators();
+  }
+
+  private updateStatutoryValidators(): void {
+    const controls = this.form.controls.payroll.controls;
+    const rules = [
+      { code: 'EPF', control: controls.epfEmployerNo },
+      { code: 'EPF', control: controls.epfRate },
+      { code: 'SOCSO', control: controls.socsoNo },
+      { code: 'SOCSO', control: controls.contributionCategory },
+      { code: 'EIS', control: controls.eisStatus },
+      { code: 'HRD_CORP_LEVY', control: controls.hrdRegisterNo },
+    ];
+
+    for (const { code, control } of rules) {
+      control.setValidators(this.isStatutoryEntitlementSelected(code) ? Validators.required : null);
+      control.updateValueAndValidity({ emitEvent: false });
+    }
   }
 
   commissionCalculationLabel(setting: CommissionIncentiveSetting): string {
@@ -358,13 +400,21 @@ export class CreateComponent {
   }
 
   onDepartmentChange(): void {
-    this.employeeForm.controls.employment.controls.position.setValue('');
+    this.form.controls.employment.controls.positionId.setValue('');
+    this.updatePositionValidator();
+  }
+
+  private updatePositionValidator(): void {
+    const position = this.form.controls.employment.controls.positionId;
+    if (this.hasAvailablePositions) position.setValidators(Validators.required);
+    else position.clearValidators();
+    position.updateValueAndValidity({ emitEvent: false });
   }
 
   onEmploymentTypeChange(type: EmploymentType | null): void {
     if (!type) return;
 
-    const scheduleDays = this.employeeForm.controls.employment.controls.workingSchedule.controls.days;
+    const scheduleDays = this.form.controls.employment.controls.workingSchedule.controls.days;
     WORKING_SCHEDULE[type].days.forEach((day, index) => {
       scheduleDays.at(index)?.patchValue(day);
     });
@@ -375,17 +425,17 @@ export class CreateComponent {
     return (!effectiveFrom || effectiveFrom <= today) && (!effectiveTo || effectiveTo >= today);
   }
 
-  readonly leaveYear = new Date().getFullYear();
+  leaveYear = new Date().getFullYear();
 
   get selectedLeavePolicies(): LeavePolicy[] {
-    const selectedCodes = new Set(this.employeeForm.controls.leave.controls.leavePolicyCodes.value);
+    const selectedCodes = new Set(this.form.controls.leave.controls.leavePolicyCodes.value);
     return this.leavePolicies.filter(policy => selectedCodes.has(policy.leaveCode));
   }
 
   get medicalLeaveYearlyEntitlement(): number {
     return this.toYearlyEntitlement(
-      this.employeeForm.controls.leave.controls.medicalLeaveEntitlement.value,
-      this.employeeForm.controls.leave.controls.medicalLeavePeriod.value
+      this.form.controls.leave.controls.medicalLeaveEntitlement.value,
+      this.form.controls.leave.controls.medicalLeavePeriod.value
     );
   }
 
@@ -395,7 +445,7 @@ export class CreateComponent {
   }
 
   serviceEntitlementTiers(leaveCode: string): FormArray<LeaveServiceTierForm> {
-    return this.employeeForm.controls.leave.controls.leaveServiceEntitlementTiers.controls[leaveCode];
+    return this.form.controls.leave.controls.leaveServiceEntitlementTiers.controls[leaveCode];
   }
 
   addLeaveServiceTier(leaveCode: string): void {
@@ -429,11 +479,11 @@ export class CreateComponent {
   }
 
   isLeavePolicySelected(leaveCode: string): boolean {
-    return this.employeeForm.controls.leave.controls.leavePolicyCodes.value.includes(leaveCode);
+    return this.form.controls.leave.controls.leavePolicyCodes.value.includes(leaveCode);
   }
 
   setLeavePolicySelected(leaveCode: string, selected: boolean): void {
-    const codes = this.employeeForm.controls.leave.controls.leavePolicyCodes;
+    const codes = this.form.controls.leave.controls.leavePolicyCodes;
     const selectedCodes = new Set(codes.value);
 
     if (selected) selectedCodes.add(leaveCode);
@@ -477,7 +527,7 @@ export class CreateComponent {
 
   private employeeLeaveEntitlement(policy: LeavePolicy): number | null {
     if (policy.entitlementCalculationMethod !== 'SERVICE') {
-      return this.employeeForm.controls.leave.controls.leaveEntitlementOverrides.controls[policy.leaveCode]?.value ?? null;
+      return this.form.controls.leave.controls.leaveEntitlementOverrides.controls[policy.leaveCode]?.value ?? null;
     }
     const yearsOfService = this.yearsOfService();
     if (yearsOfService === null) return null;
@@ -490,28 +540,13 @@ export class CreateComponent {
   }
 
   private yearsOfService(): number | null {
-    const joinedDate = this.employeeForm.controls.employment.controls.joinedDate.value;
+    const joinedDate = this.form.controls.employment.controls.joinedDate.value;
     if (!joinedDate || Number.isNaN(joinedDate.getTime())) return null;
     const today = new Date();
     let years = today.getFullYear() - joinedDate.getFullYear();
     if (today.getMonth() < joinedDate.getMonth()
       || (today.getMonth() === joinedDate.getMonth() && today.getDate() < joinedDate.getDate())) years--;
     return Math.max(0, years);
-  }
-
-  onSubmit(): void {
-    const availableStatutoryCodes = new Set<string>(this.availableStatutoryEntitlements.map(option => option.code));
-    const selectedStatutoryCodes = this.employeeForm.controls.payroll.controls.statutoryEntitlementCodes;
-    selectedStatutoryCodes.setValue(selectedStatutoryCodes.value.filter(code => availableStatutoryCodes.has(code)));
-    const availableCodes = new Set(this.availableCommissionSettings.map(setting => setting.code));
-    const selectedCodes = this.employeeForm.controls.payroll.controls.commissionSettingCodes;
-    selectedCodes.setValue(selectedCodes.value.filter(code => availableCodes.has(code)));
-    const overtimeControls = this.employeeForm.controls.payroll.controls;
-    if (!payrollSettings.includeOvertime || !overtimeControls.includeOvertime.value) {
-      overtimeControls.includeOvertime.setValue(false);
-      overtimeControls.overtimeHourlyRate.setValue(null);
-    }
-    console.log('form.value', this.employeeForm.value);
   }
 
   entitlementLabel(policy: LeavePolicy): string {
@@ -542,4 +577,86 @@ export class CreateComponent {
   private entitlementUnitLabel(policy: LeavePolicy): string {
     return policy.entitlementUnit === 'DAILY' ? 'days' : 'hours';
   }
+
+
+  onSubmit(form: FormGroup) {
+    const availableStatutoryCodes = new Set<string>(this.availableStatutoryEntitlements.map(option => option.code));
+    const selectedStatutoryCodes = this.form.controls.payroll.controls.statutoryEntitlementCodes;
+    selectedStatutoryCodes.setValue(selectedStatutoryCodes.value.filter(code => availableStatutoryCodes.has(code)));
+    const availableCodes = new Set(this.availableCommissionSettings.map(setting => setting.code));
+    const selectedCodes = this.form.controls.payroll.controls.commissionSettingCodes;
+    selectedCodes.setValue(selectedCodes.value.filter(code => availableCodes.has(code)));
+    const overtimeControls = this.form.controls.payroll.controls;
+    if (!payrollSettings.includeOvertime || !overtimeControls.includeOvertime.value) {
+      overtimeControls.includeOvertime.setValue(false);
+      overtimeControls.overtimeHourlyRate.setValue(null);
+    }
+    const { personal, employment, payroll, taxInformation, leave, emergencyContact } = form.value;
+    const { employeeNo, name, ...personalFields } = personal;
+    const toDateString = (value: Date | string | null | undefined): string | null => {
+      if (!value) return null;
+      if (typeof value === 'string') return value;
+      const year = value.getFullYear();
+      const month = String(value.getMonth() + 1).padStart(2, '0');
+      const day = String(value.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+    const data = {
+      ...personalFields,
+      employeeNo: employeeNo,
+      name: name,
+      dateOfBirth: toDateString(personal.dateOfBirth),
+      ...employment,
+      positionId: employment.positionId || null,
+      managerId: employment.managerId || null,
+      joinedDate: toDateString(employment.joinedDate),
+      confirmationDate: toDateString(employment.confirmationDate),
+      resignationDate: toDateString(employment.resignationDate),
+      ...payroll,
+      ...taxInformation,
+      ...leave,
+      ...emergencyContact,
+    };
+    console.log('employee data', data);
+
+    this.apiService.createEmployee(data).subscribe({
+      next: (response) => {
+        console.log("response", response);
+
+        this.toastService.show({
+          title: "Success",
+          message: "Position has been created.",
+          icon: 'success'
+        });
+
+        this.formDirective.resetForm();
+        this.submitting = false;
+        setTimeout(() => {
+          this.router.navigate(['/organization/positions/overview']);
+        }, 1000);
+      },
+      error: (error) => {
+        console.log("Error:", error);
+        const errorResponse = error?.error;
+
+        if (errorResponse?.errors?.length) {
+          errorResponse.errors.forEach((err: any) => {
+            this.toastService.show({
+              title: errorResponse.code,
+              message: err.message,
+              icon: 'danger'
+            });
+          });
+        } else {
+          this.toastService.show({
+            title: errorResponse?.code || 'Error',
+            message: errorResponse?.message || 'Something went wrong.',
+            icon: 'danger'
+          });
+        }
+        this.submitting = false;
+      }
+    });
+  }
+
 }

@@ -1,17 +1,17 @@
 export type EmploymentStatus =
-  | 'Active'
-  | 'Probation'
-  | 'Suspended'
-  | 'Resigned'
-  | 'Terminated'
-  | 'Retired';
+  | 'ACTIVE'
+  | 'PROBATION'
+  | 'SUSPENDED'
+  | 'RESIGNED'
+  | 'TERMINATED'
+  | 'RETIRED';
 
 export type EmploymentType =
-  | 'Permanent'
-  | 'Contract'
-  | 'Part-time'
-  | 'Intern'
-  | 'Temporary'
-  | 'Trainee'
-  | 'Freelance'
-  | 'Casual';
+  | 'PERMANENT'
+  | 'CONTRACT'
+  | 'PART-TIME'
+  | 'INTERN'
+  | 'TEMPORARY'
+  | 'TRAINEE'
+  | 'FREELANCE'
+  | 'CASUAL';

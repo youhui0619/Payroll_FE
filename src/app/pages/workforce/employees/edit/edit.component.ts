@@ -171,7 +171,7 @@ export class EditComponent implements OnInit {
     employment: new FormGroup({
       employmentStatus: new FormControl<EmploymentStatus | null>(null),
       employmentType: new FormControl<EmploymentType | null>(null),
-      workingSchedule: createWorkingScheduleForm(WORKING_SCHEDULE.Permanent),
+      workingSchedule: createWorkingScheduleForm(WORKING_SCHEDULE.PERMANENT),
       department: new FormControl(''),
       position: new FormControl(''),
       reportingManager: new FormControl(''),

@@ -1,7 +1,7 @@
 import type { WorkingScheduleSettings } from '../../models/working-schedule/working-schedule.model';
 
 export const WORKING_SCHEDULE: WorkingScheduleSettings = {
-  Permanent: {
+  PERMANENT: {
     days: [
       {
         day: 'Monday',
@@ -61,7 +61,7 @@ export const WORKING_SCHEDULE: WorkingScheduleSettings = {
       },
     ]
   },
-  Contract: {
+  CONTRACT: {
     days: [
       {
         day: 'Monday',
@@ -121,7 +121,7 @@ export const WORKING_SCHEDULE: WorkingScheduleSettings = {
       },
     ]
   },
-  'Part-time': {
+  'PART-TIME': {
     days: [
       {
         day: 'Monday',
@@ -181,7 +181,7 @@ export const WORKING_SCHEDULE: WorkingScheduleSettings = {
       },
     ]
   },
-  Intern: {
+  INTERN: {
     days: [
       {
         day: 'Monday',
@@ -241,7 +241,7 @@ export const WORKING_SCHEDULE: WorkingScheduleSettings = {
       },
     ]
   },
-  Temporary: {
+  TEMPORARY: {
     days: [
       {
         day: 'Monday',
@@ -301,7 +301,7 @@ export const WORKING_SCHEDULE: WorkingScheduleSettings = {
       },
     ]
   },
-  Trainee: {
+  TRAINEE: {
     days: [
       {
         day: 'Monday',
@@ -361,7 +361,7 @@ export const WORKING_SCHEDULE: WorkingScheduleSettings = {
       },
     ]
   },
-  Freelance: {
+  FREELANCE: {
     days: [
       {
         day: 'Monday',
@@ -421,7 +421,7 @@ export const WORKING_SCHEDULE: WorkingScheduleSettings = {
       },
     ]
   },
-  Casual: {
+  CASUAL: {
     days: [
       {
         day: 'Monday',

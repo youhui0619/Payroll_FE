@@ -25,7 +25,7 @@ import { MaterialImports, MaterialProviders } from '../../../../shared/material-
 })
 
 export class CreateComponent {
-  readonly employees = employees.filter(employee => employee.employmentStatus === 'Active');
+  readonly employees = employees.filter(employee => employee.employmentStatus === 'ACTIVE');
   readonly departments = departments;
   readonly positions = positions;
   readonly commissionPlans: CommissionIncentiveSetting[] = commissionIncentiveSettings;
