@@ -1,47 +1,139 @@
-<form [formGroup]="notificationForm" (ngSubmit)="onSubmit()">
-    @for (group of notificationGroups; track group.id) {
-        <section class="notification-group mb-4">
-            <h4 class="text-primary my-0">{{ group.title }}</h4>
-            <p class="text-muted mt-0 mb-2">{{ group.description }}</p>
-            <div class="card">
-                <div class="card-body">
-                    @for (preference of group.preferences; track preference.id) {
-                    <div class="notification-row d-flex justify-content-between align-items-center gap-3 py-3">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="icon bg-light-primary text-primary flex-shrink-0">
-                                <tabler-icon [icon]="preference.icon"></tabler-icon>
-                            </div>
-                            <div>
-                                <label class="text-dark fw-550 my-0">{{ preference.title }}</label>
-                                <p class="text-muted mb-0">{{ preference.description }}</p>
-                                @if (preference.monthInterval && notificationForm.controls[preference.id].value) {
-                                    <div class="d-flex align-items-center gap-2 mt-2">
-                                        <span class="small text-muted">{{ preference.monthInterval.label }}</span>
-                                        <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
-                                            <input matInput type="number" step="1" [min]="preference.monthInterval.min" [max]="preference.monthInterval.max" [formControl]="probationConfirmationMonths" [attr.aria-label]="preference.title + ' reminder interval in months'">
-                                        </mat-form-field>
-                                        <span class="small text-muted">{{ preference.monthInterval.unit }}</span>
-                                    </div>
-                                    @if (probationConfirmationMonths.touched && probationConfirmationMonths.invalid) {
-                                        <div class="small text-danger">Choose a whole number from {{ preference.monthInterval.min }} to {{ preference.monthInterval.max }} months.</div>
-                                    }
-                                }
-                            </div>
+<form [formGroup]="form" (ngSubmit)="onSubmit(form)">
+    <section class="notification-group mb-4">
+        <h4 class="text-primary my-0">Notification Channels</h4>
+        <p class="text-muted mt-0 mb-2">Choose how you want to receive notifications.</p>
+        <div class="card">
+            <div class="card-body">
+                <div class="notification-row d-flex justify-content-between align-items-center gap-3 py-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon bg-light-primary text-primary flex-shrink-0">
+                            <tabler-icon icon="mail-question"></tabler-icon>
                         </div>
-                        <mat-slide-toggle
-                            color="primary"
-                            [formControlName]="preference.id"
-                            [aria-label]="preference.title">
-                        </mat-slide-toggle>
+                        <div>
+                            <label class="text-dark fw-550 my-0">Email notifications</label>
+                            <p class="text-muted mb-0">Receive notifications by email.</p>
+                        </div>
                     </div>
-                    }
+                    <mat-slide-toggle color="primary" formControlName="emailNotifications" aria-label="Email notifications"></mat-slide-toggle>
+                </div>
+                <div class="notification-row d-flex justify-content-between align-items-center gap-3 py-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon bg-light-primary text-primary flex-shrink-0">
+                            <tabler-icon icon="article"></tabler-icon>
+                        </div>
+                        <div>
+                            <label class="text-dark fw-550 my-0">WhatsApp notifications</label>
+                            <p class="text-muted mb-0">Receive notifications on WhatsApp.</p>
+                        </div>
+                    </div>
+                    <mat-slide-toggle color="primary" formControlName="whatsappNotifications" aria-label="WhatsApp notifications"></mat-slide-toggle>
                 </div>
             </div>
-        </section>
-    }
-   <div class="d-flex justify-content-end">
-        <button type="submit" mat-flat-button color="primary">
-            <tabler-icon icon="check" [size]="16"></tabler-icon> Save Preferences
+        </div>
+    </section>
+
+    <section class="notification-group mb-4">
+        <h4 class="text-primary my-0">Events to notify</h4>
+        <p class="text-muted mt-0 mb-2">Choose which payroll and employee updates you want to hear about.</p>
+        <div class="card">
+            <div class="card-body">
+                <div class="notification-row d-flex justify-content-between align-items-center gap-3 py-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon bg-light-primary text-primary flex-shrink-0">
+                            <tabler-icon icon="calendar-event"></tabler-icon>
+                        </div>
+                        <div>
+                            <label class="text-dark fw-550 my-0">Leave applications</label>
+                            <p class="text-muted mb-0">Submitted, approved, rejected or cancelled.</p>
+                        </div>
+                    </div>
+                    <mat-slide-toggle color="primary" formControlName="leaveApplications" aria-label="Leave applications"></mat-slide-toggle>
+                </div>
+                @if (showClaims) {
+                <div class="notification-row d-flex justify-content-between align-items-center gap-3 py-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon bg-light-primary text-primary flex-shrink-0">
+                            <tabler-icon icon="file-description"></tabler-icon>
+                        </div>
+                        <div>
+                            <label class="text-dark fw-550 my-0">Claims</label>
+                            <p class="text-muted mb-0">Submitted, approved, rejected or paid.</p>
+                        </div>
+                    </div>
+                    <mat-slide-toggle color="primary" formControlName="claims" aria-label="Claims"></mat-slide-toggle>
+                </div>
+                }
+                @if (showAttendanceOvertime) {
+                <div class="notification-row d-flex justify-content-between align-items-center gap-3 py-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon bg-light-primary text-primary flex-shrink-0">
+                            <tabler-icon icon="clock"></tabler-icon>
+                        </div>
+                        <div>
+                            <label class="text-dark fw-550 my-0">Attendance & overtime</label>
+                            <p class="text-muted mb-0">Adjustment requests and overtime approvals.</p>
+                        </div>
+                    </div>
+                    <mat-slide-toggle color="primary" formControlName="attendanceOvertime" aria-label="Attendance & overtime"></mat-slide-toggle>
+                </div>
+                }
+                <div class="notification-row d-flex justify-content-between align-items-center gap-3 py-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon bg-light-primary text-primary flex-shrink-0">
+                            <tabler-icon icon="file-description"></tabler-icon>
+                        </div>
+                        <div>
+                            <label class="text-dark fw-550 my-0">Payroll & payslips</label>
+                            <p class="text-muted mb-0">Payroll completed, payslip published or corrected.</p>
+                        </div>
+                    </div>
+                    <mat-slide-toggle color="primary" formControlName="payrollPayslips" aria-label="Payroll & payslips"></mat-slide-toggle>
+                </div>
+                <div class="notification-row d-flex justify-content-between align-items-center gap-3 py-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon bg-light-primary text-primary flex-shrink-0">
+                            <tabler-icon icon="user-check"></tabler-icon>
+                        </div>
+                        <div>
+                            <label class="text-dark fw-550 my-0">Probation confirmation</label>
+                            <p class="text-muted mb-0">Remind managers to confirm an employee’s probation outcome.</p>
+                            @if (form.controls.probationConfirmation.value) {
+                                <div class="d-flex align-items-center gap-2 mt-2">
+                                    <span class="small text-muted">Remind after</span>
+                                    <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+                                        <input matInput type="number" step="1" min="1" max="12" formControlName="probationConfirmationLeadMonths" aria-label="Probation confirmation reminder interval in months">
+                                    </mat-form-field>
+                                    <span class="small text-muted">months</span>
+                                </div>
+                                @if (form.controls.probationConfirmationLeadMonths.touched && form.controls.probationConfirmationLeadMonths.invalid) {
+                                    <div class="small text-danger">Choose a whole number from 1 to 12 months.</div>
+                                }
+                            }
+                        </div>
+                    </div>
+                    <mat-slide-toggle color="primary" formControlName="probationConfirmation" aria-label="Probation confirmation"></mat-slide-toggle>
+                </div>
+                @if (showStatutoryCompliance) {
+                <div class="notification-row d-flex justify-content-between align-items-center gap-3 py-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon bg-light-primary text-primary flex-shrink-0">
+                            <tabler-icon icon="progress-check"></tabler-icon>
+                        </div>
+                        <div>
+                            <label class="text-dark fw-550 my-0">Statutory & compliance</label>
+                            <p class="text-muted mb-0">Reminders for configured statutory tasks.</p>
+                        </div>
+                    </div>
+                    <mat-slide-toggle color="primary" formControlName="statutoryCompliance" aria-label="Statutory & compliance"></mat-slide-toggle>
+                </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <div class="d-flex justify-content-end">
+        <button type="submit" mat-flat-button color="primary" [disabled]="submitting">
+            <tabler-icon icon="check" [size]="16"></tabler-icon> {{ submitting ? 'Saving...' : 'Save Preferences' }}
         </button>
     </div>
 </form>
