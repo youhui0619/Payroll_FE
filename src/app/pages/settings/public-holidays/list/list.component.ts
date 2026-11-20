@@ -88,13 +88,6 @@ export class ListComponent implements OnInit, AfterViewInit {
     console.log("this.meta sort", this.meta)
     this.getPublicHolidays();
   }
-  
-  applyFilter(event: any) {
-    const filterValue = event;
-    this.filter.search = filterValue;
-    console.log("this.filter.search", this.filter.search)
-    this.getPublicHolidays(); 
-  }
   get years(): number[] {
     return [...new Set(
       this.publicHolidays.data.flatMap(holiday => {
@@ -109,17 +102,13 @@ export class ListComponent implements OnInit, AfterViewInit {
     )].sort((a, b) => b - a);
   }
 
-  get activeHolidayCount(): number {
-    return this.publicHolidays.data.filter(holiday => holiday.status === 'ACTIVE').length;
+  applyFilter(field: 'search' | 'year' | 'scope' | 'status' | 'region', value: string | number) {
+    this.filter[field] = value;
+    this.getPublicHolidays();
   }
 
-  get inactiveHolidayCount(): number {
-    return this.publicHolidays.data.filter(holiday => holiday.status === 'INACTIVE').length;
-  }
-
-
-  get upcomingHolidayCount(): number {
-    return this.publicHolidays.data.filter(holiday => holiday.status === 'INACTIVE').length;
+  filteredCountByStatus(status: any): number {
+    return this.publicHolidays.data.filter(publicHoliday => publicHoliday.status === status).length;
   }
 
   getHolidayRegionTitle(holiday: PublicHoliday): string {

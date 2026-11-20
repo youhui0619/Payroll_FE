@@ -89,12 +89,14 @@ export class OverviewComponent implements OnInit, AfterViewInit {
     console.log("this.meta sort", this.meta)
     this.getWorkLocations();
   }
-  
-  applyFilter(event: any) {
-    const filterValue = event;
-    this.filter.search = filterValue;
-    console.log("this.filter.search", this.filter.search)
-    this.getWorkLocations(); 
+
+  applyFilter(field: 'search' | 'type' | 'state', value: string) {
+    this.filter[field] = value;
+    this.getWorkLocations();
+  }
+
+  filteredCountByStatus(status: boolean): number {
+    return this.workLocations.data.filter(workLocation => workLocation.active === status).length;
   }
 
   // countByType(type: WorkLocationType): number {
