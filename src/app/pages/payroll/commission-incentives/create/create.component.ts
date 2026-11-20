@@ -6,7 +6,7 @@ import { departments } from '../../../../data/workforce/departments.data';
 import { positions } from '../../../../data/workforce/positions.data';
 import { commissionIncentiveSettings } from '../../../../data/commission/commission-incentive-settings.data';
 import { commissionPayrollRecords } from '../../../../data/commission/commission-payroll-records.data';
-import type { EmployeeRecord } from '../../../../models/workforce/employee.model';
+import type { Employee } from '../../../../models/workforce/employee.model';
 import type {
   CommissionCalculationFrequency,
   CommissionCalculationMethod,
@@ -30,7 +30,7 @@ export class CreateComponent {
   readonly positions = positions;
   readonly commissionPlans: CommissionIncentiveSetting[] = commissionIncentiveSettings;
   readonly commissionRecords = commissionPayrollRecords;
-  readonly employeeSearch = new FormControl<EmployeeRecord | string>('');
+  readonly employeeSearch = new FormControl<Employee | string>('');
   submitted = false;
 
   readonly assignmentForm = new FormGroup({
@@ -41,7 +41,7 @@ export class CreateComponent {
     notes: new FormControl('', { nonNullable: true })
   });
 
-  get filteredEmployees(): EmployeeRecord[] {
+  get filteredEmployees(): Employee[] {
     const searchValue = this.employeeSearch.value;
     const query = typeof searchValue === 'string' ? searchValue.trim().toLowerCase() : '';
 
@@ -50,7 +50,7 @@ export class CreateComponent {
     );
   }
 
-  get selectedEmployee(): EmployeeRecord | undefined {
+  get selectedEmployee(): Employee | undefined {
     return this.employees.find(employee => employee.employeeId === this.assignmentForm.controls.employeeId.value);
   }
 
@@ -122,14 +122,14 @@ export class CreateComponent {
     return labels[frequency];
   }
 
-  readonly employeeDisplayName = (value: EmployeeRecord | string | null): string => {
+  readonly employeeDisplayName = (value: Employee | string | null): string => {
     if (value && typeof value === 'object') return `${value.employeeId} - ${value.employeeName}`;
     if (!value) return '';
     const employee = this.employees.find(item => item.employeeId === value);
     return employee ? `${employee.employeeId} - ${employee.employeeName}` : value;
   };
 
-  onEmployeeSelected(employee: EmployeeRecord): void {
+  onEmployeeSelected(employee: Employee): void {
     this.submitted = false;
     this.assignmentForm.controls.employeeId.setValue(employee.employeeId);
     const eligibleCodes = new Set(this.availableCommissionPlans.map(plan => plan.code));

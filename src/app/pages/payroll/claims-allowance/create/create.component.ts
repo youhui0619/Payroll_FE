@@ -7,7 +7,7 @@ import { departments } from '../../../../data/workforce/departments.data';
 import { employees } from '../../../../data/workforce/employees.data';
 import { claims } from '../../../../data/claims/claims.data';
 import type { ClaimPaymentMethod, ClaimType, ExpenseClaimRecord } from '../../../../models/claims/claim.model';
-import type { EmployeeRecord } from '../../../../models/workforce/employee.model';
+import type { Employee } from '../../../../models/workforce/employee.model';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
 
 @Component({
@@ -33,7 +33,7 @@ export class CreateComponent {
     { value: 'CASH', label: 'Cash' }
   ];
 
-  employeeSearch = new FormControl<EmployeeRecord | string>('');
+  employeeSearch = new FormControl<Employee | string>('');
   submitting = false;
 
   form = new FormGroup({
@@ -55,7 +55,7 @@ export class CreateComponent {
     return this.router.navigate(['/settings/claim-settings/overview'])
   }
 
-  get filteredEmployees(): EmployeeRecord[] {
+  get filteredEmployees(): Employee[] {
     const departmentId = this.form.controls.departmentId.value;
     const searchValue = this.employeeSearch.value;
     const query = typeof searchValue === 'string' ? searchValue.trim().toLowerCase() : '';
@@ -70,12 +70,12 @@ export class CreateComponent {
     });
   }
 
-  get selectedEmployee(): EmployeeRecord | undefined {
+  get selectedEmployee(): Employee | undefined {
     const employeeId = this.form.controls.employeeId.value;
     return this.employees.find(employee => employee.employeeId === employeeId);
   }
 
-  employeeDisplayName = (value: EmployeeRecord | string | null): string => {
+  employeeDisplayName = (value: Employee | string | null): string => {
     if (value && typeof value === 'object') return `${value.employeeId} - ${value.employeeName}`;
     if (!value) return '';
     const employee = this.employees.find(item => item.employeeId === value);
@@ -87,7 +87,7 @@ export class CreateComponent {
     this.employeeSearch.setValue('');
   }
 
-  onEmployeeSelected(employee: EmployeeRecord): void {
+  onEmployeeSelected(employee: Employee): void {
     this.form.controls.employeeId.setValue(employee.employeeId);
     this.employeeSearch.setValue(employee);
   }

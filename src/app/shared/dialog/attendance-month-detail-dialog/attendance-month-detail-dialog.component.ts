@@ -1,6 +1,6 @@
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { MaterialImports, MaterialProviders } from '../../material-imports';
-import type { EmployeeRecord } from '../../../models/workforce/employee.model';
+import type { Employee } from '../../../models/workforce/employee.model';
 
 export interface DailyAttendanceRow {
   dateKey: string;
@@ -22,7 +22,7 @@ export interface DailyAttendanceRow {
   templateUrl: './attendance-month-detail-dialog.component.html',
 })
 export class AttendanceMonthDetailDialogComponent {
-  @Input({ required: true }) employee!: EmployeeRecord;
+  @Input({ required: true }) employee!: Employee;
   @Input({ required: true }) monthLabel = '';
   @Input({ required: true }) records: DailyAttendanceRow[] = [];
   @Output() closed = new EventEmitter<void>();

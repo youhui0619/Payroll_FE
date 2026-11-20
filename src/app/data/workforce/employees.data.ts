@@ -1,9 +1,9 @@
-import type { EmployeeRecord, OvertimeCalculationBasis } from '../../models/workforce/employee.model';
+import type { Employee, OvertimeCalculationBasis } from '../../models/workforce/employee.model';
 import type { WorkingDayName, WorkingDaySchedule, WorkingSchedule } from '../../models/working-schedule/working-schedule.model';
 import { WORKING_SCHEDULE } from '../working-schedule/working-schedule.data';
 import { payrollSettings } from '../payroll/payroll-settings.data';
 
-type SampleEmployeeInput = Pick<EmployeeRecord,
+type SampleEmployeeInput = Pick<Employee,
   'employeeId' | 'employeeName' | 'nricPassportNo' | 'gender' | 'race' |
   'religion' | 'department' | 'position' | 'basicSalary' | 'contactNo' |
   'employmentStatus' | 'employmentType'> & {
@@ -50,7 +50,7 @@ const defaultStatutoryEntitlementCodes = [
   ...(payrollSettings.includeHrdCorpLevy ? ['HRD_CORP_LEVY'] : []),
 ];
 
-function createSampleEmployee(input: SampleEmployeeInput): EmployeeRecord {
+function createSampleEmployee(input: SampleEmployeeInput): Employee {
   const employeeNumber = input.employeeId.slice(-4);
   const statutoryEntitlementCodes = input.statutoryEntitlementCodes ?? [...defaultStatutoryEntitlementCodes];
   const hasEpf = statutoryEntitlementCodes.includes('EPF');
@@ -106,7 +106,7 @@ function createSampleEmployee(input: SampleEmployeeInput): EmployeeRecord {
   };
 }
 
-export const employees: EmployeeRecord[] = [
+export const employees: Employee[] = [
   {
     employeeId: 'EMP-0042',
     employeeName: 'Aisyah Nur Abdullah',
@@ -297,7 +297,7 @@ export const employees: EmployeeRecord[] = [
   })
 ];
 
-export function getEmployee(employeeId: string): EmployeeRecord {
+export function getEmployee(employeeId: string): Employee {
   const employee = employees.find(record => record.employeeId === employeeId);
   if (!employee) {
     throw new Error(`Employee not found: ${employeeId}`);

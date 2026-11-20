@@ -1,64 +1,114 @@
-
-import { Component, OnInit } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { CommonModule } from '@angular/common';
+import { OnInit, Component, ViewChild, AfterViewInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
-import { TablerIconComponent } from '@tabler/icons-angular';
+import { MatTableDataSource } from '@angular/material/table';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
+import { stateList } from '../../../../data/other/other.data';
 import { employees } from '../../../../data/workforce/employees.data';
 import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { departments } from '../../../../data/workforce/departments.data';
 import { employmentStatuses, employmentTypes } from '../../../../data/workforce/options/employment-options.data';
 import type { EmploymentStatus, EmploymentType } from '../../../../models/workforce/employment-status.model';
+import { EmployeesApiService } from '../../../../services/api/employees.service';
+import { Employee } from '../../../../models/workforce/employee.model';
 
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [MatButtonModule, MatFormFieldModule, MatInputModule, MatPaginator, MatSelectModule, MatSort, ReactiveFormsModule, RouterModule, SkeletonLoaderComponent, TablerIconComponent],
+  imports: [CommonModule, ...MaterialImports, RouterLink, SkeletonLoaderComponent, FormsModule],
+  providers: [...MaterialProviders, EmployeesApiService],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
 })
 export class ListComponent implements OnInit {
+  
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
+  constructor(
+    private apiService: EmployeesApiService,
+    private toastService: ToastService
+  ) {}
+
   loading = true;
-  readonly employees = employees;
-  readonly departments = departments.filter(department => department.status === 'ACTIVE');
-  readonly employmentTypes = employmentTypes;
-  readonly employmentStatuses = employmentStatuses;
-  readonly searchControl = new FormControl('', { nonNullable: true });
+  employees = new MatTableDataSource<Employee>([]);
+  filter: any = {};
+  meta: any = {};
+  stateList: any = {};
+
+
+
+  departments = departments.filter(department => department.status === 'ACTIVE');
+  employmentTypes = employmentTypes;
+  employmentStatuses = employmentStatuses;
   selectedDepartments: string[] = [];
   selectedEmploymentTypes: EmploymentType[] = [];
   selectedEmploymentStatuses: EmploymentStatus[] = [];
 
-  ngOnInit(): void {
-    // Keep the initial loading state visible while this page uses local sample data.
-    window.setTimeout(() => this.loading = false, 3000);
+  
+  ngOnInit() {
+    this.resetFilter();
+    this.stateList = stateList;
   }
 
-  get filteredEmployees() {
-    const query = this.searchControl.value.trim().toLowerCase();
-    return this.employees.filter(employee => {
-      const matchesQuery = !query || [employee.employeeName, employee.employeeId, employee.department, employee.position]
-        .some(value => value.toLowerCase().includes(query));
-      const matchesDepartment = this.selectedDepartments.length === 0 || this.selectedDepartments.includes(employee.department);
-      const matchesType = this.selectedEmploymentTypes.length === 0 || this.selectedEmploymentTypes.includes(employee.employmentType);
-      const matchesStatus = this.selectedEmploymentStatuses.length === 0 || this.selectedEmploymentStatuses.includes(employee.employmentStatus);
-      return matchesQuery && matchesDepartment && matchesType && matchesStatus;
+  ngAfterViewInit() {
+    this.paginator.page.subscribe(() => {
+      this.meta.pageSize = this.paginator.pageSize;
+      this.meta.page = this.paginator.pageIndex + 1; 
+      console.log(this.meta, this.meta)
+      this.getEmployees();
     });
   }
 
-  clearFilters(): void {
-    this.searchControl.setValue('');
-    this.selectedDepartments = [];
-    this.selectedEmploymentTypes = [];
-    this.selectedEmploymentStatuses = [];
+  resetFilter(){
+    this.filter = {
+      search: "",
+      departmentId: "",
+      employmentStatus: "",
+      employmentType: "",
+    };
+    this.getEmployees();
+  }
+
+  getEmployees(){
+    this.loading = true;
+    this.apiService.getAllEmployees(this.filter).subscribe({
+      next: (response) => {
+        console.log("response", response)
+        this.employees.data = response.data.length > 0 ? response.data : [];
+        this.meta.total = response.meta.total
+        this.loading = false;
+        console.log("employees", this.employees)
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+        this.loading = false;
+      },
+    });
+  }
+
+  onSortChange(event: { active: string; direction: string }) {
+    this.meta.sortBy = event.active;
+    this.meta.sortDir = event.direction.toUpperCase() || 'ASC';
+    console.log("this.meta sort", this.meta)
+    this.getEmployees();
+  }
+  
+  applyFilter(field: 'search' | 'departmentId' | 'employmentType', value: string) {
+    this.filter[field] = value;
+    this.getEmployees();
   }
 
   filteredCountByStatus(status: EmploymentStatus): number {
-    return this.filteredEmployees.filter(employee => employee.employmentStatus === status).length;
+    return this.employees.data.filter(employee => employee.employmentStatus === status).length;
   }
 
   employmentStatusClass(status: EmploymentStatus): string {

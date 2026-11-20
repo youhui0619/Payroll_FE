@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../material-imports';
 import { getEmployee } from '../../../data/workforce/employees.data';
 import type { ClaimPaymentMethod, ClaimType, ExpenseClaimRecord } from '../../../models/claims/claim.model';
-import type { EmployeeRecord } from '../../../models/workforce/employee.model';
+import type { Employee } from '../../../models/workforce/employee.model';
 
 @Component({
   selector: 'app-claim-detail-dialog',
@@ -20,7 +20,7 @@ export class ClaimDetailDialogComponent {
   @Output() decisionMade = new EventEmitter<{ status: 'Approved' | 'Rejected'; comment: string }>();
   decisionComment = '';
 
-  get employee(): EmployeeRecord | null {
+  get employee(): Employee | null {
     try {
       return getEmployee(this.claim.employeeId);
     } catch {

@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { RouterLink } from '@angular/router';
 import { CalendarDay, LeaveRecord } from '../../../../models/leave/leave.model';
-import type { EmployeeRecord } from '../../../../models/workforce/employee.model';
+import type { Employee } from '../../../../models/workforce/employee.model';
 import { employees as employeeDirectory } from '../../../../data/workforce/employees.data';
 import { workLocations } from '../../../../data/workforce/work-locations.data';
 import { overtimeRequests } from '../../../../data/overtime/overtime-requests.data';
@@ -33,7 +33,7 @@ export class OverviewComponent implements AfterViewInit, OnInit {
 
   selectedLeave: LeaveDialogData | null = null;
   selectedOvertime: OvertimeRequestRecord | null = null;
-  selectedDailyRecordsEmployee: EmployeeRecord | null = null;
+  selectedDailyRecordsEmployee: Employee | null = null;
   @ViewChild('calendarScroller') private calendarScroller?: ElementRef<HTMLDivElement>;
   
   constructor(private readonly changeDetector: ChangeDetectorRef) {
@@ -48,7 +48,7 @@ export class OverviewComponent implements AfterViewInit, OnInit {
   days: CalendarDay[] = [];
   monthLabel = '';
 
-  employees: EmployeeRecord[] = employeeDirectory;
+  employees: Employee[] = employeeDirectory;
   selectedDepartments: string[] = [];
 
   readonly leaveRecords: LeaveRecord[] = attendanceRecords;
@@ -72,7 +72,7 @@ export class OverviewComponent implements AfterViewInit, OnInit {
       .sort((first, second) => first.localeCompare(second));
   }
 
-  get filteredEmployees(): EmployeeRecord[] {
+  get filteredEmployees(): Employee[] {
     if (this.selectedDepartments.length === 0) return this.employees;
     return this.employees.filter(employee => this.selectedDepartments.includes(employee.department));
   }
@@ -108,7 +108,7 @@ export class OverviewComponent implements AfterViewInit, OnInit {
     });
   }
 
-  openMonthlyRecords(employee: EmployeeRecord): void {
+  openMonthlyRecords(employee: Employee): void {
     this.selectedDailyRecordsEmployee = employee;
   }
 
@@ -233,7 +233,7 @@ export class OverviewComponent implements AfterViewInit, OnInit {
     );
   }
 
-  getPublicHoliday(employee: EmployeeRecord, dateKey: string) {
+  getPublicHoliday(employee: Employee, dateKey: string) {
     const workLocation = workLocations.find(location => location.id === employee.workLocationId);
     return getPublicHolidaysForDate(dateKey, `${employee.address} ${workLocation?.city ?? ''} ${workLocation?.state ?? ''}`)[0];
   }
@@ -246,7 +246,7 @@ export class OverviewComponent implements AfterViewInit, OnInit {
     );
   }
 
-  attendanceBadgeClass(employee: EmployeeRecord, day: CalendarDay): string {
+  attendanceBadgeClass(employee: Employee, day: CalendarDay): string {
     const leave = this.getLeave(employee.employeeId, day.dateKey);
     if (leave) return leave.typeClass;
     if (this.getOvertimeRequest(employee.employeeId, day.dateKey)) return 'overtime';
@@ -254,7 +254,7 @@ export class OverviewComponent implements AfterViewInit, OnInit {
     return this.isFutureDate(day.dateKey) ? 'future' : '';
   }
 
-  attendanceBadgeLabel(employee: EmployeeRecord, day: CalendarDay): string {
+  attendanceBadgeLabel(employee: Employee, day: CalendarDay): string {
     const leave = this.getLeave(employee.employeeId, day.dateKey);
     if (leave) return leave.code;
     if (this.getOvertimeRequest(employee.employeeId, day.dateKey)) return 'OT';
@@ -262,7 +262,7 @@ export class OverviewComponent implements AfterViewInit, OnInit {
     return '';
   }
 
-  attendanceBadgeTitle(employee: EmployeeRecord, day: CalendarDay): string {
+  attendanceBadgeTitle(employee: Employee, day: CalendarDay): string {
     const leave = this.getLeave(employee.employeeId, day.dateKey);
     if (leave) return leave.leaveType;
     const overtime = this.getOvertimeRequest(employee.employeeId, day.dateKey);
@@ -270,13 +270,13 @@ export class OverviewComponent implements AfterViewInit, OnInit {
     return this.getPublicHoliday(employee, day.dateKey)?.name ?? 'Attendance actions';
   }
 
-  hasAttendanceRecord(employee: EmployeeRecord, day: CalendarDay): boolean {
+  hasAttendanceRecord(employee: Employee, day: CalendarDay): boolean {
     return !!this.getLeave(employee.employeeId, day.dateKey)
       || !!this.getOvertimeRequest(employee.employeeId, day.dateKey)
       || !!this.getPublicHoliday(employee, day.dateKey);
   }
 
-  onAttendanceBadgeClick(employee: EmployeeRecord, day: CalendarDay): void {
+  onAttendanceBadgeClick(employee: Employee, day: CalendarDay): void {
     const leave = this.getLeave(employee.employeeId, day.dateKey);
     if (leave) {
       this.openLeaveDetails(employee, day, leave);
@@ -300,7 +300,7 @@ export class OverviewComponent implements AfterViewInit, OnInit {
       .join('');
   }
 
-  openLeaveDetails(employee: EmployeeRecord, day: CalendarDay, leave: LeaveRecord): void {
+  openLeaveDetails(employee: Employee, day: CalendarDay, leave: LeaveRecord): void {
     const durationDays = Math.round(
       (new Date(`${leave.endDate}T00:00:00`).getTime() - new Date(`${leave.startDate}T00:00:00`).getTime()) / 86_400_000
     ) + 1;

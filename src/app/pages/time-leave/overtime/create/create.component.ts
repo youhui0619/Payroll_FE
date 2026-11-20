@@ -7,7 +7,7 @@ import { departments } from '../../../../data/workforce/departments.data';
 import { employees } from '../../../../data/workforce/employees.data';
 import { overtimeRequests } from '../../../../data/overtime/overtime-requests.data';
 import { payrollSettings } from '../../../../data/payroll/payroll-settings.data';
-import type { EmployeeRecord } from '../../../../models/workforce/employee.model';
+import type { Employee } from '../../../../models/workforce/employee.model';
 import type { OvertimeRequestRecord, OvertimeType } from '../../../../models/overtime/overtime.model';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
 
@@ -36,7 +36,7 @@ export class CreateComponent {
   }
   readonly breakDurations = [0, 15, 30, 45, 60];
 
-  readonly employeeSearch = new FormControl<EmployeeRecord | string>('');
+  readonly employeeSearch = new FormControl<Employee | string>('');
   submitted = false;
   createdOvertime: OvertimeRequestRecord | null = null;
 
@@ -106,7 +106,7 @@ export class CreateComponent {
     return this.formatDuration(this.netOvertimeMinutes);
   }
 
-  get filteredEmployees(): EmployeeRecord[] {
+  get filteredEmployees(): Employee[] {
     const departmentId = this.otForm.controls.departmentId.value;
     const searchValue = this.employeeSearch.value;
     const query = typeof searchValue === 'string' ? searchValue.trim().toLowerCase() : '';
@@ -121,12 +121,12 @@ export class CreateComponent {
     });
   }
 
-  get selectedEmployee(): EmployeeRecord | undefined {
+  get selectedEmployee(): Employee | undefined {
     const employeeId = this.otForm.controls.employeeId.value;
     return this.employees.find(employee => employee.employeeId === employeeId);
   }
 
-  readonly employeeDisplayName = (value: EmployeeRecord | string | null): string => {
+  readonly employeeDisplayName = (value: Employee | string | null): string => {
     if (value && typeof value === 'object') return `${value.employeeId} - ${value.employeeName}`;
     if (!value) return '';
     const employee = this.employees.find(item => item.employeeId === value);
@@ -138,7 +138,7 @@ export class CreateComponent {
     this.employeeSearch.setValue('');
   }
 
-  onEmployeeSelected(employee: EmployeeRecord): void {
+  onEmployeeSelected(employee: Employee): void {
     this.otForm.controls.employeeId.setValue(employee.employeeId);
     this.employeeSearch.setValue(employee);
   }

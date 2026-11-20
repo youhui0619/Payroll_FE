@@ -20,7 +20,7 @@ import { commissionIncentiveSettings } from '../../../../data/commission/commiss
 import { LeaveApplication } from '../../../../models/leave/leave.model';
 import type { ClaimStatus, ClaimType, ExpenseClaimRecord } from '../../../../models/claims/claim.model';
 import type { LeavePolicy } from '../../../../models/leave/leave-policy.model';
-import type { EmployeeRecord, OvertimeCalculationBasis } from '../../../../models/workforce/employee.model';
+import type { Employee, OvertimeCalculationBasis } from '../../../../models/workforce/employee.model';
 import type { OvertimeRequestRecord, OvertimeStatus, OvertimeType } from '../../../../models/overtime/overtime.model';
 import type {
   CommissionCalculationFrequency,
@@ -55,7 +55,7 @@ export class ViewComponent {
 
   private navigation = inject(NavigationService);
   
-  employee!: EmployeeRecord;
+  employee!: Employee;
   readonly workLocations = workLocations;
   readonly leaveYear = new Date().getFullYear();
   readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');

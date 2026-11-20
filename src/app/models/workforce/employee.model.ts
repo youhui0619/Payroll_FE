@@ -4,7 +4,7 @@ import type { WorkingSchedule } from '../working-schedule/working-schedule.model
 
 export type OvertimeCalculationBasis = 'HOURLY_RATE' | 'DAILY_RATE_CONVERTED' | 'MONTHLY_SALARY_CONVERTED';
 
-export interface EmployeeRecord {
+export interface Employee {
   employeeId: string;
   employeeName: string;
   initials: string;

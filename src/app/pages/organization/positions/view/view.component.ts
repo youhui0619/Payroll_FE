@@ -6,7 +6,7 @@ import { MaterialImports, MaterialProviders } from '../../../../shared/material-
 import { departments } from '../../../../data/workforce/departments.data';
 import { employees } from '../../../../data/workforce/employees.data';
 import { positions } from '../../../../data/workforce/positions.data';
-import type { EmployeeRecord } from '../../../../models/workforce/employee.model';
+import type { Employee } from '../../../../models/workforce/employee.model';
 import type { Position } from '../../../../models/workforce/position.model';
 import { NavigationService } from '../../../../services/navigation.service';
 
@@ -26,7 +26,7 @@ export class ViewComponent {
   private readonly navigation = inject(NavigationService);
   position!: Position;
   departmentName = '—';
-  employees: EmployeeRecord[] = [];
+  employees: Employee[] = [];
   organizationTree: PositionTreeNode[] = [];
 
   goBack(): void { void this.navigation.back('/organization/positions/overview'); }

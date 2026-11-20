@@ -15,7 +15,7 @@
 @if (loading) {
   <div class="row my-4">
     <div class="col-12 px-2">
-      <app-skeleton-loader [rows]="0" [columns]="0" [summaryCards]="4"></app-skeleton-loader>
+      <app-skeleton-loader [rows]="0" [columns]="0" [summaryCards]="1"></app-skeleton-loader>
     </div>
   </div>
 } @else {
@@ -26,7 +26,7 @@
         <div class="d-flex flex-column-reverse flex-sm-row align-items-start justify-content-between">
           <div class="summary-info">
             <p class="fs-12 text-muted">Total employees</p>
-            <h3 class="mb-0">128</h3>
+            <h3 class="mb-0">{{employees.data.length}}</h3>
           </div>
           <div class="text-primary bg-light-primary text-end icon mb-2">
             <tabler-icon icon="users"></tabler-icon>
@@ -35,7 +35,7 @@
       </div>
     </div>
   </div>
-
+<!-- 
   <div class="col-6 col-sm-3 px-2 d-flex flex-column">
     <div class="card flex-grow-1 mb-4">
       <div class="card-body">
@@ -84,7 +84,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>
 }
 
@@ -93,7 +93,8 @@
         <mat-form-field appearance="outline"
             class="form-input w-100"
             subscriptSizing="dynamic">
-            <input type="text" matInput placeholder="Search...">
+            <input type="text" matInput placeholder="Search..."
+                [ngModel]="filter.search" (ngModelChange)="applyFilter('search', $event)">
             <span matTextPrefix class="text-muted me-2">
                 <tabler-icon icon="search" [size]="16"></tabler-icon>
             </span>
@@ -102,9 +103,9 @@
 
     <div class="col-12 col-sm-6 col-md-3 col-lg-3">
       <mat-form-field appearance="outline" class="form-input w-100" subscriptSizing="dynamic">
-        <mat-select placeholder="Department" multiple [(value)]="selectedDepartments">
+        <mat-select placeholder="Department" [ngModel]="filter.departmentId" (ngModelChange)="applyFilter('departmentId', $event)">
           @for (department of departments; track department.id) {
-            <mat-option [value]="department.name">{{ department.name }}</mat-option>
+            <mat-option [value]="department.id">{{ department.name }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
@@ -112,7 +113,7 @@
 
     <div class="col-12 col-sm-6 col-md-3 col-lg-3">
       <mat-form-field appearance="outline" class="form-input w-100" subscriptSizing="dynamic">
-        <mat-select placeholder="Employment Type" multiple [(value)]="selectedEmploymentTypes">
+        <mat-select placeholder="Employment Type"  [ngModel]="filter.employmentType" (ngModelChange)="applyFilter('employmentType', $event)">
           @for (type of employmentTypes; track type.value) {
             <mat-option [value]="type.value">{{ type.label }}</mat-option>
           }
@@ -127,7 +128,7 @@
       <div class="card-header">
       <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-3">
           <h6 class="fs-14 fw-400 text-muted my-0">
-            <span class="fw-550 text-primary">All ({{ filteredEmployees.length }})</span>
+            <span class="fw-550 text-primary">All ({{ employees.data.length }})</span>
             | Active ({{ filteredCountByStatus('ACTIVE') }})
             | Probation ({{ filteredCountByStatus('PROBATION') }})
             | Suspended ({{ filteredCountByStatus('SUSPENDED') }})
@@ -137,7 +138,7 @@
           </h6>
           <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center flex-lg-nowrap gap-2">
             <div class="d-flex flex-wrap flex-lg-nowrap gap-2 ms-auto">
-                <button mat-flat-button color="primary-outline" class="btn-sm">
+                <button mat-flat-button color="primary-outline" class="btn-sm" (click)="resetFilter()">
                     <tabler-icon icon="x" [size]="16"></tabler-icon>
                     Clear
                 </button>
@@ -170,7 +171,7 @@
               </tr>
             </thead>
             <tbody>
-              @for (employee of filteredEmployees; track employee.employeeId) {
+              @for (employee of employees.data; track employee.employeeId) {
                 <tr>
                   <td class="text-muted cursor-pointer text-nowrap" [routerLink]="['/workforce/employees/view', employee.employeeId]">
                     <div class="d-flex align-items-center justify-content-start">
@@ -195,13 +196,19 @@
                   </td>
                 </tr>
               }
-              @if (filteredEmployees.length === 0) {
+              @empty {
                 <tr><td colspan="6" class="text-center text-muted py-4">No employees match these filters.</td></tr>
               }
             </tbody>
           </table>
-          <mat-paginator [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>
           }
+          <!-- Pagination -->
+          <mat-paginator
+            [length]="meta.total" 
+            [pageSize]="meta.pageSize" 
+            [pageSizeOptions]="[5, 10 ,20]"
+            showFirstLastButtons>
+          </mat-paginator>
         </div>
       </div>
     </div>

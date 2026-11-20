@@ -7,7 +7,7 @@ import { departments } from '../../../../data/workforce/departments.data';
 import { employees } from '../../../../data/workforce/employees.data';
 import { leaveApplications } from '../../../../data/leave/leave-applications.data';
 import { leavePolicies } from '../../../../data/leave/leave-policies.data';
-import type { EmployeeRecord } from '../../../../models/workforce/employee.model';
+import type { Employee } from '../../../../models/workforce/employee.model';
 import type { LeaveApplication } from '../../../../models/leave/leave.model';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
 
@@ -23,7 +23,7 @@ export class CreateComponent {
   readonly departments = departments.filter(department => department.status === 'ACTIVE');
   readonly employees = employees;
   readonly leaveTypeOptions = leavePolicies.filter(policy => policy.status === 'ACTIVE');
-  readonly employeeSearch = new FormControl<EmployeeRecord | string>('');
+  readonly employeeSearch = new FormControl<Employee | string>('');
   submitted = false;
   createdLeave: LeaveApplication | null = null;
 
@@ -58,7 +58,7 @@ export class CreateComponent {
     void this.router.navigateByUrl('/time-leave/leave/applications');
   }
 
-  get selectedEmployee(): EmployeeRecord | undefined {
+  get selectedEmployee(): Employee | undefined {
     return this.employees.find(employee => employee.employeeId === this.leaveForm.controls.employeeId.value);
   }
 
@@ -66,7 +66,7 @@ export class CreateComponent {
     return this.leaveTypeOptions.find(policy => policy.leaveCode === this.leaveForm.controls.leaveCode.value);
   }
 
-  get filteredEmployees(): EmployeeRecord[] {
+  get filteredEmployees(): Employee[] {
     const departmentId = this.leaveForm.controls.departmentId.value;
     const searchValue = this.employeeSearch.value;
     const query = typeof searchValue === 'string' ? searchValue.trim().toLowerCase() : '';
@@ -79,7 +79,7 @@ export class CreateComponent {
     });
   }
 
-  readonly employeeDisplayName = (value: EmployeeRecord | string | null): string => {
+  readonly employeeDisplayName = (value: Employee | string | null): string => {
     if (value && typeof value === 'object') return `${value.employeeId} - ${value.employeeName}`;
     if (!value) return '';
     const employee = this.employees.find(item => item.employeeId === value);
@@ -101,7 +101,7 @@ export class CreateComponent {
     this.employeeSearch.setValue('');
   }
 
-  onEmployeeSelected(employee: EmployeeRecord): void {
+  onEmployeeSelected(employee: Employee): void {
     this.leaveForm.controls.employeeId.setValue(employee.employeeId);
     this.employeeSearch.setValue(employee);
   }

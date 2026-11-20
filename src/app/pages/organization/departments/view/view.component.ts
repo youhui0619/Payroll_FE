@@ -6,9 +6,9 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FullCalendarModule, CalendarOptions } from '@fullcalendar/angular';
 import { departments } from '../../../../data/workforce/departments.data';
-import { employees as employeeRecords } from '../../../../data/workforce/employees.data';
+import { employees as Employees } from '../../../../data/workforce/employees.data';
 import type { Department } from '../../../../models/workforce/department.model';
-import type { EmployeeRecord } from '../../../../models/workforce/employee.model';
+import type { Employee } from '../../../../models/workforce/employee.model';
 import { NavigationService } from '../../../../services/navigation.service';
 
 interface DepartmentTreeNode {
@@ -26,7 +26,7 @@ interface DepartmentTreeNode {
 export class ViewComponent {
   private readonly navigation = inject(NavigationService);
   department!: Department;
-  employees: EmployeeRecord[] = [];
+  employees: Employee[] = [];
   organizationTree: DepartmentTreeNode[] = [];
   searchTerm = '';
   selectedEmploymentTypes: string[] = [];
@@ -41,7 +41,7 @@ export class ViewComponent {
       if (!department) return;
 
       this.department = department;
-      this.employees = employeeRecords.filter(employee => employee.department === department.name);
+      this.employees = Employees.filter(employee => employee.department === department.name);
       this.organizationTree = this.buildOrganizationTree();
       this.clearEmployeeFilters();
     });
@@ -55,7 +55,7 @@ export class ViewComponent {
     return [...new Set(this.employees.map(employee => employee.employmentStatus).filter(Boolean))].sort();
   }
 
-  get filteredEmployees(): EmployeeRecord[] {
+  get filteredEmployees(): Employee[] {
     const query = this.searchTerm.trim().toLocaleLowerCase();
 
     return this.employees.filter(employee => {
@@ -96,15 +96,15 @@ export class ViewComponent {
   }
 
   departmentHeadName(): string {
-    return employeeRecords.find(item => item.employeeId === this.department.headOfDepartmentId)?.employeeName ?? '—';
+    return Employees.find(item => item.employeeId === this.department.headOfDepartmentId)?.employeeName ?? '—';
   }
 
   departmentHead(department: Department): string {
-    return employeeRecords.find(employee => employee.employeeId === department.headOfDepartmentId)?.employeeName ?? 'No department head assigned';
+    return Employees.find(employee => employee.employeeId === department.headOfDepartmentId)?.employeeName ?? 'No department head assigned';
   }
 
   departmentEmployeeCount(department: Department): number {
-    return employeeRecords.filter(employee => employee.department === department.name).length;
+    return Employees.filter(employee => employee.department === department.name).length;
   }
 
   private buildOrganizationTree(): DepartmentTreeNode[] {

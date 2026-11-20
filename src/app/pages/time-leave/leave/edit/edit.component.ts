@@ -7,7 +7,7 @@ import { departments } from '../../../../data/workforce/departments.data';
 import { employees } from '../../../../data/workforce/employees.data';
 import { leaveApplications } from '../../../../data/leave/leave-applications.data';
 import { leavePolicies } from '../../../../data/leave/leave-policies.data';
-import type { EmployeeRecord } from '../../../../models/workforce/employee.model';
+import type { Employee } from '../../../../models/workforce/employee.model';
 import type { LeaveApplication } from '../../../../models/leave/leave.model';
 import type { LeavePolicy } from '../../../../models/leave/leave-policy.model';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
@@ -28,7 +28,7 @@ export class EditComponent {
   readonly leaveTypeOptions: LeaveTypeOption[] = leavePolicies
     .filter(policy => policy.status === 'ACTIVE')
     .map(({ leaveCode, leaveName, leaveType, requireSupportingDocuments }) => ({ leaveCode, leaveName, leaveType, requireSupportingDocuments }));
-  readonly employeeSearch = new FormControl<EmployeeRecord | string>('');
+  readonly employeeSearch = new FormControl<Employee | string>('');
   submitted = false;
   leaveToEdit: LeaveApplication | null = null;
   updatedLeave: LeaveApplication | null = null;
@@ -86,7 +86,7 @@ export class EditComponent {
     this.onLeaveTypeChange();
   }
 
-  get selectedEmployee(): EmployeeRecord | undefined {
+  get selectedEmployee(): Employee | undefined {
     return this.employees.find(employee => employee.employeeId === this.leaveForm.controls.employeeId.value);
   }
 
@@ -94,7 +94,7 @@ export class EditComponent {
     return this.leaveTypeOptions.find(policy => policy.leaveCode === this.leaveForm.controls.leaveCode.value);
   }
 
-  get filteredEmployees(): EmployeeRecord[] {
+  get filteredEmployees(): Employee[] {
     const departmentId = this.leaveForm.controls.departmentId.value;
     const searchValue = this.employeeSearch.value;
     const query = typeof searchValue === 'string' ? searchValue.trim().toLowerCase() : '';
@@ -107,7 +107,7 @@ export class EditComponent {
     });
   }
 
-  readonly employeeDisplayName = (value: EmployeeRecord | string | null): string => {
+  readonly employeeDisplayName = (value: Employee | string | null): string => {
     if (value && typeof value === 'object') return `${value.employeeId} - ${value.employeeName}`;
     if (!value) return '';
     const employee = this.employees.find(item => item.employeeId === value);
@@ -129,7 +129,7 @@ export class EditComponent {
     this.employeeSearch.setValue('');
   }
 
-  onEmployeeSelected(employee: EmployeeRecord): void {
+  onEmployeeSelected(employee: Employee): void {
     this.leaveForm.controls.employeeId.setValue(employee.employeeId);
     this.employeeSearch.setValue(employee);
   }

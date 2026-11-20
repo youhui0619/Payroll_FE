@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { RouterLink } from '@angular/router';
 import { CalendarDay, LeaveRecord } from '../../../../models/leave/leave.model';
-import type { EmployeeRecord } from '../../../../models/workforce/employee.model';
+import type { Employee } from '../../../../models/workforce/employee.model';
 import { employees as employeeDirectory } from '../../../../data/workforce/employees.data';
 import { attendanceRecords } from '../../../../data/attendance/attendance.data';
 import { getEmployeeLeaveBalances } from '../../../../data/leave/leave-balances.data';
@@ -38,7 +38,7 @@ export class OverviewComponent implements OnInit {
   days: CalendarDay[] = [];
   monthLabel = '';
 
-  employees: EmployeeRecord[] = employeeDirectory;
+  employees: Employee[] = employeeDirectory;
   selectedDepartments: string[] = [];
 
   get departments(): string[] {
@@ -46,7 +46,7 @@ export class OverviewComponent implements OnInit {
       .sort((first, second) => first.localeCompare(second));
   }
 
-  get filteredEmployees(): EmployeeRecord[] {
+  get filteredEmployees(): Employee[] {
     if (this.selectedDepartments.length === 0) return this.employees;
     return this.employees.filter(employee => this.selectedDepartments.includes(employee.department));
   }
