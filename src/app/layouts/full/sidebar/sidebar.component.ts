@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { commissionPayrollRecords } from '../../../data/commission/commission-payroll-records.data';
 import { AuthApiService } from '../../../services/api/auth.service';
-import { ToastService } from '../../../shared/components/toast/toast.service';
 
 interface MenuItem {
   id?: number;
@@ -29,8 +28,7 @@ export class SidebarComponent implements OnInit, OnChanges {
 
   constructor(
     private router: Router,
-    private apiService: AuthApiService,
-    private toastService: ToastService
+    private apiService: AuthApiService
   ) {}
 
   user: any;
@@ -144,20 +142,15 @@ export class SidebarComponent implements OnInit, OnChanges {
   ];
 
   ngOnInit() {
-    this.user = localStorage.getItem('user')
-    this.apiService.getProfile().subscribe({
-      next: (response: any) => {
-        this.user = response
-        console.log("this.user", this.user)
-      },
-      error: (error) => {
-        this.toastService.show({
-          title: error.error.code,
-          message: error.error.message,
-          icon: 'danger'
-        });
-      }
-    })
+    const storedUser = sessionStorage.getItem('user');
+    this.user = storedUser ? JSON.parse(storedUser) : null;
+    if (sessionStorage.getItem('accessToken')) {
+      this.apiService.getProfile().subscribe({
+        next: (response: any) => this.user = response,
+        // The auth interceptor clears the session and redirects on 401.
+        error: () => {}
+      });
+    }
     if (!this.menu || this.menu.length === 0) {
       this.menu = this.defaultMenu;
     }

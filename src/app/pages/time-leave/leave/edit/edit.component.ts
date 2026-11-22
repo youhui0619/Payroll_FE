@@ -12,7 +12,7 @@ import type { LeaveApplication } from '../../../../models/leave/leave.model';
 import type { LeavePolicy } from '../../../../models/leave/leave-policy.model';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
 
-type LeaveTypeOption = Pick<LeavePolicy, 'code' | 'leaveName' | 'leaveType' | 'requireSupportingDocuments'>;
+type LeaveTypeOption = Pick<LeavePolicy, 'code' | 'name' | 'leaveType' | 'requireSupportingDocuments'>;
 
 @Component({
   selector: 'app-leave-edit',
@@ -61,11 +61,11 @@ export class EditComponent {
     const [startText, endText = startText] = application.dateRange.split('~').map(value => value.trim());
     const startDate = this.parseDisplayDate(startText);
     const endDate = this.parseDisplayDate(endText);
-    let policy = this.leaveTypeOptions.find(item => item.leaveName === application.leaveType);
+    let policy = this.leaveTypeOptions.find(item => item.name === application.leaveType);
     if (!policy) {
       policy = {
         code: `LEGACY-${application.reference}`,
-        leaveName: application.leaveType,
+        name: application.leaveType,
         leaveType: 'PAID',
         requireSupportingDocuments: false
       };
@@ -174,7 +174,7 @@ export class EditComponent {
       ...existingApplication,
       employeeId: employee.employeeId,
       requestDate: this.formatDate(requestDate),
-      leaveType: "policy.name",
+      leaveType: policy.name,
       dateRange: startDate.getTime() === endDate.getTime()
         ? this.formatDate(startDate)
         : `${this.formatDate(startDate)} ~ ${this.formatDate(endDate)}`,

@@ -8,6 +8,7 @@ export class AuthService {
   private authTokenKey = 'accessToken';
   private userKey = 'user';
   private permissionsKey = 'userPermissions';
+  private sessionExpired = false;
   private userSubject = new BehaviorSubject<any>(this.getStoredUser());
   user$ = this.userSubject.asObservable();
 
@@ -27,15 +28,25 @@ export class AuthService {
   }
 
   login(userData: any): void {
+    this.sessionExpired = false;
     this.setUser(userData);
     this.router.navigate(['/dashboard']);
   }
 
   logout(): void {
+    this.sessionExpired = true;
     this.userSubject.next(null);
-    sessionStorage.removeItem(this.authTokenKey);
-    sessionStorage.removeItem(this.userKey);
+    sessionStorage.clear();
     this.router.navigate(['/login']);
+  }
+
+  isSessionExpired(): boolean {
+    return this.sessionExpired;
+  }
+
+  handleUnauthorized(): void {
+    if (this.sessionExpired) return;
+    this.logout();
   }
 
   private setUser(userData: any): void {
