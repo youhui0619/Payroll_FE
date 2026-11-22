@@ -1,4 +1,5 @@
-export type LeavePolicyStatus = 'ACTIVE' | 'INACTIVE';
+import { LeaveApproval } from "./leave.model";
+
 export type LeaveEntitlementUnit = 'DAILY' | 'HOURLY';
 export type LeavePolicyType = 'PAID' | 'UNPAID';
 export type LeaveEntitlementCalculation = 'FIXED' | 'SERVICE';
@@ -15,12 +16,16 @@ export interface LeaveServiceEntitlementTier {
 }
 
 export interface LeavePolicy {
-  leaveCode: string;
-  leaveName: string;
+  id: string;
+  companyId: string;
+
+  // Basic information
+  code: string;
+  name: string;
   description: string;
-  status: LeavePolicyStatus;
-  entitlementUnit: LeaveEntitlementUnit;
+  active: boolean;
   leaveType: LeavePolicyType;
+  entitlementUnit: LeaveEntitlementUnit;
   entitlementCalculationMethod: LeaveEntitlementCalculation;
   defaultEntitlement: number | null;
   serviceEntitlementTiers: LeaveServiceEntitlementTier[];
@@ -29,9 +34,21 @@ export interface LeavePolicy {
   leaveYear: LeaveYearBasis;
   carryForwardPolicy: LeaveCarryForwardPolicy;
   maximumCarryForward: number | null;
+  approval: LeaveApproval;
   approvalOverflow: LeaveApprovalOverflow;
   minimumAdvanceNotice: number | null;
+  noticeDays: number | null;
   allowHalfDay: boolean;
   requireSupportingDocuments: boolean;
   allowEmployeeSpecificSettings: boolean;
+  paid: boolean;
+  effectiveFrom: string | null;
+  effectiveTo: string | null;
 }
+
+export const approvalList = [
+  { value: 'MANAGER', name: 'Manager' },
+  { value: 'MANAGER_HR', name: 'Manager & HR' },
+  { value: 'HR_ONLY', name: 'HR Only' },
+  { value: 'NO_APPROVAL', name: 'No Approval' }
+];

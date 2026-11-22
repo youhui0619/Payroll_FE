@@ -80,12 +80,12 @@
         <div class="col-sm-4 px-2">
           <mat-label class="form-label">Leave Type <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
-            <mat-select placeholder="Select leave type" formControlName="leaveCode" (selectionChange)="onLeaveTypeChange()">
-              @for (policy of leaveTypeOptions; track policy.leaveCode) {
-                <mat-option [value]="policy.leaveCode">{{ policy.leaveName }}</mat-option>
+            <mat-select placeholder="Select leave type" formControlName="code" (selectionChange)="onLeaveTypeChange()">
+              @for (policy of leaveTypeOptions; track policy.code) {
+                <mat-option [value]="policy.code">{{ policy.name }}</mat-option>
               }
             </mat-select>
-            @if (leaveForm.controls.leaveCode.hasError('required')) { <mat-error class="text-danger">Leave type is required.</mat-error> }
+            @if (leaveForm.controls.code.hasError('required')) { <mat-error class="text-danger">Leave type is required.</mat-error> }
           </mat-form-field>
         </div>
         <div class="col-sm-4 px-2">

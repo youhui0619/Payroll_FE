@@ -22,7 +22,7 @@ import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.componen
 export class CreateComponent {
   readonly departments = departments.filter(department => department.status === 'ACTIVE');
   readonly employees = employees;
-  readonly leaveTypeOptions = leavePolicies.filter(policy => policy.status === 'ACTIVE');
+  readonly leaveTypeOptions = leavePolicies.filter(policy => policy.active);
   readonly employeeSearch = new FormControl<Employee | string>('');
   submitted = false;
   createdLeave: LeaveApplication | null = null;
@@ -31,7 +31,7 @@ export class CreateComponent {
     requestDate: new FormControl<Date | null>(new Date(), Validators.required),
     departmentId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     employeeId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    leaveCode: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    code: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     startDate: new FormControl<Date | null>(null, Validators.required),
     endDate: new FormControl<Date | null>(null, Validators.required),
     reason: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -63,7 +63,7 @@ export class CreateComponent {
   }
 
   get selectedLeavePolicy() {
-    return this.leaveTypeOptions.find(policy => policy.leaveCode === this.leaveForm.controls.leaveCode.value);
+    return this.leaveTypeOptions.find(policy => policy.code === this.leaveForm.controls.code.value);
   }
 
   get filteredEmployees(): Employee[] {
@@ -129,10 +129,10 @@ export class CreateComponent {
       return;
     }
 
-    const { requestDate, departmentId, employeeId, leaveCode, startDate, endDate, reason, supportingDocuments } = this.leaveForm.getRawValue();
+    const { requestDate, departmentId, employeeId, code, startDate, endDate, reason, supportingDocuments } = this.leaveForm.getRawValue();
     const employee = this.employees.find(item => item.employeeId === employeeId);
     const department = this.departments.find(item => item.id === departmentId);
-    const policy = this.leaveTypeOptions.find(item => item.leaveCode === leaveCode);
+    const policy = this.leaveTypeOptions.find(item => item.code === code);
     if (!requestDate || !startDate || !endDate || endDate < startDate || !employee || !department || !policy || employee.department !== department.name) {
       if (endDate && startDate && endDate < startDate) this.leaveForm.controls.endDate.setErrors({ invalidRange: true });
       if (!employee || !department || employee.department !== department.name) this.leaveForm.controls.employeeId.setErrors({ selectionRequired: true });
@@ -140,15 +140,15 @@ export class CreateComponent {
     }
 
     const nextReferenceNumber = leaveApplications.reduce((maximum, application) => {
-      if (!application.reference.startsWith(`${policy.leaveCode}-`)) return maximum;
+      if (!application.reference.startsWith(`${policy.code}-`)) return maximum;
       const number = Number(application.reference.split('-').at(-1));
       return Number.isFinite(number) ? Math.max(maximum, number) : maximum;
     }, 100) + 1;
     const record: LeaveApplication = {
       employeeId: employee.employeeId,
       requestDate: this.formatDate(requestDate),
-      leaveType: policy.leaveName,
-      reference: `${policy.leaveCode}-${requestDate.getFullYear()}-${nextReferenceNumber}`,
+      leaveType: policy.name,
+      reference: `${policy.code}-${requestDate.getFullYear()}-${nextReferenceNumber}`,
       dateRange: startDate.getTime() === endDate.getTime()
         ? this.formatDate(startDate)
         : `${this.formatDate(startDate)} ~ ${this.formatDate(endDate)}`,

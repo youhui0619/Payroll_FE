@@ -87,11 +87,11 @@ export class EditComponent implements OnInit {
     for (const policy of this.leavePolicies) {
       if (policy.entitlementCalculationMethod === 'SERVICE') {
         const tiers = new FormArray<LeaveServiceTierForm>((policy.serviceEntitlementTiers ?? []).map(createLeaveServiceTierForm));
-        this.employeeForm.controls.leave.controls.leaveServiceEntitlementTiers.addControl(policy.leaveCode, tiers);
-        this.updateLeaveServiceToValidators(policy.leaveCode);
+        this.employeeForm.controls.leave.controls.leaveServiceEntitlementTiers.addControl(policy.code, tiers);
+        this.updateLeaveServiceToValidators(policy.code);
       } else {
         this.employeeForm.controls.leave.controls.leaveEntitlementOverrides.addControl(
-          policy.leaveCode,
+          policy.code,
           new FormControl<number | null>(policy.defaultEntitlement, [Validators.min(0)])
         );
       }
@@ -107,7 +107,7 @@ export class EditComponent implements OnInit {
   readonly workLocationSearch = new FormControl<WorkLocation | string>('', { nonNullable: true });
   readonly employmentStatuses = employmentStatuses;
   readonly employmentTypes = employmentTypes;
-  readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');
+  readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.active);
   readonly commissionIncentiveSettings: CommissionIncentiveSetting[] = commissionIncentiveSettings;
   readonly availableStatutoryEntitlements = statutoryEntitlementOptions.filter(option => payrollSettings[option.setting]);
   readonly overtimeEnabledInPayrollSettings = payrollSettings.includeOvertime;
@@ -434,17 +434,17 @@ export class EditComponent implements OnInit {
     this.workLocationSearch.setValue(this.workLocations.find(location => location.id === employee.workLocationId) ?? '');
     for (const policy of this.leavePolicies) {
       if (policy.entitlementCalculationMethod === 'SERVICE') {
-        const customTiers = employee.leaveServiceEntitlementTiers?.[policy.leaveCode];
+        const customTiers = employee.leaveServiceEntitlementTiers?.[policy.code];
         if (customTiers) {
-          const tiers = this.serviceEntitlementTiers(policy.leaveCode);
+          const tiers = this.serviceEntitlementTiers(policy.code);
           tiers.clear({ emitEvent: false });
           customTiers.forEach(tier => tiers.push(createLeaveServiceTierForm(tier), { emitEvent: false }));
-          this.updateLeaveServiceToValidators(policy.leaveCode);
+          this.updateLeaveServiceToValidators(policy.code);
         }
       } else {
-        const override = employee.leaveEntitlementOverrides?.[policy.leaveCode];
+        const override = employee.leaveEntitlementOverrides?.[policy.code];
         if (override !== undefined) {
-          this.employeeForm.controls.leave.controls.leaveEntitlementOverrides.controls[policy.leaveCode].setValue(override);
+          this.employeeForm.controls.leave.controls.leaveEntitlementOverrides.controls[policy.code].setValue(override);
         }
       }
     }
@@ -459,33 +459,33 @@ export class EditComponent implements OnInit {
 
   get selectedLeavePolicies(): LeavePolicy[] {
     const selectedCodes = new Set(this.employeeForm.controls.leave.controls.leavePolicyCodes.value);
-    return this.leavePolicies.filter(policy => selectedCodes.has(policy.leaveCode));
+    return this.leavePolicies.filter(policy => selectedCodes.has(policy.code));
   }
 
-  serviceEntitlementTiers(leaveCode: string): FormArray<LeaveServiceTierForm> {
-    return this.employeeForm.controls.leave.controls.leaveServiceEntitlementTiers.controls[leaveCode];
+  serviceEntitlementTiers(code: string): FormArray<LeaveServiceTierForm> {
+    return this.employeeForm.controls.leave.controls.leaveServiceEntitlementTiers.controls[code];
   }
 
-  addLeaveServiceTier(leaveCode: string): void {
-    const tiers = this.serviceEntitlementTiers(leaveCode);
+  addLeaveServiceTier(code: string): void {
+    const tiers = this.serviceEntitlementTiers(code);
     const previousTier = tiers.at(tiers.length - 1);
     tiers.push(createLeaveServiceTierForm({
       serviceFrom: previousTier?.controls.serviceTo.value ?? 0,
       serviceTo: null,
       daysPerYear: null
     }));
-    this.updateLeaveServiceToValidators(leaveCode);
+    this.updateLeaveServiceToValidators(code);
   }
 
-  removeLeaveServiceTier(leaveCode: string, index: number): void {
-    const tiers = this.serviceEntitlementTiers(leaveCode);
+  removeLeaveServiceTier(code: string, index: number): void {
+    const tiers = this.serviceEntitlementTiers(code);
     if (tiers.length <= 1) return;
     tiers.removeAt(index);
-    this.updateLeaveServiceToValidators(leaveCode);
+    this.updateLeaveServiceToValidators(code);
   }
 
-  private updateLeaveServiceToValidators(leaveCode: string): void {
-    const tiers = this.serviceEntitlementTiers(leaveCode);
+  private updateLeaveServiceToValidators(code: string): void {
+    const tiers = this.serviceEntitlementTiers(code);
     tiers.controls.forEach((tier, index) => {
       tier.controls.serviceTo.setValidators(index < tiers.length - 1
         ? [Validators.required, Validators.min(0)]
@@ -494,30 +494,30 @@ export class EditComponent implements OnInit {
     });
   }
 
-  isLeavePolicySelected(leaveCode: string): boolean {
-    return this.employeeForm.controls.leave.controls.leavePolicyCodes.value.includes(leaveCode);
+  isLeavePolicySelected(code: string): boolean {
+    return this.employeeForm.controls.leave.controls.leavePolicyCodes.value.includes(code);
   }
 
-  setLeavePolicySelected(leaveCode: string, selected: boolean): void {
+  setLeavePolicySelected(code: string, selected: boolean): void {
     const codes = this.employeeForm.controls.leave.controls.leavePolicyCodes;
     const selectedCodes = new Set(codes.value);
 
-    if (selected) selectedCodes.add(leaveCode);
+    if (selected) selectedCodes.add(code);
     else {
-      selectedCodes.delete(leaveCode);
-      this.editingLeavePolicyCodes.delete(leaveCode);
+      selectedCodes.delete(code);
+      this.editingLeavePolicyCodes.delete(code);
     }
 
     codes.setValue([...selectedCodes]);
   }
 
-  isEditingLeavePolicy(leaveCode: string): boolean {
-    return this.editingLeavePolicyCodes.has(leaveCode);
+  isEditingLeavePolicy(code: string): boolean {
+    return this.editingLeavePolicyCodes.has(code);
   }
 
-  toggleLeavePolicyEditor(leaveCode: string): void {
-    if (this.editingLeavePolicyCodes.has(leaveCode)) this.editingLeavePolicyCodes.delete(leaveCode);
-    else this.editingLeavePolicyCodes.add(leaveCode);
+  toggleLeavePolicyEditor(code: string): void {
+    if (this.editingLeavePolicyCodes.has(code)) this.editingLeavePolicyCodes.delete(code);
+    else this.editingLeavePolicyCodes.add(code);
   }
 
   employeeEntitlementLabel(policy: LeavePolicy): string {
@@ -528,7 +528,7 @@ export class EditComponent implements OnInit {
 
   employeeEntitlementRulesLabel(policy: LeavePolicy): string {
     if (policy.entitlementCalculationMethod === 'SERVICE') {
-      const tiers = this.serviceEntitlementTiers(policy.leaveCode).getRawValue()
+      const tiers = this.serviceEntitlementTiers(policy.code).getRawValue()
         .filter(tier => tier.serviceFrom !== null && tier.daysPerYear !== null)
         .map(tier => {
           const range = tier.serviceTo === null
@@ -543,11 +543,11 @@ export class EditComponent implements OnInit {
 
   private employeeLeaveEntitlement(policy: LeavePolicy): number | null {
     if (policy.entitlementCalculationMethod !== 'SERVICE') {
-      return this.employeeForm.controls.leave.controls.leaveEntitlementOverrides.controls[policy.leaveCode]?.value ?? null;
+      return this.employeeForm.controls.leave.controls.leaveEntitlementOverrides.controls[policy.code]?.value ?? null;
     }
     const yearsOfService = this.yearsOfService();
     if (yearsOfService === null) return null;
-    const tier = this.serviceEntitlementTiers(policy.leaveCode).getRawValue().find(item =>
+    const tier = this.serviceEntitlementTiers(policy.code).getRawValue().find(item =>
       item.serviceFrom !== null
       && yearsOfService >= item.serviceFrom
       && (item.serviceTo === null || yearsOfService < item.serviceTo)

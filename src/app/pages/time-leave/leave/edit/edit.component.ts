@@ -12,7 +12,7 @@ import type { LeaveApplication } from '../../../../models/leave/leave.model';
 import type { LeavePolicy } from '../../../../models/leave/leave-policy.model';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
 
-type LeaveTypeOption = Pick<LeavePolicy, 'leaveCode' | 'leaveName' | 'leaveType' | 'requireSupportingDocuments'>;
+type LeaveTypeOption = Pick<LeavePolicy, 'code' | 'leaveName' | 'leaveType' | 'requireSupportingDocuments'>;
 
 @Component({
   selector: 'app-leave-edit',
@@ -26,8 +26,8 @@ export class EditComponent {
   readonly departments = departments.filter(department => department.status === 'ACTIVE');
   readonly employees = employees;
   readonly leaveTypeOptions: LeaveTypeOption[] = leavePolicies
-    .filter(policy => policy.status === 'ACTIVE')
-    .map(({ leaveCode, leaveName, leaveType, requireSupportingDocuments }) => ({ leaveCode, leaveName, leaveType, requireSupportingDocuments }));
+    .filter(policy => policy.active)
+    .map(({ code, name, leaveType, requireSupportingDocuments }) => ({ code, name, leaveType, requireSupportingDocuments }));
   readonly employeeSearch = new FormControl<Employee | string>('');
   submitted = false;
   leaveToEdit: LeaveApplication | null = null;
@@ -37,7 +37,7 @@ export class EditComponent {
     requestDate: new FormControl<Date | null>(new Date(), Validators.required),
     departmentId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     employeeId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    leaveCode: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    code: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     startDate: new FormControl<Date | null>(null, Validators.required),
     endDate: new FormControl<Date | null>(null, Validators.required),
     reason: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -64,7 +64,7 @@ export class EditComponent {
     let policy = this.leaveTypeOptions.find(item => item.leaveName === application.leaveType);
     if (!policy) {
       policy = {
-        leaveCode: `LEGACY-${application.reference}`,
+        code: `LEGACY-${application.reference}`,
         leaveName: application.leaveType,
         leaveType: 'PAID',
         requireSupportingDocuments: false
@@ -76,7 +76,7 @@ export class EditComponent {
       requestDate: application.requestDate ? this.parseDisplayDate(application.requestDate) : new Date(),
       departmentId: department?.id ?? '',
       employeeId: application.employeeId,
-      leaveCode: policy?.leaveCode ?? '',
+      code: policy?.code ?? '',
       startDate,
       endDate,
       reason: application.reason,
@@ -91,7 +91,7 @@ export class EditComponent {
   }
 
   get selectedLeavePolicy() {
-    return this.leaveTypeOptions.find(policy => policy.leaveCode === this.leaveForm.controls.leaveCode.value);
+    return this.leaveTypeOptions.find(policy => policy.code === this.leaveForm.controls.code.value);
   }
 
   get filteredEmployees(): Employee[] {
@@ -157,10 +157,10 @@ export class EditComponent {
       return;
     }
 
-    const { requestDate, departmentId, employeeId, leaveCode, startDate, endDate, reason, supportingDocuments } = this.leaveForm.getRawValue();
+    const { requestDate, departmentId, employeeId, code, startDate, endDate, reason, supportingDocuments } = this.leaveForm.getRawValue();
     const employee = this.employees.find(item => item.employeeId === employeeId);
     const department = this.departments.find(item => item.id === departmentId);
-    const policy = this.leaveTypeOptions.find(item => item.leaveCode === leaveCode);
+    const policy = this.leaveTypeOptions.find(item => item.code === code);
     if (!requestDate || !startDate || !endDate || endDate < startDate || !employee || !department || !policy || employee.department !== department.name) {
       if (endDate && startDate && endDate < startDate) this.leaveForm.controls.endDate.setErrors({ invalidRange: true });
       if (!employee || !department || employee.department !== department.name) this.leaveForm.controls.employeeId.setErrors({ selectionRequired: true });
@@ -174,7 +174,7 @@ export class EditComponent {
       ...existingApplication,
       employeeId: employee.employeeId,
       requestDate: this.formatDate(requestDate),
-      leaveType: policy.leaveName,
+      leaveType: "policy.name",
       dateRange: startDate.getTime() === endDate.getTime()
         ? this.formatDate(startDate)
         : `${this.formatDate(startDate)} ~ ${this.formatDate(endDate)}`,

@@ -3,7 +3,7 @@ import type { LeavePolicy } from '../../models/leave/leave-policy.model';
 // Demo policy values for the settings screens. Adjust the entitlements to match company policy.
 export const leavePolicies: LeavePolicy[] = [
   {
-    leaveCode: 'AL',
+    code: 'AL',
     leaveName: 'Annual Leave',
     description: 'Paid time off for rest, personal matters and planned time away from work.',
     status: 'ACTIVE',
@@ -28,7 +28,7 @@ export const leavePolicies: LeavePolicy[] = [
     allowEmployeeSpecificSettings: true
   },
   {
-    leaveCode: 'ML',
+    code: 'ML',
     leaveName: 'Medical Leave',
     description: 'Paid leave for illness, injury or medical appointments.',
     status: 'ACTIVE',
@@ -49,7 +49,7 @@ export const leavePolicies: LeavePolicy[] = [
     allowEmployeeSpecificSettings: true
   },
   {
-    leaveCode: 'HL',
+    code: 'HL',
     leaveName: 'Hospitalisation Leave',
     description: 'Paid leave for hospitalisation and recovery from a serious medical condition.',
     status: 'ACTIVE',
@@ -70,7 +70,7 @@ export const leavePolicies: LeavePolicy[] = [
     allowEmployeeSpecificSettings: true
   },
   {
-    leaveCode: 'MAT',
+    code: 'MAT',
     leaveName: 'Maternity Leave',
     description: 'Paid leave for an employee taking time away from work for childbirth and recovery.',
     status: 'ACTIVE',
@@ -91,7 +91,7 @@ export const leavePolicies: LeavePolicy[] = [
     allowEmployeeSpecificSettings: true
   },
   {
-    leaveCode: 'PAT',
+    code: 'PAT',
     leaveName: 'Paternity Leave',
     description: 'Paid leave for an employee supporting their family after the birth of a child.',
     status: 'ACTIVE',
@@ -112,7 +112,7 @@ export const leavePolicies: LeavePolicy[] = [
     allowEmployeeSpecificSettings: true
   },
   {
-    leaveCode: 'UL',
+    code: 'UL',
     leaveName: 'Unpaid Leave',
     description: 'Approved time away from work for which no salary is paid.',
     status: 'ACTIVE',

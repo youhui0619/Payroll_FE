@@ -13,7 +13,7 @@
   <div class="col-sm-7">
     <h3 class="text-dark my-0">Edit Leave Policies</h3>
     @if (leavePolicy; as policy) {
-      <p class="fw-300 text-muted mb-0">Update {{ policy.leaveName }} settings.</p>
+      <p class="fw-300 text-muted mb-0">Update {{ policy.name }} settings.</p>
     }
   </div>
 </div>
@@ -28,8 +28,8 @@
             <div class="col-sm-4 px-2">
               <mat-label class="form-label">Leave Code <span class="text-danger">*</span></mat-label>
               <mat-form-field appearance="outline" class="form-input w-100">
-                <input matInput placeholder="Enter leave code" formControlName="leaveCode">
-                @if (form.controls.leaveCode.hasError('required')) {
+                <input matInput placeholder="Enter leave code" formControlName="code">
+                @if (form.controls.code.hasError('required')) {
                   <mat-error class="text-danger">Leave code is required.</mat-error>
                 }
               </mat-form-field>

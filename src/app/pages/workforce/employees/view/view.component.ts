@@ -57,7 +57,7 @@ export class ViewComponent {
   employee!: Employee;
   readonly workLocations = workLocations;
   readonly leaveYear = new Date().getFullYear();
-  readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.status === 'ACTIVE');
+  readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.active);
   readonly commissionIncentiveSettings = commissionIncentiveSettings;
   employeeLeaveBalances!: ReturnType<typeof getEmployeeLeaveBalances>;
   claimRequests: ExpenseClaimRecord[] = [];
@@ -257,8 +257,8 @@ export class ViewComponent {
   }
 
   private policyBalance(policy: LeavePolicy): { entitled: number; balance: number } | undefined {
-    if (policy.leaveCode === 'AL') return this.employeeLeaveBalances.annual;
-    if (policy.leaveCode === 'ML') return this.employeeLeaveBalances.medical;
+    if (policy.code === 'AL') return this.employeeLeaveBalances.annual;
+    if (policy.code === 'ML') return this.employeeLeaveBalances.medical;
     return undefined;
   }
 

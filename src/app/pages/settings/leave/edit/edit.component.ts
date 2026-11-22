@@ -26,7 +26,7 @@ export class EditComponent implements OnInit {
   leavePolicy: LeavePolicy | undefined;
 
   form = new FormGroup({
-    leaveCode: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    code: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     leaveName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     description: new FormControl('', { nonNullable: true }),
     status: new FormControl<'ACTIVE' | 'INACTIVE'>('ACTIVE', { nonNullable: true }),
@@ -67,7 +67,7 @@ export class EditComponent implements OnInit {
   }
   
   getLeavePolicy(){
-    this.leavePolicy = leavePolicies.find(item => item.leaveCode === this.route.snapshot.paramMap.get('leaveCode'));
+    this.leavePolicy = leavePolicies.find(item => item.code === this.route.snapshot.paramMap.get('code'));
     console.log("this.claimType", this.leavePolicy)
     if(this.leavePolicy){
       this.form.patchValue(this.leavePolicy)
