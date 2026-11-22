@@ -62,7 +62,7 @@ export class WorkLocationApiService {
   }
 
   updateWorkLocationStatus(id: any): Observable<any> {
-    return this.http.post(environment.apiURL + '/work-locations/'+id+'/deactivate', {
+    return this.http.post(environment.apiURL + '/work-locations/'+id+'/deactivate', null, {
       headers: this.getHeaders(),
     });
   }

@@ -1,13 +1,12 @@
-export type PublicHolidayScope = 'National' | 'State';
-export type PublicHolidayStatus = 'ACTIVE' | 'INACTIVE';
+export type PublicHolidayScope = 'NATIONAL' | 'STATE';
 
 export interface PublicHoliday {
   id: string;
   name: string;
   description: string;
-  startDate: string;
-  endDate: string;
   scope: PublicHolidayScope;
   regions: string[];
-  status: PublicHolidayStatus;
+  startDate: Date | null;
+  endDate: Date| null;
+  active: boolean;
 }

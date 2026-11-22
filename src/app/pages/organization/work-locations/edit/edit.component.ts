@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
@@ -6,6 +6,7 @@ import type { WorkLocation } from '../../../../models/workforce/work-location.mo
 import { ToastService } from '../../../../shared/components/toast/toast.service';
 import { WorkLocationApiService } from '../../../../services/api/work-location.service';
 import { AlertService } from '../../../../shared/components/alert/alert.service';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-work-location-edit',
@@ -22,6 +23,8 @@ export class EditComponent implements OnInit {
     private router: Router,
     private alertService: AlertService,
     private apiService: WorkLocationApiService,
+    private cdr: ChangeDetectorRef
+
   ) {}
 
   @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
@@ -127,18 +130,25 @@ export class EditComponent implements OnInit {
     });
   }
 
-  deactivate(id: any){
+  updateStatus(workLocation: any){
+    const isActive = workLocation.active
+    const action = isActive ? 'deactivated' : 'activated';
+    const actionLabel = isActive ? 'Deactivate' : 'Activate';
+
+
      this.alertService.show({
-      title: 'Payroll Report',
-      content: 'The payroll report is ready to review.',
+      title: `${actionLabel} Work Location`,
+      content: `Are you sure you want to ${actionLabel.toLowerCase()} this work location?`,
       approveLabel: 'Continue',
       rejectLabel: 'Cancel',
       onApprove: () => {
-        this.apiService.updateWorkLocationStatus(id).subscribe({
+        this.apiService.updateWorkLocationStatus(workLocation.id).subscribe({
           next: (response) => {
+            this.workLocation = response.data;
+            this.cdr.markForCheck();
            this.toastService.show({
               title: "Success",
-              message: "Work location has been deactivated.",
+              message: `Work location has been ${action}.`,
               icon: 'success'
             });
             setTimeout(()=>{

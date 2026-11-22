@@ -11,7 +11,6 @@ import themePlugin from "@fullcalendar/angular/themes/monarch";
 import { getEmployee } from '../../../../data/workforce/employees.data';
 import { workLocations } from '../../../../data/workforce/work-locations.data';
 import { attendanceRecords } from '../../../../data/attendance/attendance.data';
-import { getPublicHolidaysForLocation } from '../../../../data/settings/public-holidays.data';
 import { getEmployeeLeaveBalances } from '../../../../data/leave/leave-balances.data';
 import { leavePolicies } from '../../../../data/leave/leave-policies.data';
 import { claims } from '../../../../data/claims/claims.data';
@@ -194,18 +193,19 @@ export class ViewComponent {
       };
     });
     const workLocation = this.selectedWorkLocation;
-    this.publicHolidayEvents = getPublicHolidaysForLocation(`${this.employee.address} ${workLocation?.city ?? ''} ${workLocation?.state ?? ''}`).map(holiday => ({
-      id: holiday.id,
-      title: holiday.name,
-      start: holiday.startDate,
-      end: dayAfter(holiday.endDate),
-      allDay: true,
-      classNames: ['public-holiday-event', 'bg-light-info', 'text-info'],
-      backgroundColor: 'var(--light-info)',
-      borderColor: 'var(--light-info)',
-      textColor: 'var(--info)',
-      extendedProps: { eventType: 'public-holiday', holidayName: holiday.name }
-    }));
+    this.publicHolidayEvents = []
+    // getPublicHolidaysForLocation(`${this.employee.address} ${workLocation?.city ?? ''} ${workLocation?.state ?? ''}`).map(holiday => ({
+    //   id: holiday.id,
+    //   title: holiday.name,
+    //   start: formatDate(holiday.startDate),
+    //   end: formatDate(holiday.endDate),
+    //   allDay: true,
+    //   classNames: ['public-holiday-event', 'bg-light-info', 'text-info'],
+    //   backgroundColor: 'var(--light-info)',
+    //   borderColor: 'var(--light-info)',
+    //   textColor: 'var(--info)',
+    //   extendedProps: { eventType: 'public-holiday', holidayName: holiday.name }
+    // }));
     this.selectedLeave = null;
     this.selectedClaim = null;
     this.calendarOptions = {

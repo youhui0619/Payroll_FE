@@ -89,10 +89,19 @@ export class ListComponent implements OnInit, AfterViewInit {
     this.getPublicHolidays();
   }
   get years(): number[] {
+    const getYear = (value: Date | string | null): number => {
+      if (!value) return NaN;
+      return (value instanceof Date ? value : new Date(value)).getFullYear();
+    };
+
     return [...new Set(
       this.publicHolidays.data.flatMap(holiday => {
-        const startYear = Number(holiday.startDate.slice(0, 4));
-        const endYear = Number(holiday.endDate.slice(0, 4));
+        const startYear = getYear(holiday.startDate);
+        const endYear = getYear(holiday.endDate ?? holiday.startDate);
+
+        if (!Number.isFinite(startYear) || !Number.isFinite(endYear) || endYear < startYear) {
+          return [];
+        }
 
         return Array.from(
           { length: endYear - startYear + 1 },
@@ -108,15 +117,15 @@ export class ListComponent implements OnInit, AfterViewInit {
   }
 
   filteredCountByStatus(status: any): number {
-    return this.publicHolidays.data.filter(publicHoliday => publicHoliday.status === status).length;
+    return this.publicHolidays.data.filter(publicHoliday => publicHoliday.active === true).length;
   }
 
   getHolidayRegionTitle(holiday: PublicHoliday): string {
-    return holiday.scope === 'National' ? 'All States' : holiday.regions.join(', ');
+    return holiday.scope === 'NATIONAL' ? 'All States' : holiday.regions.join(', ');
   }
 
   getHolidayRegionLabel(holiday: PublicHoliday): string {
-    return holiday.scope === 'National'
+    return holiday.scope === 'NATIONAL'
       ? 'All States'
       : `${holiday.regions.length} states`;
   }

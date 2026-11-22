@@ -26,7 +26,6 @@ export class CreateComponent {
 
   form = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    status: new FormControl('ACTIVE', { nonNullable: true, validators: [Validators.required] }),
     description: new FormControl('', { nonNullable: true }),
     scope: new FormControl<'NATIONAL' | 'STATE'>('NATIONAL', { nonNullable: true }),
     regions: new FormControl<string[]>([], { nonNullable: true }),
@@ -37,7 +36,7 @@ export class CreateComponent {
   submitting = false;
 
   goBack() { 
-    return this.router.navigate(['/settings/public-holidays/overview'])
+    return this.router.navigate(['/settings/public-holidays/list'])
   }
 
   get selectedScope(): 'NATIONAL' | 'STATE' {
@@ -91,6 +90,7 @@ export class CreateComponent {
     const data = {
       ...value,
       scope: 'State',
+      active: true,
       startDate: this.formatDate(value.startDate),
       endDate: this.formatDate(value.endDate)
     };

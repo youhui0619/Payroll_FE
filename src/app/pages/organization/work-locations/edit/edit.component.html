@@ -17,9 +17,18 @@
   </div>
 
   <div class="col-sm-5 d-flex align-items-center justify-content-end">
-    <button mat-flat-button color="danger" class="ms-2" (click)="deactivate(workLocation.id)">
-      <tabler-icon icon="circle-dashed" [size]="16"></tabler-icon>
-      Deactivate
+    <button
+      mat-flat-button
+      [attr.color]="workLocation.active ? 'danger' : 'primary'"
+      class="ms-2"
+      (click)="updateStatus(workLocation)"
+    >
+      <tabler-icon
+        [icon]="workLocation.active ? 'x' : 'check'"
+        [size]="16">
+      </tabler-icon>
+
+      {{ workLocation.active ? 'Deactivate' : 'Activate' }}
     </button>
   </div>
 </div>

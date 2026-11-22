@@ -62,7 +62,7 @@ export class PublicHolidayApiService {
   }
 
   updatePublicHolidayStatus(id: any): Observable<any> {
-    return this.http.post(environment.apiURL + '/public-holidays/'+id+'/deactivate', {
+    return this.http.post(environment.apiURL + '/public-holidays/'+id+'/deactivate', null, {
       headers: this.getHeaders(),
     });
   }

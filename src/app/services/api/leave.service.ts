@@ -54,7 +54,7 @@ export class LeaveApiService {
   }
 
   updateLeavePoliciesStatus(id: any): Observable<any> {
-    return this.http.post(environment.apiURL + '/leave/policies/' +id+ '/deactivate', {
+    return this.http.post(environment.apiURL + '/leave/policies/' +id+ '/deactivate', null, {
       headers: this.getHeaders()
     });
   }

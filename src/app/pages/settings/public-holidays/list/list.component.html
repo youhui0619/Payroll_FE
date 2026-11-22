@@ -142,7 +142,7 @@
                   <td class="text-muted">{{ holiday.startDate === holiday.endDate ? (holiday.startDate | date: 'dd/MM/yyyy') : `${(holiday.startDate | date: 'dd/MM/yyyy')} ~ ${(holiday.endDate | date: 'dd/MM/yyyy')}` }}</td>
                   <td class="text-muted">{{ holiday.startDate === holiday.endDate ? (holiday.startDate | date: 'EEE') : `${(holiday.startDate | date: 'EEE')} ~ ${(holiday.endDate | date: 'EEE')}` }}</td>
                   <td class="text-muted">
-                    <span class="chip" [ngClass]="holiday.scope === 'National' ? 'text-info bg-light-info' : 'text-secondary bg-light-secondary'">{{ holiday.scope }}</span>
+                    <span class="chip" [ngClass]="holiday.scope === 'NATIONAL' ? 'text-info bg-light-info' : 'text-secondary bg-light-secondary'">{{ holiday.scope | titlecase }}</span>
                   </td>
                   <td class="text-muted">
                      {{ holiday.regions.slice(0, 2).join(', ') }}
@@ -152,7 +152,7 @@
                       
                   </td>
                   <td class="text-muted">
-                    <span class="chip" [ngClass]="holiday.status === 'ACTIVE' ? 'text-primary bg-light-primary' : 'text-muted bg-light-secondary'">{{ holiday.status === 'ACTIVE' ? 'Active' : 'Inactive' }}</span>
+                    <span class="chip" [ngClass]="holiday.active ? 'text-primary bg-light-primary' : 'text-muted bg-light-secondary'">{{ holiday.active ? 'Active' : 'Inactive' }}</span>
                   </td>
                   <td>
                     <button class="text-muted action-btn" mat-icon-button [routerLink]="['/settings/public-holidays/edit', holiday.id]">

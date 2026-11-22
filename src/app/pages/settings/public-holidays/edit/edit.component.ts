@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators, FormGroupDirective } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,6 +6,7 @@ import { stateList } from '../../../../data/other/other.data';
 import { ToastService } from '../../../../shared/components/toast/toast.service';
 import { PublicHolidayApiService } from '../../../../services/api/public-holiday.service';
 import { PublicHoliday } from '../../../../models/settings/public-holiday.model';
+import { AlertService } from '../../../../shared/components/alert/alert.service';
 @Component({
   selector: 'app-edit',
   standalone: true,
@@ -19,7 +20,9 @@ export class EditComponent {
     private toastService: ToastService,
     private route: ActivatedRoute,
     private router: Router,
+    private alertService: AlertService,
     private apiService: PublicHolidayApiService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
@@ -29,7 +32,6 @@ export class EditComponent {
   id: any = '';
   form = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    status: new FormControl('ACTIVE', { nonNullable: true, validators: [Validators.required] }),
     description: new FormControl('', { nonNullable: true }),
     scope: new FormControl<'NATIONAL' | 'STATE'>('NATIONAL', { nonNullable: true }),
     regions: new FormControl<string[]>([], { nonNullable: true }),
@@ -58,7 +60,7 @@ export class EditComponent {
         this.publicHoliday = response.data;
         console.log("publicHoliday:", this.publicHoliday);
         if(this.publicHoliday){
-          // this.form.patchValue(this.publicHoliday)
+          this.form.patchValue(this.publicHoliday)
         }
       },
       error: (error) => {
@@ -72,7 +74,7 @@ export class EditComponent {
   }
 
   goBack() { 
-    return this.router.navigate(['/settings/public-holidays/overview'])
+    return this.router.navigate(['/settings/public-holidays/list'])
   }
 
   get selectedScope(): 'NATIONAL' | 'STATE' {
@@ -168,6 +170,46 @@ export class EditComponent {
         }
         this.submitting = false;
       }
+    });
+  }
+
+  updateStatus(publicHoliday: any){
+    const isActive = publicHoliday.active
+    const action = isActive ? 'deactivated' : 'activated';
+    const actionLabel = isActive ? 'Deactivate' : 'Activate';
+
+
+     this.alertService.show({
+      title: `${actionLabel} Public Holiday`,
+      content: `Are you sure you want to ${actionLabel.toLowerCase()} this public holiday?`,
+      approveLabel: 'Continue',
+      rejectLabel: 'Cancel',
+      onApprove: () => {
+        this.apiService.updatePublicHolidayStatus(publicHoliday.id).subscribe({
+          next: (response) => {
+            this.publicHoliday = response.data;
+            this.cdr.markForCheck();
+           this.toastService.show({
+              title: "Success",
+              message: `Public holiday has been ${action}.`,
+              icon: 'success'
+            });
+            setTimeout(()=>{
+              this.alertService.close()
+            }, 1000)
+          },
+          error: (error) => {
+            this.toastService.show({
+              title: error.error.code,
+              message: error.error.message,
+              icon: 'danger'
+            });
+          },
+        });
+       },
+      onReject: () => {
+          this.alertService.close()
+       }
     });
   }
 }

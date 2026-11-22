@@ -27,7 +27,7 @@
               </div>
             </div>
             <div>
-              <span class="ms-2 chip" [ngClass]="record.status === 'ACTIVE' ? 'bg-light-success text-success' : 'bg-light-secondary text-secondary'">{{ record.status === 'ACTIVE' ? 'Active' : 'Inactive' }}</span>
+              <span class="ms-2 chip" [ngClass]="record.active ? 'bg-light-success text-success' : 'bg-light-secondary text-secondary'">{{ record.active ? 'Active' : 'Inactive' }}</span>
               <span class="ms-2 chip bg-light-info text-info">{{ record.scope }}</span>
             </div>
           </div>

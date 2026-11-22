@@ -10,7 +10,6 @@ import { workLocations } from '../../../../data/workforce/work-locations.data';
 import { overtimeRequests } from '../../../../data/overtime/overtime-requests.data';
 import { attendanceRecords } from '../../../../data/attendance/attendance.data';
 import { dailyAttendanceRecords } from '../../../../data/attendance/daily-attendance.data';
-import { getPublicHolidaysForDate } from '../../../../data/settings/public-holidays.data';
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
 import { OvertimeDetailDialogComponent } from '../../../../shared/dialog/overtime-detail-dialog/overtime-detail-dialog.component';
 import type { OvertimeRequestRecord } from '../../../../models/overtime/overtime.model';
@@ -103,7 +102,7 @@ export class OverviewComponent implements AfterViewInit, OnInit {
         overtime: attendance?.overtimeMinutes
           ? this.durationLabel(attendance.overtimeMinutes)
           : overtime ? this.durationLabel(overtime.netMinutes) : '—',
-        remark: attendance?.remark ?? leave?.leaveType ?? holiday?.name ?? '—'
+        remark: attendance?.remark ?? leave?.leaveType ?? '—'
       };
     });
   }
@@ -139,8 +138,9 @@ export class OverviewComponent implements AfterViewInit, OnInit {
   get presentTodayCount(): number {
     return this.filteredEmployees.filter(employee => {
       const hasApprovedLeave = this.hasApprovedLeave(employee.employeeId, this.todayDateKey);
-      const isPublicHoliday = !!this.getPublicHoliday(employee, this.todayDateKey);
-      return !hasApprovedLeave && !isPublicHoliday;
+      // const isPublicHoliday = !!this.getPublicHoliday(employee, this.todayDateKey);
+      return !hasApprovedLeave 
+      // && !isPublicHoliday;
     }).length;
   }
 
@@ -235,7 +235,8 @@ export class OverviewComponent implements AfterViewInit, OnInit {
 
   getPublicHoliday(employee: Employee, dateKey: string) {
     const workLocation = workLocations.find(location => location.id === employee.workLocationId);
-    return getPublicHolidaysForDate(dateKey, `${employee.address} ${workLocation?.city ?? ''} ${workLocation?.state ?? ''}`)[0];
+    return;
+    // return getPublicHolidaysForDate(dateKey, `${employee.address} ${workLocation?.city ?? ''} ${workLocation?.state ?? ''}`)[0];
   }
 
   getOvertimeRequest(employeeId: string, dateKey: string) {
@@ -250,7 +251,7 @@ export class OverviewComponent implements AfterViewInit, OnInit {
     const leave = this.getLeave(employee.employeeId, day.dateKey);
     if (leave) return leave.typeClass;
     if (this.getOvertimeRequest(employee.employeeId, day.dateKey)) return 'overtime';
-    if (this.getPublicHoliday(employee, day.dateKey)) return 'public-holiday';
+    // if (this.getPublicHoliday(employee, day.dateKey)) return 'public-holiday';
     return this.isFutureDate(day.dateKey) ? 'future' : '';
   }
 
@@ -258,22 +259,23 @@ export class OverviewComponent implements AfterViewInit, OnInit {
     const leave = this.getLeave(employee.employeeId, day.dateKey);
     if (leave) return leave.code;
     if (this.getOvertimeRequest(employee.employeeId, day.dateKey)) return 'OT';
-    if (this.getPublicHoliday(employee, day.dateKey)) return 'PH';
+    // if (this.getPublicHoliday(employee, day.dateKey)) return 'PH';
     return '';
   }
 
-  attendanceBadgeTitle(employee: Employee, day: CalendarDay): string {
+  attendanceBadgeTitle(employee: Employee, day: CalendarDay) {
     const leave = this.getLeave(employee.employeeId, day.dateKey);
     if (leave) return leave.leaveType;
     const overtime = this.getOvertimeRequest(employee.employeeId, day.dateKey);
     if (overtime) return `Overtime · ${overtime.status}`;
-    return this.getPublicHoliday(employee, day.dateKey)?.name ?? 'Attendance actions';
+    return;
+    // return this.getPublicHoliday(employee, day.dateKey)?.name ?? 'Attendance actions';
   }
 
   hasAttendanceRecord(employee: Employee, day: CalendarDay): boolean {
     return !!this.getLeave(employee.employeeId, day.dateKey)
       || !!this.getOvertimeRequest(employee.employeeId, day.dateKey)
-      || !!this.getPublicHoliday(employee, day.dateKey);
+      // || !!this.getPublicHoliday(employee, day.dateKey);
   }
 
   onAttendanceBadgeClick(employee: Employee, day: CalendarDay): void {

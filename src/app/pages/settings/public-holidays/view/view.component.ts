@@ -30,7 +30,7 @@ export class ViewComponent {
 
   get holidayRegions(): string {
     if (!this.holiday) return '';
-    return this.holiday.scope === 'National'
+    return this.holiday.scope === 'NATIONAL'
       ? 'All states'
       : this.holiday.regions.join(', ');
   }

@@ -4,15 +4,31 @@
       <button mat-icon-button type="button" class="d-flex justify-content-center w-auto mb-0">
         <tabler-icon icon="chevron-left" class="text-dark d-flex" [size]="16"></tabler-icon>
       </button>
-      <p class="text-muted mb-0">Back to leave settings</p>
+      <p class="text-muted mb-0">Back to public holidays</p>
     </div>
   </div>
 </div>
-
+@if (publicHoliday) {
 <div class="row justify-content-between mb-4">
   <div class="col-sm-7">
-    <h3 class="text-dark my-0">Create Leave Policies</h3>
+    <h3 class="text-dark my-0">Update Public Holiday</h3>
     <p class="fw-300 text-muted mb-0">Add an expense category employees can select when submitting a claim.</p>
+  </div>
+
+  <div class="col-sm-5 d-flex align-items-center justify-content-end">
+    <button
+      mat-flat-button
+      [attr.color]="publicHoliday.active ? 'danger' : 'primary'"
+      class="ms-2"
+      (click)="updateStatus(publicHoliday)"
+    >
+      <tabler-icon
+        [icon]="publicHoliday.active ? 'x' : 'check'"
+        [size]="16">
+      </tabler-icon>
+
+      {{ publicHoliday.active ? 'Deactivate' : 'Activate' }}
+    </button>
   </div>
 </div>
 
@@ -28,17 +44,6 @@
             @if (form.controls.name.hasError('required')) {
               <mat-error class="text-danger">Holiday name is required.</mat-error>
             }
-          </mat-form-field>
-        </div>
-        <div class="col-sm-4 px-2">
-          <mat-label class="form-label">Status
-            <span class="text-danger">*</span>
-          </mat-label>
-          <mat-form-field appearance="outline" class="form-input w-100">
-            <mat-select placeholder="Select status" formControlName="status">
-              <mat-option value="ACTIVE">Active</mat-option>
-              <mat-option value="INACTIVE">Inactive</mat-option>
-            </mat-select>
           </mat-form-field>
         </div>
         <div class="col-sm-12 px-2">
@@ -137,3 +142,4 @@
     <button mat-flat-button color="primary" [disabled]="!form.valid || submitting"><tabler-icon icon="check" [size]="16"></tabler-icon>{{ submitting ? 'Submitting...' : 'Submit' }}</button>
   </div>
 </form>
+}
