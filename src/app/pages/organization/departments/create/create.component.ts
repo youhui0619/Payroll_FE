@@ -33,7 +33,7 @@ export class CreateComponent {
   submitting: boolean = false;
 
   goBack() {
-    return this.router.navigate(['/organization/work-locations/overview'])
+    return this.router.navigate(['/organization/departments/overview'])
   }
 
   formatDate(date: Date | string | null): string | null {

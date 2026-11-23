@@ -12,14 +12,24 @@
 @if (position) {
 <div class="row justify-content-between mb-4">
   <div class="col-sm-7">
-    <h3 class="text-dark my-0">Edit Pisition</h3>
+    <h3 class="text-dark my-0">Edit Position</h3>
     <p class="text-muted mb-0">Update the details for {{ position.title || 'this position' }}.</p>
   </div>
 
+  
   <div class="col-sm-5 d-flex align-items-center justify-content-end">
-    <button mat-flat-button color="danger" class="ms-2" (click)="deactivate(position.id)">
-      <tabler-icon icon="circle-dashed" [size]="16"></tabler-icon>
-      Deactivate
+    <button
+      mat-flat-button
+      [attr.color]="position.active ? 'danger' : 'primary'"
+      class="ms-2"
+      (click)="updateStatus(position)"
+    >
+      <tabler-icon
+        [icon]="position.active ? 'x' : 'check'"
+        [size]="16">
+      </tabler-icon>
+
+      {{ position.active ? 'Deactivate' : 'Activate' }}
     </button>
   </div>
 </div>
@@ -82,7 +92,7 @@
           <mat-label class="form-label">Department <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <mat-select placeholder="Select department" formControlName="departmentId">
-              @for (department of departments; track department.id) {
+              @for (department of departmentList; track department.id) {
                 <mat-option [value]="department.id">{{ department.name }}</mat-option>
               }
             </mat-select>

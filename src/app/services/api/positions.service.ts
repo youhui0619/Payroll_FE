@@ -49,7 +49,7 @@ export class PositionsApiService {
   }
 
   getPosition(id: any): Observable<any> {
-    return this.http.post(environment.apiURL + '/positions/'+id, {
+    return this.http.get(environment.apiURL + '/positions/'+id, {
       headers: this.getHeaders(),
     });
   }
@@ -61,7 +61,7 @@ export class PositionsApiService {
   }
 
   updatePositionStatus(id: any): Observable<any> {
-    return this.http.post(environment.apiURL + '/positions/' +id+ '/deactivate' ,  {
+    return this.http.post(environment.apiURL + '/positions/' +id+ '/deactivate' ,null , {
       headers: this.getHeaders(),
     });
   }

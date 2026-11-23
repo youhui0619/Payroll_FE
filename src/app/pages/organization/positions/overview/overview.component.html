@@ -25,7 +25,7 @@
         <div class="d-flex flex-column-reverse flex-sm-row align-items-start justify-content-between">
           <div class="summary-info">
             <p class="fs-12 text-muted">Total Positions</p>
-            <h3 class="mb-0">{{ positions.length }}</h3>
+            <h3 class="mb-0">{{ positions.data.length }}</h3>
           </div>
           <div class="text-primary bg-light-primary text-end icon mb-2">
             <tabler-icon icon="users"></tabler-icon>
@@ -41,7 +41,7 @@
         <div class="d-flex flex-column-reverse flex-sm-row align-items-start justify-content-between">
           <div class="summary-info">
             <p class="fs-12 text-muted">Active</p>
-            <h3 class="mb-0">{{ activePositionCount }}</h3>
+            <!-- <h3 class="mb-0">{{ activePositionCount }}</h3> -->
           </div>
           <div class="text-primary bg-light-primary text-end icon mb-2">
             <tabler-icon icon="user-check"></tabler-icon>
@@ -57,7 +57,7 @@
         <div class="d-flex flex-column-reverse flex-sm-row align-items-start justify-content-between">
           <div class="summary-info">
             <p class="fs-12 text-muted">Inactive</p>
-            <h3 class="mb-0">{{ inactivePositionCount }}</h3>
+            <!-- <h3 class="mb-0">{{ inactivePositionCount }}</h3> -->
           </div>
           <div class="text-primary bg-light-primary text-end icon mb-2">
             <tabler-icon icon="user-off"></tabler-icon>
@@ -75,7 +75,7 @@
       <mat-form-field appearance="outline"
         class="form-input w-100"
         subscriptSizing="dynamic">
-        <input type="text" matInput placeholder="Search...">
+        <input type="text" matInput placeholder="Search..." [ngModel]="filter.search" (ngModelChange)="applyFilter('search', $event)">
         <span matTextPrefix class="text-muted me-2">
             <tabler-icon icon="search" [size]="16"></tabler-icon>
         </span>
@@ -84,8 +84,8 @@
 
     <div class="col-12 col-sm-6 col-md-3 col-lg-3">
       <mat-form-field appearance="outline" class="form-input w-100" subscriptSizing="dynamic">
-        <mat-select placeholder="Select department" multiple [(ngModel)]="selectedDepartmentIds">
-          @for (department of departments; track department) {
+        <mat-select placeholder="Select department" [ngModel]="filter.departmentId" (ngModelChange)="applyFilter('departmentId', $event)">
+          @for (department of departmentList; track department) {
             <mat-option [value]="department.id">{{ department.name }}</mat-option>
           }
         </mat-select>
@@ -94,7 +94,7 @@
 
     <div class="col-12 col-sm-6 col-md-3 col-lg-3">
       <mat-form-field appearance="outline" class="form-input w-100" subscriptSizing="dynamic">
-        <mat-select placeholder="Select job level" multiple [(ngModel)]="selectedJobLevels">
+        <mat-select placeholder="Select job level"  [ngModel]="filter.jobLevel" (ngModelChange)="applyFilter('jobLevel', $event)">
           @for (level of jobLevels; track level) {
             <mat-option [value]="level">{{ jobLevelLabel(level) }}</mat-option>
           }
@@ -109,13 +109,13 @@
       <div class="card-header mb-3">
         <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
           <h6 class="fs-14 fw-400 text-muted my-0">
-            <span class="fw-550 text-primary">All ({{ filteredPositions.length }})</span>
-            | Active ({{ activePositionCount }}) 
-            | Inactive ({{ inactivePositionCount }}) 
+            <span class="fw-550 text-primary">All ({{ positions.data.length }})</span>
+            | Active ({{ filteredCountByStatus(true) }})
+            | Inactive ({{ filteredCountByStatus(false) }})
           </h6>
           <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center flex-lg-nowrap gap-2">
             <div class="d-flex flex-wrap flex-lg-nowrap gap-2 ms-auto">
-                <button mat-flat-button color="primary-outline" class="btn-sm">
+                <button mat-flat-button color="primary-outline" class="btn-sm" (click)="resetFilter()">
                     <tabler-icon icon="x" [size]="16"></tabler-icon>
                     Clear
                 </button>
@@ -136,7 +136,7 @@
           @if (loading) {
             <app-skeleton-loader [rows]="6" [columns]="8"></app-skeleton-loader>
           } @else {
-            <table class="table no-wrap w-100 text-left">
+            <table class="table no-wrap w-100 text-left"  mat-table matSort (matSortChange)="onSortChange($event)">
             <thead>
               <tr>
                 <th class="text-dark text-nowrap">Position</th>
@@ -151,30 +151,40 @@
             </thead>
             <tbody>
 
-              @for (position of filteredPositions; track position) {
+              @for (position of positions.data; track position) {
                 <tr>
                   <td>
                     <p class="text-dark my-0">{{ position.title }}</p>
                     <p class="text-muted fw-300 fs-10 my-0">{{ position.code }}</p>
                   </td>
-                  <td class="text-muted">{{ departmentName(position.departmentId) }}</td>
+                   <td>
+                    <p class="text-dark my-0">{{ position.department?.name ?? '—' }}</p>
+                    <p class="text-muted fw-300 fs-10 my-0">{{ position.department?.code ?? '—' }}</p>
+                  </td>
                   <td class="text-muted">{{ jobLevelLabel(position.jobLevel) }}</td>
                   <td class="text-muted">{{ position.reportsTo || '-' }}</td>
-                  <td class="text-muted text-center">{{ employeeCount(position) }}</td>
-                  <td class="text-muted">{{ position.effectiveFrom | regionalDate:'dd/MM/yyyy' }}</td>
+                  <td class="text-muted text-center">{{ position.employeeCount ?? 0 }}</td>
+                  <td class="text-muted">{{ position.effectiveFrom | date:'dd/MM/yyyy' }}</td>
                   <td>
-                    <span class="chip" [ngClass]="isActive(position) ? 'bg-light-primary text-primary' : 'bg-light-secondary text-secondary'">
-                      {{ isActive(position) ? 'Active' : 'Inactive' }}
+                    <span
+                      class="chip"
+                      [ngClass]="position.active
+                        ? 'bg-light-primary text-primary'
+                        : 'bg-light-danger text-danger'">
+                      {{ position.active ? 'Active' : 'Inactive' }}
                     </span>
                   </td>
                   <td>
-                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/organization/positions/view', position.id]" aria-label="View position">
+                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/organization/positions/view', position.id]">
                       <tabler-icon icon="eye"></tabler-icon>
+                    </button>
+                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/organization/positions/edit', position.id]">
+                      <tabler-icon icon="edit"></tabler-icon>
                     </button>
                   </td>
                 </tr>
               }
-              @if (filteredPositions.length === 0) {
+              @empty {
                 <tr>
                   <td colspan="8" class="text-muted text-center py-4">No positions match your search or filters.</td>
                 </tr>
@@ -182,6 +192,13 @@
             </tbody>
           </table>
           }
+          <!-- Pagination -->
+          <mat-paginator
+            [length]="meta.total" 
+            [pageSize]="meta.pageSize" 
+            [pageSizeOptions]="[5, 10 ,20]"
+            showFirstLastButtons>
+          </mat-paginator>
         </div>
       </div>
     </div>

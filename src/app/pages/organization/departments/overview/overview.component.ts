@@ -86,12 +86,12 @@ export class OverviewComponent implements OnInit, AfterViewInit {
     this.getDepartments();
   }
   
-  applyFilter(event: any) {
-    const filterValue = event;
-    this.filter.search = filterValue;
-    console.log("this.filter.search", this.filter.search)
-    this.getDepartments(); 
+  
+  applyFilter(field: 'search' | 'type' | 'state', value: string) {
+    this.filter[field] = value;
+    this.getDepartments();
   }
+
   departmentName(parentDepartmentId: string | null): string {
     return this.departments.data.find(department => department.id === parentDepartmentId)?.name ?? '-';
   }

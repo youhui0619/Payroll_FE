@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { ToastService } from '../../../../shared/components/toast/toast.service';
@@ -12,21 +12,24 @@ import { departments as departmentData } from '../../../../data/workforce/depart
 @Component({
   selector: 'app-edit',
   imports: [...MaterialImports, ReactiveFormsModule],
-  providers: [...MaterialProviders, DepartmentsApiService],
+  providers: [...MaterialProviders, PositionsApiService, DepartmentsApiService],
   templateUrl: './edit.component.html',
   styleUrl: './edit.component.scss'
 })
 export class EditComponent {
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private apiService: PositionsApiService,
+    private positionApiService: PositionsApiService,
+    private departmentApiService: DepartmentsApiService,
     private toastService: ToastService,
-      private alertService: AlertService,
+    private alertService: AlertService,
+    private cdr: ChangeDetectorRef
   ) {}
   
   @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
-  readonly departments = departmentData;
+  departmentList: Department[] = [];
   position: Position | null = null;
   id: any = '';
   form = new FormGroup({
@@ -50,17 +53,35 @@ export class EditComponent {
         console.error("🚨 No ID found in route!");
       }
     });  
+    this.getDepartmentList()
   }
 
   getPosition(id: any){
     console.log(id)
-    this.apiService.getPosition(id).subscribe({
+    this.positionApiService.getPosition(id).subscribe({
       next: (response) => {
         this.position = response.data;
         console.log("position:", this.position);
         if(this.position){
           this.form.patchValue(this.position)
         }
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
+    });
+  }
+
+  getDepartmentList(){
+    this.departmentApiService.getAllDepartments(null).subscribe({
+      next: (response) => {
+        const departments: Department[] = response?.data ?? [];
+        this.departmentList = departments.filter(department => department.active);
+        console.log("departmentList:", this.departmentList);
       },
       error: (error) => {
         this.toastService.show({
@@ -104,20 +125,20 @@ export class EditComponent {
     }
     console.log("Data", data);
 
-    this.apiService.updatePosition(this.id, data).subscribe({
+    this.positionApiService.updatePosition(this.id, data).subscribe({
       next: (response) => {
         console.log("response", response);
 
         this.toastService.show({
           title: "Success",
-          message: "Department has been created.",
+          message: "Position has been updated.",
           icon: 'success'
         });
 
         this.formDirective.resetForm();
         this.submitting = false;
         setTimeout(() => {
-          this.router.navigate(['/organization/departments/overview']);
+          this.router.navigate(['/organization/positions/overview']);
         }, 1000);
       },
       error: (error) => {
@@ -143,20 +164,25 @@ export class EditComponent {
       }
     });
   }
+  
+  updateStatus(position: any){
+    const isActive = position.active
+    const action = isActive ? 'deactivated' : 'activated';
+    const actionLabel = isActive ? 'Deactivate' : 'Activate';
 
-
-  deactivate(id: any){
-     this.alertService.show({
-      title: 'Payroll Report',
-      content: 'The payroll report is ready to review.',
+    this.alertService.show({
+      title: `${actionLabel} Position`,
+      content: `Are you sure you want to ${actionLabel.toLowerCase()} this work location?`,
       approveLabel: 'Continue',
       rejectLabel: 'Cancel',
       onApprove: () => {
-        this.apiService.updatePositionStatus(id).subscribe({
+        this.positionApiService.updatePositionStatus(position.id).subscribe({
           next: (response) => {
+            this.position = response.data;
+            this.cdr.markForCheck();
            this.toastService.show({
               title: "Success",
-              message: "Department has been deactivated.",
+              message: `Position has been ${action}.`,
               icon: 'success'
             });
             setTimeout(()=>{

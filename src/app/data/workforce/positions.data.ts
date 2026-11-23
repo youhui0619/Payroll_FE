@@ -10,7 +10,8 @@ export const positions: Position[] = [
     departmentId: 'DEP-0001',
     reportsTo: null,
     effectiveFrom: '2020-01-01',
-    effectiveTo: null
+    effectiveTo: null,
+    active: true
   },
   {
     id: 'POS-0002',
@@ -21,7 +22,8 @@ export const positions: Position[] = [
     departmentId: 'DEP-0002',
     reportsTo: 'Corporate Director',
     effectiveFrom: '2020-01-01',
-    effectiveTo: null
+    effectiveTo: null,
+    active: true
   },
   {
     id: 'POS-0003',
@@ -32,7 +34,8 @@ export const positions: Position[] = [
     departmentId: 'DEP-0003',
     reportsTo: 'Corporate Director',
     effectiveFrom: '2020-01-01',
-    effectiveTo: null
+    effectiveTo: null,
+    active: true
   },
   {
     id: 'POS-0004',
@@ -43,7 +46,8 @@ export const positions: Position[] = [
     departmentId: 'DEP-0004',
     reportsTo: 'Corporate Director',
     effectiveFrom: '2021-01-01',
-    effectiveTo: null
+    effectiveTo: null,
+    active: true
   },
   {
     id: 'POS-0005',
@@ -54,7 +58,8 @@ export const positions: Position[] = [
     departmentId: 'DEP-0005',
     reportsTo: 'Operations Manager',
     effectiveFrom: '2021-01-01',
-    effectiveTo: null
+    effectiveTo: null,
+    active: true
   },
   {
     id: 'POS-0006',
@@ -65,7 +70,8 @@ export const positions: Position[] = [
     departmentId: 'DEP-0002',
     reportsTo: 'Finance Manager',
     effectiveFrom: '2022-03-01',
-    effectiveTo: null
+    effectiveTo: null,
+    active: true
   },
   {
     id: 'POS-0007',
@@ -76,7 +82,8 @@ export const positions: Position[] = [
     departmentId: 'DEP-0003',
     reportsTo: 'Operations Manager',
     effectiveFrom: '2021-07-15',
-    effectiveTo: null
+    effectiveTo: null,
+    active: true
   },
   {
     id: 'POS-0008',
@@ -87,7 +94,8 @@ export const positions: Position[] = [
     departmentId: 'DEP-0004',
     reportsTo: 'Human Resources Manager',
     effectiveFrom: '2023-01-15',
-    effectiveTo: null
+    effectiveTo: null,
+    active: true
   },
   {
     id: 'POS-0009',
@@ -98,7 +106,8 @@ export const positions: Position[] = [
     departmentId: 'DEP-0005',
     reportsTo: 'IT Manager',
     effectiveFrom: '2023-01-15',
-    effectiveTo: null
+    effectiveTo: null,
+    active: true
   },
   {
     id: 'POS-0010',
@@ -109,7 +118,8 @@ export const positions: Position[] = [
     departmentId: 'DEP-0006',
     reportsTo: 'Corporate Director',
     effectiveFrom: '2023-01-15',
-    effectiveTo: null
+    effectiveTo: null,
+    active: true
   },
   {
     id: 'POS-0011',
@@ -120,7 +130,8 @@ export const positions: Position[] = [
     departmentId: 'DEP-0005',
     reportsTo: 'IT Manager',
     effectiveFrom: '2023-01-15',
-    effectiveTo: null
+    effectiveTo: null,
+    active: true
   },
   {
     id: 'POS-0012',
@@ -131,7 +142,8 @@ export const positions: Position[] = [
     departmentId: 'DEP-0005',
     reportsTo: 'IT Manager',
     effectiveFrom: '2023-01-15',
-    effectiveTo: null
+    effectiveTo: null,
+    active: true
   },
   {
     id: 'POS-0013',
@@ -142,6 +154,7 @@ export const positions: Position[] = [
     departmentId: 'DEP-0005',
     reportsTo: 'IT Manager',
     effectiveFrom: '2023-01-15',
-    effectiveTo: null
+    effectiveTo: null,
+    active: true
   }
 ];

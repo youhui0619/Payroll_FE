@@ -1,16 +1,16 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { departments as departmentData } from '../../../../data/workforce/departments.data';
 import { ToastService } from '../../../../shared/components/toast/toast.service';
 import { Router } from '@angular/router';
 import { PositionsApiService } from '../../../../services/api/positions.service';
-import { Position } from '../../../../models/workforce/position.model';
+import type { Department } from '../../../../models/workforce/department.model';
+import { DepartmentsApiService } from '../../../../services/api/departments.service';
 
 @Component({
   selector: 'app-create',
   imports: [...MaterialImports, ReactiveFormsModule],
-  providers: [...MaterialProviders, PositionsApiService],
+  providers: [...MaterialProviders, PositionsApiService, DepartmentsApiService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'
 })
@@ -18,12 +18,13 @@ export class CreateComponent {
 
   constructor(
     private router: Router,
-    private apiService: PositionsApiService,
+    private positionApiService: PositionsApiService,
+    private departmentApiService: DepartmentsApiService,
     private toastService: ToastService
   ) {}
   
   @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
-  readonly departments = departmentData;
+  departmentList: Department[] = [];
   form = new FormGroup({
     code: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     title: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -35,6 +36,28 @@ export class CreateComponent {
     effectiveTo: new FormControl(''),
   });
   submitting: boolean = false;
+
+
+  ngOnInit() {
+    this.getDepartmentList()
+  }
+
+  getDepartmentList(){
+    this.departmentApiService.getAllDepartments(null).subscribe({
+      next: (response) => {
+        const departments: Department[] = response?.data ?? [];
+        this.departmentList = departments.filter(department => department.active);
+        console.log("departmentList:", this.departmentList);
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
+    });
+  }
 
   goBack() {
     return this.router.navigate(['/organization/positions/overview'])
@@ -62,13 +85,12 @@ export class CreateComponent {
     const value = form.value;
     const data = {
       ...value,
-      status: "ACTIVE",
       effectiveFrom: this.formatDate(value.effectiveFrom),
       effectiveTo: this.formatDate(value.effectiveTo) || null
     }
     console.log("Data", data);
 
-    this.apiService.createPosition(data).subscribe({
+    this.positionApiService.createPosition(data).subscribe({
       next: (response) => {
         console.log("response", response);
 

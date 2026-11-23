@@ -75,7 +75,7 @@
       <mat-form-field appearance="outline"
         class="form-input w-100"
         subscriptSizing="dynamic">
-        <input type="text" matInput placeholder="Search...">
+        <input type="text" matInput placeholder="Search..."  [ngModel]="filter.search" (ngModelChange)="applyFilter('search', $event)">
         <span matTextPrefix class="text-muted me-2">
             <tabler-icon icon="search" [size]="16"></tabler-icon>
         </span>
@@ -116,7 +116,7 @@
           </h6>
           <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center flex-lg-nowrap gap-2">
             <div class="d-flex flex-wrap flex-lg-nowrap gap-2 ms-auto">
-                <button mat-flat-button color="primary-outline" class="btn-sm">
+                <button mat-flat-button color="primary-outline" class="btn-sm" (click)="resetFilter()">
                     <tabler-icon icon="x" [size]="16"></tabler-icon>
                     Clear
                 </button>
