@@ -8,7 +8,8 @@ export interface Department {
   parentDepartmentId: string | null;
   headOfDepartmentId: string | null;
   totalEmployees: number;
+  totalPositions: number
   effectiveFrom: string;
   effectiveTo: string | null;
-  status: DepartmentStatus;
+  active: boolean
 }

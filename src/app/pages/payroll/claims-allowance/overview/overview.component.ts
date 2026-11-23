@@ -25,7 +25,7 @@ export class OverviewComponent implements OnInit {
   }
 
   readonly claims = claims;
-  readonly departments = departments.filter(department => department.status === 'ACTIVE');
+  readonly departments = departments.filter(department => department.active);
   readonly statuses: ClaimStatus[] = ['Pending', 'Approved', 'Rejected', 'Paid'];
   readonly months = [
     { value: 1, label: 'January' }, { value: 2, label: 'February' },

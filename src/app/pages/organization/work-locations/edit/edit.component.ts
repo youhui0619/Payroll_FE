@@ -135,8 +135,7 @@ export class EditComponent implements OnInit {
     const action = isActive ? 'deactivated' : 'activated';
     const actionLabel = isActive ? 'Deactivate' : 'Activate';
 
-
-     this.alertService.show({
+    this.alertService.show({
       title: `${actionLabel} Work Location`,
       content: `Are you sure you want to ${actionLabel.toLowerCase()} this work location?`,
       approveLabel: 'Continue',

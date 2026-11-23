@@ -23,7 +23,7 @@ type LeaveTypeOption = Pick<LeavePolicy, 'code' | 'name' | 'leaveType' | 'requir
   styleUrl: './edit.component.scss'
 })
 export class EditComponent {
-  readonly departments = departments.filter(department => department.status === 'ACTIVE');
+  readonly departments = departments.filter(department => department.active);
   readonly employees = employees;
   readonly leaveTypeOptions: LeaveTypeOption[] = leavePolicies
     .filter(policy => policy.active)

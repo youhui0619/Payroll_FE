@@ -42,7 +42,7 @@ export class ListComponent implements OnInit {
 
 
 
-  departments = departments.filter(department => department.status === 'ACTIVE');
+  departments = departments.filter(department => department.active);
   employmentTypes = employmentTypes;
   employmentStatuses = employmentStatuses;
   selectedDepartments: string[] = [];

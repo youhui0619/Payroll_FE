@@ -129,7 +129,7 @@ export class CreateComponent {
   private editingLeavePolicyCodes = new Set<string>();
 
   stateList: any =stateList
-  departments: Department[] = departments.filter(department => department.status === 'ACTIVE');
+  departments: Department[] = departments.filter(department => department.active);
   positions: Position[] = positions;
   managers = employees.filter(employee => employee.employmentStatus === 'ACTIVE');
   workLocations = workLocations;

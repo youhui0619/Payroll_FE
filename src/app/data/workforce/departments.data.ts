@@ -9,9 +9,10 @@ export const departments: Department[] = [
     parentDepartmentId: null,
     headOfDepartmentId: null,
     totalEmployees: 1,
+    totalPositions: 1,
     effectiveFrom: '2020-01-01',
     effectiveTo: null,
-    status: 'ACTIVE'
+    active: true
   },
   {
     id: 'DEP-0002',
@@ -21,9 +22,10 @@ export const departments: Department[] = [
     parentDepartmentId: 'DEP-0001',
     headOfDepartmentId: 'EMP-0042',
     totalEmployees: 1,
+    totalPositions: 1,
     effectiveFrom: '2020-01-01',
     effectiveTo: null,
-    status: 'ACTIVE'
+    active: true
   },
   {
     id: 'DEP-0003',
@@ -33,9 +35,10 @@ export const departments: Department[] = [
     parentDepartmentId: 'DEP-0001',
     headOfDepartmentId: 'EMP-0043',
     totalEmployees: 1,
+    totalPositions: 1,
     effectiveFrom: '2020-01-01',
     effectiveTo: null,
-    status: 'ACTIVE'
+    active: true
   },
   {
     id: 'DEP-0004',
@@ -45,9 +48,10 @@ export const departments: Department[] = [
     parentDepartmentId: 'DEP-0001',
     headOfDepartmentId: 'EMP-0042',
     totalEmployees: 1,
+    totalPositions: 1,
     effectiveFrom: '2021-01-01',
     effectiveTo: null,
-    status: 'ACTIVE'
+    active: true
   },
   {
     id: 'DEP-0005',
@@ -57,9 +61,10 @@ export const departments: Department[] = [
     parentDepartmentId: 'DEP-0003',
     headOfDepartmentId: 'EMP-0052',
     totalEmployees: 5,
+    totalPositions: 1,
     effectiveFrom: '2021-01-01',
     effectiveTo: null,
-    status: 'ACTIVE'
+    active: true
   },
   {
     id: 'DEP-0006',
@@ -69,9 +74,10 @@ export const departments: Department[] = [
     parentDepartmentId: 'DEP-0001',
     headOfDepartmentId: 'EMP-0043',
     totalEmployees: 1,
+    totalPositions: 1,
     effectiveFrom: '2021-01-01',
     effectiveTo: null,
-    status: 'ACTIVE'
+    active: true
   },
   {
     id: 'DEP-0007',
@@ -81,9 +87,10 @@ export const departments: Department[] = [
     parentDepartmentId: 'DEP-0001',
     headOfDepartmentId: 'EMP-0042',
     totalEmployees: 1,
+    totalPositions: 1,
     effectiveFrom: '2021-04-01',
     effectiveTo: null,
-    status: 'ACTIVE'
+    active: true
   },
   {
     id: 'DEP-0008',
@@ -93,9 +100,10 @@ export const departments: Department[] = [
     parentDepartmentId: 'DEP-0003',
     headOfDepartmentId: 'EMP-0043',
     totalEmployees: 1,
+    totalPositions: 1,
     effectiveFrom: '2022-01-01',
     effectiveTo: null,
-    status: 'ACTIVE'
+    active: true
   },
   {
     id: 'DEP-0009',
@@ -105,9 +113,10 @@ export const departments: Department[] = [
     parentDepartmentId: 'DEP-0003',
     headOfDepartmentId: 'EMP-0043',
     totalEmployees: 1,
+    totalPositions: 1,
     effectiveFrom: '2022-01-01',
     effectiveTo: null,
-    status: 'ACTIVE'
+    active: true
   },
   {
     id: 'DEP-0010',
@@ -117,8 +126,9 @@ export const departments: Department[] = [
     parentDepartmentId: 'DEP-0001',
     headOfDepartmentId: 'EMP-0042',
     totalEmployees: 1,
+    totalPositions: 1,
     effectiveFrom: '2022-06-01',
     effectiveTo: null,
-    status: 'ACTIVE'
+    active: true
   }
 ];

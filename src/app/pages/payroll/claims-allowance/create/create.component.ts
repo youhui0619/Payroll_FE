@@ -23,7 +23,7 @@ export class CreateComponent {
     private router: Router,
   ) {}
   
-  departments = departments.filter(department => department.status === 'ACTIVE');
+  departments = departments.filter(department => department.active);
   employees = employees;
   // claimTypes: { value: ClaimType; label: string }[] = ClaimTypes
   //   .map(claimType => ({ value: claimType.code, label: claimType.name }));

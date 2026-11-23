@@ -49,7 +49,7 @@ export class DepartmentsApiService {
   }
 
   getDepartment(id: any): Observable<any> {
-    return this.http.post(environment.apiURL + '/departments/'+id, {
+    return this.http.get(environment.apiURL + '/departments/'+id, {
       headers: this.getHeaders(),
     });
   }
@@ -61,7 +61,7 @@ export class DepartmentsApiService {
   }
 
   updateDepartmentStatus(id: any): Observable<any> {
-    return this.http.post(environment.apiURL + '/departments/' +id+ '/deactivate' ,  {
+    return this.http.post(environment.apiURL + '/departments/' +id+ '/deactivate', null, {
       headers: this.getHeaders(),
     });
   }

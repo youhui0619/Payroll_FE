@@ -21,7 +21,15 @@
                 <tabler-icon icon="users"></tabler-icon>
               </div>
               <div>
-                <h4 class="my-0">{{ department.name }} <span class="ms-2 badge bg-light-primary text-primary fw-400">{{ department.status }}</span></h4>
+                <h4 class="my-0">{{ department.name }} 
+                  <span
+                    class="ms-2 badge fw-400"
+                    [ngClass]="department.active
+                      ? 'bg-light-primary text-primary'
+                      : 'bg-light-danger text-danger'">
+                    {{ department.active ? 'Active' : 'Inactive' }}
+                  </span>
+                </h4>
                 <p class="fs-10 fw-300 text-muted mb-2 ">{{ department.code }}</p>
               </div>
             </div>
@@ -40,7 +48,7 @@
           <div class="summary-info">
             <p class="fs-12 text-muted">Total Employees
             </p>
-            <h3 class="mb-0">{{ employees.length }}</h3>
+            <h3 class="mb-0">{{ department.totalEmployees }}</h3>
           </div>
           <div class="text-primary bg-light-primary text-end icon">
             <tabler-icon icon="users"></tabler-icon>
@@ -55,9 +63,9 @@
       <div class="card-body">
         <div  class="d-flex align-items-center justify-content-between">
           <div class="summary-info">
-            <p class="fs-12 text-muted">Sub Departments
+            <p class="fs-12 text-muted">Total Positions
             </p>
-            <h3 class="mb-0">2</h3>
+            <h3 class="mb-0">{{department.totalPositions}}</h3>
           </div>
           <div class="text-primary bg-light-primary text-end icon">
             <tabler-icon icon="user-check"></tabler-icon>
@@ -145,7 +153,7 @@
                   tabindex="0">
                   <div class="d-flex justify-content-between align-items-start gap-2">
                     <span class="department-code">{{ node.department.code }}</span>
-                    <span class="chip" [ngClass]="node.department.status === 'ACTIVE' ? 'bg-light-primary text-primary' : node.department.status === 'Inactive' ? 'bg-light-secondary text-secondary' : 'bg-light-warning text-warning'">
+                    <span class="chip" [ngClass]="node.department.active ? 'bg-light-primary text-primary' : node.department.status === 'Inactive' ? 'bg-light-secondary text-secondary' : 'bg-light-warning text-warning'">
                       {{ node.department.status }}
                     </span>
                   </div>
@@ -164,7 +172,7 @@
         </div>
       </div>
     </mat-tab> -->
-    <mat-tab label="Employees">
+    <!-- <mat-tab label="Employees">
       <div class="px-2 mt-3">
         <h4 class="text-primary">Employee List</h4>
         <div class="row mt-4">
@@ -260,7 +268,7 @@
           </div>
         </div>
       </div>
-    </mat-tab>
+    </mat-tab> -->
   </mat-tab-group>
 </div>
 </div>

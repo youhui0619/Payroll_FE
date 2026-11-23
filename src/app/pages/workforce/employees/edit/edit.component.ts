@@ -101,7 +101,7 @@ export class EditComponent implements OnInit {
   private navigation = inject(NavigationService);
   private readonly editingLeavePolicyCodes = new Set<string>();
   
-  readonly departments: Department[] = departments.filter(department => department.status === 'ACTIVE');
+  readonly departments: Department[] = departments.filter(department => department.active);
   readonly positions: Position[] = positions;
   readonly workLocations = workLocations;
   readonly workLocationSearch = new FormControl<WorkLocation | string>('', { nonNullable: true });

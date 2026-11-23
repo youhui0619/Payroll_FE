@@ -1,15 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FullCalendarModule, CalendarOptions } from '@fullcalendar/angular';
 import { departments } from '../../../../data/workforce/departments.data';
 import { employees as Employees } from '../../../../data/workforce/employees.data';
 import type { Department } from '../../../../models/workforce/department.model';
 import type { Employee } from '../../../../models/workforce/employee.model';
-import { NavigationService } from '../../../../services/navigation.service';
+import { DepartmentsApiService } from '../../../../services/api/departments.service';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
+import { AlertService } from '../../../../shared/components/alert/alert.service';
+
 
 interface DepartmentTreeNode {
   department: Department;
@@ -19,84 +22,106 @@ interface DepartmentTreeNode {
 @Component({
   selector: 'app-view',
   imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule, FullCalendarModule, RouterLink],
-    providers: [...MaterialProviders],
-    templateUrl: './view.component.html',
+  providers: [...MaterialProviders, DepartmentsApiService],
+  templateUrl: './view.component.html',
   styleUrl: './view.component.scss'
 })
 export class ViewComponent {
-  private readonly navigation = inject(NavigationService);
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private apiService: DepartmentsApiService,
+    private toastService: ToastService,
+    private alertService: AlertService,
+    private cdr: ChangeDetectorRef
+  ) {}
+  
   department!: Department;
+  id: any;
   employees: Employee[] = [];
   organizationTree: DepartmentTreeNode[] = [];
-  searchTerm = '';
-  selectedEmploymentTypes: string[] = [];
-  selectedEmploymentStatuses: string[] = [];
+  ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      this.id = params.get('id');
+      if (this.id) {
+        this.getDepartment(this.id);
+      } else {
+        console.error("🚨 No ID found in route!");
+      }
+    });  
+  }
 
-  goBack(): void { void this.navigation.back('/organization/departments/overview'); }
-
-  constructor(route: ActivatedRoute) {
-    route.paramMap.pipe(takeUntilDestroyed()).subscribe(params => {
-      const departmentId = params.get('id');
-      const department = departments.find(item => item.id === departmentId) ?? departments[0];
-      if (!department) return;
-
-      this.department = department;
-      this.employees = Employees.filter(employee => employee.department === department.name);
-      this.organizationTree = this.buildOrganizationTree();
-      this.clearEmployeeFilters();
+  getDepartment(id: any){
+    console.log(id)
+    this.apiService.getDepartment(id).subscribe({
+      next: (response) => {
+        this.department = response.data;
+        console.log("department:", this.department);
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
     });
   }
 
-  get employmentTypes(): string[] {
-    return [...new Set(this.employees.map(employee => employee.employmentType).filter(Boolean))].sort();
+  goBack() {
+    return this.router.navigate(['/organization/departments/overview'])
   }
 
-  get employmentStatuses(): string[] {
-    return [...new Set(this.employees.map(employee => employee.employmentStatus).filter(Boolean))].sort();
-  }
+  // get employmentTypes(): string[] {
+  //   return [...new Set(this.employees.map(employee => employee.employmentType).filter(Boolean))].sort();
+  // }
 
-  get filteredEmployees(): Employee[] {
-    const query = this.searchTerm.trim().toLocaleLowerCase();
+  // get employmentStatuses(): string[] {
+  //   return [...new Set(this.employees.map(employee => employee.employmentStatus).filter(Boolean))].sort();
+  // }
 
-    return this.employees.filter(employee => {
-      const matchesSearch = !query || [
-        employee.employeeName,
-        employee.employeeId,
-        employee.position,
-        employee.tin,
-        employee.kwspNo
-      ].some(value => value?.toLocaleLowerCase().includes(query));
-      const matchesType = !this.selectedEmploymentTypes.length || this.selectedEmploymentTypes.includes(employee.employmentType);
-      const matchesStatus = !this.selectedEmploymentStatuses.length || this.selectedEmploymentStatuses.includes(employee.employmentStatus);
+  // get filteredEmployees(): Employee[] {
+  //   const query = this.searchTerm.trim().toLocaleLowerCase();
 
-      return matchesSearch && matchesType && matchesStatus;
-    });
-  }
+  //   return this.employees.filter(employee => {
+  //     const matchesSearch = !query || [
+  //       employee.employeeName,
+  //       employee.employeeId,
+  //       employee.position,
+  //       employee.tin,
+  //       employee.kwspNo
+  //     ].some(value => value?.toLocaleLowerCase().includes(query));
+  //     const matchesType = !this.selectedEmploymentTypes.length || this.selectedEmploymentTypes.includes(employee.employmentType);
+  //     const matchesStatus = !this.selectedEmploymentStatuses.length || this.selectedEmploymentStatuses.includes(employee.employmentStatus);
 
-  employeeStatusCount(status: string): number {
-    return this.filteredEmployees.filter(employee => employee.employmentStatus === status).length;
-  }
+  //     return matchesSearch && matchesType && matchesStatus;
+  //   });
+  // }
 
-  employeeStatusClass(status: string): string {
-    switch (status.toLocaleLowerCase()) {
-      case 'active': return 'bg-light-primary text-primary';
-      case 'probation': return 'bg-light-warning text-warning';
-      default: return 'bg-light-secondary text-secondary';
-    }
-  }
+  // employeeStatusCount(status: string): number {
+  //   return this.filteredEmployees.filter(employee => employee.employmentStatus === status).length;
+  // }
 
-  clearEmployeeFilters(): void {
-    this.searchTerm = '';
-    this.selectedEmploymentTypes = [];
-    this.selectedEmploymentStatuses = [];
-  }
+  // employeeStatusClass(status: string): string {
+  //   switch (status.toLocaleLowerCase()) {
+  //     case 'active': return 'bg-light-primary text-primary';
+  //     case 'probation': return 'bg-light-warning text-warning';
+  //     default: return 'bg-light-secondary text-secondary';
+  //   }
+  // }
+
+  // clearEmployeeFilters(): void {
+  //   this.searchTerm = '';
+  //   this.selectedEmploymentTypes = [];
+  //   this.selectedEmploymentStatuses = [];
+  // }
 
   parentDepartmentName(): string {
     return departments.find(item => item.id === this.department.parentDepartmentId)?.name ?? '- (Top-level)';
   }
 
   departmentHeadName(): string {
-    return Employees.find(item => item.employeeId === this.department.headOfDepartmentId)?.employeeName ?? '—';
+    return Employees.find(item => item.employeeId === this.department.headOfDepartmentId)?.employeeName ?? '-';
   }
 
   departmentHead(department: Department): string {

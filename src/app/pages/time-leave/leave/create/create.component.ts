@@ -20,7 +20,7 @@ import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.componen
   styleUrl: './create.component.scss'
 })
 export class CreateComponent {
-  readonly departments = departments.filter(department => department.status === 'ACTIVE');
+  readonly departments = departments.filter(department => department.active);
   readonly employees = employees;
   readonly leaveTypeOptions = leavePolicies.filter(policy => policy.active);
   readonly employeeSearch = new FormControl<Employee | string>('');

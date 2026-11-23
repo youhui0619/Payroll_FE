@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { ToastService } from '../../../../shared/components/toast/toast.service';
@@ -19,7 +19,8 @@ export class EditComponent {
     private route: ActivatedRoute,
     private apiService: DepartmentsApiService,
     private toastService: ToastService,
-      private alertService: AlertService,
+    private alertService: AlertService,
+    private cdr: ChangeDetectorRef
   ) {}
   
   @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
@@ -69,7 +70,7 @@ export class EditComponent {
   }
 
   goBack() {
-    return this.router.navigate(['/organization/work-locations/overview'])
+    return this.router.navigate(['/organization/departments/overview'])
   }
 
   formatDate(date: Date | string | null): string | null {
@@ -106,7 +107,7 @@ export class EditComponent {
 
         this.toastService.show({
           title: "Success",
-          message: "Department has been created.",
+          message: "Department has been updated.",
           icon: 'success'
         });
 
@@ -139,20 +140,25 @@ export class EditComponent {
       }
     });
   }
+  
+  updateStatus(department: any){
+    const isActive = department.active
+    const action = isActive ? 'deactivated' : 'activated';
+    const actionLabel = isActive ? 'Deactivate' : 'Activate';
 
-
-  deactivate(id: any){
-     this.alertService.show({
-      title: 'Payroll Report',
-      content: 'The payroll report is ready to review.',
+    this.alertService.show({
+      title: `${actionLabel} Department`,
+      content: `Are you sure you want to ${actionLabel.toLowerCase()} this department?`,
       approveLabel: 'Continue',
       rejectLabel: 'Cancel',
       onApprove: () => {
-        this.apiService.updateDepartmentStatus(id).subscribe({
+        this.apiService.updateDepartmentStatus(department.id).subscribe({
           next: (response) => {
+            this.department = response.data;
+            this.cdr.markForCheck();
            this.toastService.show({
               title: "Success",
-              message: "Department has been deactivated.",
+              message: `Department has been ${action}.`,
               icon: 'success'
             });
             setTimeout(()=>{

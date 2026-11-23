@@ -157,11 +157,19 @@
                     <p class="text-dark my-0">{{ department.name }}</p>
                     <p class="text-muted fw-300 fs-10 my-0">{{ department.code }}</p>
                   </td>
-                  <!-- <td class="text-muted">{{ departmentName(department.parentDepartmentId) }}</td>
-                  <td class="text-muted">{{ departmentHead(department.headOfDepartmentId) }}</td>
-                  <td class="text-muted text-center">{{ departmentEmployeeCount(department) }}</td>
+                  <td class="text-muted">{{ departmentName(department.parentDepartmentId) }}</td>
+                  <td class="text-muted">{{ department.headOfDepartmentId }}</td>
+                  <td class="text-muted text-center">{{ department.totalEmployees }}</td>
                   <td class="text-muted">{{ department.effectiveFrom | regionalDate:'dd/MM/yyyy' }}</td>
-                  <td><span class="chip" [ngClass]="statusClass(department.status)">{{ department.status }}</span></td> -->
+                  <td>
+                    <span
+                      class="chip"
+                      [ngClass]="department.active
+                        ? 'bg-light-primary text-primary'
+                        : 'bg-light-danger text-danger'">
+                      {{ department.active ? 'Active' : 'Inactive' }}
+                    </span>
+                  </td>
                   <td>
                     <button class="text-muted action-btn" mat-icon-button [routerLink]="['/organization/departments/view', department.id]">
                       <tabler-icon icon="eye"></tabler-icon>

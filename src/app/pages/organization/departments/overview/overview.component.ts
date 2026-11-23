@@ -53,7 +53,7 @@ export class OverviewComponent implements OnInit, AfterViewInit {
   resetFilter(){
     this.filter = {
       search: "",
-      status: ""
+      active: null
     };
     this.getDepartments();
   }
@@ -92,61 +92,7 @@ export class OverviewComponent implements OnInit, AfterViewInit {
     console.log("this.filter.search", this.filter.search)
     this.getDepartments(); 
   }
-
-  searchTerm = '';
-  selectedDepartmentIds: string[] = [];
-  selectedStatuses: DepartmentStatus[] = [];
-
-  // get filteredDepartments(): Department[] {
-  //   const query = this.searchTerm.trim().toLowerCase();
-  //   return this.departments.filter(department => {
-  //     const matchesSearch = !query || [department.name, department.code, department.shortName, department.remark]
-  //       .some(value => value.toLowerCase().includes(query));
-  //     const matchesDepartment = this.selectedDepartmentIds.length === 0
-  //       || this.selectedDepartmentIds.includes(department.id);
-  //     const matchesStatus = this.selectedStatuses.length === 0
-  //       || this.selectedStatuses.includes(department.status);
-  //     return matchesSearch && matchesDepartment && matchesStatus;
-  //   });
-  // }
-
-  // get activeDepartmentCount(): number {
-  //   return this.departments.filter(department => department.status === 'ACTIVE').length;
-  // }
-
-  // get inactiveDepartmentCount(): number {
-  //   return this.departments.filter(department => department.status === 'Inactive').length;
-  // }
-
-  // get draftDepartmentCount(): number {
-  //   return this.departments.filter(department => department.status === 'Draft').length;
-  // }
-
-  // filteredCountByStatus(status: DepartmentStatus): number {
-  //   return this.filteredDepartments.filter(department => department.status === status).length;
-  // }
-
-  // departmentName(parentDepartmentId: string | null): string {
-  //   return this.departments.find(department => department.id === parentDepartmentId)?.name ?? '-';
-  // }
-
-  // departmentHead(employeeId: string | null): string {
-  //   return this.employees.find(employee => employee.employeeId === employeeId)?.employeeName ?? '-';
-  // }
-
-  // departmentEmployeeCount(department: Department): number {
-  //   return this.employees.filter(employee => employee.department === department.name).length;
-  // }
-
-  // statusClass(status: DepartmentStatus): string {
-  //   if (status === 'Active') return 'bg-light-primary text-primary';
-  //   if (status === 'Inactive') return 'bg-light-secondary text-secondary';
-  //   return 'bg-light-warning text-warning';
-  // }
-
-  // clearFilters(): void {
-  //   this.searchTerm = '';
-  //   this.selectedDepartmentIds = [];
-  //   this.selectedStatuses = [];
-  // }
+  departmentName(parentDepartmentId: string | null): string {
+    return this.departments.data.find(department => department.id === parentDepartmentId)?.name ?? '-';
+  }
 }

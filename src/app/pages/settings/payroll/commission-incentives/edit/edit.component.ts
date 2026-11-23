@@ -76,7 +76,7 @@ export class EditComponent implements OnInit {
     { value: 'SELECTED_EMPLOYEES', label: 'Selected employees' }
   ];
 
-  readonly departments = departments.filter(department => department.status === 'ACTIVE');
+  readonly departments = departments.filter(department => department.active);
   readonly positions = positions.filter(position => position.effectiveTo === null);
   readonly employees = employees.filter(employee => employee.employmentStatus === 'ACTIVE');
 

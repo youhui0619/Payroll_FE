@@ -15,11 +15,19 @@
     <h3 class="text-dark my-0">Edit Department</h3>
     <p class="text-muted mb-0">Update the details for {{ department.name || 'this department' }}.</p>
   </div>
-
   <div class="col-sm-5 d-flex align-items-center justify-content-end">
-    <button mat-flat-button color="danger" class="ms-2" (click)="deactivate(department.id)">
-      <tabler-icon icon="circle-dashed" [size]="16"></tabler-icon>
-      Deactivate
+    <button
+      mat-flat-button
+      [attr.color]="department.active ? 'danger' : 'primary'"
+      class="ms-2"
+      (click)="updateStatus(department)"
+    >
+      <tabler-icon
+        [icon]="department.active ? 'x' : 'check'"
+        [size]="16">
+      </tabler-icon>
+
+      {{ department.active ? 'Deactivate' : 'Activate' }}
     </button>
   </div>
 </div>
