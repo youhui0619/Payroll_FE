@@ -1,13 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { REGIONAL_PREFERENCE_VALUES, REGIONAL_LANGUAGE_OPTIONS, REGIONAL_TIME_ZONE_OPTIONS, REGIONAL_TIME_FORMAT_OPTIONS, REGIONAL_CURRENCY_OPTIONS, REGIONAL_NUMBER_FORMAT_OPTIONS } from '../../../../data/settings/regional-preferences.data';
+import { REGIONAL_LANGUAGE_OPTIONS, REGIONAL_TIME_ZONE_OPTIONS, REGIONAL_TIME_FORMAT_OPTIONS, REGIONAL_CURRENCY_OPTIONS, REGIONAL_NUMBER_FORMAT_OPTIONS } from '../../../../data/settings/regional-preferences.data';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { RegionalPreferencesService } from '../../../../services/regional-preferences.service';
 import { RegionalCurrencyPipe } from '../../../../shared/pipes/regional-format.pipes';
 import { RegionalSettingApiService } from '../../../../services/api/regional-setting.service';
 import { ToastService } from '../../../../shared/components/toast/toast.service';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-regional-preferences',
