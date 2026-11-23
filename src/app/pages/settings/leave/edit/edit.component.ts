@@ -1,11 +1,13 @@
 
-import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { leavePolicies } from '../../../../data/leave/leave-policies.data';
 import type { LeavePolicy, LeaveServiceEntitlementTier } from '../../../../models/leave/leave-policy.model';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
+import { AlertService } from '../../../../shared/components/alert/alert.service';
+import { LeaveApiService } from '../../../../services/api/leave.service';
 
 type ServiceEntitlementTierForm = FormGroup<{
   serviceFrom: FormControl<number | null>;
@@ -17,42 +19,20 @@ type ServiceEntitlementTierForm = FormGroup<{
   selector: 'app-edit',
   standalone: true,
   imports: [...MaterialImports, ReactiveFormsModule],
-  providers: [...MaterialProviders],
+  providers: [...MaterialProviders, LeaveApiService],
   templateUrl: './edit.component.html',
   styleUrl: './edit.component.scss'
 })
 export class EditComponent implements OnInit {
-  leavePolicies = leavePolicies;
-  leavePolicy: LeavePolicy | undefined;
-
-  form = new FormGroup({
-    code: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    leaveName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    description: new FormControl('', { nonNullable: true }),
-    status: new FormControl<'ACTIVE' | 'INACTIVE'>('ACTIVE', { nonNullable: true }),
-    entitlementUnit: new FormControl<'DAILY' | 'HOURLY'>('DAILY', { nonNullable: true, validators: [Validators.required] }),
-    leaveType: new FormControl<'PAID' | 'UNPAID'>('PAID', { nonNullable: true, validators: [Validators.required] }),
-    entitlementCalculationMethod: new FormControl<'FIXED' | 'SERVICE'>('FIXED', { nonNullable: true }),
-    defaultEntitlement: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-    serviceEntitlementTiers: new FormArray<ServiceEntitlementTierForm>([this.createServiceEntitlementTier(0)]),
-    entitlementGrantMethod: new FormControl<'ANNUAL' | 'MONTHLY_ACCRUAL' | 'SERVICE_ANNIVERSARY' | 'MANUAL'>('ANNUAL', { nonNullable: true }),
-    eligibility: new FormControl<'ALL_EMPLOYEES' | 'PERMANENT' | 'PROBATION' | 'PART_TIME' | 'CONTRACT_WORKER' | 'INTERN'>('ALL_EMPLOYEES', { nonNullable: true }),
-    leaveYear: new FormControl<'CALENDAR' | 'EMPLOYMENT_ANNIVERSARY' | 'FINANCIAL'>('CALENDAR', { nonNullable: true }),
-    carryForwardPolicy: new FormControl<'NONE' | 'LIMITED' | 'UNLIMITED' | 'HR_REVIEW'>('NONE', { nonNullable: true }),
-    maximumCarryForward: new FormControl<number | null>({ value: null, disabled: true }),
-    approvalOverflow: new FormControl<'MANAGER' | 'MANAGER_HR' | 'HR_ONLY' | 'NO_APPROVAL'>('MANAGER', { nonNullable: true }),
-    minimumAdvanceNotice: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-    allowHalfDay: new FormControl(true, { nonNullable: true }),
-    requireSupportingDocuments: new FormControl(true, { nonNullable: true }),
-    allowEmployeeSpecificSettings: new FormControl(true, { nonNullable: true })
-  });
-
-  submitting = false;
 
   constructor(
-    private route: ActivatedRoute, 
-    private router: Router, 
-  ) {
+    private toastService: ToastService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private alertService: AlertService,
+    private apiService: LeaveApiService,
+    private cdr: ChangeDetectorRef
+  ){
     this.form.controls.serviceEntitlementTiers.disable({ emitEvent: false });
     this.form.controls.carryForwardPolicy.valueChanges
       .pipe(takeUntilDestroyed())
@@ -62,20 +42,68 @@ export class EditComponent implements OnInit {
       .subscribe(method => this.updateEntitlementValidation(method));
   }
 
+  @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
+
+  leavePolicy: LeavePolicy | null = null;
+  id: any = '';
+  form = new FormGroup({
+    code: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    description: new FormControl(''),
+    status: new FormControl<'ACTIVE' | 'INACTIVE'>('ACTIVE', { nonNullable: true }),
+    entitlementUnit: new FormControl<'DAILY' | 'HOURLY'>('DAILY', { nonNullable: true, validators: [Validators.required] }),
+    paid: new FormControl<boolean>(true, { nonNullable: true, validators: [Validators.required] }),
+    entitlementCalculationMethod: new FormControl<'FIXED' | 'SERVICE'>('FIXED', { nonNullable: true }),
+    defaultEntitlement: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
+    serviceEntitlementTiers: new FormArray<ServiceEntitlementTierForm>([this.createServiceEntitlementTier(0)]),
+    entitlementGrantMethod: new FormControl<'ANNUAL' | 'MONTHLY_ACCRUAL' | 'SERVICE_ANNIVERSARY' | 'MANUAL'>('ANNUAL', { nonNullable: true }),
+    eligibility: new FormControl<'ALL_EMPLOYEES' | 'PERMANENT' | 'PROBATION' | 'PART_TIME' | 'CONTRACT_WORKER' | 'INTERN'>('ALL_EMPLOYEES', { nonNullable: true }),
+    leaveYear: new FormControl<'CALENDAR' | 'EMPLOYMENT_ANNIVERSARY' | 'FINANCIAL'>('CALENDAR', { nonNullable: true }),
+    carryForwardPolicy: new FormControl<'NONE' | 'LIMITED' | 'UNLIMITED' | 'HR_REVIEW'>('NONE', { nonNullable: true }),
+    maximumCarryForward: new FormControl<number | null>({ value: null, disabled: true }),
+    approval: new FormControl<'MANAGER' | 'MANAGER_HR' | 'HR_ONLY' | 'NO_APPROVAL'>('MANAGER', { nonNullable: true }),
+    noticeDays: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
+    allowHalfDay: new FormControl(true, { nonNullable: true }),
+    requireSupportingDocuments: new FormControl(true, { nonNullable: true }),
+    allowEmployeeSpecificSettings: new FormControl(true, { nonNullable: true }),
+    effectiveFrom: new FormControl<Date | null>(null, Validators.required),
+    effectiveTo: new FormControl<Date | null>(null)
+  });
+  submitting = false;
+
   ngOnInit() {
-    this.getLeavePolicy()
+    this.route.paramMap.subscribe(params => {
+      this.id = params.get('id');
+      if (this.id) {
+        this.getLeavePolicy(this.id);
+      } else {
+        console.error("🚨 No ID found in route!");
+      }
+    });
   }
-  
-  getLeavePolicy(){
-    this.leavePolicy = leavePolicies.find(item => item.code === this.route.snapshot.paramMap.get('code'));
-    console.log("this.claimType", this.leavePolicy)
-    if(this.leavePolicy){
-      this.form.patchValue(this.leavePolicy)
-    }
+
+  getLeavePolicy(id: any){
+    console.log(id)
+    this.apiService.getLeavePolicy(id).subscribe({
+      next: (response) => {
+        this.leavePolicy = response.data;
+        console.log("this.leavePolicy", this.leavePolicy)
+        if (this.leavePolicy) {
+          this.patchLeaveForm(this.leavePolicy);
+        }
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
+    });
   }
 
   goBack() { 
-    return this.router.navigate(['/settings/claim-settings/overview'])
+    return this.router.navigate(['/settings/leave-settings/overview'])
   }
 
   get showMaximumCarryForward(): boolean {
@@ -109,18 +137,80 @@ export class EditComponent implements OnInit {
 
 
   private patchLeaveForm(policy: LeavePolicy): void {
-    const { serviceEntitlementTiers, ...policyFields } = policy;
-    this.form.patchValue(policyFields, { emitEvent: false });
+    const tiers = policy.serviceEntitlementTiers ?? [];
+    this.form.patchValue({
+      code: policy.code,
+      name: policy.name,
+      description: policy.description,
+      status: policy.active ? 'ACTIVE' : 'INACTIVE',
+      entitlementUnit: policy.entitlementUnit,
+      paid: policy.paid,
+      entitlementCalculationMethod: policy.entitlementCalculationMethod,
+      defaultEntitlement: this.toNumber(policy.defaultEntitlement),
+      entitlementGrantMethod: policy.entitlementGrantMethod,
+      eligibility: policy.eligibility,
+      leaveYear: policy.leaveYear,
+      carryForwardPolicy: policy.carryForwardPolicy,
+      maximumCarryForward: this.toNumber(policy.maximumCarryForward),
+      approval: this.getApprovalValue(policy),
+      noticeDays: policy.noticeDays ?? policy.minimumAdvanceNotice,
+      allowHalfDay: policy.allowHalfDay,
+      requireSupportingDocuments: policy.requireSupportingDocuments,
+      allowEmployeeSpecificSettings: policy.allowEmployeeSpecificSettings,
+      effectiveFrom: this.parseDate(policy.effectiveFrom),
+      effectiveTo: this.parseDate(policy.effectiveTo)
+    }, { emitEvent: false });
 
     this.serviceEntitlementTiers.clear({ emitEvent: false });
-    const tiers: LeaveServiceEntitlementTier[] = serviceEntitlementTiers.length
-      ? serviceEntitlementTiers
+    const initialTiers: LeaveServiceEntitlementTier[] = tiers.length
+      ? tiers
       : [{ serviceFrom: 0, serviceTo: null, daysPerYear: null }];
-    tiers.forEach(tier => this.serviceEntitlementTiers.push(this.createServiceEntitlementTier(tier.serviceFrom, tier)));
+    initialTiers.forEach(tier => this.serviceEntitlementTiers.push(
+      this.createServiceEntitlementTier(tier.serviceFrom, tier)
+    ));
 
     this.updateEntitlementValidation(policy.entitlementCalculationMethod);
     this.updateMaximumCarryForwardValidation(policy.carryForwardPolicy);
     this.updateServiceToValidators();
+  }
+
+  private getApprovalValue(policy: LeavePolicy): 'MANAGER' | 'MANAGER_HR' | 'HR_ONLY' | 'NO_APPROVAL' {
+    const rawApproval = (policy as LeavePolicy & { approval?: unknown }).approval;
+    const approvalRecord = rawApproval && typeof rawApproval === 'object'
+      ? rawApproval as unknown as Record<string, unknown>
+      : null;
+    const candidates = [
+      rawApproval,
+      approvalRecord?.['value'],
+      approvalRecord?.['code'],
+      approvalRecord?.['approval'],
+      approvalRecord?.['overflow'],
+      approvalRecord?.['approver'],
+      policy.approvalOverflow
+    ];
+    const allowedValues = ['MANAGER', 'MANAGER_HR', 'HR_ONLY', 'NO_APPROVAL'] as const;
+
+    for (const candidate of candidates) {
+      if (typeof candidate !== 'string') continue;
+      const normalized = candidate.trim().toUpperCase();
+      if (allowedValues.includes(normalized as typeof allowedValues[number])) {
+        return normalized as typeof allowedValues[number];
+      }
+    }
+
+    return 'MANAGER';
+  }
+
+  private parseDate(value: string | null): Date | null {
+    if (!value) return null;
+    const date = new Date(`${value.slice(0, 10)}T00:00:00`);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  private toNumber(value: unknown): number | null {
+    if (value === null || value === undefined || value === '') return null;
+    const parsed = typeof value === 'number' ? value : Number(value);
+    return Number.isFinite(parsed) ? parsed : null;
   }
 
   private createServiceEntitlementTier(
@@ -177,10 +267,23 @@ export class EditComponent implements OnInit {
     maximumCarryForward.updateValueAndValidity({ emitEvent: false });
   }
 
+  formatDate(date: Date | string | null): string | null {
+    if (!date) return null;
+
+    const parsedDate = date instanceof Date ? date : new Date(date);
+    if (isNaN(parsedDate.getTime())) return null;
+    const year = parsedDate.getFullYear();
+    const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
+    const day = String(parsedDate.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
   onSubmit(form: FormGroup) {
     this.submitting = true;
     if (form.invalid || !this.leavePolicy) {
       form.markAllAsTouched();
+      this.submitting = false;
       return;
     }
 
@@ -189,9 +292,90 @@ export class EditComponent implements OnInit {
       ...value,
       defaultEntitlement: value.entitlementCalculationMethod === 'FIXED' ? value.defaultEntitlement : null,
       serviceEntitlementTiers: value.entitlementCalculationMethod === 'SERVICE' ? value.serviceEntitlementTiers : [],
-      maximumCarryForward: value.carryForwardPolicy === 'LIMITED' ? value.maximumCarryForward : null
+      maximumCarryForward: value.carryForwardPolicy === 'LIMITED' ? value.maximumCarryForward : null,
+      effectiveFrom: this.formatDate(value.effectiveFrom),
+      effectiveTo: this.formatDate(value.effectiveTo)
     };
+
     console.log("data", data)
-    return this.goBack()
+    delete data.status;
+    this.apiService.updateLeavePolicy(this.id, data).subscribe({
+      next: (response) => {
+        console.log("response", response);
+
+        this.toastService.show({
+          title: "Success",
+          message: "Leave policy has been updated.",
+          icon: 'success'
+        });
+
+        this.formDirective.resetForm();
+        this.submitting = false;
+        setTimeout(() => {
+          this.router.navigate(['/settings/leave-settings/overview']);
+        }, 1000);
+      },
+      error: (error) => {
+        console.log("Error:", error);
+        const errorResponse = error?.error;
+
+        if (errorResponse?.errors?.length) {
+          errorResponse.errors.forEach((err: any) => {
+            this.toastService.show({
+              title: errorResponse.code,
+              message: err.message,
+              icon: 'danger'
+            });
+          });
+        } else {
+          this.toastService.show({
+            title: errorResponse?.code || 'Error',
+            message: errorResponse?.message || 'Something went wrong.',
+            icon: 'danger'
+          });
+        }
+        this.submitting = false;
+      }
+    });
+  }
+
+  updateStatus(leavePolicy: any){
+    const isActive = leavePolicy.active
+    const action = isActive ? 'deactivated' : 'activated';
+    const actionLabel = isActive ? 'Deactivate' : 'Activate';
+
+
+     this.alertService.show({
+      title: `${actionLabel} Leave Policies`,
+      content: `Are you sure you want to ${actionLabel.toLowerCase()} this leave policies?`,
+      approveLabel: 'Continue',
+      rejectLabel: 'Cancel',
+      onApprove: () => {
+        this.apiService.updateLeavePolicyStatus(leavePolicy.id).subscribe({
+          next: (response) => {
+            this.leavePolicy = response.data;
+            this.cdr.markForCheck();
+           this.toastService.show({
+              title: "Success",
+              message: `Leave policy has been ${action}.`,
+              icon: 'success'
+            });
+            setTimeout(()=>{
+              this.alertService.close()
+            }, 1000)
+          },
+          error: (error) => {
+            this.toastService.show({
+              title: error.error.code,
+              message: error.error.message,
+              icon: 'danger'
+            });
+          },
+        });
+       },
+      onReject: () => {
+          this.alertService.close()
+       }
+    });
   }
 }

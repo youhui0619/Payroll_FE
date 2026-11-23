@@ -127,7 +127,6 @@ export class EditComponent {
     const { stateSelections, ...value } = form.value;
     const data = {
       ...value,
-      scope: 'State',
       startDate: this.formatDate(value.startDate),
       endDate: this.formatDate(value.endDate)
     };

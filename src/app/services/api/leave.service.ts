@@ -39,14 +39,20 @@ export class LeaveApiService {
     });
   }
 
-  getLeavePolicies(id: any): Observable<any> {
+  getLeavePolicy(id: any): Observable<any> {
     return this.http.get(environment.apiURL + '/leave/policies/'+id, {
       headers: this.getHeaders()
     });
   }
 
-  updateLeavePolicies(id: any, data: any): Observable<any> {
+  updateLeavePolicy(id: any, data: any): Observable<any> {
     return this.http.patch(environment.apiURL + '/leave/policies/'+id, data, {
+      headers: this.getHeaders()
+    });
+  }
+
+  updateLeavePolicyStatus(id: any): Observable<any> {
+    return this.http.post(environment.apiURL + '/leave/policies/'+id+ '/deactivate', null, {
       headers: this.getHeaders()
     });
   }
@@ -54,12 +60,6 @@ export class LeaveApiService {
   getMyAttendanceStatus(): Observable<any> {
     return this.http.get(environment.apiURL + '/attendance/me/status', {
       headers: this.getHeaders(),
-    });
-  }
-
-  updateLeavePoliciesStatus(id: any): Observable<any> {
-    return this.http.post(environment.apiURL + '/leave/policies/' +id+ '/deactivate', null, {
-      headers: this.getHeaders()
     });
   }
 

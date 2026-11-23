@@ -9,12 +9,11 @@
   </div>
 </div>
 
+@if(leavePolicy){
 <div class="row justify-content-between mb-4">
   <div class="col-sm-7">
     <h3 class="text-dark my-0">Edit Leave Policies</h3>
-    @if (leavePolicy; as policy) {
-      <p class="fw-300 text-muted mb-0">Update {{ policy.name }} settings.</p>
-    }
+      <p class="fw-300 text-muted mb-0">Update {{ leavePolicy.name }} settings.</p>
   </div>
 </div>
 
@@ -37,8 +36,8 @@
             <div class="col-sm-8 px-2">
               <mat-label class="form-label">Leave Name <span class="text-danger">*</span></mat-label>
               <mat-form-field appearance="outline" class="form-input w-100">
-                <input matInput placeholder="Enter leave name" formControlName="leaveName">
-                @if (form.controls.leaveName.hasError('required')) {
+                <input matInput placeholder="Enter leave name" formControlName="name">
+                @if (form.controls.name.hasError('required')) {
                   <mat-error class="text-danger">Leave name is required.</mat-error>
                 }
               </mat-form-field>
@@ -83,10 +82,10 @@
           class="selection-group status-group"
           color="primary"
           hideSingleSelectionIndicator
-          formControlName="leaveType"
+          formControlName="paid"
           required>
-          <mat-button-toggle value="PAID">Paid</mat-button-toggle>
-          <mat-button-toggle value="UNPAID">Unpaid</mat-button-toggle>
+          <mat-button-toggle [value]="true">Paid</mat-button-toggle>
+          <mat-button-toggle [value]="false">Unpaid</mat-button-toggle>
         </mat-button-toggle-group>
         <!-- <mat-error class="text-danger" class="text-danger">Gender is required</mat-error> -->
       </div>
@@ -97,7 +96,6 @@
           <textarea matInput rows="3" placeholder="Describe when this leave type applies" formControlName="description"></textarea>
         </mat-form-field>
       </div>
-
     </div>
   </div>
   </div>
@@ -324,7 +322,7 @@
       <div class="row mx-0">
         <div class="col-sm-12 px-2 mb-4">
           <mat-label class="form-label">Approval Overflow <span class="text-danger">*</span></mat-label>
-          <mat-radio-group class="form-radio-group row mx-0" formControlName="approvalOverflow">
+          <mat-radio-group class="form-radio-group row mx-0" formControlName="approval">
             <div class="col-sm-6 px-2">
               <mat-radio-button class="form-radio" color="primary" value="MANAGER">
                 Reporting Manager
@@ -351,12 +349,12 @@
         <div class="col-sm-6 px-2">
           <mat-label class="form-label">Minimum Advance Notice <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
-            <input type="number" min="0" matInput placeholder="Enter Minimum Advance Notice" formControlName="minimumAdvanceNotice">
+            <input type="number" min="0" matInput placeholder="Enter Minimum Advance Notice" formControlName="noticeDays">
             <span matTextSurfix class="text-muted ms-2 text-nowrap">Working Days</span>
-            @if (form.controls.minimumAdvanceNotice.hasError('required')) {
+            @if (form.controls.noticeDays.hasError('required')) {
               <mat-error class="text-danger">Minimum advance notice is required.</mat-error>
             }
-            @if (form.controls.minimumAdvanceNotice.hasError('min')) {
+            @if (form.controls.noticeDays.hasError('min')) {
               <mat-error class="text-danger">Enter zero or more days.</mat-error>
             }
           </mat-form-field>
@@ -393,11 +391,13 @@
         </div>
         <div class="col-sm-6 px-2">
           <div class="d-flex justify-content-between align-items-center gap-3 py-3">
-            <label class="text-dark my-0">Allow employee-specific leave settings</label>
-            <p class="fs-10 my-0 text-muted">
-              Enable different leave settings for each employee.
+            <div>
+              <label class="text-dark my-0">Allow employee-specific leave settings</label>
+              <p class="fs-10 my-0 text-muted">
+                Enable different leave settings for each employee.
               Otherwise, all employees share the same settings.
-            </p>
+              </p>
+            </div>
             <mat-slide-toggle
               color="primary"
               [checked]="form.controls.allowEmployeeSpecificSettings.value"
@@ -411,8 +411,36 @@
   </div>
   </div>
 
+  <h4 class="text-primary">Effective Period</h4>
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row mx-0">
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Effective From <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput [matDatepicker]="effectiveFrom" placeholder="Enter effective form" formControlName="effectiveFrom">
+            <mat-datepicker-toggle matSuffix [for]="effectiveFrom"></mat-datepicker-toggle>
+            <mat-datepicker #effectiveFrom></mat-datepicker>
+            @if (form.controls.effectiveFrom.hasError('required')) {
+              <mat-error class="text-danger">Start date is required.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Effective To</mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input matInput [min]="form.controls.effectiveFrom.value" [matDatepicker]="effectiveTo" placeholder="Enter effective to" formControlName="effectiveTo">
+            <mat-datepicker-toggle matSuffix [for]="effectiveTo"></mat-datepicker-toggle>
+            <mat-datepicker #effectiveTo></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="d-flex align-items-center justify-content-end gap-3">
     <button mat-flat-button color="primary-outline" (click)="goBack()"><tabler-icon icon="x" [size]="16"></tabler-icon>Cancel</button>
     <button mat-flat-button color="primary" [disabled]="!form.valid || submitting"><tabler-icon icon="check" [size]="16"></tabler-icon>{{ submitting ? 'Submitting...' : 'Submit' }}</button>
   </div>
 </form>
+}

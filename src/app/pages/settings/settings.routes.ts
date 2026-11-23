@@ -68,7 +68,7 @@ export const SETTINGS_ROUTES: Routes = [
     component: LeaveCreateComponent
   },
   {
-    path: 'leave-settings/edit/:code',
+    path: 'leave-settings/edit/:id',
     title: 'Edit Leave Setting',
     component: LeaveEditComponent
   },

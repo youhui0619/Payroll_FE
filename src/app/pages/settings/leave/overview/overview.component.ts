@@ -92,6 +92,10 @@ export class OverviewComponent implements OnInit {
     this.getLeavePolicies();
   }
 
+  filteredCountByStatus(status: any): number {
+    return this.leavePolicies.data.filter(leavePolicy => leavePolicy.active === status).length;
+  }
+
   entitlementLabel(policy: LeavePolicy): string {
     if (policy.entitlementCalculationMethod === 'SERVICE') {
       return 'Based on length of service';
@@ -100,4 +104,23 @@ export class OverviewComponent implements OnInit {
     const unit = policy.entitlementUnit === 'DAILY' ? 'days' : 'hours';
     return `${policy.defaultEntitlement ?? 0} ${unit} per year`;
   }
+
+  approvalName(policy: LeavePolicy): string {
+    const approval = (policy as LeavePolicy & { approval?: unknown }).approval;
+    const approvalRecord = approval && typeof approval === 'object'
+      ? approval as unknown as Record<string, unknown>
+      : null;
+    const approvalValue = [
+      approval,
+      approvalRecord?.['value'],
+      approvalRecord?.['code'],
+      approvalRecord?.['approval'],
+      approvalRecord?.['overflow'],
+      policy.approvalOverflow
+    ].find(value => typeof value === 'string' && approvalList.some(option => option.value === value.trim().toUpperCase()));
+    const normalizedValue = typeof approvalValue === 'string' ? approvalValue.trim().toUpperCase() : '';
+
+    return approvalList.find(option => option.value === normalizedValue)?.name ?? '—';
+  }
+  
 }

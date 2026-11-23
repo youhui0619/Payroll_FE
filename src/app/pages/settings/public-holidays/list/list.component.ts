@@ -117,7 +117,7 @@ export class ListComponent implements OnInit, AfterViewInit {
   }
 
   filteredCountByStatus(status: any): number {
-    return this.publicHolidays.data.filter(publicHoliday => publicHoliday.active === true).length;
+    return this.publicHolidays.data.filter(publicHoliday => publicHoliday.active === status).length;
   }
 
   getHolidayRegionTitle(holiday: PublicHoliday): string {
