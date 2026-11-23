@@ -4,9 +4,6 @@ import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { positions } from '../../../../data/workforce/positions.data';
-import { departments } from '../../../../data/workforce/departments.data';
-import { employees } from '../../../../data/workforce/employees.data';
 import type { Position, PositionJobLevel } from '../../../../models/workforce/position.model';
 import { PositionsApiService } from '../../../../services/api/positions.service';
 import { ToastService } from '../../../../shared/components/toast/toast.service';
@@ -121,9 +118,5 @@ export class OverviewComponent implements OnInit {
 
   filteredCountByStatus(status: boolean): number {
     return this.positions.data.filter(position => position.active === status).length;
-  }
-
-  jobLevelLabel(jobLevel: PositionJobLevel) {
-    return jobLevel.charAt(0) + jobLevel.slice(1).toLowerCase();
   }
 }

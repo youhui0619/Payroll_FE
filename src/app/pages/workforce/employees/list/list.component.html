@@ -104,7 +104,7 @@
     <div class="col-12 col-sm-6 col-md-3 col-lg-3">
       <mat-form-field appearance="outline" class="form-input w-100" subscriptSizing="dynamic">
         <mat-select placeholder="Department" [ngModel]="filter.departmentId" (ngModelChange)="applyFilter('departmentId', $event)">
-          @for (department of departments; track department.id) {
+          @for (department of departmentList; track department.id) {
             <mat-option [value]="department.id">{{ department.name }}</mat-option>
           }
         </mat-select>
@@ -175,22 +175,32 @@
                 <tr>
                   <td class="text-muted cursor-pointer text-nowrap" [routerLink]="['/workforce/employees/view', employee.employeeId]">
                     <div class="d-flex align-items-center justify-content-start">
-                      <div class="initial-avatar me-3">{{ employee.initials }}</div>
+                      <div class="initial-avatar me-3">{{ initials(employee.name) }}</div>
                       <div>
-                        <p class="text-dark my-0">{{ employee.employeeName }}</p>
-                        <p class="fs-10 fw-300 text-muted my-0">{{ employee.employeeId }}</p>
+                        <p class="text-dark my-0">{{ employee.name }}</p>
+                        <p class="fs-10 fw-300 text-muted my-0">{{ employee.employeeNo }}</p>
                       </div>
                     </div>
                   </td>
-                  <td class="text-muted">{{ employee.employmentType }}</td>
-                  <td class="text-muted">{{ employee.department }}</td>
-                  <td class="text-muted">{{ employee.position }}</td>
-                  <td><span [class]="'chip ' + employmentStatusClass(employee.employmentStatus)">{{ employee.employmentStatus }}</span></td>
+                  <td class="text-muted">{{ employee.employmentType | titlecase }}</td>
+                  <td class="text-muted">
+                    <div>
+                      <p class="text-dark my-0">{{ employee.department.name }}</p>
+                      <p class="fs-10 fw-300 text-muted my-0">{{ employee.department.code }}</p>
+                    </div>
+                  </td>
+                  <td class="text-muted">
+                    <div>
+                      <p class="text-dark my-0">{{ employee.position.title }}</p>
+                      <p class="fs-10 fw-300 text-muted my-0">{{ employee.position.code }}</p>
+                    </div>
+                  </td>
+                  <td><span [class]="'chip ' + employmentStatusClass(employee.employmentStatus)">{{ employee.employmentStatus | titlecase }}</span></td>
                   <td>
-                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/workforce/employees/view', employee.employeeId]">
+                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/workforce/employees/view', employee.id]">
                       <tabler-icon icon="eye"></tabler-icon>
                     </button>
-                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/workforce/employees/edit', employee.employeeId]">
+                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/workforce/employees/edit', employee.id]">
                       <tabler-icon icon="edit"></tabler-icon>
                     </button>
                   </td>

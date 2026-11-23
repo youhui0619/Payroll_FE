@@ -96,7 +96,7 @@
       <mat-form-field appearance="outline" class="form-input w-100" subscriptSizing="dynamic">
         <mat-select placeholder="Select job level"  [ngModel]="filter.jobLevel" (ngModelChange)="applyFilter('jobLevel', $event)">
           @for (level of jobLevels; track level) {
-            <mat-option [value]="level">{{ jobLevelLabel(level) }}</mat-option>
+            <mat-option [value]="level">{{ level | titlecase }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
@@ -161,7 +161,7 @@
                     <p class="text-dark my-0">{{ position.department?.name ?? '—' }}</p>
                     <p class="text-muted fw-300 fs-10 my-0">{{ position.department?.code ?? '—' }}</p>
                   </td>
-                  <td class="text-muted">{{ jobLevelLabel(position.jobLevel) }}</td>
+                  <td class="text-muted">{{ position.jobLevel | titlecase }}</td>
                   <td class="text-muted">{{ position.reportsTo || '-' }}</td>
                   <td class="text-muted text-center">{{ position.employeeCount ?? 0 }}</td>
                   <td class="text-muted">{{ position.effectiveFrom | date:'dd/MM/yyyy' }}</td>

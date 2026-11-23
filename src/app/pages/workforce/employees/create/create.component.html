@@ -344,7 +344,7 @@
                     </mat-label>
                     <mat-form-field appearance="outline" class="form-input w-100">
                       <mat-select placeholder="Select department" formControlName="departmentId" (selectionChange)="onDepartmentChange()">
-                        @for (department of departments; track department) {
+                        @for (department of departmentList; track department) {
                           <mat-option [value]="department.id">{{ department.name }}</mat-option>
                         }
                       </mat-select>
@@ -361,7 +361,7 @@
                       </mat-label>
                       <mat-form-field appearance="outline" class="form-input w-100">
                         <mat-select placeholder="Select position" formControlName="positionId" [disabled]="!form.controls.employment.controls.departmentId.value">
-                          @for (position of availablePositions; track position) {
+                          @for (position of availablePositions; track position.id) {
                             <mat-option [value]="position.id">{{ position.title }}</mat-option>
                           }
                         </mat-select>
@@ -403,7 +403,7 @@
                         #workLocationAuto="matAutocomplete"
                         [displayWith]="workLocationDisplayName"
                         (optionSelected)="onWorkLocationSelected($event.option.value)">
-                        @for (location of filteredWorkLocations; track location.id) {
+                        @for (location of workLocationList; track location.id) {
                           <mat-option [value]="location">
                             {{ location.name }} — {{ location.city }}, {{ location.state }}
                           </mat-option>
@@ -1211,7 +1211,7 @@
               <button mat-flat-button color="primary-outline" type="button" matStepperPrevious>
                 <tabler-icon icon="arrow-left" [size]="16"></tabler-icon>Back
               </button>
-              <button mat-flat-button color="primary" type="submit"><tabler-icon icon="check"></tabler-icon>Submit</button>
+              <button mat-flat-button color="primary" [disabled]="!form.valid || submitting"><tabler-icon icon="check" [size]="16"></tabler-icon>{{ submitting ? 'Submitting...' : 'Submit' }}</button>
             </div>
           </mat-step>
         </mat-stepper>

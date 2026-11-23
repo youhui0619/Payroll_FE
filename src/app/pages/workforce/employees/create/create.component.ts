@@ -14,13 +14,12 @@ import { workLocations } from '../../../../data/workforce/work-locations.data';
 import type { Department } from '../../../../models/workforce/department.model';
 import type { Position } from '../../../../models/workforce/position.model';
 import type { WorkLocation } from '../../../../models/workforce/work-location.model';
-import type { OvertimeCalculationBasis } from '../../../../models/workforce/employee.model';
+import type { EmployeeCreatePayload, OvertimeCalculationBasis } from '../../../../models/workforce/employee.model';
 import type { EmploymentStatus, EmploymentType } from '../../../../models/workforce/employment-status.model';
 import { employmentStatuses, employmentTypes } from '../../../../data/workforce/options/employment-options.data';
 import { commissionIncentiveSettings } from '../../../../data/commission/commission-incentive-settings.data';
 import { payrollSettings } from '../../../../data/payroll/payroll-settings.data';
 import { WORKING_SCHEDULE } from '../../../../data/working-schedule/working-schedule.data';
-import { NavigationService } from '../../../../services/navigation.service';
 import type { WorkingDayName, WorkingDaySchedule, WorkingSchedule } from '../../../../models/working-schedule/working-schedule.model';
 import type {
   CommissionCalculationFrequency,
@@ -31,6 +30,9 @@ import { EmployeesApiService } from '../../../../services/api/employees.service'
 import { ToastService } from '../../../../shared/components/toast/toast.service';
 import { Router } from '@angular/router';
 import { stateList } from '../../../../data/other/other.data';
+import { PositionsApiService } from '../../../../services/api/positions.service';
+import { DepartmentsApiService } from '../../../../services/api/departments.service';
+import { WorkLocationApiService } from '../../../../services/api/work-location.service';
 
 const statutoryEntitlementOptions = [
   { code: 'EPF', name: 'EPF / KWSP', setting: 'includeEpf' },
@@ -87,15 +89,17 @@ function createWorkingScheduleForm(schedule: WorkingSchedule): EmployeeWorkingSc
 @Component({
   selector: 'app-create',
   imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule,  DropzoneComponent],
-  providers: [...MaterialProviders, EmployeesApiService],
+  providers: [...MaterialProviders, EmployeesApiService, PositionsApiService, DepartmentsApiService, WorkLocationApiService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'
 })
 export class CreateComponent {
-
   constructor(
     private router: Router,
     private apiService: EmployeesApiService,
+    private positionApiService: PositionsApiService,
+    private departmentApiService: DepartmentsApiService,
+    private workLocationApiService: WorkLocationApiService,
     private toastService: ToastService
   ) {
     this.updatePositionValidator();
@@ -115,7 +119,7 @@ export class CreateComponent {
     }
   }
 
-  markStepTouched(control: AbstractControl): void {
+  markStepTouched(control: AbstractControl) {
     control.markAllAsTouched();
     console.log('Step validation result:', {
       valid: control.valid,
@@ -129,10 +133,10 @@ export class CreateComponent {
   private editingLeavePolicyCodes = new Set<string>();
 
   stateList: any =stateList
-  departments: Department[] = departments.filter(department => department.active);
-  positions: Position[] = positions;
+  departmentList: Department[] = [];
+  positionList: Position[] = [];
   managers = employees.filter(employee => employee.employmentStatus === 'ACTIVE');
-  workLocations = workLocations;
+  workLocationList: WorkLocation[] = [];
   workLocationSearch = new FormControl<WorkLocation | string>('', { nonNullable: true });
   employmentStatuses = employmentStatuses;
   employmentTypes = employmentTypes;
@@ -221,15 +225,74 @@ export class CreateComponent {
   });
   submitting: boolean = false;
 
+
+  ngOnInit() {
+    this.getDepartmentList();
+    this.getPositionList();
+    this.getWorkLocationList();
+  }
+
+  getDepartmentList(){
+    this.departmentApiService.getAllDepartments(null).subscribe({
+      next: (response) => {
+        const departments: Department[] = response?.data ?? [];
+        this.departmentList = departments.filter(department => department.active);
+        console.log("departmentList:", this.departmentList);
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
+    });
+  }
+
+  getPositionList(){
+    this.positionApiService.getAllPositions(null).subscribe({
+      next: (response) => {
+        const positions: Position[] = response?.data ?? [];
+        this.positionList = positions.filter(position => position.active);
+        console.log("positionList:", this.positionList);
+        this.updatePositionValidator();
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
+    });
+  }
+
+  getWorkLocationList(){
+    this.workLocationApiService.getAllWorkLocations(null).subscribe({
+      next: (response) => {
+        const workLocations: WorkLocation[] = response?.data ?? [];
+        this.workLocationList = workLocations.filter(workLocation => workLocation.active);
+        console.log("workLocationList:", this.workLocationList);
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
+    });
+  }
+
   get selectedWorkLocation(): WorkLocation | undefined {
     const locationId = this.form.controls.employment.controls.locationId.value;
-    return this.workLocations.find(location => location.id === locationId);
+    return this.workLocationList.find(location => location.id === locationId);
   }
 
   get filteredWorkLocations(): WorkLocation[] {
     const searchValue = this.workLocationSearch.value;
     const query = typeof searchValue === 'string' ? searchValue.trim().toLowerCase() : '';
-    return this.workLocations.filter(location => !query || [
+    return this.workLocationList.filter(location => !query || [
       location.name,
       location.code,
       location.city,
@@ -241,12 +304,12 @@ export class CreateComponent {
     return value && typeof value === 'object' ? value.name : value ?? '';
   };
 
-  onWorkLocationSelected(location: WorkLocation): void {
+  onWorkLocationSelected(location: WorkLocation) {
     this.form.controls.employment.controls.locationId.setValue(location.id);
     this.workLocationSearch.setValue(location);
   }
 
-  onWorkLocationSearchInput(): void {
+  onWorkLocationSearchInput() {
     if (typeof this.workLocationSearch.value === 'string') {
       this.form.controls.employment.controls.locationId.setValue('');
     }
@@ -258,11 +321,10 @@ export class CreateComponent {
 
   get availablePositions(): Position[] {
     const departmentId = this.form.controls.employment.controls.departmentId.value;
-    const department = this.departments.find(item => item.id === departmentId);
-    if (!department) return [];
+    if (!departmentId) return [];
 
-    return this.positions.filter(position =>
-      position.departmentId === department.id && this.isEffective(position.effectiveFrom, position.effectiveTo)
+    return this.positionList.filter(position =>
+      position.departmentId === departmentId && this.isEffective(position.effectiveFrom, position.effectiveTo)
     );
   }
 
@@ -272,8 +334,8 @@ export class CreateComponent {
 
   get availableCommissionSettings(): any[] {
     const employeeNo = (this.form.controls.personal.controls.employeeNo.value ?? '').trim();
-    const department = this.departments.find(item => item.id === this.form.controls.employment.controls.departmentId.value);
-    const position = this.positions.find(item => item.id === this.form.controls.employment.controls.positionId.value);
+    const department = this.departmentList.find(item => item.id === this.form.controls.employment.controls.departmentId.value);
+    const position = this.availablePositions.find(item => item.id === this.form.controls.employment.controls.positionId.value);
 
     return this.commissionIncentiveSettings.filter(setting => {
       switch (setting.eligibleEmployees) {
@@ -293,7 +355,7 @@ export class CreateComponent {
     return this.form.controls.payroll.controls.commissionSettingCodes.value.includes(code);
   }
 
-  setCommissionSelected(code: string, selected: boolean): void {
+  setCommissionSelected(code: string, selected: boolean) {
     const codes = this.form.controls.payroll.controls.commissionSettingCodes;
     const selectedCodes = new Set(codes.value);
 
@@ -303,7 +365,7 @@ export class CreateComponent {
     codes.setValue([...selectedCodes]);
   }
 
-  setOvertimeIncluded(selected: boolean): void {
+  setOvertimeIncluded(selected: boolean) {
     const payroll = this.form.controls.payroll.controls;
     payroll.includeOvertime.setValue(selected);
     if (selected && payroll.overtimeCalculationBasis.value === 'HOURLY_RATE') {
@@ -315,7 +377,7 @@ export class CreateComponent {
     payroll.overtimeHourlyRate.updateValueAndValidity();
   }
 
-  setOvertimeCalculationBasis(basis: OvertimeCalculationBasis): void {
+  setOvertimeCalculationBasis(basis: OvertimeCalculationBasis) {
     const payroll = this.form.controls.payroll.controls;
     payroll.overtimeCalculationBasis.setValue(basis);
     if (payroll.includeOvertime.value && basis === 'HOURLY_RATE') {
@@ -340,7 +402,7 @@ export class CreateComponent {
     return this.form.controls.payroll.controls.statutoryEntitlementCodes.value.includes(code);
   }
 
-  setStatutoryEntitlementSelected(code: string, selected: boolean): void {
+  setStatutoryEntitlementSelected(code: string, selected: boolean) {
     const codes = this.form.controls.payroll.controls.statutoryEntitlementCodes;
     const selectedCodes = new Set(codes.value);
 
@@ -351,7 +413,7 @@ export class CreateComponent {
     this.updateStatutoryValidators();
   }
 
-  private updateStatutoryValidators(): void {
+  private updateStatutoryValidators() {
     const controls = this.form.controls.payroll.controls;
     const rules = [
       { code: 'EPF', control: controls.epfEmployerNo },
@@ -399,19 +461,20 @@ export class CreateComponent {
     return labels[frequency];
   }
 
-  onDepartmentChange(): void {
+  onDepartmentChange(): string {
     this.form.controls.employment.controls.positionId.setValue('');
     this.updatePositionValidator();
+    return this.form.controls.employment.controls.departmentId.value;
   }
 
-  private updatePositionValidator(): void {
+  private updatePositionValidator() {
     const position = this.form.controls.employment.controls.positionId;
     if (this.hasAvailablePositions) position.setValidators(Validators.required);
     else position.clearValidators();
     position.updateValueAndValidity({ emitEvent: false });
   }
 
-  onEmploymentTypeChange(type: EmploymentType | null): void {
+  onEmploymentTypeChange(type: EmploymentType | null) {
     if (!type) return;
 
     const scheduleDays = this.form.controls.employment.controls.workingSchedule.controls.days;
@@ -448,7 +511,7 @@ export class CreateComponent {
     return this.form.controls.leave.controls.leaveServiceEntitlementTiers.controls[code];
   }
 
-  addLeaveServiceTier(code: string): void {
+  addLeaveServiceTier(code: string) {
     const tiers = this.serviceEntitlementTiers(code);
     const previousTier = tiers.at(tiers.length - 1);
     tiers.push(createLeaveServiceTierForm({
@@ -459,14 +522,14 @@ export class CreateComponent {
     this.updateLeaveServiceToValidators(code);
   }
 
-  removeLeaveServiceTier(code: string, index: number): void {
+  removeLeaveServiceTier(code: string, index: number) {
     const tiers = this.serviceEntitlementTiers(code);
     if (tiers.length <= 1) return;
     tiers.removeAt(index);
     this.updateLeaveServiceToValidators(code);
   }
 
-  private updateLeaveServiceToValidators(code: string): void {
+  private updateLeaveServiceToValidators(code: string) {
     const tiers = this.serviceEntitlementTiers(code);
     tiers.controls.forEach((tier, index) => {
       tier.controls.serviceTo.setValidators(
@@ -482,7 +545,7 @@ export class CreateComponent {
     return this.form.controls.leave.controls.leavePolicyCodes.value.includes(code);
   }
 
-  setLeavePolicySelected(code: string, selected: boolean): void {
+  setLeavePolicySelected(code: string, selected: boolean) {
     const codes = this.form.controls.leave.controls.leavePolicyCodes;
     const selectedCodes = new Set(codes.value);
 
@@ -499,7 +562,7 @@ export class CreateComponent {
     return this.editingLeavePolicyCodes.has(code);
   }
 
-  toggleLeavePolicyEditor(code: string): void {
+  toggleLeavePolicyEditor(code: string) {
     if (this.editingLeavePolicyCodes.has(code)) this.editingLeavePolicyCodes.delete(code);
     else this.editingLeavePolicyCodes.add(code);
   }
@@ -601,7 +664,7 @@ export class CreateComponent {
       const day = String(value.getDate()).padStart(2, '0');
       return `${year}-${month}-${day}`;
     };
-    const data = {
+    const data: EmployeeCreatePayload = {
       ...personalFields,
       employeeNo: employeeNo,
       name: name,

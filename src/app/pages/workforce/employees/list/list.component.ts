@@ -8,41 +8,43 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastService } from '../../../../shared/components/toast/toast.service';
 import { stateList } from '../../../../data/other/other.data';
-import { employees } from '../../../../data/workforce/employees.data';
 import { SkeletonLoaderComponent } from '../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { departments } from '../../../../data/workforce/departments.data';
 import { employmentStatuses, employmentTypes } from '../../../../data/workforce/options/employment-options.data';
 import type { EmploymentStatus, EmploymentType } from '../../../../models/workforce/employment-status.model';
 import { EmployeesApiService } from '../../../../services/api/employees.service';
-import { Employee } from '../../../../models/workforce/employee.model';
+import type { EmployeeOverview } from '../../../../models/workforce/employee.model';
+import { DepartmentsApiService } from '../../../../services/api/departments.service';
+import { Department } from '../../../../models/workforce/department.model';
 
 @Component({
   selector: 'app-list',
   standalone: true,
   imports: [CommonModule, ...MaterialImports, RouterLink, SkeletonLoaderComponent, FormsModule],
-  providers: [...MaterialProviders, EmployeesApiService],
+  providers: [...MaterialProviders, EmployeesApiService, DepartmentsApiService],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
 })
 export class ListComponent implements OnInit {
-  
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private apiService: EmployeesApiService,
+    private departmentApiService: DepartmentsApiService,
     private toastService: ToastService
   ) {}
 
   loading = true;
-  employees = new MatTableDataSource<Employee>([]);
+  employees = new MatTableDataSource<EmployeeOverview>([]);
   filter: any = {};
   meta: any = {};
   stateList: any = {};
 
 
 
-  departments = departments.filter(department => department.active);
+  departmentList: Department[] = [];
   employmentTypes = employmentTypes;
   employmentStatuses = employmentStatuses;
   selectedDepartments: string[] = [];
@@ -53,6 +55,7 @@ export class ListComponent implements OnInit {
   ngOnInit() {
     this.resetFilter();
     this.stateList = stateList;
+    this.getDepartmentList();
   }
 
   ngAfterViewInit() {
@@ -73,6 +76,28 @@ export class ListComponent implements OnInit {
     };
     this.getEmployees();
   }
+
+
+
+    getDepartmentList(){
+      this.loading = true;
+      this.departmentApiService.getAllDepartments(null).subscribe({
+        next: (response) => {
+          const departments: Department[] = response?.data ?? [];
+          this.departmentList = departments.filter(department => department.active);
+          console.log("departmentList:", this.departmentList);
+          this.loading = false
+        },
+        error: (error) => {
+          this.toastService.show({
+            title: error.error.code,
+            message: error.error.message,
+            icon: 'danger'
+          });
+          this.loading = false;
+        },
+      });
+    }
 
   getEmployees(){
     this.loading = true;
@@ -111,9 +136,14 @@ export class ListComponent implements OnInit {
     return this.employees.data.filter(employee => employee.employmentStatus === status).length;
   }
 
+
+  initials(name: string | null | undefined) {
+    return (name ?? '').split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join('').toUpperCase();
+  }
+
   employmentStatusClass(status: EmploymentStatus): string {
     const classes: Record<EmploymentStatus, string> = {
-      ACTIVE: 'bg-light-success text-success',
+      ACTIVE: 'bg-light-primary text-primary',
       PROBATION: 'bg-light-warning text-warning',
       SUSPENDED: 'bg-light-danger text-danger',
       RESIGNED: 'bg-light-secondary text-secondary',

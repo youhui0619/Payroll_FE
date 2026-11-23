@@ -4,6 +4,89 @@ import type { WorkingSchedule } from '../working-schedule/working-schedule.model
 
 export type OvertimeCalculationBasis = 'HOURLY_RATE' | 'DAILY_RATE_CONVERTED' | 'MONTHLY_SALARY_CONVERTED';
 
+/** Flat employee payload produced by the Workforce > Employees create form. */
+export interface EmployeeCreatePayload {
+  employeeNo: string;
+  name: string;
+  nricPassportNo: string;
+  dateOfBirth: string | null;
+  gender: string;
+  nationality: string;
+  race: string;
+  religion: string;
+  maritalStatus: string;
+  email: string;
+  contactNo: string;
+  addressLine1: string;
+  addressLine2: string | null;
+  city: string;
+  postcode: string;
+  state: string;
+  country: string;
+  employmentStatus: EmploymentStatus | null;
+  employmentType: EmploymentType | null;
+  workingSchedule: WorkingSchedule;
+  departmentId: string;
+  positionId: string | null;
+  managerId: string | null;
+  locationId: string;
+  joinedDate: string | null;
+  confirmationDate: string | null;
+  resignationDate: string | null;
+  basicSalary: number | null;
+  salaryType: string;
+  paymentMethod: string;
+  bank: string;
+  bankAccount: string;
+  epfEmployeeNo: string;
+  epfEmployerNo: string;
+  epfRate: string;
+  socsoNo: string;
+  contributionCategory: string;
+  eisStatus: string;
+  hrdRegisterNo: string;
+  statutoryEntitlementCodes: string[];
+  commissionSettingCodes: string[];
+  includeOvertime: boolean;
+  overtimeCalculationBasis: OvertimeCalculationBasis;
+  overtimeHourlyRate: number | null;
+  leavePolicyCodes: string[];
+  leaveEntitlementOverrides: Record<string, number | null>;
+  leaveServiceEntitlementTiers: Record<string, LeaveServiceEntitlementTier[]>;
+  medicalLeaveEntitlement: number | null;
+  medicalLeavePeriod: 'month' | 'year';
+  emergencyContactName: string;
+  emergencyContactRelationship: string;
+  emergencyContactNo: string;
+  emergencyContactAddressLine1: string;
+  emergencyContactAddressLine2: string | null;
+  emergencyContactCity: string;
+  emergencyContactPostcode: string;
+  emergencyContactState: string;
+  emergencyContactCountry: string;
+}
+
+/** Employee list/overview response, including the related department and position summaries. */
+export interface EmployeeOverview {
+  id: string;
+  employeeId: string;
+  employeeNo: string;
+  name: string;
+  employmentType: EmploymentType;
+  employmentStatus: EmploymentStatus;
+  department: {
+    id: string;
+    code: string;
+    name: string;
+  };
+  position: {
+    id: string;
+    code: string;
+    title: string;
+  };
+}
+
+/** Employee record used by existing directory, leave, and payroll views. */
 export interface Employee {
   employeeId: string;
   employeeName: string;
@@ -54,163 +137,3 @@ export interface Employee {
   emergencyContactRelationship: string;
   emergencyContactNo: string;
 }
-
-export interface EmployeePersonalInfo {
-  employeeId: string | null;
-  employeeName: string | null;
-  nricPassportNo: string | null;
-  dateOfBirth: Date | null;
-  gender: string | null;
-  nationality: string | null;
-  race: string | null;
-  religion: string | null;
-  maritalStatus: string | null;
-  email: string | null;
-  contactNo: string | null;
-  addressLine1: string | null;
-  addressLine2: string | null;
-  city: string | null;
-  postcode: string | null;
-  state: string | null;
-  country: string | null;
-}
-
-export interface EmployeeEmploymentInfo {
-  employmentStatus: EmploymentStatus | null;
-  employmentType: EmploymentType | null;
-  department: string | null;
-  position: string | null;
-  reportingManager: string | null;
-  workLocationId: string | null;
-  joinedDate: Date | null;
-  confirmationDate: Date | null;
-  resignationDate: Date | null;
-  workingSchedule: WorkingSchedule | null;
-}
-
-export interface EmployeePayrollInfo {
-  basicSalary: number | null;
-  salaryType: string | null;
-  paymentMethod: string | null;
-  bank: string | null;
-  bankAccount: string | null;
-  epfEmployeeNo: string | null;
-  epfEmployerNo: string | null;
-  epfRate: string | null;
-  socsoNo: string | null;
-  contributionCategory: string | null;
-  eisStatus: string | null;
-  hrdRegisterNo: string | null;
-  statutoryEntitlementCodes: string[];
-  commissionSettingCodes: string[];
-  includeOvertime: boolean;
-  overtimeCalculationBasis: OvertimeCalculationBasis;
-  overtimeHourlyRate: number | null;
-}
-
-export interface EmployeeTaxInformation {
-  agreeWithTerms: boolean | null;
-}
-
-export interface EmployeeLeaveInformation {
-  leavePolicyCodes: string[];
-  leaveEntitlementOverrides: Record<string, number | null>;
-  leaveServiceEntitlementTiers: Record<string, LeaveServiceEntitlementTier[]>;
-  medicalLeaveEntitlement: number | null;
-  medicalLeavePeriod: 'month' | 'year';
-}
-
-export interface EmployeeEmergencyContact {
-  contactName: string | null;
-  relationship: string | null;
-  contactNo: string | null;
-  addressLine1: string | null;
-  addressLine2: string | null;
-  city: string | null;
-  postcode: string | null;
-  state: string | null;
-  country: string | null;
-}
-
-export interface EmployeeFormData {
-  personal: EmployeePersonalInfo;
-  employment: EmployeeEmploymentInfo;
-  payroll: EmployeePayrollInfo;
-  taxInformation: EmployeeTaxInformation;
-  leave: EmployeeLeaveInformation;
-  emergencyContact: EmployeeEmergencyContact;
-}
-
-export const EMPTY_EMPLOYEE_FORM_DATA: EmployeeFormData = {
-  personal: {
-    employeeId: '',
-    employeeName: '',
-    nricPassportNo: '',
-    dateOfBirth: null,
-    gender: '',
-    nationality: '',
-    race: '',
-    religion: '',
-    maritalStatus: '',
-    email: '',
-    contactNo: '',
-    addressLine1: '',
-    addressLine2: '',
-    city: '',
-    postcode: '',
-    state: '',
-    country: '',
-  },
-  employment: {
-    employmentStatus: null,
-    employmentType: null,
-    department: '',
-    position: '',
-    reportingManager: '',
-    workLocationId: '',
-    joinedDate: null,
-    confirmationDate: null,
-    resignationDate: null,
-    workingSchedule: null,
-  },
-  payroll: {
-    basicSalary: null,
-    salaryType: '',
-    paymentMethod: '',
-    bank: '',
-    bankAccount: '',
-    epfEmployeeNo: '',
-    epfEmployerNo: '',
-    epfRate: '',
-    socsoNo: '',
-    contributionCategory: '',
-    eisStatus: '',
-    hrdRegisterNo: '',
-    statutoryEntitlementCodes: [],
-    commissionSettingCodes: [],
-    includeOvertime: false,
-    overtimeCalculationBasis: 'HOURLY_RATE',
-    overtimeHourlyRate: null,
-  },
-  taxInformation: {
-    agreeWithTerms: false,
-  },
-  leave: {
-    leavePolicyCodes: ['AL', 'ML'],
-    leaveEntitlementOverrides: {},
-    leaveServiceEntitlementTiers: {},
-    medicalLeaveEntitlement: null,
-    medicalLeavePeriod: 'year',
-  },
-  emergencyContact: {
-    contactName: '',
-    relationship: '',
-    contactNo: '',
-    addressLine1: '',
-    addressLine2: '',
-    city: '',
-    postcode: '',
-    state: '',
-    country: '',
-  },
-};
