@@ -1,6 +1,6 @@
-import type { PayrollSettings } from '../../models/payroll/payroll-settings.model';
+import type { PayrollSetting } from '../../models/payroll/payroll-settings.model';
 
-export const payrollSettings: PayrollSettings = {
+export const payrollSettings: PayrollSetting = {
   payrollFrequency: 'MONTHLY',
   payrollCutoffDay: 'LAST_DAY',
   scheduledPayDate: 1,

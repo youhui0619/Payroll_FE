@@ -2,28 +2,35 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../shared/material-imports';
-import { payrollSettings } from '../../../data/payroll/payroll-settings.data';
-import type { PayrollSettings } from '../../../models/payroll/payroll-settings.model';
+import type { PayrollSetting } from '../../../models/payroll/payroll-settings.model';
+import { PayrollSettingApiService } from '../../../services/api/payroll-setting.service';
+import { ToastService } from '../../../shared/components/toast/toast.service';
 
 @Component({
   selector: 'app-payroll',
   standalone: true,
   imports: [...MaterialImports, ReactiveFormsModule],
-  providers: [...MaterialProviders],
+  providers: [...MaterialProviders, PayrollSettingApiService],
   templateUrl: './payroll.component.html',
   styleUrl: './payroll.component.scss'
 })
 export class PayrollComponent implements OnInit {
-  @Input() showSubmitButton = true;
-  readonly daysOfMonth = Array.from({ length: 31 }, (_, index) => index + 1);
 
-  readonly payrollForm = new FormGroup({
-    payrollFrequency: new FormControl<PayrollSettings['payrollFrequency']>('MONTHLY', { nonNullable: true, validators: [Validators.required] }),
-    payrollCutoffDay: new FormControl<PayrollSettings['payrollCutoffDay']>('LAST_DAY', { nonNullable: true, validators: [Validators.required] }),
-    scheduledPayDate: new FormControl<PayrollSettings['scheduledPayDate']>(1, { nonNullable: true, validators: [Validators.required] }),
-    currency: new FormControl<PayrollSettings['currency']>('MYR', { nonNullable: true, validators: [Validators.required] }),
-    salaryProrationMethod: new FormControl<PayrollSettings['salaryProrationMethod']>('CALENDAR_DAYS', { nonNullable: true, validators: [Validators.required] }),
-    calculationPrecision: new FormControl<PayrollSettings['calculationPrecision']>(2, { nonNullable: true, validators: [Validators.required] }),
+  constructor(
+    private toastService: ToastService,
+    private apiService: PayrollSettingApiService,
+  ) {}
+
+  @Input() showSubmitButton = true;
+  daysOfMonth = Array.from({ length: 31 }, (_, index) => index + 1);
+
+  form = new FormGroup({
+    payrollFrequency: new FormControl<PayrollSetting['payrollFrequency'] | null>(null, { nonNullable: true, validators: [Validators.required] }),
+    payrollCutoffDay: new FormControl<PayrollSetting['payrollCutoffDay'] | null>(null, { nonNullable: true, validators: [Validators.required] }),
+    scheduledPayDate: new FormControl<PayrollSetting['scheduledPayDate'] | null>(null, { nonNullable: true, validators: [Validators.required] }),
+    currency: new FormControl<PayrollSetting['currency'] | null>(null, { nonNullable: true, validators: [Validators.required] }),
+    salaryProrationMethod: new FormControl<PayrollSetting['salaryProrationMethod'] | null>(null, { nonNullable: true, validators: [Validators.required] }),
+    calculationPrecision: new FormControl<PayrollSetting['calculationPrecision'] | null>(null, { nonNullable: true, validators: [Validators.required] }),
     includeBasicSalary: new FormControl(true, { nonNullable: true }),
     includeOvertime: new FormControl(true, { nonNullable: true }),
     includeClaimsAndAllowance: new FormControl(true, { nonNullable: true }),
@@ -38,42 +45,80 @@ export class PayrollComponent implements OnInit {
     configurePublicHolidayRates: new FormControl(false, { nonNullable: true }),
     publicHolidayOvertimeMultiplier: new FormControl<number | null>(null),
     publicHolidayEarningCode: new FormControl('', { nonNullable: true }),
-    deductionProrationMethod: new FormControl<PayrollSettings['deductionProrationMethod']>('FOLLOW_SALARY_PRORATION', { nonNullable: true, validators: [Validators.required] }),
+    deductionProrationMethod: new FormControl<PayrollSetting['deductionProrationMethod']| null>(null, { nonNullable: true, validators: [Validators.required] }),
     includeEpf: new FormControl(true, { nonNullable: true }),
     includeSocso: new FormControl(true, { nonNullable: true }),
     includeEis: new FormControl(true, { nonNullable: true }),
     includePcb: new FormControl(true, { nonNullable: true }),
     includeHrdCorpLevy: new FormControl(false, { nonNullable: true }),
-    paymentMethod: new FormControl<PayrollSettings['paymentMethod']>('BANK_TRANSFER', { nonNullable: true, validators: [Validators.required] }),
+    paymentMethod: new FormControl<PayrollSetting['paymentMethod']| null>(null, { nonNullable: true, validators: [Validators.required] }),
     automaticallyCalculatePayroll: new FormControl(true, { nonNullable: true }),
     blockApprovalOnValidationErrors: new FormControl(true, { nonNullable: true }),
     lockAfterFinalApproval: new FormControl(true, { nonNullable: true }),
     notifyApprovers: new FormControl(true, { nonNullable: true }),
-    approvalWorkflow: new FormControl<PayrollSettings['approvalWorkflow']>('ONE_APPROVER', { nonNullable: true, validators: [Validators.required] })
+    approvalWorkflow: new FormControl<PayrollSetting['approvalWorkflow']| null>(null, { nonNullable: true, validators: [Validators.required] })
   });
 
-  submittedPayrollSettings: PayrollSettings | null = null;
-  submitted = false;
-
-  ngOnInit(): void {
-    this.patchPayrollForm();
+  payrollSetting: PayrollSetting | null = null;
+  submitting: boolean = false;
+  
+  ngOnInit() {
+    this.getPayrollSetting()
   }
 
-  private patchPayrollForm(settings: PayrollSettings = payrollSettings): void {
-    const formValues = Object.fromEntries(
-      Object.entries(settings).filter(([key]) => this.payrollForm.contains(key))
-    );
-
-    this.payrollForm.patchValue(formValues);
+  getPayrollSetting(){
+    this.apiService.getPayrollSetting().subscribe({
+      next: (response) => {
+        this.payrollSetting = response.data;
+        console.log("payrollSetting:", this.payrollSetting);
+        if(this.payrollSetting){
+          this.form.patchValue(this.payrollSetting)
+        }
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
+    });
   }
 
-  onSubmit(): void {
-    this.submitted = true;
-    if (this.payrollForm.invalid) {
-      this.payrollForm.markAllAsTouched();
-      return;
-    }
+  onSubmit(form: FormGroup) {
+    const data = form.value;
+    this.apiService.updatePayrollSetting(data).subscribe({
+      next: (response) => {
+        this.form.markAsPristine();
+        this.toastService.show({
+          title: "Success",
+          message: "Payroll setting has been updated.",
+          icon: 'success'
+        });
 
-    this.submittedPayrollSettings = this.payrollForm.getRawValue();
+        this.submitting = false;
+      },
+      error: (error) => {
+        console.log("Error:", error);
+        const errorResponse = error?.error;
+
+        if (errorResponse?.errors?.length) {
+          errorResponse.errors.forEach((err: any) => {
+            this.toastService.show({
+              title: errorResponse.code,
+              message: err.message,
+              icon: 'danger'
+            });
+          });
+        } else {
+          this.toastService.show({
+            title: errorResponse?.code || 'Error',
+            message: errorResponse?.message || 'Something went wrong.',
+            icon: 'danger'
+          });
+        }
+        this.submitting = false;
+      }
+    });
   }
 }

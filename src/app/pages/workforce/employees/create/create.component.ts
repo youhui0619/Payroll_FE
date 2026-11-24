@@ -106,6 +106,7 @@ export class CreateComponent {
   ) {
     this.updatePositionValidator();
     this.updateStatutoryValidators();
+    this.updateBankValidators(this.form.controls.payroll.controls.paymentMethod.value);
 
     for (const policy of this.leavePolicies) {
       if (policy.entitlementCalculationMethod === 'SERVICE') {
@@ -128,6 +129,29 @@ export class CreateComponent {
       status: control.status,
       value: control.getRawValue(),
     });
+  }
+
+  get isBankTransfer(): boolean {
+    return this.form.controls.payroll.controls.paymentMethod.value === 'Transfer by bank';
+  }
+
+  onPaymentMethodChange(method: string) {
+    this.updateBankValidators(method);
+  }
+
+  private updateBankValidators(method: string) {
+    const { bank, bankAccount } = this.form.controls.payroll.controls;
+    if (method === 'Transfer by bank') {
+      bank.setValidators(Validators.required);
+      bankAccount.setValidators(Validators.required);
+    } else {
+      bank.clearValidators();
+      bankAccount.clearValidators();
+      bank.setValue('');
+      bankAccount.setValue('');
+    }
+    bank.updateValueAndValidity({ emitEvent: false });
+    bankAccount.updateValueAndValidity({ emitEvent: false });
   }
 
   @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;

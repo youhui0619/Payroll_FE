@@ -5,7 +5,7 @@ export type DeductionProrationMethod = PayrollProrationMethod | 'FOLLOW_SALARY_P
 export type PayrollPaymentMethod = 'BANK_TRANSFER' | 'CASH' | 'OTHER';
 export type PayrollApprovalWorkflow = 'ONE_APPROVER' | 'TWO_STEP';
 
-export interface PayrollSettings {
+export interface PayrollSetting {
   payrollFrequency: PayrollFrequency;
   payrollCutoffDay: PayrollDay;
   scheduledPayDate: PayrollDay;

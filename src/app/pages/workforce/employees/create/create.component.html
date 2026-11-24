@@ -581,7 +581,7 @@
                         *</span>
                       </mat-label>
                       <mat-form-field appearance="outline" class="form-input w-100">
-                        <mat-select placeholder="Select payment method" formControlName="paymentMethod">
+                        <mat-select placeholder="Select payment method" formControlName="paymentMethod" (selectionChange)="onPaymentMethodChange($event.value)">
                           <mat-option value="Transfer by bank">Transfer by bank</mat-option>
                           <mat-option value="Cash">Cash</mat-option>
                           <mat-option value="Cheque">Cheque</mat-option>
@@ -592,6 +592,7 @@
                       </mat-form-field>
                     </div>
 
+                    @if (isBankTransfer) {
                     <div class="col-sm-4 px-2">
                       <mat-label class="form-label">Bank
                         <span class="text-danger">
@@ -625,6 +626,7 @@
                         }
                       </mat-form-field>
                     </div>
+                    }
                   </div>
                 </div>
               </div>

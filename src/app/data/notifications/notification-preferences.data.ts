@@ -1,5 +1,5 @@
 import type { NotificationPreferenceGroup } from '../../models/notifications/notification-preference.model';
-import type { PayrollSettings } from '../../models/payroll/payroll-settings.model';
+import type { PayrollSetting } from '../../models/payroll/payroll-settings.model';
 import { payrollSettings } from '../payroll/payroll-settings.data';
 
 export const NOTIFICATION_PREFERENCE_VALUES: Record<string, boolean> = {
@@ -17,7 +17,7 @@ export const NOTIFICATION_PREFERENCE_MONTH_VALUES = {
   probationConfirmation: 2
 };
 
-export function getNotificationPreferenceGroups(settings: PayrollSettings = payrollSettings): NotificationPreferenceGroup[] {
+export function getNotificationPreferenceGroups(settings: PayrollSetting = payrollSettings): NotificationPreferenceGroup[] {
   const groups: NotificationPreferenceGroup[] = [
     {
       id: 'notification-channels',

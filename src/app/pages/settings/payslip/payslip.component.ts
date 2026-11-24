@@ -51,7 +51,8 @@ export class PayslipComponent implements OnInit {
 
   @ViewChild('payslipNumberFormatInput') payslipNumberFormatInput?: ElementRef<HTMLInputElement>;
   @ViewChild('pdfFilenameFormatInput') pdfFilenameFormatInput?: ElementRef<HTMLInputElement>;
-  readonly payslipFormatTokens = [
+   
+  payslipFormatTokens = [
     { name: 'Year (YYYY)', value: '{YYYY}' },
     { name: 'Month (MM)', value: '{MM}' },
     { name: 'Employee ID', value: '{EMPLOYEE_ID}' }
