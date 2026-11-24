@@ -14,7 +14,7 @@ import {
   salaryProrationMethodOptions as salaryProrationMethodOptionList,
   scheduledPayDateOptions as scheduledPayDateOptionList
 } from '../../../models/payroll/payroll-settings.model';
-import type { PayrollSetting } from '../../../models/payroll/payroll-settings.model';
+import type { PayrollDay, PayrollSetting } from '../../../models/payroll/payroll-settings.model';
 import { PayrollSettingApiService } from '../../../services/api/payroll-setting.service';
 import { ToastService } from '../../../shared/components/toast/toast.service';
 
@@ -93,7 +93,11 @@ export class PayrollComponent implements OnInit {
         this.payrollSetting = response.data;
         console.log("payrollSetting:", this.payrollSetting);
         if(this.payrollSetting){
-          this.form.patchValue(this.payrollSetting)
+          this.form.patchValue({
+            ...this.payrollSetting,
+            payrollCutoffDay: this.normalizePayrollDay(this.payrollSetting.payrollCutoffDay),
+            scheduledPayDate: this.normalizePayrollDay(this.payrollSetting.scheduledPayDate)
+          });
         }
       },
       error: (error) => {
@@ -104,6 +108,13 @@ export class PayrollComponent implements OnInit {
         });
       },
     });
+  }
+
+  private normalizePayrollDay(value: PayrollDay | string): PayrollDay {
+    if (value === 'LAST_DAY' || typeof value === 'number') return value;
+
+    const day = Number(value);
+    return Number.isInteger(day) && day >= 1 && day <= 31 ? day : value as PayrollDay;
   }
 
   onSubmit(form: FormGroup) {
