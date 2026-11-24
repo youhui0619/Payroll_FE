@@ -2,6 +2,18 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialImports, MaterialProviders } from '../../../shared/material-imports';
+import {
+  approvalWorkflowOptions as approvalWorkflowOptionList,
+  calculationPrecisionOptions as calculationPrecisionOptionList,
+  deductionProrationMethodOptions as deductionProrationMethodOptionList,
+  minimumOvertimeDurationOptions as minimumOvertimeDurationOptionList,
+  paymentMethodOptions as paymentMethodOptionList,
+  payrollCutoffDayOptions as payrollCutoffDayOptionList,
+  payrollCurrencyOptions as payrollCurrencyOptionList,
+  payrollFrequencyOptions as payrollFrequencyOptionList,
+  salaryProrationMethodOptions as salaryProrationMethodOptionList,
+  scheduledPayDateOptions as scheduledPayDateOptionList
+} from '../../../models/payroll/payroll-settings.model';
 import type { PayrollSetting } from '../../../models/payroll/payroll-settings.model';
 import { PayrollSettingApiService } from '../../../services/api/payroll-setting.service';
 import { ToastService } from '../../../shared/components/toast/toast.service';
@@ -22,7 +34,16 @@ export class PayrollComponent implements OnInit {
   ) {}
 
   @Input() showSubmitButton = true;
-  daysOfMonth = Array.from({ length: 31 }, (_, index) => index + 1);
+  payrollFrequencyOptions = payrollFrequencyOptionList;
+  payrollCutoffDayOptions = payrollCutoffDayOptionList;
+  scheduledPayDateOptions = scheduledPayDateOptionList;
+  payrollCurrencyOptions = payrollCurrencyOptionList;
+  salaryProrationMethodOptions = salaryProrationMethodOptionList;
+  calculationPrecisionOptions = calculationPrecisionOptionList;
+  deductionProrationMethodOptions = deductionProrationMethodOptionList;
+  paymentMethodOptions = paymentMethodOptionList;
+  approvalWorkflowOptions = approvalWorkflowOptionList;
+  minimumOvertimeDurationOptions = minimumOvertimeDurationOptionList;
 
   form = new FormGroup({
     payrollFrequency: new FormControl<PayrollSetting['payrollFrequency'] | null>(null, { nonNullable: true, validators: [Validators.required] }),
@@ -31,11 +52,11 @@ export class PayrollComponent implements OnInit {
     currency: new FormControl<PayrollSetting['currency'] | null>(null, { nonNullable: true, validators: [Validators.required] }),
     salaryProrationMethod: new FormControl<PayrollSetting['salaryProrationMethod'] | null>(null, { nonNullable: true, validators: [Validators.required] }),
     calculationPrecision: new FormControl<PayrollSetting['calculationPrecision'] | null>(null, { nonNullable: true, validators: [Validators.required] }),
-    includeBasicSalary: new FormControl(true, { nonNullable: true }),
-    includeOvertime: new FormControl(true, { nonNullable: true }),
-    includeClaimsAndAllowance: new FormControl(true, { nonNullable: true }),
-    includeBonus: new FormControl(true, { nonNullable: true }),
-    includeCommissionAndIncentives: new FormControl(true, { nonNullable: true }),
+    includeBasicSalary: new FormControl(false, { nonNullable: true }),
+    includeOvertime: new FormControl(false, { nonNullable: true }),
+    includeClaimsAndAllowance: new FormControl(false, { nonNullable: true }),
+    includeBonus: new FormControl(false, { nonNullable: true }),
+    includeCommissionAndIncentives: new FormControl(false, { nonNullable: true }),
     standardWorkingHoursPerDay: new FormControl<number | null>(null),
     normalWorkingDayMultiplier: new FormControl<number | null>(null),
     normalWorkingDayEarningCode: new FormControl('', { nonNullable: true }),
@@ -46,16 +67,16 @@ export class PayrollComponent implements OnInit {
     publicHolidayOvertimeMultiplier: new FormControl<number | null>(null),
     publicHolidayEarningCode: new FormControl('', { nonNullable: true }),
     deductionProrationMethod: new FormControl<PayrollSetting['deductionProrationMethod']| null>(null, { nonNullable: true, validators: [Validators.required] }),
-    includeEpf: new FormControl(true, { nonNullable: true }),
-    includeSocso: new FormControl(true, { nonNullable: true }),
-    includeEis: new FormControl(true, { nonNullable: true }),
-    includePcb: new FormControl(true, { nonNullable: true }),
+    includeEpf: new FormControl(false, { nonNullable: true }),
+    includeSocso: new FormControl(false, { nonNullable: true }),
+    includeEis: new FormControl(false, { nonNullable: true }),
+    includePcb: new FormControl(false, { nonNullable: true }),
     includeHrdCorpLevy: new FormControl(false, { nonNullable: true }),
     paymentMethod: new FormControl<PayrollSetting['paymentMethod']| null>(null, { nonNullable: true, validators: [Validators.required] }),
-    automaticallyCalculatePayroll: new FormControl(true, { nonNullable: true }),
-    blockApprovalOnValidationErrors: new FormControl(true, { nonNullable: true }),
-    lockAfterFinalApproval: new FormControl(true, { nonNullable: true }),
-    notifyApprovers: new FormControl(true, { nonNullable: true }),
+    automaticallyCalculatePayroll: new FormControl(false, { nonNullable: true }),
+    blockApprovalOnValidationErrors: new FormControl(false, { nonNullable: true }),
+    lockAfterFinalApproval: new FormControl(false, { nonNullable: true }),
+    notifyApprovers: new FormControl(false, { nonNullable: true }),
     approvalWorkflow: new FormControl<PayrollSetting['approvalWorkflow']| null>(null, { nonNullable: true, validators: [Validators.required] })
   });
 
@@ -86,7 +107,16 @@ export class PayrollComponent implements OnInit {
   }
 
   onSubmit(form: FormGroup) {
-    const data = form.value;
+    if (form.invalid) {
+      form.markAllAsTouched();
+      return;
+    }
+
+    this.submitting = true;
+    const data = {
+      ...form.value,
+    makerChecker: true,
+  };
     this.apiService.updatePayrollSetting(data).subscribe({
       next: (response) => {
         this.form.markAsPristine();

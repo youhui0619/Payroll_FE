@@ -13,6 +13,7 @@ export const payrollSettings: PayrollSetting = {
   includeBonus: true,
   includeCommissionAndIncentives: true,
   standardWorkingHoursPerDay: 8,
+  minimumOvertimeDuration: 'NONE',
   normalWorkingDayMultiplier: 1.5,
   normalWorkingDayEarningCode: 'OT',
   configureRestDayRates: true,

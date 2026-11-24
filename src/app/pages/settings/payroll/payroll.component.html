@@ -7,12 +7,13 @@
           <mat-label class="form-label">Payroll frequency <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <mat-select placeholder="Select payroll frequency" formControlName="payrollFrequency">
-              <mat-option value="WEEKLY">Weekly</mat-option>
-              <mat-option value="BIWEEKLY">Every two weeks</mat-option>
-              <mat-option value="SEMIMONTHLY">Twice a month</mat-option>
-              <mat-option value="MONTHLY">Monthly</mat-option>
+              @for (option of payrollFrequencyOptions; track option.value) {
+                <mat-option [value]="option.value">{{ option.label }}</mat-option>
+              }
             </mat-select>
-            <mat-error class="text-danger" class="text-danger">Status is required</mat-error>
+            @if (form.controls.payrollFrequency.hasError('required') && form.controls.payrollFrequency.touched) {
+              <mat-error>Payroll frequency is required.</mat-error>
+            }
           </mat-form-field>
         </div>
 
@@ -20,12 +21,13 @@
           <mat-label class="form-label">Payroll cut-off day <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <mat-select placeholder="Select payroll cut-off day" formControlName="payrollCutoffDay">
-              @for (day of daysOfMonth; track day) {
-                <mat-option [value]="day">{{ day }}</mat-option>
+              @for (option of payrollCutoffDayOptions; track option.value) {
+                <mat-option [value]="option.value">{{ option.label }}</mat-option>
               }
-              <mat-option value="LAST_DAY">Last day of the month</mat-option>
             </mat-select>
-            <mat-error class="text-danger" class="text-danger">Status is required</mat-error>
+            @if (form.controls.payrollCutoffDay.hasError('required') && form.controls.payrollCutoffDay.touched) {
+              <mat-error>Payroll cut-off day is required.</mat-error>
+            }
           </mat-form-field>
         </div>
 
@@ -33,12 +35,13 @@
           <mat-label class="form-label">Scheduled pay date <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <mat-select placeholder="Select scheduled pay date" formControlName="scheduledPayDate">
-              @for (day of daysOfMonth; track day) {
-                <mat-option [value]="day">{{ day }}{{ day === 1 ? 'st' : day === 2 ? 'nd' : day === 3 ? 'rd' : 'th' }} of each month</mat-option>
+              @for (option of scheduledPayDateOptions; track option.value) {
+                <mat-option [value]="option.value">{{ option.label }}</mat-option>
               }
-              <mat-option value="LAST_DAY">Last day of the month</mat-option>
             </mat-select>
-            <mat-error class="text-danger" class="text-danger">Status is required</mat-error>
+            @if (form.controls.scheduledPayDate.hasError('required') && form.controls.scheduledPayDate.touched) {
+              <mat-error>Scheduled pay date is required.</mat-error>
+            }
           </mat-form-field>
         </div>
 
@@ -46,9 +49,13 @@
           <mat-label class="form-label">Currency <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <mat-select placeholder="Select currency" formControlName="currency">
-              <mat-option value="MYR">RM — Malaysian Ringgit</mat-option>
+              @for (option of payrollCurrencyOptions; track option.value) {
+                <mat-option [value]="option.value">{{ option.label }}</mat-option>
+              }
             </mat-select>
-            <mat-error class="text-danger" class="text-danger">Status is required</mat-error>
+            @if (form.controls.currency.hasError('required') && form.controls.currency.touched) {
+              <mat-error>Currency is required.</mat-error>
+            }
           </mat-form-field>
         </div>
 
@@ -56,11 +63,13 @@
           <mat-label class="form-label">Salary proration method <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <mat-select placeholder="Select Salary proration method" formControlName="salaryProrationMethod">
-              <mat-option value="CALENDAR_DAYS">Calendar days in month</mat-option>
-              <mat-option value="FIXED_26_DAYS">Fixed 26-day basis</mat-option>
-              <mat-option value="WORKING_DAYS">Working days in month</mat-option>
+              @for (option of salaryProrationMethodOptions; track option.value) {
+                <mat-option [value]="option.value">{{ option.label }}</mat-option>
+              }
             </mat-select>
-            <mat-error class="text-danger" class="text-danger">Status is required</mat-error>
+            @if (form.controls.salaryProrationMethod.hasError('required') && form.controls.salaryProrationMethod.touched) {
+              <mat-error>Salary proration method is required.</mat-error>
+            }
           </mat-form-field>
         </div>
 
@@ -68,10 +77,13 @@
           <mat-label class="form-label">Calculation precision <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <mat-select placeholder="Select Calculation precision" formControlName="calculationPrecision">
-              <mat-option [value]="2">2 decimal places</mat-option>
-              <mat-option [value]="3">3 decimal places</mat-option>
+              @for (option of calculationPrecisionOptions; track option.value) {
+                <mat-option [value]="option.value">{{ option.label }}</mat-option>
+              }
             </mat-select>
-            <mat-error class="text-danger" class="text-danger">Status is required</mat-error>
+            @if (form.controls.calculationPrecision.hasError('required') && form.controls.calculationPrecision.touched) {
+              <mat-error>Calculation precision is required.</mat-error>
+            }
           </mat-form-field>
         </div>
       </div>
@@ -244,11 +256,13 @@
           <mat-label class="form-label">Deduction proration method <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <mat-select placeholder="Select deduction proration method" formControlName="deductionProrationMethod">
-              <mat-option value="CALENDAR_DAYS">Calendar-day basis</mat-option>
-              <mat-option value="WORKING_DAYS">Working-day basis</mat-option>
-              <mat-option value="FOLLOW_SALARY_PRORATION">Follow salary proration method</mat-option>
+              @for (option of deductionProrationMethodOptions; track option.value) {
+                <mat-option [value]="option.value">{{ option.label }}</mat-option>
+              }
             </mat-select>
-            <mat-error class="text-danger" class="text-danger">Status is required</mat-error>
+            @if (form.controls.deductionProrationMethod.hasError('required') && form.controls.deductionProrationMethod.touched) {
+              <mat-error>Deduction proration method is required.</mat-error>
+            }
           </mat-form-field>
         </div>
       </div>
@@ -259,12 +273,15 @@
     <div class="card-body">
       <div class="row mx-0">
         <div class="col-sm-12 px-2 mb-4">
-          <mat-label class="form-label">Overtime calculation basis <span class="text-danger">*</span></mat-label>
+          <mat-label class="form-label">Payment method <span class="text-danger">*</span></mat-label>
           <mat-radio-group class="form-radio-group row" formControlName="paymentMethod">
-            <mat-radio-button class="col-sm-12 form-radio" value="BANK_TRANSFER">Hourly rate</mat-radio-button>
-            <mat-radio-button class="col-sm-12 form-radio" value="CASH">Daily rate converted to hourly</mat-radio-button>
-            <mat-radio-button class="col-sm-12 form-radio" value="OTHER">Monthly salary converted to hourly</mat-radio-button>
+            @for (option of paymentMethodOptions; track option.value) {
+              <mat-radio-button class="col-sm-12 form-radio" [value]="option.value">{{ option.label }}</mat-radio-button>
+            }
           </mat-radio-group>
+          @if (form.controls.paymentMethod.hasError('required') && form.controls.paymentMethod.touched) {
+            <p class="text-danger small">Payment method is required.</p>
+          }
         </div>
         <div class="col-sm-6 px-2">
           <mat-label class="form-label">Standard working hours per day <span class="text-danger">*</span></mat-label>
@@ -277,12 +294,10 @@
           <mat-label class="form-label">Minimum overtime duration <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <mat-select placeholder="Select deduction proration method">
-              <mat-option value="CALENDAR_DAYS">No minimium</mat-option>
-              <mat-option value="CALENDAR_DAYS">15 Minutes</mat-option>
-              <mat-option value="CALENDAR_DAYS">30 Minutes</mat-option>
-              <mat-option value="CALENDAR_DAYS">60 Minutes</mat-option>
+              @for (option of minimumOvertimeDurationOptions; track option.value) {
+                <mat-option [value]="option.value">{{ option.label }}</mat-option>
+              }
             </mat-select>
-            <mat-error class="text-danger" class="text-danger">Status is required</mat-error>
           </mat-form-field>
         </div>
       </div>
@@ -328,16 +343,20 @@
         <div class="col-sm-12 px-2 mb-4">
           <mat-label class="form-label">Approval workflow <span class="text-danger">*</span></mat-label>
           <mat-radio-group class="form-radio-group row" formControlName="approvalWorkflow">
-            <mat-radio-button class="col-sm-12 form-radio" value="ONE_APPROVER">One approver</mat-radio-button>
-            <mat-radio-button class="col-sm-12 form-radio" value="TWO_STEP">Two-step approval — reviewer and final approver</mat-radio-button>
+            @for (option of approvalWorkflowOptions; track option.value) {
+              <mat-radio-button class="col-sm-12 form-radio" [value]="option.value">{{ option.label }}</mat-radio-button>
+            }
           </mat-radio-group>
+          @if (form.controls.approvalWorkflow.hasError('required') && form.controls.approvalWorkflow.touched) {
+            <p class="text-danger small">Approval workflow is required.</p>
+          }
         </div>
       </div>
     </div>
   </div>
   <div class="d-flex align-items-center justify-content-end gap-3">
     @if (showSubmitButton) {
-      <button type="submit" mat-flat-button color="primary"><tabler-icon icon="check"></tabler-icon>Submit</button>
+      <button type="submit" mat-flat-button color="primary" [disabled]="form.invalid || submitting"><tabler-icon icon="check"></tabler-icon>{{ submitting ? 'Saving...' : 'Submit' }}</button>
     }
   </div>
 </form>
