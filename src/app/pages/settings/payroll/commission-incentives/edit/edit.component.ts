@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -26,6 +26,7 @@ import type { Department } from '../../../../../models/workforce/department.mode
 import type { Position } from '../../../../../models/workforce/position.model';
 import type { EmployeeOverview } from '../../../../../models/workforce/employee.model';
 import { ToastService } from '../../../../../shared/components/toast/toast.service';
+import { AlertService } from '../../../../../shared/components/alert/alert.service';
 
 @Component({
   selector: 'app-edit',
@@ -45,7 +46,8 @@ export class EditComponent implements OnInit {
     private positionApiService: PositionsApiService,
     private employeeApiService: EmployeesApiService,
     private toastService: ToastService,
-    private destroyRef: DestroyRef
+    private alertService: AlertService,
+    private cdr: ChangeDetectorRef
   ) {
     this.form.controls.calculationMethod.valueChanges
       .pipe(takeUntilDestroyed())
@@ -188,7 +190,7 @@ export class EditComponent implements OnInit {
   }
 
   goBack() {
-    return this.router.navigate(['/settings/payroll/commission-incentives/overview']);
+    return this.router.navigate(['/settings/commission-incentives/overview']);
   }
 
   onSubmit(form: FormGroup) {
@@ -198,30 +200,14 @@ export class EditComponent implements OnInit {
     }
 
     this.submitting = true;
-    const value = this.form.getRawValue();
-    const method = value.calculationMethod;
-    const eligibility = value.eligibleEmployees;
-    if (!method || !eligibility || !value.commissionType || !value.calculationFrequency || !value.payoutTiming || !value.payrollEarningCode) {
-      this.submitting = false;
-      return;
-    }
-
-    const data: Omit<CommissionIncentiveSetting, 'id' | 'active'> = {
-      code: value.code.trim(),
-      name: value.name.trim(),
-      commissionType: value.commissionType,
-      calculationMethod: method,
-      rate: this.usesRateCalculation(method) ? value.rate : null,
-      amount: this.usesRateCalculation(method) ? null : value.amount,
-      calculationFrequency: value.calculationFrequency,
-      payoutTiming: value.payoutTiming,
-      description: value.description?.trim() ?? '',
-      eligibleEmployees: eligibility,
-      eligibleDepartmentIds: eligibility === 'SELECTED_DEPARTMENTS' ? value.eligibleDepartmentIds : [],
-      eligiblePositionIds: eligibility === 'SELECTED_POSITIONS' ? value.eligiblePositionIds : [],
-      eligibleEmployeeIds: eligibility === 'SELECTED_EMPLOYEES' ? value.eligibleEmployeeIds : [],
-      payrollEarningCode: value.payrollEarningCode.trim(),
-      requiresApproval: value.requiresApproval === true
+    const value = form.value;
+    const data: CommissionIncentiveSetting = {
+      ...value,
+      rate: this.usesRateCalculation(value.calculationMethod) ? value.rate : null,
+      amount: this.usesRateCalculation(value.calculationMethod) ? null : value.amount,
+      eligibleDepartmentIds: value.eligibleEmployees === 'SELECTED_DEPARTMENTS' ? value.eligibleDepartmentIds : [],
+      eligiblePositionIds: value.eligibleEmployees === 'SELECTED_POSITIONS' ? value.eligiblePositionIds : [],
+      eligibleEmployeeIds: value.eligibleEmployees === 'SELECTED_EMPLOYEES' ? value.eligibleEmployeeIds : []
     };
 
     this.commissionApiService.updateCommissionSetting(this.id, data).subscribe({
@@ -230,40 +216,28 @@ export class EditComponent implements OnInit {
         this.submitting = false;
         this.goBack();
       },
-      error: error => {
-        this.showRequestError(error);
+      error: (error) => {
+        console.log("Error:", error);
+        const errorResponse = error?.error;
+
+        if (errorResponse?.errors?.length) {
+          errorResponse.errors.forEach((err: any) => {
+            this.toastService.show({
+              title: errorResponse.code,
+              message: err.message,
+              icon: 'danger'
+            });
+          });
+        } else {
+          this.toastService.show({
+            title: errorResponse?.code || 'Error',
+            message: errorResponse?.message || 'Something went wrong.',
+            icon: 'danger'
+          });
+        }
         this.submitting = false;
       }
     });
-  }
-
-
-  private patchForm(setting: CommissionIncentiveSetting) {
-    this.form.patchValue({
-      code: setting.code,
-      name: setting.name,
-      commissionType: setting.commissionType,
-      calculationMethod: setting.calculationMethod,
-      calculationFrequency: setting.calculationFrequency,
-      payoutTiming: setting.payoutTiming,
-      description: setting.description ?? '',
-      eligibleEmployees: setting.eligibleEmployees,
-      payrollEarningCode: setting.payrollEarningCode,
-      requiresApproval: setting.requiresApproval
-    }, { emitEvent: false });
-
-    this.updateEligibilityFields(setting.eligibleEmployees);
-    this.form.patchValue({
-      eligibleDepartmentIds: setting.eligibleDepartmentIds ?? [],
-      eligiblePositionIds: setting.eligiblePositionIds ?? [],
-      eligibleEmployeeIds: setting.eligibleEmployeeIds ?? []
-    }, { emitEvent: false });
-    this.updateCalculationFields(setting.calculationMethod);
-    if (this.usesRateCalculation(setting.calculationMethod)) {
-      this.form.controls.rate.setValue(setting.rate, { emitEvent: false });
-    } else {
-      this.form.controls.amount.setValue(setting.amount, { emitEvent: false });
-    }
   }
 
   private updateCalculationFields(method: CommissionCalculationMethod | null) {
@@ -316,15 +290,43 @@ export class EditComponent implements OnInit {
     });
   }
 
-  private showRequestError(error: any) {
-    const response = error?.error;
-    const messages = (response?.errors as Array<{ message?: string }> | undefined)
-      ?.map(item => item.message)
-      .filter((message): message is string => !!message);
-    this.toastService.show({
-      title: response?.code || 'Error',
-      message: messages?.join('\n') || response?.message || 'Something went wrong.',
-      icon: 'danger'
+
+  updateStatus(commissionSetting: any){
+    const isActive = commissionSetting.active
+    const action = isActive ? 'deactivated' : 'activated';
+    const actionLabel = isActive ? 'Deactivate' : 'Activate';
+
+    this.alertService.show({
+      title: `${actionLabel} Commission`,
+      content: `Are you sure you want to ${actionLabel.toLowerCase()} this commission?`,
+      approveLabel: 'Continue',
+      rejectLabel: 'Cancel',
+      onApprove: () => {
+        this.commissionApiService.updateCommissionSettingStatus(commissionSetting.id).subscribe({
+          next: (response) => {
+            this.commissionSetting = response.data;
+            this.cdr.markForCheck();
+           this.toastService.show({
+              title: "Success",
+              message: `Commission has been ${action}.`,
+              icon: 'success'
+            });
+            setTimeout(()=>{
+              this.alertService.close()
+            }, 1000)
+          },
+          error: (error) => {
+            this.toastService.show({
+              title: error.error.code,
+              message: error.error.message,
+              icon: 'danger'
+            });
+          },
+        });
+       },
+      onReject: () => {
+          this.alertService.close()
+       }
     });
   }
 }

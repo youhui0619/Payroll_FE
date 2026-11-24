@@ -158,7 +158,7 @@ export class CreateComponent {
   }
 
   goBack() {
-    return this.router.navigate(['/settings/payroll/commission-incentives/overview'])
+    return this.router.navigate(['/settings/commission-incentives/overview'])
   }
 
   onSubmit(form: FormGroup) {
@@ -191,7 +191,7 @@ export class CreateComponent {
         this.formDirective.resetForm();
         this.submitting = false;
         setTimeout(() => {
-          this.router.navigate(['/settings/payroll/commission-incentives/overview']);
+          this.router.navigate(['/settings/commission-incentives/overview']);
         }, 1000);
       },
       error: (error) => {

@@ -1,4 +1,39 @@
+<div class="row justify-content-between mb-3">
+  <div class="col-sm-12 px-2">
+    <div class="d-flex align-items-center gap-2 cursor-pointer" (click)="goBack()">
+      <button mat-icon-button type="button" class="d-flex justify-content-center w-auto mb-0" aria-label="Go back">
+        <tabler-icon icon="chevron-left" class="text-dark d-flex" [size]="16"></tabler-icon>
+      </button>
+      <p class="text-muted mb-0">Back to commission list</p>
+    </div>
+  </div>
+</div>
+
 @if (commissionSetting) {
+<div class="row justify-content-between mb-4">
+  <div class="col-sm-7">
+    <h3 class="text-dark my-0">Edit Commission Type</h3>
+    <p class="text-muted mb-0">Update the details for {{ commissionSetting.name || 'this commissionSetting' }}.</p>
+  </div>
+
+  
+  <div class="col-sm-5 d-flex align-items-center justify-content-end">
+    <button
+      mat-flat-button
+      [attr.color]="commissionSetting.active ? 'danger' : 'primary'"
+      class="ms-2"
+      (click)="updateStatus(commissionSetting)"
+    >
+      <tabler-icon
+        [icon]="commissionSetting.active ? 'x' : 'check'"
+        [size]="16">
+      </tabler-icon>
+
+      {{ commissionSetting.active ? 'Deactivate' : 'Activate' }}
+    </button>
+  </div>
+</div>
+
   
 <form [formGroup]="form" (ngSubmit)="onSubmit(form)">
   <h4 class="text-primary">Commission &amp; Incentive Information</h4>

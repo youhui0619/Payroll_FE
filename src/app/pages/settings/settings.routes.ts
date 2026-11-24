@@ -99,17 +99,17 @@ export const SETTINGS_ROUTES: Routes = [
     component: PayslipComponent
   },
   {
-    path: 'payroll/commission-incentives/overview',
+    path: 'commission-incentives/overview',
     title: 'Commission & Incentives List',
     component: CommissionOverviewComponent
   },
   {
-    path: 'payroll/commission-incentives/create',
+    path: 'commission-incentives/create',
     title: 'Commission & Incentives Create',
     component: CommissionCreateComponent
   },
   {
-    path: 'payroll/commission-incentives/edit/:id',
+    path: 'commission-incentives/edit/:id',
     title: 'Edit Commission & Incentives',
     component: CommissionEditComponent
   },

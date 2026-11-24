@@ -4,7 +4,7 @@
     <p class="fw-300 text-muted mb-0">Manage commission and incentive rules, calculation frequency, and payout timing.</p>
   </div>
   <div class="col-sm-5 d-flex align-items-center justify-content-end">
-    <button mat-flat-button color="primary" class="ms-2" routerLink="/settings/payroll/commission-incentives/create">
+    <button mat-flat-button color="primary" class="ms-2" routerLink="/settings/commission-incentives/create">
       <tabler-icon icon="plus" [size]="16"></tabler-icon>
       Create Commission
     </button>
@@ -138,7 +138,7 @@
                     </span>
                   </td>
                   <td>
-                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/settings/payroll/commission-incentives/edit', commission.id]">
+                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/settings/commission-incentives/edit', commission.id]">
                       <tabler-icon icon="edit"></tabler-icon>
                     </button>
                   </td>
