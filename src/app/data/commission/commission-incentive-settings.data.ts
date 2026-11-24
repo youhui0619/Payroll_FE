@@ -2,6 +2,7 @@ import type { CommissionIncentiveSetting } from '../../models/commission/commiss
 
 export const commissionIncentiveSettings: CommissionIncentiveSetting[] = [
   {
+    id: 'QTR-PERF',
     code: 'SALES-COMM',
     name: 'Sales Commission',
     commissionType: 'REVENUE_COMMISSION',
@@ -16,9 +17,11 @@ export const commissionIncentiveSettings: CommissionIncentiveSetting[] = [
     eligiblePositionIds: [],
     eligibleEmployeeIds: [],
     payrollEarningCode: 'COMM-SALES',
-    requiresApproval: true
+    requiresApproval: true,
+    active: true,
   },
   {
+    id: 'QTR-PERF',
     code: 'QTR-PERF',
     name: 'Quarterly Performance Incentive',
     commissionType: 'TEAM_INCENTIVE',
@@ -33,9 +36,11 @@ export const commissionIncentiveSettings: CommissionIncentiveSetting[] = [
     eligiblePositionIds: [],
     eligibleEmployeeIds: [],
     payrollEarningCode: 'INC-QTR',
-    requiresApproval: true
+    requiresApproval: true,
+    active: true,
   },
   {
+    id: 'QTR-PERF',
     code: 'NEW-CLIENT',
     name: 'New Client Bonus',
     commissionType: 'CUSTOMER_ACQUISITION',
@@ -50,6 +55,7 @@ export const commissionIncentiveSettings: CommissionIncentiveSetting[] = [
     eligiblePositionIds: ['POS-0010'],
     eligibleEmployeeIds: [],
     payrollEarningCode: 'COMM-NEW',
-    requiresApproval: true
+    requiresApproval: true,
+    active: true,
   }
 ];

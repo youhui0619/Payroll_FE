@@ -5,7 +5,7 @@
   </div>
   <div class="col-sm-5 d-flex align-items-center justify-content-end">
     <button mat-flat-button color="primary" class="ms-2" routerLink="/settings/payroll/commission-incentives/create">
-      <tabler-icon icon="plus"></tabler-icon>
+      <tabler-icon icon="plus" [size]="16"></tabler-icon>
       Create Commission
     </button>
   </div>
@@ -18,42 +18,50 @@
     </div>
   </div>
 } @else {
-<div class="row my-4">
-  <div class="col-sm-3 px-2">
-    <div class="card">
+<div class="row align-items-stretch">
+  <div class="col-6 col-sm-3 px-2 d-flex flex-column">
+    <div class="card flex-grow-1 mb-4">
       <div class="card-body">
-        <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex flex-column-reverse flex-sm-row align-items-start justify-content-between">
           <div class="summary-info">
-            <p class="fs-12 text-muted mb-1">Total Programs</p>
-            <h3 class="mb-0">{{ commissionIncentiveSettings.length }}</h3>
+            <p class="fs-12 text-muted">Total Commission Type</p>
+            <h3 class="mb-0">{{ commissions.data.length }}</h3>
           </div>
-          <div class="text-primary bg-light-primary text-end icon"><tabler-icon icon="receipt"></tabler-icon></div>
+          <div class="text-primary bg-light-primary text-end icon mb-2">
+            <tabler-icon icon="users"></tabler-icon>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-sm-3 px-2">
-    <div class="card">
+
+  <div class="col-6 col-sm-3 px-2 d-flex flex-column">
+    <div class="card flex-grow-1 mb-4">
       <div class="card-body">
-        <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex flex-column-reverse flex-sm-row align-items-start justify-content-between">
           <div class="summary-info">
-            <p class="fs-12 text-muted mb-1">Approval Required</p>
-            <h3 class="mb-0">{{ approvalRequiredCount }}</h3>
+            <p class="fs-12 text-muted">Active</p>
+            <!-- <h3 class="mb-0">{{ activePositionCount }}</h3> -->
           </div>
-          <div class="text-warning bg-light-warning text-end icon"><tabler-icon icon="hourglass-empty"></tabler-icon></div>
+          <div class="text-primary bg-light-primary text-end icon mb-2">
+            <tabler-icon icon="user-check"></tabler-icon>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-sm-3 px-2">
-    <div class="card">
+
+  <div class="col-6 col-sm-3 px-2 d-flex flex-column">
+    <div class="card flex-grow-1 mb-4">
       <div class="card-body">
-        <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex flex-column-reverse flex-sm-row align-items-start justify-content-between">
           <div class="summary-info">
-            <p class="fs-12 text-muted mb-1">All Employees Eligible</p>
-            <h3 class="mb-0">{{ allEmployeesCount }}</h3>
+            <p class="fs-12 text-muted">Inactive</p>
+            <!-- <h3 class="mb-0">{{ inactivePositionCount }}</h3> -->
           </div>
-          <div class="text-success bg-light-success text-end icon"><tabler-icon icon="users"></tabler-icon></div>
+          <div class="text-primary bg-light-primary text-end icon mb-2">
+            <tabler-icon icon="user-off"></tabler-icon>
+          </div>
         </div>
       </div>
     </div>
@@ -65,10 +73,28 @@
   <div class="col-sm-12 px-2">
     <div class="card">
       <div class="card-header mb-3">
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
           <h6 class="fs-14 fw-400 text-muted my-0">
-            <span class="fw-550 text-primary">All ({{ commissionIncentiveSettings.length }})</span>
+            <span class="fw-550 text-primary">All ({{ commissions.data.length }})</span>
+            | Active ({{ filteredCountByStatus(true) }})
+            | Inactive ({{ filteredCountByStatus(false) }})
           </h6>
+          <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center flex-lg-nowrap gap-2">
+            <div class="d-flex flex-wrap flex-lg-nowrap gap-2 ms-auto">
+                <button mat-flat-button color="primary-outline" class="btn-sm" (click)="resetFilter()">
+                    <tabler-icon icon="x" [size]="16"></tabler-icon>
+                    Clear
+                </button>
+                <button mat-flat-button color="primary-outline" class="btn-sm">
+                    <tabler-icon icon="upload" [size]="16"></tabler-icon>
+                    Import
+                </button>
+                <button mat-flat-button color="primary-outline" class="btn-sm">
+                    <tabler-icon icon="download" [size]="16"></tabler-icon>
+                    Export
+                </button>
+            </div>
+          </div>
         </div>
       </div>
       <div class="card-body">
@@ -76,7 +102,7 @@
           @if (loading) {
             <app-skeleton-loader [rows]="6" [columns]="7"></app-skeleton-loader>
           } @else {
-<table class="table no-wrap w-100 text-left">
+          <table class="table no-wrap w-100 text-left">
             <thead>
               <tr>
                 <th class="text-dark">Name</th>
@@ -85,30 +111,40 @@
                 <th class="text-dark">Frequency</th>
                 <th class="text-dark">Payout Timing</th>
                 <th class="text-dark">Eligible Employees</th>
+                <th class="text-dark">Status</th>
                 <th class="text-dark">Action</th>
               </tr>
             </thead>
             <tbody>
 
-              @for (setting of commissionIncentiveSettings; track setting) {
+              @for (commission of commissions.data; track commission) {
                 <tr>
                   <td class="text-muted">
-                    <p>{{ setting.name }}</p>
-                    <p class="fs-10 fw-300 my-0">{{ setting.code }}</p>
+                    <p>{{ commission.name }}</p>
+                    <p class="fs-10 fw-300 my-0">{{ commission.code }}</p>
                   </td>
-                  <td class="text-muted">{{ typeLabel(setting.commissionType) }}</td>
-                  <td class="text-muted">{{ calculationLabel(setting) }}</td>
-                  <td class="text-muted">{{ frequencyLabel(setting.calculationFrequency) }}</td>
-                  <td class="text-muted">{{ payoutLabel(setting.payoutTiming) }}</td>
-                  <td class="text-muted">{{ eligibilityLabel(setting) }}</td>
+                  <td class="text-muted">{{ typeLabel(commission.commissionType) }}</td>
+                  <td class="text-muted">{{ calculationLabel(commission) }}</td>
+                  <td class="text-muted">{{ frequencyLabel(commission.calculationFrequency) }}</td>
+                  <td class="text-muted">{{ payoutLabel(commission.payoutTiming) }}</td>
+                  <td class="text-muted">{{ eligibilityLabel(commission) }}</td>
                   <td>
-                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/settings/payroll/commission-incentives/edit', setting.code]" [attr.aria-label]="'Edit ' + setting.name">
+                    <span
+                      class="chip"
+                      [ngClass]="commission.active
+                        ? 'bg-light-primary text-primary'
+                        : 'bg-light-danger text-danger'">
+                      {{ commission.active ? 'Active' : 'Inactive' }}
+                    </span>
+                  </td>
+                  <td>
+                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/settings/payroll/commission-incentives/edit', commission.id]">
                       <tabler-icon icon="edit"></tabler-icon>
                     </button>
                   </td>
                 </tr>
               }
-              @if (commissionIncentiveSettings.length === 0) {
+              @empty {
                 <tr>
                   <td colspan="9" class="text-center text-muted py-4">No commission or incentive settings found.</td>
                 </tr>
@@ -116,6 +152,13 @@
             </tbody>
           </table>
           }
+          <!-- Pagination -->
+          <mat-paginator
+            [length]="meta.total" 
+            [pageSize]="meta.pageSize" 
+            [pageSizeOptions]="[5, 10 ,20]"
+            showFirstLastButtons>
+          </mat-paginator>
         </div>
       </div>
     </div>

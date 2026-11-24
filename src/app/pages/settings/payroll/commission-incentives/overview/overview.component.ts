@@ -1,5 +1,5 @@
-import { OnInit, Component } from '@angular/core';
-
+import { OnInit, Component, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { SkeletonLoaderComponent } from '../../../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../../shared/material-imports';
@@ -13,30 +13,93 @@ import type {
   CommissionIncentiveType,
   CommissionPayoutTiming
 } from '../../../../../models/commission/commission-incentive-setting.model';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+
+import { CommissionSettingApiService } from '../../../../../services/api/commission-setting.service';
+import { ToastService } from '../../../../../shared/components/toast/toast.service';
 
 @Component({
   selector: 'app-overview',
   standalone: true,
-  imports: [...MaterialImports, RouterLink, SkeletonLoaderComponent],
-  providers: [...MaterialProviders],
+  imports: [...MaterialImports, RouterLink, SkeletonLoaderComponent, CommonModule],
+  providers: [...MaterialProviders, CommissionSettingApiService],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
 export class OverviewComponent implements OnInit {
+  
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
+  constructor(
+    private apiService: CommissionSettingApiService,
+    private toastService: ToastService,
+  ) {}
+
   loading = true;
+  commissions = new MatTableDataSource<CommissionIncentiveSetting>([]);
+  filter: any = {};
+  meta: any = {};
 
-  ngOnInit(): void {
-    window.setTimeout(() => this.loading = false, 3000);
+  
+  ngOnInit() {
+    this.resetFilter();
   }
 
-  readonly commissionIncentiveSettings = commissionIncentiveSettings;
-
-  get approvalRequiredCount(): number {
-    return this.commissionIncentiveSettings.filter(setting => setting.requiresApproval).length;
+  ngAfterViewInit() {
+    this.paginator.page.subscribe(() => {
+      this.meta.pageSize = this.paginator.pageSize;
+      this.meta.page = this.paginator.pageIndex + 1; 
+      console.log(this.meta, this.meta)
+      this.getCommissions();
+    });
   }
 
-  get allEmployeesCount(): number {
-    return this.commissionIncentiveSettings.filter(setting => setting.eligibleEmployees === 'ALL_EMPLOYEES').length;
+  resetFilter(){
+    this.filter = {
+      search: "",
+      active: null
+    };
+    this.getCommissions();
+  }
+
+  getCommissions(){
+    this.loading = true;
+    this.apiService.getAllCommissionSettings(this.filter).subscribe({
+      next: (response) => {
+        console.log("response", response)
+        this.commissions.data = response.data.length > 0 ? response.data : [];
+        this.meta.total = response.meta.total
+        this.loading = false;
+        console.log("commissions", this.commissions)
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+        this.loading = false;
+      },
+    });
+  }
+
+  onSortChange(event: { active: string; direction: string }) {
+    this.meta.sortBy = event.active;
+    this.meta.sortDir = event.direction.toUpperCase() || 'ASC';
+    console.log("this.meta sort", this.meta)
+    this.getCommissions();
+  }
+
+  applyFilter(field: 'search' | 'departmentId' | 'jobLevel' | 'state', value: string) {
+    this.filter[field] = value;
+    this.getCommissions();
+  }
+
+  filteredCountByStatus(status: boolean): number {
+    return this.commissions.data.filter(commission => commission.active === status).length;
   }
 
   typeLabel(type: CommissionIncentiveType): string {

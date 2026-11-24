@@ -1,13 +1,16 @@
 
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormGroupDirective } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../../shared/material-imports';
-import { departments } from '../../../../../data/workforce/departments.data';
-import { employees } from '../../../../../data/workforce/employees.data';
-import { positions } from '../../../../../data/workforce/positions.data';
-import { commissionIncentiveSettings } from '../../../../../data/commission/commission-incentive-settings.data';
+import {
+  commissionTypes as commissionTypeOptions,
+  calculationMethods as calculationMethodOptions,
+  calculationFrequencies as calculationFrequencyOptions,
+  payoutTimings as payoutTimingOptions,
+  employeeEligibilityOptions as eligibilityOptions
+} from '../../../../../models/commission/commission-incentive-setting.model';
 import type {
   CommissionCalculationFrequency,
   CommissionCalculationMethod,
@@ -16,154 +19,217 @@ import type {
   CommissionIncentiveType,
   CommissionPayoutTiming
 } from '../../../../../models/commission/commission-incentive-setting.model';
+import { DepartmentsApiService } from '../../../../../services/api/departments.service';
+import { PositionsApiService } from '../../../../../services/api/positions.service';
+import { ToastService } from '../../../../../shared/components/toast/toast.service';
+import { EmployeesApiService } from '../../../../../services/api/employees.service';
+import { EmployeeOverview } from '../../../../../models/workforce/employee.model';
+import { Position } from '../../../../../models/workforce/position.model';
+import { Department } from '../../../../../models/workforce/department.model';
+import { CommissionSettingApiService } from '../../../../../services/api/commission-setting.service';
 
 @Component({
   selector: 'app-create',
   standalone: true,
-  imports: [...MaterialImports, ReactiveFormsModule, RouterLink],
-  providers: [...MaterialProviders],
+  imports: [...MaterialImports, ReactiveFormsModule],
+  providers: [...MaterialProviders, PositionsApiService, DepartmentsApiService, EmployeesApiService, CommissionSettingApiService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'
 })
 export class CreateComponent {
-  readonly commissionTypes: { value: CommissionIncentiveType; label: string }[] = [
-    { value: 'SALES_COMMISSION', label: 'Sales Commission' },
-    { value: 'TIERED_SALES_COMMISSION', label: 'Tiered Sales Commission' },
-    { value: 'REVENUE_COMMISSION', label: 'Revenue Commission' },
-    { value: 'PROFIT_COMMISSION', label: 'Profit-Based Commission' },
-    { value: 'TARGET_ACHIEVEMENT', label: 'Sales Target Achievement Incentive' },
-    { value: 'REFERRAL_INCENTIVE', label: 'Referral Incentive' },
-    { value: 'COLLECTION_INCENTIVE', label: 'Payment Collection Incentive' },
-    { value: 'PROJECT_INCENTIVE', label: 'Project Completion Incentive' },
-    { value: 'TEAM_INCENTIVE', label: 'Team Performance Incentive' },
-    { value: 'PRODUCT_INCENTIVE', label: 'Product-Specific Sales Incentive' },
-    { value: 'CUSTOMER_ACQUISITION', label: 'New Customer Acquisition Incentive' },
-    { value: 'CUSTOM', label: 'Other / Custom Incentive' },
-  ];
 
-  readonly calculationMethods: { value: CommissionCalculationMethod; label: string }[] = [
-    { value: 'PERCENTAGE_OF_SALES', label: 'Percentage of Sales' },
-    { value: 'PERCENTAGE_OF_REVENUE', label: 'Percentage of Revenue' },
-    { value: 'PERCENTAGE_OF_PROFIT', label: 'Percentage of Profit' },
-    { value: 'FIXED_PER_TRANSACTION', label: 'Fixed Amount per Transaction' },
-    { value: 'TIERED_RATE', label: 'Tiered Rate' },
-    { value: 'TARGET_BASED', label: 'Target-Based Calculation' },
-    { value: 'FIXED_AMOUNT', label: 'Fixed Amount' },
-  ];
+  @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
+  
+  constructor(
+    private router: Router,
+    private apiService: CommissionSettingApiService,
+    private positionApiService: PositionsApiService,
+    private departmentApiService: DepartmentsApiService,
+    private employeeApiService: EmployeesApiService,
+    private toastService: ToastService
+  ) {
+     this.form.controls.calculationMethod.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe(method => this.updateCalculationFields(method));
+    this.updateCalculationFields(this.form.controls.calculationMethod.value);
+    this.form.controls.eligibleEmployees.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe(eligibility => this.updateEligibilityFields(eligibility));
+    this.updateEligibilityFields(this.form.controls.eligibleEmployees.value);
+  }
 
-  readonly calculationFrequencies: { value: CommissionCalculationFrequency; label: string }[] = [
-    { value: 'PER_TRANSACTION', label: 'Per transaction' },
-    { value: 'WEEKLY', label: 'Weekly' },
-    { value: 'BIWEEKLY', label: 'Every two weeks' },
-    { value: 'MONTHLY', label: 'Monthly' },
-    { value: 'QUARTERLY', label: 'Quarterly' }
-  ];
-
-  readonly payoutTimings: { value: CommissionPayoutTiming; label: string }[] = [
-    { value: 'CURRENT_PAYROLL', label: 'Current payroll cycle' },
-    { value: 'NEXT_PAYROLL', label: 'Next payroll cycle' },
-    { value: 'SEPARATE_PAYOUT', label: 'Separate payout' }
-  ];
-
-  readonly employeeEligibilityOptions: { value: CommissionEmployeeEligibility; label: string }[] = [
-    { value: 'ALL_EMPLOYEES', label: 'All employees' },
-    { value: 'SELECTED_DEPARTMENTS', label: 'Selected departments' },
-    { value: 'SELECTED_POSITIONS', label: 'Selected positions' },
-    { value: 'SELECTED_EMPLOYEES', label: 'Selected employees' }
-  ];
-
-  readonly departments = departments.filter(department => department.active);
-  readonly positions = positions.filter(position => position.effectiveTo === null);
-  readonly employees = employees.filter(employee => employee.employmentStatus === 'ACTIVE');
-
-  readonly commissionForm = new FormGroup({
-    code: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.maxLength(20), Validators.pattern(/^[A-Za-z][A-Za-z0-9_-]*$/)]
-    }),
-    name: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(60)] }),
-    commissionType: new FormControl<CommissionIncentiveType>('SALES_COMMISSION', { nonNullable: true, validators: [Validators.required] }),
-    calculationMethod: new FormControl<CommissionCalculationMethod>('PERCENTAGE_OF_SALES', { nonNullable: true, validators: [Validators.required] }),
+  commissionTypes = commissionTypeOptions;
+  calculationMethods = calculationMethodOptions;
+  calculationFrequencies = calculationFrequencyOptions;
+  payoutTimings = payoutTimingOptions;
+  employeeEligibilityOptions = eligibilityOptions;
+  departmentList: Department[] = [];
+  positionList: Position[] = [];
+  employeeList: EmployeeOverview[] = [];
+  form = new FormGroup({
+    code: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    commissionType: new FormControl<CommissionIncentiveType | null>(null, Validators.required),
+    calculationMethod: new FormControl<CommissionCalculationMethod | null>(null, Validators.required),
     rate: new FormControl<number | null>(null),
     amount: new FormControl<number | null>(null),
-    calculationFrequency: new FormControl<CommissionCalculationFrequency>('MONTHLY', { nonNullable: true, validators: [Validators.required] }),
-    payoutTiming: new FormControl<CommissionPayoutTiming>('CURRENT_PAYROLL', { nonNullable: true, validators: [Validators.required] }),
-    description: new FormControl('', { nonNullable: true, validators: [Validators.maxLength(250)] }),
-    eligibleEmployees: new FormControl<CommissionEmployeeEligibility>('ALL_EMPLOYEES', { nonNullable: true, validators: [Validators.required] }),
+    calculationFrequency: new FormControl<CommissionCalculationFrequency | null>(null, Validators.required),
+    payoutTiming: new FormControl<CommissionPayoutTiming | null>(null, Validators.required),
+    description: new FormControl<string | null>(''),
+    eligibleEmployees: new FormControl<CommissionEmployeeEligibility | null>(null, Validators.required),
     eligibleDepartmentIds: new FormControl<string[]>([], { nonNullable: true }),
     eligiblePositionIds: new FormControl<string[]>([], { nonNullable: true }),
     eligibleEmployeeIds: new FormControl<string[]>([], { nonNullable: true }),
-    payrollEarningCode: new FormControl('COMM-SALES', { nonNullable: true, validators: [Validators.required, Validators.maxLength(20), Validators.pattern(/^[A-Za-z][A-Za-z0-9_-]*$/)] }),
-    requiresApproval: new FormControl(true, { nonNullable: true })
+    payrollEarningCode: new FormControl<string | null>(null, Validators.required),
+    requiresApproval: new FormControl<boolean | null>(null)
   });
-
-  submittedCommissionSetting: CommissionIncentiveSetting | null = null;
-  submitted = false;
-
-  constructor(private readonly router: Router) {
-    this.commissionForm.controls.calculationMethod.valueChanges
-      .pipe(takeUntilDestroyed())
-      .subscribe(method => this.updateCalculationFields(method));
-    this.updateCalculationFields(this.commissionForm.controls.calculationMethod.value);
-    this.commissionForm.controls.eligibleEmployees.valueChanges
-      .pipe(takeUntilDestroyed())
-      .subscribe(eligibility => this.updateEligibilityFields(eligibility));
-    this.updateEligibilityFields(this.commissionForm.controls.eligibleEmployees.value);
+  submitting: boolean = false;
+    
+  ngOnInit() {
+    this.getDepartmentList();
+    this.getPositionList();
+    this.getEmployeeList();
   }
-
+  
   get usesPercentageCalculation(): boolean {
-    return this.usesRateCalculation(this.commissionForm.controls.calculationMethod.value);
+    return this.usesRateCalculation(this.form.controls.calculationMethod.value);
   }
 
   get showDepartmentSelection(): boolean {
-    return this.commissionForm.controls.eligibleEmployees.value === 'SELECTED_DEPARTMENTS';
+    return this.form.controls.eligibleEmployees.value === 'SELECTED_DEPARTMENTS';
   }
 
   get showPositionSelection(): boolean {
-    return this.commissionForm.controls.eligibleEmployees.value === 'SELECTED_POSITIONS';
+    return this.form.controls.eligibleEmployees.value === 'SELECTED_POSITIONS';
   }
 
   get showEmployeeSelection(): boolean {
-    return this.commissionForm.controls.eligibleEmployees.value === 'SELECTED_EMPLOYEES';
+    return this.form.controls.eligibleEmployees.value === 'SELECTED_EMPLOYEES';
   }
 
-  onSubmit(): void {
-    this.submitted = true;
-    const codeControl = this.commissionForm.controls.code;
-    const normalizedCode = codeControl.value.trim().toUpperCase();
-    codeControl.setValue(normalizedCode, { emitEvent: false });
+  getDepartmentList(){
+    this.departmentApiService.getAllDepartments(null).subscribe({
+      next: (response) => {
+        const departments: Department[] = response?.data ?? [];
+        this.departmentList = departments.filter(department => department.active);
+        console.log("departmentList:", this.departmentList);
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
+    });
+  }
+  getPositionList(){
+    this.positionApiService.getAllPositions(null).subscribe({
+      next: (response) => {
+        const positions: Position[] = response?.data ?? [];
+        this.positionList = positions.filter(position => position.active);
+        console.log("positionList:", this.positionList);
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
+    });
+  }
 
-    const duplicateCode = commissionIncentiveSettings.some(item => item.code.toUpperCase() === normalizedCode);
-    if (duplicateCode) {
-      codeControl.setErrors({ ...codeControl.errors, duplicate: true });
-    }
+  getEmployeeList(){
+    this.employeeApiService.getAllEmployees(null).subscribe({
+      next: (response) => {
+        const employees: EmployeeOverview[] = response?.data ?? [];
+        this.employeeList = employees.filter(employee => {});
+        console.log("employeeList:", this.employeeList);
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
+    });
+  }
 
-    if (this.commissionForm.invalid) {
-      this.commissionForm.markAllAsTouched();
+  goBack() {
+    return this.router.navigate(['/settings/payroll/commission-incentives/overview'])
+  }
+
+  onSubmit(form: FormGroup) {
+    if (form.invalid) {
+      form.markAllAsTouched();
       return;
     }
 
-    const value = this.commissionForm.getRawValue();
-    this.submittedCommissionSetting = {
+    const value = form.value;
+    const data: CommissionIncentiveSetting = {
       ...value,
-      code: normalizedCode,
-      name: value.name.trim(),
-      description: value.description.trim(),
       rate: this.usesRateCalculation(value.calculationMethod) ? value.rate : null,
       amount: this.usesRateCalculation(value.calculationMethod) ? null : value.amount,
       eligibleDepartmentIds: value.eligibleEmployees === 'SELECTED_DEPARTMENTS' ? value.eligibleDepartmentIds : [],
       eligiblePositionIds: value.eligibleEmployees === 'SELECTED_POSITIONS' ? value.eligiblePositionIds : [],
       eligibleEmployeeIds: value.eligibleEmployees === 'SELECTED_EMPLOYEES' ? value.eligibleEmployeeIds : []
     };
-    commissionIncentiveSettings.push(this.submittedCommissionSetting);
-    void this.router.navigateByUrl('/settings/payroll/commission-incentives/overview');
+    console.log("data", data)
+
+    this.apiService.createCommissionSetting(data).subscribe({
+      next: (response) => {
+        console.log("response", response);
+
+        this.toastService.show({
+          title: "Success",
+          message: "Commission type has been created.",
+          icon: 'success'
+        });
+
+        this.formDirective.resetForm();
+        this.submitting = false;
+        setTimeout(() => {
+          this.router.navigate(['/settings/payroll/commission-incentives/overview']);
+        }, 1000);
+      },
+      error: (error) => {
+        console.log("Error:", error);
+        const errorResponse = error?.error;
+
+        if (errorResponse?.errors?.length) {
+          errorResponse.errors.forEach((err: any) => {
+            this.toastService.show({
+              title: errorResponse.code,
+              message: err.message,
+              icon: 'danger'
+            });
+          });
+        } else {
+          this.toastService.show({
+            title: errorResponse?.code || 'Error',
+            message: errorResponse?.message || 'Something went wrong.',
+            icon: 'danger'
+          });
+        }
+        this.submitting = false;
+      }
+    });
   }
 
-  private updateCalculationFields(method: CommissionCalculationMethod): void {
-    const rate = this.commissionForm.controls.rate;
-    const amount = this.commissionForm.controls.amount;
+  private updateCalculationFields(method: CommissionCalculationMethod | null): void {
+    const rate = this.form.controls.rate;
+    const amount = this.form.controls.amount;
 
-    if (this.usesRateCalculation(method)) {
+    if (!method) {
+      rate.reset(null, { emitEvent: false });
+      amount.reset(null, { emitEvent: false });
+      rate.clearValidators();
+      amount.clearValidators();
+      rate.disable({ emitEvent: false });
+      amount.disable({ emitEvent: false });
+    } else if (this.usesRateCalculation(method)) {
       amount.reset(null, { emitEvent: false });
       amount.clearValidators();
       amount.disable({ emitEvent: false });
@@ -181,15 +247,16 @@ export class CreateComponent {
     amount.updateValueAndValidity({ emitEvent: false });
   }
 
-  private usesRateCalculation(method: CommissionCalculationMethod): boolean {
+  private usesRateCalculation(method: CommissionCalculationMethod | null): boolean {
+    if (!method) return false;
     return ['PERCENTAGE_OF_SALES', 'PERCENTAGE_OF_REVENUE', 'PERCENTAGE_OF_PROFIT', 'TIERED_RATE'].includes(method);
   }
 
-  private updateEligibilityFields(eligibility: CommissionEmployeeEligibility): void {
+  private updateEligibilityFields(eligibility: CommissionEmployeeEligibility | null): void {
     const selections = [
-      { key: 'SELECTED_DEPARTMENTS', control: this.commissionForm.controls.eligibleDepartmentIds },
-      { key: 'SELECTED_POSITIONS', control: this.commissionForm.controls.eligiblePositionIds },
-      { key: 'SELECTED_EMPLOYEES', control: this.commissionForm.controls.eligibleEmployeeIds }
+      { key: 'SELECTED_DEPARTMENTS', control: this.form.controls.eligibleDepartmentIds },
+      { key: 'SELECTED_POSITIONS', control: this.form.controls.eligiblePositionIds },
+      { key: 'SELECTED_EMPLOYEES', control: this.form.controls.eligibleEmployeeIds }
     ] as const;
 
     selections.forEach(({ key, control }) => {

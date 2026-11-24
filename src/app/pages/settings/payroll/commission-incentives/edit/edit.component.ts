@@ -8,6 +8,13 @@ import { commissionIncentiveSettings } from '../../../../../data/commission/comm
 import { departments } from '../../../../../data/workforce/departments.data';
 import { employees } from '../../../../../data/workforce/employees.data';
 import { positions } from '../../../../../data/workforce/positions.data';
+import {
+  commissionTypes as commissionTypeOptions,
+  calculationMethods as calculationMethodOptions,
+  calculationFrequencies as calculationFrequencyOptions,
+  payoutTimings as payoutTimingOptions,
+  employeeEligibilityOptions as eligibilityOptions
+} from '../../../../../models/commission/commission-incentive-setting.model';
 import type {
   CommissionCalculationFrequency,
   CommissionCalculationMethod,
@@ -30,51 +37,11 @@ export class EditComponent implements OnInit {
   commissionSetting: CommissionIncentiveSetting | undefined;
   private originalCode = '';
 
-  readonly commissionTypes: { value: CommissionIncentiveType; label: string }[] = [
-    { value: 'SALES_COMMISSION', label: 'Sales Commission' },
-    { value: 'TIERED_SALES_COMMISSION', label: 'Tiered Sales Commission' },
-    { value: 'REVENUE_COMMISSION', label: 'Revenue Commission' },
-    { value: 'PROFIT_COMMISSION', label: 'Profit-Based Commission' },
-    { value: 'TARGET_ACHIEVEMENT', label: 'Sales Target Achievement Incentive' },
-    { value: 'REFERRAL_INCENTIVE', label: 'Referral Incentive' },
-    { value: 'COLLECTION_INCENTIVE', label: 'Payment Collection Incentive' },
-    { value: 'PROJECT_INCENTIVE', label: 'Project Completion Incentive' },
-    { value: 'TEAM_INCENTIVE', label: 'Team Performance Incentive' },
-    { value: 'PRODUCT_INCENTIVE', label: 'Product-Specific Sales Incentive' },
-    { value: 'CUSTOMER_ACQUISITION', label: 'New Customer Acquisition Incentive' },
-    { value: 'CUSTOM', label: 'Other / Custom Incentive' }
-  ];
-
-  readonly calculationMethods: { value: CommissionCalculationMethod; label: string }[] = [
-    { value: 'PERCENTAGE_OF_SALES', label: 'Percentage of Sales' },
-    { value: 'PERCENTAGE_OF_REVENUE', label: 'Percentage of Revenue' },
-    { value: 'PERCENTAGE_OF_PROFIT', label: 'Percentage of Profit' },
-    { value: 'FIXED_PER_TRANSACTION', label: 'Fixed Amount per Transaction' },
-    { value: 'TIERED_RATE', label: 'Tiered Rate' },
-    { value: 'TARGET_BASED', label: 'Target-Based Calculation' },
-    { value: 'FIXED_AMOUNT', label: 'Fixed Amount' }
-  ];
-
-  readonly calculationFrequencies: { value: CommissionCalculationFrequency; label: string }[] = [
-    { value: 'PER_TRANSACTION', label: 'Per transaction' },
-    { value: 'WEEKLY', label: 'Weekly' },
-    { value: 'BIWEEKLY', label: 'Every two weeks' },
-    { value: 'MONTHLY', label: 'Monthly' },
-    { value: 'QUARTERLY', label: 'Quarterly' }
-  ];
-
-  readonly payoutTimings: { value: CommissionPayoutTiming; label: string }[] = [
-    { value: 'CURRENT_PAYROLL', label: 'Current payroll cycle' },
-    { value: 'NEXT_PAYROLL', label: 'Next payroll cycle' },
-    { value: 'SEPARATE_PAYOUT', label: 'Separate payout' }
-  ];
-
-  readonly employeeEligibilityOptions: { value: CommissionEmployeeEligibility; label: string }[] = [
-    { value: 'ALL_EMPLOYEES', label: 'All employees' },
-    { value: 'SELECTED_DEPARTMENTS', label: 'Selected departments' },
-    { value: 'SELECTED_POSITIONS', label: 'Selected positions' },
-    { value: 'SELECTED_EMPLOYEES', label: 'Selected employees' }
-  ];
+  readonly commissionTypes = commissionTypeOptions;
+  readonly calculationMethods = calculationMethodOptions;
+  readonly calculationFrequencies = calculationFrequencyOptions;
+  readonly payoutTimings = payoutTimingOptions;
+  readonly employeeEligibilityOptions = eligibilityOptions;
 
   readonly departments = departments.filter(department => department.active);
   readonly positions = positions.filter(position => position.effectiveTo === null);
@@ -170,7 +137,7 @@ export class EditComponent implements OnInit {
     }
 
     const value = this.commissionForm.getRawValue();
-    const updatedSetting: CommissionIncentiveSetting = {
+    const updatedSetting: any = {
       ...value,
       code: normalizedCode,
       name: value.name.trim(),

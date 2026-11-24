@@ -1,4 +1,22 @@
-<form [formGroup]="commissionForm" (ngSubmit)="onSubmit()">
+<div class="row justify-content-between mb-3">
+  <div class="col-sm-12 px-2">
+    <div class="d-flex align-items-center gap-2 cursor-pointer" (click)="goBack()">
+      <button mat-icon-button type="button" class="d-flex justify-content-center w-auto mb-0">
+        <tabler-icon icon="chevron-left" class="text-dark d-flex" [size]="16"></tabler-icon>
+      </button>
+      <p class="text-muted mb-0">Back to commission list</p>
+    </div>
+  </div>
+</div>
+
+<div class="row justify-content-between align-items-center mb-4">
+  <div class="col-sm-7">
+    <h3 class="text-dark my-0">Create Commission Type</h3>
+    <p class="text-muted mb-0">Create a commission type and assign a role to determine their access.</p>
+  </div>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit(form)">
   <h4 class="text-primary">Commission &amp; Incentive Information</h4>
   <div class="card mb-4">
     <div class="card-body">
@@ -7,17 +25,8 @@
           <mat-label class="form-label">Commission Code <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput formControlName="code" placeholder="e.g. COMM-SALES">
-            @if (commissionForm.controls.code.hasError('required')) {
+            @if (form.controls.code.hasError('required')) {
               <mat-error class="text-danger">Commission code is required.</mat-error>
-            }
-            @if (commissionForm.controls.code.hasError('pattern')) {
-              <mat-error class="text-danger">Start with a letter; use letters, numbers, hyphens, or underscores.</mat-error>
-            }
-            @if (commissionForm.controls.code.hasError('maxlength')) {
-              <mat-error class="text-danger">Use no more than 20 characters.</mat-error>
-            }
-            @if (commissionForm.controls.code.hasError('duplicate')) {
-              <mat-error class="text-danger">This commission code already exists.</mat-error>
             }
           </mat-form-field>
         </div>
@@ -25,11 +34,8 @@
           <mat-label class="form-label">Commission Name <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <input matInput formControlName="name" placeholder="Enter commission or incentive name">
-            @if (commissionForm.controls.name.hasError('required')) {
+            @if (form.controls.name.hasError('required')) {
               <mat-error class="text-danger">Commission name is required.</mat-error>
-            }
-            @if (commissionForm.controls.name.hasError('maxlength')) {
-              <mat-error class="text-danger">Use no more than 60 characters.</mat-error>
             }
           </mat-form-field>
         </div>
@@ -42,7 +48,7 @@
                 <mat-option [value]="type.value">{{ type.label }}</mat-option>
               }
             </mat-select>
-            @if (commissionForm.controls.commissionType.hasError('required')) {
+            @if (form.controls.commissionType.hasError('required')) {
               <mat-error class="text-danger">Commission type is required.</mat-error>
             }
           </mat-form-field>
@@ -56,7 +62,7 @@
                 <mat-option [value]="method.value">{{ method.label }}</mat-option>
               }
             </mat-select>
-            @if (commissionForm.controls.calculationMethod.hasError('required')) {
+            @if (form.controls.calculationMethod.hasError('required')) {
               <mat-error class="text-danger">Calculation method is required.</mat-error>
             }
           </mat-form-field>
@@ -69,27 +75,21 @@
             <mat-form-field appearance="outline" class="form-input w-100">
               <input type="number" min="0" matInput placeholder="Enter rate" formControlName="rate">
               <span matTextSurfix class="text-muted ms-2">%</span>
-              @if (commissionForm.controls.rate.hasError('required')) {
+              @if (form.controls.rate.hasError('required')) {
                 <mat-error class="text-danger">Rate is required.</mat-error>
-              }
-              @if (commissionForm.controls.rate.hasError('min')) {
-                <mat-error class="text-danger">Enter zero or more.</mat-error>
               }
             </mat-form-field>
           </div>
         }
 
-        @if (!usesPercentageCalculation) {
+        @if (form.controls.calculationMethod.value && !usesPercentageCalculation) {
           <div class="col-sm-4 px-2">
             <mat-label class="form-label">Amount <span class="text-danger">*</span></mat-label>
             <mat-form-field appearance="outline" class="form-input w-100">
               <input type="number" min="0" matInput placeholder="Enter amount" formControlName="amount">
               <span matTextPrefix class="text-muted me-2">MYR</span>
-              @if (commissionForm.controls.amount.hasError('required')) {
+              @if (form.controls.amount.hasError('required')) {
                 <mat-error class="text-danger">Amount is required.</mat-error>
-              }
-              @if (commissionForm.controls.amount.hasError('min')) {
-                <mat-error class="text-danger">Enter zero or more.</mat-error>
               }
             </mat-form-field>
           </div>
@@ -103,7 +103,7 @@
                 <mat-option [value]="frequency.value">{{ frequency.label }}</mat-option>
               }
             </mat-select>
-            @if (commissionForm.controls.calculationFrequency.hasError('required')) {
+            @if (form.controls.calculationFrequency.hasError('required')) {
               <mat-error class="text-danger">Calculation frequency is required.</mat-error>
             }
           </mat-form-field>
@@ -117,7 +117,7 @@
                 <mat-option [value]="timing.value">{{ timing.label }}</mat-option>
               }
             </mat-select>
-            @if (commissionForm.controls.payoutTiming.hasError('required')) {
+            @if (form.controls.payoutTiming.hasError('required')) {
               <mat-error class="text-danger">Payout timing is required.</mat-error>
             }
           </mat-form-field>
@@ -128,9 +128,6 @@
           <mat-label class="form-label">Description</mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <textarea matInput rows="3" placeholder="Describe when this commission applies" formControlName="description"></textarea>
-            @if (commissionForm.controls.description.hasError('maxlength')) {
-              <mat-error class="text-danger">Use no more than 250 characters.</mat-error>
-            }
           </mat-form-field>
         </div>
       </div>
@@ -149,7 +146,7 @@
                 <mat-option [value]="option.value">{{ option.label }}</mat-option>
               }
             </mat-select>
-            @if (commissionForm.controls.eligibleEmployees.hasError('required')) {
+            @if (form.controls.eligibleEmployees.hasError('required')) {
               <mat-error class="text-danger">Employee eligibility is required.</mat-error>
             }
           </mat-form-field>
@@ -160,11 +157,11 @@
             <mat-label class="form-label">Departments <span class="text-danger">*</span></mat-label>
             <mat-form-field appearance="outline" class="form-input w-100">
               <mat-select multiple placeholder="Select departments" formControlName="eligibleDepartmentIds">
-                @for (department of departments; track department) {
+                @for (department of departmentList; track department) {
                   <mat-option [value]="department.id">{{ department.name }}</mat-option>
                 }
               </mat-select>
-              @if (commissionForm.controls.eligibleDepartmentIds.hasError('required')) {
+              @if (form.controls.eligibleDepartmentIds.hasError('required')) {
                 <mat-error class="text-danger">Select at least one department.</mat-error>
               }
             </mat-form-field>
@@ -176,11 +173,11 @@
             <mat-label class="form-label">Positions <span class="text-danger">*</span></mat-label>
             <mat-form-field appearance="outline" class="form-input w-100">
               <mat-select multiple placeholder="Select positions" formControlName="eligiblePositionIds">
-                @for (position of positions; track position) {
+                @for (position of positionList; track position) {
                   <mat-option [value]="position.id">{{ position.title }}</mat-option>
                 }
               </mat-select>
-              @if (commissionForm.controls.eligiblePositionIds.hasError('required')) {
+              @if (form.controls.eligiblePositionIds.hasError('required')) {
                 <mat-error class="text-danger">Select at least one position.</mat-error>
               }
             </mat-form-field>
@@ -192,11 +189,11 @@
             <mat-label class="form-label">Employees <span class="text-danger">*</span></mat-label>
             <mat-form-field appearance="outline" class="form-input w-100">
               <mat-select multiple placeholder="Select employees" formControlName="eligibleEmployeeIds">
-                @for (employee of employees; track employee) {
-                  <mat-option [value]="employee.employeeId">{{ employee.employeeName }}</mat-option>
+                @for (employee of employeeList; track employee) {
+                  <mat-option [value]="employee.id">{{ employee.employeeNo }} - {{ employee.name }}</mat-option>
                 }
               </mat-select>
-              @if (commissionForm.controls.eligibleEmployeeIds.hasError('required')) {
+              @if (form.controls.eligibleEmployeeIds.hasError('required')) {
                 <mat-error class="text-danger">Select at least one employee.</mat-error>
               }
             </mat-form-field>
@@ -207,11 +204,8 @@
           <mat-label class="form-label">Payroll earning code <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <input type="text" matInput placeholder="COMM-SALES" formControlName="payrollEarningCode">
-            @if (commissionForm.controls.payrollEarningCode.hasError('required')) {
+            @if (form.controls.payrollEarningCode.hasError('required')) {
               <mat-error class="text-danger">Payroll earning code is required.</mat-error>
-            }
-            @if (commissionForm.controls.payrollEarningCode.hasError('pattern')) {
-              <mat-error class="text-danger">Use letters, numbers, hyphens, or underscores.</mat-error>
             }
           </mat-form-field>
         </div>
@@ -230,7 +224,7 @@
   </div>
 
   <div class="d-flex align-items-center justify-content-end gap-3">
-    <button type="button" mat-flat-button color="primary-outline" routerLink="/settings/payroll/commission-incentives/overview">Cancel</button>
-    <button type="submit" mat-flat-button color="primary"><tabler-icon icon="check"></tabler-icon>Save Commission</button>
+    <button mat-flat-button color="primary-outline" (click)="goBack()"><tabler-icon icon="x" [size]="16"></tabler-icon>Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="!form.valid || submitting"><tabler-icon icon="check" [size]="16"></tabler-icon>{{ submitting ? 'Submitting...' : 'Submit' }}</button>
   </div>
 </form>
