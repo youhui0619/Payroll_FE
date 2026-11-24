@@ -109,7 +109,7 @@ export const SETTINGS_ROUTES: Routes = [
     component: CommissionCreateComponent
   },
   {
-    path: 'payroll/commission-incentives/edit/:code',
+    path: 'payroll/commission-incentives/edit/:id',
     title: 'Edit Commission & Incentives',
     component: CommissionEditComponent
   },

@@ -1,13 +1,8 @@
-
-import { Component, DestroyRef, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, DestroyRef, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../../shared/material-imports';
-import { commissionIncentiveSettings } from '../../../../../data/commission/commission-incentive-settings.data';
-import { departments } from '../../../../../data/workforce/departments.data';
-import { employees } from '../../../../../data/workforce/employees.data';
-import { positions } from '../../../../../data/workforce/positions.data';
 import {
   commissionTypes as commissionTypeOptions,
   calculationMethods as calculationMethodOptions,
@@ -23,163 +18,264 @@ import type {
   CommissionIncentiveType,
   CommissionPayoutTiming
 } from '../../../../../models/commission/commission-incentive-setting.model';
+import { CommissionSettingApiService } from '../../../../../services/api/commission-setting.service';
+import { DepartmentsApiService } from '../../../../../services/api/departments.service';
+import { PositionsApiService } from '../../../../../services/api/positions.service';
+import { EmployeesApiService } from '../../../../../services/api/employees.service';
+import type { Department } from '../../../../../models/workforce/department.model';
+import type { Position } from '../../../../../models/workforce/position.model';
+import type { EmployeeOverview } from '../../../../../models/workforce/employee.model';
+import { ToastService } from '../../../../../shared/components/toast/toast.service';
 
 @Component({
   selector: 'app-edit',
   standalone: true,
   imports: [...MaterialImports, ReactiveFormsModule, RouterLink],
-  providers: [...MaterialProviders],
+  providers: [...MaterialProviders, CommissionSettingApiService, DepartmentsApiService, PositionsApiService, EmployeesApiService],
   templateUrl: './edit.component.html',
   styleUrl: './edit.component.scss'
 })
 export class EditComponent implements OnInit {
-  readonly commissionSettings = commissionIncentiveSettings;
-  commissionSetting: CommissionIncentiveSetting | undefined;
-  private originalCode = '';
 
-  readonly commissionTypes = commissionTypeOptions;
-  readonly calculationMethods = calculationMethodOptions;
-  readonly calculationFrequencies = calculationFrequencyOptions;
-  readonly payoutTimings = payoutTimingOptions;
-  readonly employeeEligibilityOptions = eligibilityOptions;
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private commissionApiService: CommissionSettingApiService,
+    private departmentApiService: DepartmentsApiService,
+    private positionApiService: PositionsApiService,
+    private employeeApiService: EmployeesApiService,
+    private toastService: ToastService,
+    private destroyRef: DestroyRef
+  ) {
+    this.form.controls.calculationMethod.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe(method => this.updateCalculationFields(method));
+    this.updateCalculationFields(this.form.controls.calculationMethod.value);
+    this.form.controls.eligibleEmployees.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe(eligibility => this.updateEligibilityFields(eligibility));
+    this.updateEligibilityFields(this.form.controls.eligibleEmployees.value);
+  }
+  
+  @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
 
-  readonly departments = departments.filter(department => department.active);
-  readonly positions = positions.filter(position => position.effectiveTo === null);
-  readonly employees = employees.filter(employee => employee.employmentStatus === 'ACTIVE');
-
-  readonly commissionForm = new FormGroup({
-    code: new FormControl('', {
-      nonNullable: true,
-      validators: [Validators.required, Validators.maxLength(20), Validators.pattern(/^[A-Za-z][A-Za-z0-9_-]*$/)]
-    }),
-    name: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(60)] }),
-    commissionType: new FormControl<CommissionIncentiveType>('SALES_COMMISSION', { nonNullable: true, validators: [Validators.required] }),
-    calculationMethod: new FormControl<CommissionCalculationMethod>('PERCENTAGE_OF_SALES', { nonNullable: true, validators: [Validators.required] }),
+  commissionSetting: CommissionIncentiveSetting | null = null;
+  commissionTypes = commissionTypeOptions;
+  calculationMethods = calculationMethodOptions;
+  calculationFrequencies = calculationFrequencyOptions;
+  payoutTimings = payoutTimingOptions;
+  employeeEligibilityOptions = eligibilityOptions;
+  departmentList: Department[] = [];
+  positionList: Position[] = [];
+  employeeList: EmployeeOverview[] = [];
+  submitting = false;
+  id: any;
+  form = new FormGroup({
+    code: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    commissionType: new FormControl<CommissionIncentiveType | null>(null, Validators.required),
+    calculationMethod: new FormControl<CommissionCalculationMethod | null>(null, Validators.required),
     rate: new FormControl<number | null>(null),
     amount: new FormControl<number | null>(null),
-    calculationFrequency: new FormControl<CommissionCalculationFrequency>('MONTHLY', { nonNullable: true, validators: [Validators.required] }),
-    payoutTiming: new FormControl<CommissionPayoutTiming>('CURRENT_PAYROLL', { nonNullable: true, validators: [Validators.required] }),
-    description: new FormControl('', { nonNullable: true, validators: [Validators.maxLength(250)] }),
-    eligibleEmployees: new FormControl<CommissionEmployeeEligibility>('ALL_EMPLOYEES', { nonNullable: true, validators: [Validators.required] }),
+    calculationFrequency: new FormControl<CommissionCalculationFrequency | null>(null, Validators.required),
+    payoutTiming: new FormControl<CommissionPayoutTiming | null>(null, Validators.required),
+    description: new FormControl<string | null>(''),
+    eligibleEmployees: new FormControl<CommissionEmployeeEligibility | null>(null, Validators.required),
     eligibleDepartmentIds: new FormControl<string[]>([], { nonNullable: true }),
     eligiblePositionIds: new FormControl<string[]>([], { nonNullable: true }),
     eligibleEmployeeIds: new FormControl<string[]>([], { nonNullable: true }),
-    payrollEarningCode: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(20), Validators.pattern(/^[A-Za-z][A-Za-z0-9_-]*$/)] }),
-    requiresApproval: new FormControl(true, { nonNullable: true })
+    payrollEarningCode: new FormControl<string | null>(null, Validators.required),
+    requiresApproval: new FormControl<boolean | null>(null)
   });
-
-  submitted = false;
-
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly destroyRef: DestroyRef
-  ) {
-    this.commissionForm.controls.calculationMethod.valueChanges
-      .pipe(takeUntilDestroyed())
-      .subscribe(method => this.updateCalculationFields(method));
-    this.updateCalculationFields(this.commissionForm.controls.calculationMethod.value);
-    this.commissionForm.controls.eligibleEmployees.valueChanges
-      .pipe(takeUntilDestroyed())
-      .subscribe(eligibility => this.updateEligibilityFields(eligibility));
-    this.updateEligibilityFields(this.commissionForm.controls.eligibleEmployees.value);
+  ngOnInit() {
+    this.getDepartmentList();
+    this.getPositionList();
+    this.getEmployeeList();
+    this.route.paramMap.subscribe(params => {
+      this.id = params.get('id');
+      if (this.id) {
+        this.getCommissionSetting(this.id);
+      } else {
+        console.error("🚨 No ID found in route!");
+      }
+    });  
   }
 
-  ngOnInit(): void {
-    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
-      const code = params.get('code');
-      this.commissionSetting = this.commissionSettings.find(setting => setting.code.toUpperCase() === code?.toUpperCase());
+  getCommissionSetting(id: string) {
+    this.commissionApiService.getCommissionSetting(id).subscribe({
+      next: (response) => {
+        this.commissionSetting = response.data;
+        console.log("commissionSetting:", this.commissionSetting);
+        if(this.commissionSetting){
+          this.form.patchValue(this.commissionSetting)
+        }
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
+    });
+  }
 
-      if (!this.commissionSetting) {
-        void this.router.navigateByUrl('/settings/payroll/commission-incentives/overview');
-        return;
-      }
+  
+  getDepartmentList(){
+    this.departmentApiService.getAllDepartments(null).subscribe({
+      next: (response) => {
+        const departments: Department[] = response?.data ?? [];
+        this.departmentList = departments.filter(department => department.active);
+        console.log("departmentList:", this.departmentList);
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
+    });
+  }
+  getPositionList(){
+    this.positionApiService.getAllPositions(null).subscribe({
+      next: (response) => {
+        const positions: Position[] = response?.data ?? [];
+        this.positionList = positions.filter(position => position.active);
+        console.log("positionList:", this.positionList);
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
+    });
+  }
 
-      this.originalCode = this.commissionSetting.code;
-      this.patchCommissionForm(this.commissionSetting);
+  getEmployeeList(){
+    this.employeeApiService.getAllEmployees(null).subscribe({
+      next: (response) => {
+        const employees: EmployeeOverview[] = response?.data ?? [];
+        this.employeeList = employees.filter(employee => {});
+        console.log("employeeList:", this.employeeList);
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
     });
   }
 
   get usesPercentageCalculation(): boolean {
-    return this.usesRateCalculation(this.commissionForm.controls.calculationMethod.value);
+    return this.usesRateCalculation(this.form.controls.calculationMethod.value);
   }
 
   get showDepartmentSelection(): boolean {
-    return this.commissionForm.controls.eligibleEmployees.value === 'SELECTED_DEPARTMENTS';
+    return this.form.controls.eligibleEmployees.value === 'SELECTED_DEPARTMENTS';
   }
 
   get showPositionSelection(): boolean {
-    return this.commissionForm.controls.eligibleEmployees.value === 'SELECTED_POSITIONS';
+    return this.form.controls.eligibleEmployees.value === 'SELECTED_POSITIONS';
   }
 
   get showEmployeeSelection(): boolean {
-    return this.commissionForm.controls.eligibleEmployees.value === 'SELECTED_EMPLOYEES';
+    return this.form.controls.eligibleEmployees.value === 'SELECTED_EMPLOYEES';
   }
 
-  onSubmit(): void {
-    this.submitted = true;
-    if (!this.commissionSetting) return;
+  goBack() {
+    return this.router.navigate(['/settings/payroll/commission-incentives/overview']);
+  }
 
-    const codeControl = this.commissionForm.controls.code;
-    const normalizedCode = codeControl.value.trim().toUpperCase();
-    codeControl.setValue(normalizedCode, { emitEvent: false });
-
-    const duplicateCode = this.commissionSettings.some(setting =>
-      setting.code.toUpperCase() === normalizedCode && setting.code !== this.originalCode
-    );
-    if (duplicateCode) {
-      codeControl.setErrors({ ...codeControl.errors, duplicate: true });
-    }
-
-    if (this.commissionForm.invalid) {
-      this.commissionForm.markAllAsTouched();
+  onSubmit(form: FormGroup) {
+    if (form.invalid) {
+      form.markAllAsTouched();
       return;
     }
 
-    const value = this.commissionForm.getRawValue();
-    const updatedSetting: any = {
-      ...value,
-      code: normalizedCode,
-      name: value.name.trim(),
-      description: value.description.trim(),
-      rate: this.usesRateCalculation(value.calculationMethod) ? value.rate : null,
-      amount: this.usesRateCalculation(value.calculationMethod) ? null : value.amount,
-      eligibleDepartmentIds: value.eligibleEmployees === 'SELECTED_DEPARTMENTS' ? value.eligibleDepartmentIds : [],
-      eligiblePositionIds: value.eligibleEmployees === 'SELECTED_POSITIONS' ? value.eligiblePositionIds : [],
-      eligibleEmployeeIds: value.eligibleEmployees === 'SELECTED_EMPLOYEES' ? value.eligibleEmployeeIds : []
-    };
-    const settingIndex = this.commissionSettings.findIndex(setting => setting.code === this.originalCode);
-    if (settingIndex < 0) return;
+    this.submitting = true;
+    const value = this.form.getRawValue();
+    const method = value.calculationMethod;
+    const eligibility = value.eligibleEmployees;
+    if (!method || !eligibility || !value.commissionType || !value.calculationFrequency || !value.payoutTiming || !value.payrollEarningCode) {
+      this.submitting = false;
+      return;
+    }
 
-    this.commissionSettings[settingIndex] = updatedSetting;
-    this.commissionSetting = updatedSetting;
-    void this.router.navigateByUrl('/settings/payroll/commission-incentives/overview');
+    const data: Omit<CommissionIncentiveSetting, 'id' | 'active'> = {
+      code: value.code.trim(),
+      name: value.name.trim(),
+      commissionType: value.commissionType,
+      calculationMethod: method,
+      rate: this.usesRateCalculation(method) ? value.rate : null,
+      amount: this.usesRateCalculation(method) ? null : value.amount,
+      calculationFrequency: value.calculationFrequency,
+      payoutTiming: value.payoutTiming,
+      description: value.description?.trim() ?? '',
+      eligibleEmployees: eligibility,
+      eligibleDepartmentIds: eligibility === 'SELECTED_DEPARTMENTS' ? value.eligibleDepartmentIds : [],
+      eligiblePositionIds: eligibility === 'SELECTED_POSITIONS' ? value.eligiblePositionIds : [],
+      eligibleEmployeeIds: eligibility === 'SELECTED_EMPLOYEES' ? value.eligibleEmployeeIds : [],
+      payrollEarningCode: value.payrollEarningCode.trim(),
+      requiresApproval: value.requiresApproval === true
+    };
+
+    this.commissionApiService.updateCommissionSetting(this.id, data).subscribe({
+      next: () => {
+        this.toastService.show({ title: 'Success', message: 'Commission type has been updated.', icon: 'success' });
+        this.submitting = false;
+        this.goBack();
+      },
+      error: error => {
+        this.showRequestError(error);
+        this.submitting = false;
+      }
+    });
   }
 
-  private patchCommissionForm(setting: CommissionIncentiveSetting): void {
-    const formValues = Object.fromEntries(
-      Object.entries(setting).filter(([key]) => this.commissionForm.contains(key) && !['rate', 'amount', 'eligibleDepartmentIds', 'eligiblePositionIds', 'eligibleEmployeeIds'].includes(key))
-    );
 
-    this.commissionForm.patchValue(formValues, { emitEvent: false });
+  private patchForm(setting: CommissionIncentiveSetting) {
+    this.form.patchValue({
+      code: setting.code,
+      name: setting.name,
+      commissionType: setting.commissionType,
+      calculationMethod: setting.calculationMethod,
+      calculationFrequency: setting.calculationFrequency,
+      payoutTiming: setting.payoutTiming,
+      description: setting.description ?? '',
+      eligibleEmployees: setting.eligibleEmployees,
+      payrollEarningCode: setting.payrollEarningCode,
+      requiresApproval: setting.requiresApproval
+    }, { emitEvent: false });
+
     this.updateEligibilityFields(setting.eligibleEmployees);
-    this.commissionForm.controls.eligibleDepartmentIds.setValue(setting.eligibleDepartmentIds ?? [], { emitEvent: false });
-    this.commissionForm.controls.eligiblePositionIds.setValue(setting.eligiblePositionIds ?? [], { emitEvent: false });
-    this.commissionForm.controls.eligibleEmployeeIds.setValue(setting.eligibleEmployeeIds ?? [], { emitEvent: false });
+    this.form.patchValue({
+      eligibleDepartmentIds: setting.eligibleDepartmentIds ?? [],
+      eligiblePositionIds: setting.eligiblePositionIds ?? [],
+      eligibleEmployeeIds: setting.eligibleEmployeeIds ?? []
+    }, { emitEvent: false });
     this.updateCalculationFields(setting.calculationMethod);
-
     if (this.usesRateCalculation(setting.calculationMethod)) {
-      this.commissionForm.controls.rate.setValue(setting.rate, { emitEvent: false });
+      this.form.controls.rate.setValue(setting.rate, { emitEvent: false });
     } else {
-      this.commissionForm.controls.amount.setValue(setting.amount, { emitEvent: false });
+      this.form.controls.amount.setValue(setting.amount, { emitEvent: false });
     }
   }
 
-  private updateCalculationFields(method: CommissionCalculationMethod): void {
-    const rate = this.commissionForm.controls.rate;
-    const amount = this.commissionForm.controls.amount;
-
-    if (this.usesRateCalculation(method)) {
+  private updateCalculationFields(method: CommissionCalculationMethod | null) {
+    const { rate, amount } = this.form.controls;
+    if (!method) {
+      rate.reset(null, { emitEvent: false });
+      amount.reset(null, { emitEvent: false });
+      rate.clearValidators();
+      amount.clearValidators();
+      rate.disable({ emitEvent: false });
+      amount.disable({ emitEvent: false });
+    } else if (this.usesRateCalculation(method)) {
       amount.reset(null, { emitEvent: false });
       amount.clearValidators();
       amount.disable({ emitEvent: false });
@@ -192,20 +288,19 @@ export class EditComponent implements OnInit {
       amount.enable({ emitEvent: false });
       amount.setValidators([Validators.required, Validators.min(0)]);
     }
-
     rate.updateValueAndValidity({ emitEvent: false });
     amount.updateValueAndValidity({ emitEvent: false });
   }
 
-  private usesRateCalculation(method: CommissionCalculationMethod): boolean {
-    return ['PERCENTAGE_OF_SALES', 'PERCENTAGE_OF_REVENUE', 'PERCENTAGE_OF_PROFIT', 'TIERED_RATE'].includes(method);
+  private usesRateCalculation(method: CommissionCalculationMethod | null): boolean {
+    return !!method && ['PERCENTAGE_OF_SALES', 'PERCENTAGE_OF_REVENUE', 'PERCENTAGE_OF_PROFIT', 'TIERED_RATE'].includes(method);
   }
 
-  private updateEligibilityFields(eligibility: CommissionEmployeeEligibility): void {
+  private updateEligibilityFields(eligibility: CommissionEmployeeEligibility | null) {
     const selections = [
-      { key: 'SELECTED_DEPARTMENTS', control: this.commissionForm.controls.eligibleDepartmentIds },
-      { key: 'SELECTED_POSITIONS', control: this.commissionForm.controls.eligiblePositionIds },
-      { key: 'SELECTED_EMPLOYEES', control: this.commissionForm.controls.eligibleEmployeeIds }
+      { key: 'SELECTED_DEPARTMENTS', control: this.form.controls.eligibleDepartmentIds },
+      { key: 'SELECTED_POSITIONS', control: this.form.controls.eligiblePositionIds },
+      { key: 'SELECTED_EMPLOYEES', control: this.form.controls.eligibleEmployeeIds }
     ] as const;
 
     selections.forEach(({ key, control }) => {
@@ -218,6 +313,18 @@ export class EditComponent implements OnInit {
         control.disable({ emitEvent: false });
       }
       control.updateValueAndValidity({ emitEvent: false });
+    });
+  }
+
+  private showRequestError(error: any) {
+    const response = error?.error;
+    const messages = (response?.errors as Array<{ message?: string }> | undefined)
+      ?.map(item => item.message)
+      .filter((message): message is string => !!message);
+    this.toastService.show({
+      title: response?.code || 'Error',
+      message: messages?.join('\n') || response?.message || 'Something went wrong.',
+      icon: 'danger'
     });
   }
 }
