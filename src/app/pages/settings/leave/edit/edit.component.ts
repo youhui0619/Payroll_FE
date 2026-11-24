@@ -7,7 +7,7 @@ import { MaterialImports, MaterialProviders } from '../../../../shared/material-
 import type { LeavePolicy, LeaveServiceEntitlementTier } from '../../../../models/leave/leave-policy.model';
 import { ToastService } from '../../../../shared/components/toast/toast.service';
 import { AlertService } from '../../../../shared/components/alert/alert.service';
-import { LeaveApiService } from '../../../../services/api/leave.service';
+import { LeavePolicyApiService } from '../../../../services/api/leave-policy.service';
 
 type ServiceEntitlementTierForm = FormGroup<{
   serviceFrom: FormControl<number | null>;
@@ -19,7 +19,7 @@ type ServiceEntitlementTierForm = FormGroup<{
   selector: 'app-edit',
   standalone: true,
   imports: [...MaterialImports, ReactiveFormsModule],
-  providers: [...MaterialProviders, LeaveApiService],
+  providers: [...MaterialProviders, LeavePolicyApiService],
   templateUrl: './edit.component.html',
   styleUrl: './edit.component.scss'
 })
@@ -30,7 +30,7 @@ export class EditComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private alertService: AlertService,
-    private apiService: LeaveApiService,
+    private apiService: LeavePolicyApiService,
     private cdr: ChangeDetectorRef
   ){
     this.form.controls.serviceEntitlementTiers.disable({ emitEvent: false });

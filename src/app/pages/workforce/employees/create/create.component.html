@@ -897,7 +897,7 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col-sm-12 px-2">
-                    @for (policy of leavePolicies; track policy; let last = $last) {
+                    @for (policy of leavePolicyList; track policy; let last = $last) {
                       <div
                         class="d-flex justify-content-between align-items-center gap-3 py-3"
                         [class.border-bottom]="!last">
@@ -908,7 +908,7 @@
                           <div>
                             <div class="d-flex align-items-center gap-2">
                               <label class="text-dark my-0">{{ policy.name }}</label>
-                              <span [ngClass]="policy.leaveType === 'PAID' ? 'badge bg-light-primary text-primary' : 'badge bg-light-danger text-danger'">{{ policy.leaveType }}</span>
+                              <span [ngClass]="policy.paid ? 'badge bg-light-primary text-primary' : 'badge bg-light-danger text-danger'">{{ policy.paid ? "Paid" : "Unpaid" }}</span>
                             </div>
                             <p class="text-muted mb-0">{{ employeeEntitlementRulesLabel(policy) }}</p>
                           </div>

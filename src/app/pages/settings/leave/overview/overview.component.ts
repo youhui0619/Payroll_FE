@@ -9,14 +9,14 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastService } from '../../../../shared/components/toast/toast.service';
-import { LeaveApiService } from '../../../../services/api/leave.service';
+import { LeavePolicyApiService } from '../../../../services/api/leave-policy.service';
 import { approvalList } from '../../../../models/leave/leave-policy.model';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-overview',
   imports: [...MaterialImports, CommonModule, RouterLink, SkeletonLoaderComponent, FormsModule],
-  providers: [...MaterialProviders, LeaveApiService],
+  providers: [...MaterialProviders, LeavePolicyApiService],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
@@ -26,7 +26,7 @@ export class OverviewComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    private apiService: LeaveApiService,
+    private apiService: LeavePolicyApiService,
     private toastService: ToastService
   ) {}
 

@@ -33,6 +33,7 @@ import { stateList } from '../../../../data/other/other.data';
 import { PositionsApiService } from '../../../../services/api/positions.service';
 import { DepartmentsApiService } from '../../../../services/api/departments.service';
 import { WorkLocationApiService } from '../../../../services/api/work-location.service';
+import { LeavePolicyApiService } from '../../../../services/api/leave-policy.service';
 
 const statutoryEntitlementOptions = [
   { code: 'EPF', name: 'EPF / KWSP', setting: 'includeEpf' },
@@ -89,7 +90,7 @@ function createWorkingScheduleForm(schedule: WorkingSchedule): EmployeeWorkingSc
 @Component({
   selector: 'app-create',
   imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule,  DropzoneComponent],
-  providers: [...MaterialProviders, EmployeesApiService, PositionsApiService, DepartmentsApiService, WorkLocationApiService],
+  providers: [...MaterialProviders, EmployeesApiService, PositionsApiService, DepartmentsApiService, WorkLocationApiService, LeavePolicyApiService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'
 })
@@ -100,6 +101,7 @@ export class CreateComponent {
     private positionApiService: PositionsApiService,
     private departmentApiService: DepartmentsApiService,
     private workLocationApiService: WorkLocationApiService,
+    private leavePolicyApiService: LeavePolicyApiService,
     private toastService: ToastService
   ) {
     this.updatePositionValidator();
@@ -150,6 +152,7 @@ export class CreateComponent {
     { value: 'MONTHLY_SALARY_CONVERTED', label: 'Monthly salary converted to hourly' }
   ];
 
+  leavePolicyList: LeavePolicy[] = [];
 
   form = new FormGroup({
     personal: new FormGroup({
@@ -230,6 +233,8 @@ export class CreateComponent {
     this.getDepartmentList();
     this.getPositionList();
     this.getWorkLocationList();
+    this.getLeavePolicyList();
+
   }
 
   getDepartmentList(){
@@ -273,6 +278,23 @@ export class CreateComponent {
         const workLocations: WorkLocation[] = response?.data ?? [];
         this.workLocationList = workLocations.filter(workLocation => workLocation.active);
         console.log("workLocationList:", this.workLocationList);
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
+    });
+  }
+
+  getLeavePolicyList(){
+    this.leavePolicyApiService.getAllLeavePolicies(null).subscribe({
+      next: (response) => {
+        const leavePolicies: LeavePolicy[] = response?.data ?? [];
+        this.leavePolicyList = leavePolicies.filter(leavePolicy => leavePolicy.active);
+        console.log("leavePolicyList:", this.leavePolicyList);
       },
       error: (error) => {
         this.toastService.show({

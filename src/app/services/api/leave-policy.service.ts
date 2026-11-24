@@ -6,7 +6,7 @@ import { AuthService } from '../auth.service';
 import { getEmployee } from '../../data/workforce/employees.data';
 
 @Injectable()
-export class LeaveApiService {
+export class LeavePolicyApiService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   private getHeaders(): HttpHeaders {

@@ -5,7 +5,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import type { LeavePolicy } from '../../../../models/leave/leave-policy.model';
 import { Router } from '@angular/router';
-import { LeaveApiService } from '../../../../services/api/leave.service';
+import { LeavePolicyApiService } from '../../../../services/api/leave-policy.service';
 import { ToastService } from '../../../../shared/components/toast/toast.service';
 
 type ServiceEntitlementTierForm = FormGroup<{
@@ -18,7 +18,7 @@ type ServiceEntitlementTierForm = FormGroup<{
   selector: 'app-create',
   standalone: true,
   imports: [...MaterialImports, ReactiveFormsModule],
-  providers: [...MaterialProviders, LeaveApiService],
+  providers: [...MaterialProviders, LeavePolicyApiService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'
 })
@@ -26,7 +26,7 @@ export class CreateComponent {
   constructor(
     private router: Router,
     private toastService: ToastService,
-    private apiService: LeaveApiService,
+    private apiService: LeavePolicyApiService,
   ) {
     this.form.controls.serviceEntitlementTiers.disable({ emitEvent: false });
     this.form.controls.carryForwardPolicy.valueChanges
