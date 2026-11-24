@@ -86,6 +86,14 @@
             }
           </mat-form-field>
         </div>
+
+        <div class="col-sm-6 px-2">
+          <mat-label class="form-label">Standard working hours per day <span class="text-danger">*</span></mat-label>
+          <mat-form-field appearance="outline" class="form-input w-100">
+            <input type="number" min="0" matInput placeholder="Enter Standard working hours per day" formControlName="standardWorkingHoursPerDay">
+            <span matTextSurfix class="text-muted ms-2">Days</span>
+          </mat-form-field>
+        </div>
       </div>
     </div>
   </div>
@@ -181,11 +189,14 @@
     <div class="card mb-4">
       <div class="card-body">
         <div class="row mx-0">
-          <div class="col-sm-9 px-2">
-            <mat-label class="form-label">Standard working hours per day <span class="text-danger">*</span></mat-label>
+          <div class="col-sm-6 px-2">
+            <mat-label class="form-label">Minimum overtime duration <span class="text-danger">*</span></mat-label>
             <mat-form-field appearance="outline" class="form-input w-100">
-              <input type="number" min="0" matInput placeholder="Enter Standard working hours per day" formControlName="standardWorkingHoursPerDay">
-              <span matTextSurfix class="text-muted ms-2">Days</span>
+              <mat-select placeholder="Select deduction proration method">
+                @for (option of minimumOvertimeDurationOptions; track option.value) {
+                  <mat-option [value]="option.value">{{ option.label }}</mat-option>
+                }
+              </mat-select>
             </mat-form-field>
           </div>
         </div>
@@ -282,23 +293,6 @@
           @if (form.controls.paymentMethod.hasError('required') && form.controls.paymentMethod.touched) {
             <p class="text-danger small">Payment method is required.</p>
           }
-        </div>
-        <div class="col-sm-6 px-2">
-          <mat-label class="form-label">Standard working hours per day <span class="text-danger">*</span></mat-label>
-          <mat-form-field appearance="outline" class="form-input w-100">
-            <input type="number" min="0" matInput placeholder="Enter Standard working hours per day">
-            <span matTextSurfix class="text-muted ms-2">Hours</span>
-          </mat-form-field>
-        </div>
-        <div class="col-sm-6 px-2">
-          <mat-label class="form-label">Minimum overtime duration <span class="text-danger">*</span></mat-label>
-          <mat-form-field appearance="outline" class="form-input w-100">
-            <mat-select placeholder="Select deduction proration method">
-              @for (option of minimumOvertimeDurationOptions; track option.value) {
-                <mat-option [value]="option.value">{{ option.label }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
         </div>
       </div>
     </div>

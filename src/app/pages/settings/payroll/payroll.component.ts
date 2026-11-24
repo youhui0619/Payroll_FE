@@ -93,11 +93,7 @@ export class PayrollComponent implements OnInit {
         this.payrollSetting = response.data;
         console.log("payrollSetting:", this.payrollSetting);
         if(this.payrollSetting){
-          this.form.patchValue({
-            ...this.payrollSetting,
-            payrollCutoffDay: this.normalizePayrollDay(this.payrollSetting.payrollCutoffDay),
-            scheduledPayDate: this.normalizePayrollDay(this.payrollSetting.scheduledPayDate)
-          });
+          this.form.patchValue(this.payrollSetting);
         }
       },
       error: (error) => {
@@ -110,14 +106,7 @@ export class PayrollComponent implements OnInit {
     });
   }
 
-  private normalizePayrollDay(value: PayrollDay | string): PayrollDay {
-    if (value === 'LAST_DAY' || typeof value === 'number') return value;
-
-    const day = Number(value);
-    return Number.isInteger(day) && day >= 1 && day <= 31 ? day : value as PayrollDay;
-  }
-
-  onSubmit(form: FormGroup) {
+onSubmit(form: FormGroup) {
     if (form.invalid) {
       form.markAllAsTouched();
       return;
