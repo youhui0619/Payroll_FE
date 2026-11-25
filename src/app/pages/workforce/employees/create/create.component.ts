@@ -110,18 +110,7 @@ export class CreateComponent {
     this.updateStatutoryValidators();
     this.updateBankValidators(this.form.controls.payroll.controls.paymentMethod.value);
 
-    for (const policy of this.leavePolicies) {
-      if (policy.entitlementCalculationMethod === 'SERVICE') {
-        const tiers = new FormArray<LeaveServiceTierForm>((policy.serviceEntitlementTiers ?? []).map(createLeaveServiceTierForm));
-        this.form.controls.leave.controls.leaveServiceEntitlementTiers.addControl(policy.code, tiers);
-        this.updateLeaveServiceToValidators(policy.code);
-      } else {
-        this.form.controls.leave.controls.leaveEntitlementOverrides.addControl(
-          policy.code,
-          new FormControl<number | null>(policy.defaultEntitlement, [Validators.min(0)])
-        );
-      }
-    }
+    this.leavePolicies.forEach(policy => this.addLeavePolicyFormControls(policy));
   }
 
   markStepTouched(control: AbstractControl) {
@@ -373,6 +362,7 @@ export class CreateComponent {
       next: (response) => {
         const leavePolicies: LeavePolicy[] = response?.data ?? [];
         this.leavePolicyList = leavePolicies.filter(leavePolicy => leavePolicy.active);
+        this.leavePolicyList.forEach(policy => this.addLeavePolicyFormControls(policy));
         console.log("leavePolicyList:", this.leavePolicyList);
       },
       error: (error) => {
@@ -383,6 +373,29 @@ export class CreateComponent {
         });
       },
     });
+  }
+
+  private addLeavePolicyFormControls(policy: LeavePolicy) {
+    const leaveControls = this.form.controls.leave.controls;
+    const overrides = leaveControls.leaveEntitlementOverrides;
+    const serviceTiers = leaveControls.leaveServiceEntitlementTiers;
+
+    if (policy.entitlementCalculationMethod === 'SERVICE') {
+      if (overrides.contains(policy.code)) overrides.removeControl(policy.code);
+      if (!serviceTiers.contains(policy.code)) {
+        const tiers = policy.serviceEntitlementTiers?.length
+          ? policy.serviceEntitlementTiers
+          : [{ serviceFrom: 0, serviceTo: null, daysPerYear: null }];
+        serviceTiers.addControl(policy.code, new FormArray<LeaveServiceTierForm>(tiers.map(createLeaveServiceTierForm)));
+      }
+      this.updateLeaveServiceToValidators(policy.code);
+      return;
+    }
+
+    if (serviceTiers.contains(policy.code)) serviceTiers.removeControl(policy.code);
+    if (!overrides.contains(policy.code)) {
+      overrides.addControl(policy.code, new FormControl<number | null>(policy.defaultEntitlement, [Validators.min(0)]));
+    }
   }
 
   get selectedWorkLocation(): WorkLocation | undefined {
@@ -593,7 +606,7 @@ export class CreateComponent {
 
   get selectedLeavePolicies(): LeavePolicy[] {
     const selectedCodes = new Set(this.form.controls.leave.controls.leavePolicyCodes.value);
-    return this.leavePolicies.filter(policy => selectedCodes.has(policy.code));
+    return this.leavePolicyList.filter(policy => selectedCodes.has(policy.code));
   }
 
   get medicalLeaveYearlyEntitlement(): number {
@@ -789,14 +802,14 @@ export class CreateComponent {
 
         this.toastService.show({
           title: "Success",
-          message: "Position has been created.",
+          message: "Employee has been created.",
           icon: 'success'
         });
 
         this.formDirective.resetForm();
         this.submitting = false;
         setTimeout(() => {
-          this.router.navigate(['/organization/positions/overview']);
+          this.router.navigate(['/workforce/employees/list']);
         }, 1000);
       },
       error: (error) => {
