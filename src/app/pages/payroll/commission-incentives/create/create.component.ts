@@ -46,12 +46,12 @@ export class CreateComponent {
     const query = typeof searchValue === 'string' ? searchValue.trim().toLowerCase() : '';
 
     return this.employees.filter(employee =>
-      !query || `${employee.employeeId} ${employee.employeeName}`.toLowerCase().includes(query)
+      !query || `${employee.employeeNo} ${employee.name}`.toLowerCase().includes(query)
     );
   }
 
   get selectedEmployee(): Employee | undefined {
-    return this.employees.find(employee => employee.employeeId === this.assignmentForm.controls.employeeId.value);
+    return this.employees.find(employee => employee.employeeNo === this.assignmentForm.controls.employeeId.value);
   }
 
   get availableCommissionPlans(): CommissionIncentiveSetting[] {
@@ -70,7 +70,7 @@ export class CreateComponent {
         case 'SELECTED_POSITIONS':
           return !!position && plan.eligiblePositionIds.includes(position.id);
         case 'SELECTED_EMPLOYEES':
-          return plan.eligibleEmployeeIds.includes(employee.employeeId);
+          return plan.eligibleEmployeeIds.includes(employee.employeeNo);
       }
     });
   }
@@ -123,15 +123,15 @@ export class CreateComponent {
   }
 
   readonly employeeDisplayName = (value: Employee | string | null): string => {
-    if (value && typeof value === 'object') return `${value.employeeId} - ${value.employeeName}`;
+    if (value && typeof value === 'object') return `${value.employeeNo} - ${value.name}`;
     if (!value) return '';
-    const employee = this.employees.find(item => item.employeeId === value);
-    return employee ? `${employee.employeeId} - ${employee.employeeName}` : value;
+    const employee = this.employees.find(item => item.employeeNo === value);
+    return employee ? `${employee.employeeNo} - ${employee.name}` : value;
   };
 
   onEmployeeSelected(employee: Employee): void {
     this.submitted = false;
-    this.assignmentForm.controls.employeeId.setValue(employee.employeeId);
+    this.assignmentForm.controls.employeeId.setValue(employee.employeeNo);
     const eligibleCodes = new Set(this.availableCommissionPlans.map(plan => plan.code));
     const currentPlanCode = (employee.commissionSettingCodes ?? []).find(code => eligibleCodes.has(code)) ?? '';
     this.assignmentForm.controls.commissionSettingCode.setValue(currentPlanCode);
@@ -196,8 +196,8 @@ export class CreateComponent {
     }, 0) + 1;
     const commissionRecord: CommissionPayrollRecord = {
       id: `CPR-${String(nextId).padStart(4, '0')}`,
-      employeeId: employee.employeeId,
-      employeeName: employee.employeeName,
+      employeeId: employee.employeeNo,
+      employeeName: employee.name,
       planCode: plan.code,
       planName: plan.name,
       payrollEarningCode: plan.payrollEarningCode,

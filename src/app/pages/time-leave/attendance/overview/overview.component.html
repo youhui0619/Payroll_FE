@@ -174,15 +174,14 @@
 
                 @for (employee of filteredEmployees; track employee) {
                   <tr>
-                    <td class="text-muted text-nowrap sticky-col sticky-col-employee cursor-pointer border-right" [routerLink]="['/workforce/employees/view', employee.employeeId]">
+                    <td class="text-muted text-nowrap sticky-col sticky-col-employee cursor-pointer border-right" [routerLink]="['/workforce/employees/view', employee.employeeNo]">
                       <div class="d-flex align-items-center justify-content-start">
                         <div class="initial-avatar me-3">{{ employee.initials }}</div>
-                        <div class="flex-grow-1"><p class="text-dark my-0">{{ employee.employeeName }}</p><p class="fs-10 fw-300 text-muted my-0">{{ employee.employeeId }}</p></div>
+                        <div class="flex-grow-1"><p class="text-dark my-0">{{ employee.name }}</p><p class="fs-10 fw-300 text-muted my-0">{{ employee.employeeNo }}</p></div>
                         <button
                           type="button"
                           mat-icon-button
                           class="text-muted action-btn me-3"
-                          [attr.aria-label]="'View monthly attendance records for ' + employee.employeeName"
                           title="View monthly records"
                           (click)="$event.stopPropagation(); openMonthlyRecords(employee)">
                           <tabler-icon icon="list" [size]="16"></tabler-icon>
@@ -227,14 +226,14 @@
     <button
       mat-menu-item
       [routerLink]="['/time-leave/leave/create']"
-      [queryParams]="{ employeeId: context.employee.employeeId, date: context.day.dateKey }">
+      [queryParams]="{ employeeId: context.employee.employeeNo, date: context.day.dateKey }">
       <tabler-icon icon="calendar-event" [size]="16" class="text-muted me-2"></tabler-icon>
       <span class="text-muted">Create leave request</span>
     </button>
     <button
       mat-menu-item
       [routerLink]="['/time-leave/overtime/create']"
-      [queryParams]="{ employeeId: context.employee.employeeId, date: context.day.dateKey }">
+      [queryParams]="{ employeeId: context.employee.employeeNo, date: context.day.dateKey }">
       <tabler-icon icon="clock" [size]="16" class="text-muted me-2"></tabler-icon>
       <span class="text-muted">Create overtime request</span>
     </button>

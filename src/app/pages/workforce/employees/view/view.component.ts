@@ -1,14 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FullCalendarModule, CalendarOptions } from '@fullcalendar/angular';
 import type { EventInput } from 'fullcalendar';
 import dayGridPlugin from '@fullcalendar/angular/daygrid';
 import interactionPlugin from '@fullcalendar/angular/interaction';
-import themePlugin from "@fullcalendar/angular/themes/monarch"; 
-import { getEmployee } from '../../../../data/workforce/employees.data';
+import themePlugin from "@fullcalendar/angular/themes/monarch";
 import { workLocations } from '../../../../data/workforce/work-locations.data';
 import { attendanceRecords } from '../../../../data/attendance/attendance.data';
 import { getEmployeeLeaveBalances } from '../../../../data/leave/leave-balances.data';
@@ -30,6 +29,10 @@ import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../sh
 import { ClaimDetailDialogComponent } from '../../../../shared/dialog/claim-detail-dialog/claim-detail-dialog.component';
 import { OvertimeDetailDialogComponent } from '../../../../shared/dialog/overtime-detail-dialog/overtime-detail-dialog.component';
 import { NavigationService } from '../../../../services/navigation.service';
+import { EmployeesApiService } from '../../../../services/api/employees.service';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
+import { AlertService } from '../../../../shared/components/alert/alert.service';
+import { getEmployee } from '../../../../data/workforce/employees.data';
 
 function dayAfter(dateString: string): string {
   const [year, month, day] = dateString.split('-').map(Number);
@@ -46,15 +49,23 @@ const leaveEventColors: Record<string, { background: string; text: string }> = {
 @Component({
   selector: 'app-view',
   imports: [...MaterialImports, CommonModule, FullCalendarModule, RouterLink, LeaveDetailDialogComponent, ClaimDetailDialogComponent, OvertimeDetailDialogComponent],
-  providers: [...MaterialProviders],
+  providers: [...MaterialProviders, EmployeesApiService],
   templateUrl: './view.component.html',
   styleUrl: './view.component.scss'
 })
 export class ViewComponent {
+ constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private apiService: EmployeesApiService,
+    private toastService: ToastService,
+    private alertService: AlertService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
-  private navigation = inject(NavigationService);
-  
+
   employee!: Employee;
+  id: any = '';
   readonly workLocations = workLocations;
   readonly leaveYear = new Date().getFullYear();
   readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.active);
@@ -68,6 +79,40 @@ export class ViewComponent {
   selectedTabIndex = 0;
   selectedLeave: LeaveDialogData | null = null;
   selectedClaim: ExpenseClaimRecord | null = null;
+
+  ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      this.id = params.get('id');
+      if (this.id) {
+        this.getEmployee(this.id);
+      } else {
+        console.error("🚨 No ID found in route!");
+      }
+    });
+  }
+
+  getEmployee(id: any){
+    console.log(id)
+    this.apiService.getEmployee(id).subscribe({
+      next: (response) => {
+        this.employee = response.data;
+        console.log("employee:", this.employee);
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
+    });
+  }
+
+
+
+
+
+
 
   get selectedWorkLocation() {
     return this.workLocations.find(location => location.id === this.employee?.workLocationId);
@@ -123,96 +168,183 @@ export class ViewComponent {
     return labels[frequency];
   }
 
-  constructor(route: ActivatedRoute) {
-    route.paramMap.pipe(takeUntilDestroyed()).subscribe(params => {
-      const employeeId = params.get('id');
-      if (employeeId) this.loadEmployeeData(employeeId);
-    });
-  }
+  // private loadEmployeeData(employeeId: string): void {
+  //   this.if = employeeId;
+  //   this.apiService.getEmployee(employeeId).subscribe({
+  //     next: response => {
+  //       const data = response?.data ?? response;
+  //       console.log("data", response.data)
+  //       if (!data || typeof data !== 'object') {
+  //         this.showEmployeeLoadError('Employee data was not returned by the server.');
+  //         return;
+  //       }
 
-  private loadEmployeeData(employeeId: string): void {
-    this.employee = getEmployee(employeeId);
-    this.employeeLeaveBalances = getEmployeeLeaveBalances(employeeId);
-    this.claimRequests = claims.filter(claim => claim.employeeId === employeeId);
-    this.overtimeHistory = overtimeRequests.filter(request => request.employeeId === employeeId);
-    this.leaveRequests = attendanceRecords
-      .filter(record => record.employeeId === employeeId)
-      .map(record => {
-      const days = Math.round((new Date(`${record.endDate}T00:00:00`).getTime() - new Date(`${record.startDate}T00:00:00`).getTime()) / 86400000) + 1;
-      const formatDate = (date: string) => {
-        const [year, month, day] = date.split('-');
-        return `${day}/${month}/${year}`;
-      };
-      const statusClass = record.status === 'Approved'
-        ? 'bg-light-primary text-primary'
-        : record.status === 'Rejected'
-          ? 'bg-light-danger text-danger'
-          : 'bg-light-info text-info';
-      const iconClass = record.typeClass === 'medical'
-        ? 'text-warning bg-light-warning'
-        : record.typeClass === 'emergency'
-          ? 'text-info bg-light-info'
-          : record.typeClass === 'unpaid'
-            ? 'text-secondary bg-light-secondary'
-            : 'text-danger bg-light-danger';
+  //       const name = data.employeeName ?? data.name ?? '';
+  //       const address = data.address ?? [
+  //         data.addressLine1,
+  //         data.addressLine2,
+  //         data.city,
+  //         data.postcode,
+  //         data.state,
+  //         data.country
+  //       ].filter(Boolean).join(', ');
+  //       const emergencyContactAddress = data.emergencyContactAddress ?? [
+  //         data.emergencyContactAddressLine1,
+  //         data.emergencyContactAddressLine2,
+  //         data.emergencyContactCity,
+  //         data.emergencyContactPostcode,
+  //         data.emergencyContactState,
+  //         data.emergencyContactCountry
+  //       ].filter(Boolean).join(', ');
+  //       const department = typeof data.department === 'object'
+  //         ? data.department?.name ?? ''
+  //         : data.department ?? data.departmentName ?? '';
+  //       const position = typeof data.position === 'object'
+  //         ? data.position?.title ?? data.position?.name ?? ''
+  //         : data.position ?? data.positionTitle ?? '';
+  //       const reportingManager = typeof data.reportingManager === 'object'
+  //         ? data.reportingManager?.name ?? ''
+  //         : data.reportingManager ?? data.manager?.name ?? '';
 
-      return {
-        employeeId: record.employeeId,
-        leaveType: record.leaveType,
-        reference: `${record.code}-${record.startDate}`,
-        dateRange: record.startDate === record.endDate
-          ? formatDate(record.startDate)
-          : `${formatDate(record.startDate)} ~ ${formatDate(record.endDate)}`,
-        daysTaken: `${days} ${days === 1 ? 'Day' : 'Days'}`,
-        status: record.status,
-        statusClass,
-        iconClass,
-        reason: record.reason,
-        approval: record.approval
-      };
-    });
-    this.attendanceEvents = attendanceRecords
-      .filter(record => record.employeeId === employeeId && record.status === 'Approved')
-      .map(record => {
-      const colors = leaveEventColors[record.typeClass] ?? leaveEventColors['annual'];
-      return {
-        id: `${record.code}-${record.startDate}`,
-        title: `${record.code} · ${record.leaveType}`,
-        start: record.startDate,
-        end: dayAfter(record.endDate),
-        allDay: true,
-        classNames: [`leave-${record.typeClass}`],
-        backgroundColor: colors.background,
-        borderColor: colors.background,
-        textColor: colors.text,
-        extendedProps: {
-          status: record.status,
-          reason: record.reason,
-          typeClass: record.typeClass
-        }
-      };
-    });
-    const workLocation = this.selectedWorkLocation;
-    this.publicHolidayEvents = []
-    // getPublicHolidaysForLocation(`${this.employee.address} ${workLocation?.city ?? ''} ${workLocation?.state ?? ''}`).map(holiday => ({
-    //   id: holiday.id,
-    //   title: holiday.name,
-    //   start: formatDate(holiday.startDate),
-    //   end: formatDate(holiday.endDate),
-    //   allDay: true,
-    //   classNames: ['public-holiday-event', 'bg-light-info', 'text-info'],
-    //   backgroundColor: 'var(--light-info)',
-    //   borderColor: 'var(--light-info)',
-    //   textColor: 'var(--info)',
-    //   extendedProps: { eventType: 'public-holiday', holidayName: holiday.name }
-    // }));
-    this.selectedLeave = null;
-    this.selectedClaim = null;
-    this.calendarOptions = {
-      ...this.calendarOptions,
-      events: [...this.attendanceEvents, ...this.publicHolidayEvents]
-    };
-  }
+  //       this.if = data.id ?? data._id ?? employeeId;
+  //       this.employee = {
+  //         ...data,
+  //         employeeId: data.employeeNo ?? data.employeeId ?? data.id ?? employeeId,
+  //         employeeName: name,
+  //         initials: data.initials ?? name.split(/\s+/).filter(Boolean).slice(0, 2).map((part: string) => part[0]).join('').toUpperCase(),
+  //         nricPassportNo: data.nricPassportNo ?? '',
+  //         dateOfBirth: data.dateOfBirth ?? '',
+  //         tin: data.tin ?? '',
+  //         email: data.email ?? '',
+  //         contactNo: data.contactNo ?? '',
+  //         address,
+  //         department,
+  //         position,
+  //         reportingManager,
+  //         workLocationId: data.workLocationId ?? data.locationId ?? data.workLocation?.id ?? '',
+  //         joinedDate: data.joinedDate ?? '',
+  //         basicSalary: data.basicSalary ?? 0,
+  //         salaryType: data.salaryType ?? '',
+  //         paymentMethod: data.paymentMethod ?? '',
+  //         bank: data.bank ?? '',
+  //         bankAccount: data.bankAccount ?? '',
+  //         epfEmployeeNo: data.epfEmployeeNo ?? '',
+  //         epfEmployerNo: data.epfEmployerNo ?? '',
+  //         epfRate: data.epfRate ?? '',
+  //         kwspNo: data.kwspNo ?? data.epfEmployeeNo ?? '',
+  //         socsoNo: data.socsoNo ?? '',
+  //         contributionCategory: data.contributionCategory ?? '',
+  //         eisStatus: data.eisStatus ?? '',
+  //         hrdRegisterNo: data.hrdRegisterNo ?? '',
+  //         statutoryEntitlementCodes: data.statutoryEntitlementCodes ?? [],
+  //         commissionSettingCodes: data.commissionSettingCodes ?? [],
+  //         includeOvertime: data.includeOvertime ?? false,
+  //         overtimeCalculationBasis: data.overtimeCalculationBasis ?? 'HOURLY_RATE',
+  //         overtimeHourlyRate: data.overtimeHourlyRate ?? null,
+  //         emergencyContactName: data.emergencyContactName ?? data.contactName ?? '',
+  //         emergencyContactRelationship: data.emergencyContactRelationship ?? data.relationship ?? '',
+  //         emergencyContactNo: data.emergencyContactNo ?? '',
+  //         emergencyContactAddress
+  //       } as Employee;
+  //       this.loadEmployeeRelatedData(employeeId);
+  //     },
+  //     error: error => this.showEmployeeLoadError(
+  //       error?.error?.message ?? 'Unable to load employee details.'
+  //     )
+  //   });
+  // }
+
+  // private showEmployeeLoadError(message: string) {
+  //   this.toastService.show({
+  //     title: 'Unable to load employee',
+  //     message,
+  //     icon: 'danger'
+  //   });
+  //   return this.navigation.back('/workforce/employees/list');
+  // }
+
+  // private loadEmployeeRelatedData(employeeId: string): void {
+  //   this.employeeLeaveBalances = getEmployeeLeaveBalances(employeeId);
+  //   this.claimRequests = claims.filter(claim => claim.employeeId === employeeId);
+  //   this.overtimeHistory = overtimeRequests.filter(request => request.employeeId === employeeId);
+  //   this.leaveRequests = attendanceRecords
+  //     .filter(record => record.employeeId === employeeId)
+  //     .map(record => {
+  //     const days = Math.round((new Date(`${record.endDate}T00:00:00`).getTime() - new Date(`${record.startDate}T00:00:00`).getTime()) / 86400000) + 1;
+  //     const formatDate = (date: string) => {
+  //       const [year, month, day] = date.split('-');
+  //       return `${day}/${month}/${year}`;
+  //     };
+  //     const statusClass = record.status === 'Approved'
+  //       ? 'bg-light-primary text-primary'
+  //       : record.status === 'Rejected'
+  //         ? 'bg-light-danger text-danger'
+  //         : 'bg-light-info text-info';
+  //     const iconClass = record.typeClass === 'medical'
+  //       ? 'text-warning bg-light-warning'
+  //       : record.typeClass === 'emergency'
+  //         ? 'text-info bg-light-info'
+  //         : record.typeClass === 'unpaid'
+  //           ? 'text-secondary bg-light-secondary'
+  //           : 'text-danger bg-light-danger';
+
+  //     return {
+  //       employeeId: record.employeeId,
+  //       leaveType: record.leaveType,
+  //       reference: `${record.code}-${record.startDate}`,
+  //       dateRange: record.startDate === record.endDate
+  //         ? formatDate(record.startDate)
+  //         : `${formatDate(record.startDate)} ~ ${formatDate(record.endDate)}`,
+  //       daysTaken: `${days} ${days === 1 ? 'Day' : 'Days'}`,
+  //       status: record.status,
+  //       statusClass,
+  //       iconClass,
+  //       reason: record.reason,
+  //       approval: record.approval
+  //     };
+  //   });
+  //   this.attendanceEvents = attendanceRecords
+  //     .filter(record => record.employeeId === employeeId && record.status === 'Approved')
+  //     .map(record => {
+  //     const colors = leaveEventColors[record.typeClass] ?? leaveEventColors['annual'];
+  //     return {
+  //       id: `${record.code}-${record.startDate}`,
+  //       title: `${record.code} · ${record.leaveType}`,
+  //       start: record.startDate,
+  //       end: dayAfter(record.endDate),
+  //       allDay: true,
+  //       classNames: [`leave-${record.typeClass}`],
+  //       backgroundColor: colors.background,
+  //       borderColor: colors.background,
+  //       textColor: colors.text,
+  //       extendedProps: {
+  //         status: record.status,
+  //         reason: record.reason,
+  //         typeClass: record.typeClass
+  //       }
+  //     };
+  //   });
+  //   const workLocation = this.selectedWorkLocation;
+  //   this.publicHolidayEvents = []
+  //   // getPublicHolidaysForLocation(`${this.employee.address} ${workLocation?.city ?? ''} ${workLocation?.state ?? ''}`).map(holiday => ({
+  //   //   id: holiday.id,
+  //   //   title: holiday.name,
+  //   //   start: formatDate(holiday.startDate),
+  //   //   end: formatDate(holiday.endDate),
+  //   //   allDay: true,
+  //   //   classNames: ['public-holiday-event', 'bg-light-info', 'text-info'],
+  //   //   backgroundColor: 'var(--light-info)',
+  //   //   borderColor: 'var(--light-info)',
+  //   //   textColor: 'var(--info)',
+  //   //   extendedProps: { eventType: 'public-holiday', holidayName: holiday.name }
+  //   // }));
+  //   this.selectedLeave = null;
+  //   this.selectedClaim = null;
+  //   this.calendarOptions = {
+  //     ...this.calendarOptions,
+  //     events: [...this.attendanceEvents, ...this.publicHolidayEvents]
+  //   };
+  // }
 
   get isWideTab(): boolean {
     return this.selectedTabIndex >= 3 && (this.selectedTabIndex <= 5 || (this.employee?.includeOvertime === true && this.selectedTabIndex === 6));
@@ -253,7 +385,7 @@ export class ViewComponent {
   }
 
   goBack() {
-    return this.navigation.back('/workforce/employees/list');
+    return this.router.navigate(['/workforce/employees/list']);
   }
 
   private policyBalance(policy: LeavePolicy): { entitled: number; balance: number } | undefined {
@@ -387,7 +519,7 @@ export class ViewComponent {
 
   openLeaveDetails(recordCode: string): void {
     const record = attendanceRecords.find(item =>
-      item.employeeId === this.employee.employeeId && `${item.code}-${item.startDate}` === recordCode && item.status === 'Approved'
+      item.employeeId === this.employee.employeeNo && `${item.code}-${item.startDate}` === recordCode && item.status === 'Approved'
     );
     if (!record) return;
 
@@ -404,8 +536,8 @@ export class ViewComponent {
       status: record.status,
       statusClass: 'bg-light-primary text-primary',
       employeeInformation: {
-        name: this.employee.employeeName,
-        employeeId: this.employee.employeeId,
+        name: this.employee.name,
+        employeeId: this.employee.employeeNo,
         department: this.employee.department,
         position: this.employee.position,
         contactNo: this.employee.contactNo,
@@ -429,8 +561,8 @@ export class ViewComponent {
       status: leave.status,
       statusClass: leave.statusClass,
       employeeInformation: {
-        name: this.employee.employeeName,
-        employeeId: this.employee.employeeId,
+        name: this.employee.name,
+        employeeId: this.employee.employeeNo,
         department: this.employee.department,
         position: this.employee.position,
         contactNo: this.employee.contactNo,

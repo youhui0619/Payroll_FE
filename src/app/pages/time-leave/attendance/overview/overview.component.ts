@@ -83,11 +83,11 @@ export class OverviewComponent implements AfterViewInit, OnInit {
     return this.days
       .filter(day => day.dateKey <= this.todayDateKey)
       .map(day => {
-      const leave = this.getLeave(employee.employeeId, day.dateKey);
+      const leave = this.getLeave(employee.employeeNo, day.dateKey);
       const holiday = this.getPublicHoliday(employee, day.dateKey);
-      const overtime = this.getOvertimeRequest(employee.employeeId, day.dateKey);
+      const overtime = this.getOvertimeRequest(employee.employeeNo, day.dateKey);
       const attendance = dailyAttendanceRecords.find(record =>
-        record.employeeId === employee.employeeId && record.date === day.dateKey
+        record.employeeId === employee.employeeNo && record.date === day.dateKey
       );
       const [year, month, date] = day.dateKey.split('-');
 
@@ -137,7 +137,7 @@ export class OverviewComponent implements AfterViewInit, OnInit {
 
   get presentTodayCount(): number {
     return this.filteredEmployees.filter(employee => {
-      const hasApprovedLeave = this.hasApprovedLeave(employee.employeeId, this.todayDateKey);
+      const hasApprovedLeave = this.hasApprovedLeave(employee.employeeNo, this.todayDateKey);
       // const isPublicHoliday = !!this.getPublicHoliday(employee, this.todayDateKey);
       return !hasApprovedLeave 
       // && !isPublicHoliday;
@@ -150,7 +150,7 @@ export class OverviewComponent implements AfterViewInit, OnInit {
         .filter(leave =>
           leave.leaveType === leaveType &&
           leave.status === 'Approved' &&
-          this.filteredEmployees.some(employee => employee.employeeId === leave.employeeId) &&
+          this.filteredEmployees.some(employee => employee.employeeNo === leave.employeeId) &&
           leave.startDate <= this.todayDateKey &&
           leave.endDate >= this.todayDateKey
         )
@@ -248,44 +248,44 @@ export class OverviewComponent implements AfterViewInit, OnInit {
   }
 
   attendanceBadgeClass(employee: Employee, day: CalendarDay): string {
-    const leave = this.getLeave(employee.employeeId, day.dateKey);
+    const leave = this.getLeave(employee.employeeNo, day.dateKey);
     if (leave) return leave.typeClass;
-    if (this.getOvertimeRequest(employee.employeeId, day.dateKey)) return 'overtime';
+    if (this.getOvertimeRequest(employee.employeeNo, day.dateKey)) return 'overtime';
     // if (this.getPublicHoliday(employee, day.dateKey)) return 'public-holiday';
     return this.isFutureDate(day.dateKey) ? 'future' : '';
   }
 
   attendanceBadgeLabel(employee: Employee, day: CalendarDay): string {
-    const leave = this.getLeave(employee.employeeId, day.dateKey);
+    const leave = this.getLeave(employee.employeeNo, day.dateKey);
     if (leave) return leave.code;
-    if (this.getOvertimeRequest(employee.employeeId, day.dateKey)) return 'OT';
+    if (this.getOvertimeRequest(employee.employeeNo, day.dateKey)) return 'OT';
     // if (this.getPublicHoliday(employee, day.dateKey)) return 'PH';
     return '';
   }
 
   attendanceBadgeTitle(employee: Employee, day: CalendarDay) {
-    const leave = this.getLeave(employee.employeeId, day.dateKey);
+    const leave = this.getLeave(employee.employeeNo, day.dateKey);
     if (leave) return leave.leaveType;
-    const overtime = this.getOvertimeRequest(employee.employeeId, day.dateKey);
+    const overtime = this.getOvertimeRequest(employee.employeeNo, day.dateKey);
     if (overtime) return `Overtime · ${overtime.status}`;
     return;
     // return this.getPublicHoliday(employee, day.dateKey)?.name ?? 'Attendance actions';
   }
 
   hasAttendanceRecord(employee: Employee, day: CalendarDay): boolean {
-    return !!this.getLeave(employee.employeeId, day.dateKey)
-      || !!this.getOvertimeRequest(employee.employeeId, day.dateKey)
+    return !!this.getLeave(employee.employeeNo, day.dateKey)
+      || !!this.getOvertimeRequest(employee.employeeNo, day.dateKey)
       // || !!this.getPublicHoliday(employee, day.dateKey);
   }
 
   onAttendanceBadgeClick(employee: Employee, day: CalendarDay): void {
-    const leave = this.getLeave(employee.employeeId, day.dateKey);
+    const leave = this.getLeave(employee.employeeNo, day.dateKey);
     if (leave) {
       this.openLeaveDetails(employee, day, leave);
       return;
     }
 
-    const overtime = this.getOvertimeRequest(employee.employeeId, day.dateKey);
+    const overtime = this.getOvertimeRequest(employee.employeeNo, day.dateKey);
     if (overtime) this.openOvertimeDetails(overtime);
   }
 
@@ -313,8 +313,8 @@ export class OverviewComponent implements AfterViewInit, OnInit {
       status: leave.status,
       statusClass: 'bg-light-primary text-primary',
       employeeInformation: {
-        name: employee.employeeName,
-        employeeId: employee.employeeId,
+        name: employee.name,
+        employeeId: employee.employeeNo,
         department: employee.department,
         position: employee.position,
         contactNo: employee.contactNo,

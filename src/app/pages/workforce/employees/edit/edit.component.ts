@@ -13,7 +13,7 @@ import { workLocations } from '../../../../data/workforce/work-locations.data';
 import type { Department } from '../../../../models/workforce/department.model';
 import type { Position } from '../../../../models/workforce/position.model';
 import type { WorkLocation } from '../../../../models/workforce/work-location.model';
-import type { OvertimeCalculationBasis } from '../../../../models/workforce/employee.model';
+import { overtimeBasisOptions, type OvertimeCalculationBasis } from '../../../../models/workforce/employee.model';
 import type { EmploymentStatus, EmploymentType } from '../../../../models/workforce/employment-status.model';
 import { employmentStatuses, employmentTypes } from '../../../../data/workforce/options/employment-options.data';
 import { getEmployee } from '../../../../data/workforce/employees.data';
@@ -111,11 +111,7 @@ export class EditComponent implements OnInit {
   readonly commissionIncentiveSettings: CommissionIncentiveSetting[] = commissionIncentiveSettings;
   readonly availableStatutoryEntitlements = statutoryEntitlementOptions.filter(option => payrollSettings[option.setting]);
   readonly overtimeEnabledInPayrollSettings = payrollSettings.includeOvertime;
-  readonly overtimeBasisOptions: { value: OvertimeCalculationBasis; label: string }[] = [
-    { value: 'HOURLY_RATE', label: 'Hourly rate' },
-    { value: 'DAILY_RATE_CONVERTED', label: 'Daily rate converted to hourly' },
-    { value: 'MONTHLY_SALARY_CONVERTED', label: 'Monthly salary converted to hourly' }
-  ];
+  readonly overtimeBasisOptions = overtimeBasisOptions;
 
   get selectedWorkLocation(): WorkLocation | undefined {
     const locationId = this.employeeForm.controls.employment.controls.workLocationId.value;
@@ -377,8 +373,8 @@ export class EditComponent implements OnInit {
 
     this.employeeForm.patchValue({
       personal: {
-        employeeId: employee.employeeId,
-        employeeName: employee.employeeName,
+        employeeId: employee.employeeNo,
+        employeeName: employee.name,
         nricPassportNo: employee.nricPassportNo,
         dateOfBirth: employee.dateOfBirth ? new Date(`${employee.dateOfBirth}T00:00:00`) : null,
         gender: employee.gender.toUpperCase(),

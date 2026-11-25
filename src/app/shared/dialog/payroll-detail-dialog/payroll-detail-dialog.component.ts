@@ -116,8 +116,8 @@ export class PayrollDetailDialogComponent {
       status: leave.status,
       statusClass: leave.statusClass,
       employeeInformation: {
-        name: employee.employeeName,
-        employeeId: employee.employeeId,
+        name: employee.name,
+        employeeId: employee.employeeNo,
         department: employee.department,
         position: employee.position,
         contactNo: employee.contactNo,

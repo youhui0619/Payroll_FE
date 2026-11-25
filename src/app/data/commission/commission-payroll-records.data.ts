@@ -16,14 +16,14 @@ function record(
   approvedAt: string | null,
   approvalComment: string
 ): CommissionPayrollRecord {
-  const employee = employees.find(item => item.employeeId === employeeId);
+  const employee = employees.find(item => item.employeeNo === employeeId);
   const plan = commissionIncentiveSettings.find(item => item.code === planCode);
   if (!employee || !plan) throw new Error(`Commission record ${id} references a missing employee or plan.`);
 
   return {
     id,
     employeeId,
-    employeeName: employee.employeeName,
+    employeeName: employee.name,
     planCode: plan.code,
     planName: plan.name,
     payrollEarningCode: plan.payrollEarningCode,

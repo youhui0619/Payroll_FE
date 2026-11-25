@@ -207,7 +207,7 @@ export class DashboardComponent {
     const monthEnd = this.toDateKey(new Date(this.calendarMonth.getFullYear(), this.calendarMonth.getMonth() + 1, 0));
     return attendanceRecords.filter(record => record.status === 'Approved')
       .map((record): DashboardLeaveEntry | null => {
-      const employee = employees.find(item => item.employeeId === record.employeeId);
+      const employee = employees.find(item => item.employeeNo === record.employeeId);
       if (!employee) return null;
       const application = leaveApplications.find(item => {
         if (item.status !== 'Approved' || item.employeeId !== record.employeeId || item.leaveType !== record.leaveType) return false;
@@ -215,7 +215,7 @@ export class DashboardComponent {
         return this.toDateKeyFromLeaveDate(startText) === record.startDate
           && this.toDateKeyFromLeaveDate(endText || startText) === record.endDate;
       });
-      return { record, employeeName: employee.employeeName, application: application ?? null };
+      return { record, employeeName: employee.name, application: application ?? null };
     })
       .filter((entry): entry is DashboardLeaveEntry => entry !== null)
       .filter(({ record }) => record.startDate <= monthEnd && record.endDate >= monthStart)
@@ -235,7 +235,7 @@ export class DashboardComponent {
       .slice(0, 5)
       .map(application => ({
         application,
-        employeeName: employees.find(employee => employee.employeeId === application.employeeId)?.employeeName ?? application.employeeId,
+        employeeName: employees.find(employee => employee.employeeNo === application.employeeId)?.name ?? application.employeeId,
       }));
   }
 
@@ -287,7 +287,7 @@ export class DashboardComponent {
   }
 
   openLeaveDetails(entry: DashboardLeaveEntry): void {
-    const employee = employees.find(item => item.employeeId === entry.record.employeeId);
+    const employee = employees.find(item => item.employeeNo === entry.record.employeeId);
     if (!employee) return;
 
     const application = entry.application;
@@ -299,8 +299,8 @@ export class DashboardComponent {
       status: entry.record.status,
       statusClass: entry.record.status === 'Approved' ? 'bg-light-primary text-primary' : 'bg-light-info text-info',
       employeeInformation: {
-        name: employee.employeeName,
-        employeeId: employee.employeeId,
+        name: employee.name,
+        employeeId: employee.employeeNo,
         department: employee.department,
         position: employee.position,
         contactNo: employee.contactNo,
@@ -318,7 +318,7 @@ export class DashboardComponent {
   }
 
   openPendingLeaveDetails(application: LeaveApplication): void {
-    const employee = employees.find(item => item.employeeId === application.employeeId);
+    const employee = employees.find(item => item.employeeNo === application.employeeId);
     if (!employee) return;
 
     this.selectedLeave = {
@@ -327,8 +327,8 @@ export class DashboardComponent {
       status: application.status,
       statusClass: application.statusClass,
       employeeInformation: {
-        name: employee.employeeName,
-        employeeId: employee.employeeId,
+        name: employee.name,
+        employeeId: employee.employeeNo,
         department: employee.department,
         position: employee.position,
         contactNo: employee.contactNo,

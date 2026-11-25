@@ -14,9 +14,29 @@ import { workLocations } from '../../../../data/workforce/work-locations.data';
 import type { Department } from '../../../../models/workforce/department.model';
 import type { Position } from '../../../../models/workforce/position.model';
 import type { WorkLocation } from '../../../../models/workforce/work-location.model';
-import type { EmployeeCreatePayload, OvertimeCalculationBasis } from '../../../../models/workforce/employee.model';
+import {
+  bankOptions,
+  contributionCategoryOptions,
+  countryOptions,
+  eisStatusOptions,
+  employmentStatuses,
+  employmentTypes,
+  emergencyContactRelationshipOptions,
+  epfRateOptions,
+  genderOptions,
+  maritalStatusOptions,
+  nationalityOptions,
+  noManagerOption,
+  overtimeBasisOptions,
+  paymentMethodOptions,
+  raceOptions,
+  religionOptions,
+  salaryTypeOptions,
+  stateOptions,
+  statutoryEntitlementOptions,
+  type OvertimeCalculationBasis
+} from '../../../../models/workforce/employee.model';
 import type { EmploymentStatus, EmploymentType } from '../../../../models/workforce/employment-status.model';
-import { employmentStatuses, employmentTypes } from '../../../../data/workforce/options/employment-options.data';
 import { commissionIncentiveSettings } from '../../../../data/commission/commission-incentive-settings.data';
 import { WORKING_SCHEDULE } from '../../../../data/working-schedule/working-schedule.data';
 import type { WorkingDayName, WorkingDaySchedule, WorkingSchedule } from '../../../../models/working-schedule/working-schedule.model';
@@ -28,21 +48,12 @@ import type {
 import { EmployeesApiService } from '../../../../services/api/employees.service';
 import { ToastService } from '../../../../shared/components/toast/toast.service';
 import { Router } from '@angular/router';
-import { stateList } from '../../../../data/other/other.data';
 import { PositionsApiService } from '../../../../services/api/positions.service';
 import { DepartmentsApiService } from '../../../../services/api/departments.service';
 import { WorkLocationApiService } from '../../../../services/api/work-location.service';
 import { LeavePolicyApiService } from '../../../../services/api/leave-policy.service';
 import { PayrollSettingApiService } from '../../../../services/api/payroll-setting.service';
 import type { PayrollSetting } from '../../../../models/payroll/payroll-settings.model';
-
-const statutoryEntitlementOptions = [
-  { code: 'EPF', name: 'EPF / KWSP', setting: 'includeEpf' },
-  { code: 'SOCSO', name: 'SOCSO / PERKESO', setting: 'includeSocso' },
-  { code: 'LHDN', name: 'LHDN (PCB / MTD)', setting: 'includePcb' },
-  { code: 'EIS', name: 'EIS / SIP', setting: 'includeEis' },
-  { code: 'HRD_CORP_LEVY', name: 'HRD Corp Levy', setting: 'includeHrdCorpLevy' },
-] as const;
 
 type LeaveServiceTierForm = FormGroup<{
   serviceFrom: FormControl<number | null>;
@@ -123,7 +134,7 @@ export class CreateComponent {
   }
 
   get isBankTransfer(): boolean {
-    return this.form.controls.payroll.controls.paymentMethod.value === 'Transfer by bank';
+    return this.form.controls.payroll.controls.paymentMethod.value === 'BANK';
   }
 
   onPaymentMethodChange(method: string) {
@@ -132,7 +143,7 @@ export class CreateComponent {
 
   private updateBankValidators(method: string) {
     const { bank, bankAccount } = this.form.controls.payroll.controls;
-    if (method === 'Transfer by bank') {
+    if (method === 'BANK') {
       bank.setValidators(Validators.required);
       bankAccount.setValidators(Validators.required);
     } else {
@@ -149,7 +160,21 @@ export class CreateComponent {
 
   private editingLeavePolicyCodes = new Set<string>();
 
-  stateList: any =stateList
+  genderOptions = genderOptions;
+  nationalityOptions = nationalityOptions;
+  raceOptions = raceOptions;
+  religionOptions = religionOptions;
+  maritalStatusOptions = maritalStatusOptions;
+  countryOptions = countryOptions;
+  stateOptions = stateOptions;
+  salaryTypeOptions = salaryTypeOptions;
+  paymentMethodOptions = paymentMethodOptions;
+  bankOptions = bankOptions;
+  epfRateOptions = epfRateOptions;
+  contributionCategoryOptions = contributionCategoryOptions;
+  eisStatusOptions = eisStatusOptions;
+  emergencyContactRelationshipOptions = emergencyContactRelationshipOptions;
+  noManagerOption = noManagerOption;
   departmentList: Department[] = [];
   positionList: Position[] = [];
   managers = employees.filter(employee => employee.employmentStatus === 'ACTIVE');
@@ -165,11 +190,7 @@ export class CreateComponent {
   includeClaimsAndAllowance = false;
   includeBonus = false;
   includeCommissionAndIncentives = false;
-  overtimeBasisOptions: { value: OvertimeCalculationBasis; label: string }[] = [
-    { value: 'HOURLY_RATE', label: 'Hourly rate' },
-    { value: 'DAILY_RATE_CONVERTED', label: 'Daily rate converted to hourly' },
-    { value: 'MONTHLY_SALARY_CONVERTED', label: 'Monthly salary converted to hourly' }
-  ];
+  overtimeBasisOptions = overtimeBasisOptions;
 
   leavePolicyList: LeavePolicy[] = [];
 
@@ -778,7 +799,7 @@ export class CreateComponent {
       const day = String(value.getDate()).padStart(2, '0');
       return `${year}-${month}-${day}`;
     };
-    const data: EmployeeCreatePayload = {
+    const data = {
       ...personalFields,
       employeeNo: employeeNo,
       name: name,

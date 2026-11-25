@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../auth.service';
-import { getEmployee } from '../../data/workforce/employees.data';
 
 @Injectable()
 export class EmployeesApiService {
@@ -62,7 +61,7 @@ export class EmployeesApiService {
     });
   }
   getEmployee(id: any): Observable<any> {
-    return this.http.post(environment.apiURL + '/employees/'+id, {
+    return this.http.get(environment.apiURL + '/employees/' + id, {
       headers: this.getHeaders(),
     });
   }

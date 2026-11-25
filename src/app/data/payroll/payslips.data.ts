@@ -75,8 +75,8 @@ export const payslips: Payslip[] = payrollList.map((row) => {
     commissionReferences: commissionItems.map(item => item.id),
     company,
     employee: {
-      name: employee.employeeName,
-      id: employee.employeeId,
+      name: employee.name,
+      id: employee.employeeNo,
       position: employee.position,
       department: employee.department,
       epfMembershipNumber: employee.epfEmployeeNo,

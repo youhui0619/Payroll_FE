@@ -160,7 +160,7 @@ export class OverviewComponent implements OnInit {
       return `${titles.join(', ') || 'None selected'}`;
     }
 
-    const names = setting.eligibleEmployeeIds.map(id => employees.find(employee => employee.employeeId === id)?.employeeName ?? id);
+    const names = setting.eligibleEmployeeIds.map(id => employees.find(employee => employee.employeeNo === id)?.name ?? id);
     return `${names.join(', ') || 'None selected'}`;
   }
 }

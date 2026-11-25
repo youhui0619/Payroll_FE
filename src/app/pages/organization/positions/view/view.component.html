@@ -130,12 +130,12 @@
             <tbody>
               @for (employee of employees; track employee) {
                 <tr>
-                  <td class="text-muted cursor-pointer" [routerLink]="['/workforce/employees/view', employee.employeeId]">
+                  <td class="text-muted cursor-pointer" [routerLink]="['/workforce/employees/view', employee.employeeNo]">
                     <div class="d-flex align-items-center justify-content-start">
                       <div class="initial-avatar me-3">{{ employee.initials }}</div>
                       <div>
-                        <p class="text-dark my-0">{{ employee.employeeName }}</p>
-                        <p class="fs-10 fw-300 text-muted my-0">{{ employee.employeeId }}</p>
+                        <p class="text-dark my-0">{{ employee.name }}</p>
+                        <p class="fs-10 fw-300 text-muted my-0">{{ employee.employeeNo }}</p>
                       </div>
                     </div>
                   </td>
@@ -144,10 +144,10 @@
                   <td class="text-muted">{{ employee.position }}</td>
                   <td><span class="chip bg-light-primary text-primary">{{ employee.employmentStatus }}</span></td>
                   <td>
-                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/workforce/employees/view', employee.employeeId]">
+                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/workforce/employees/view', employee.employeeNo]">
                       <tabler-icon icon="eye"></tabler-icon>
                     </button>
-                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/workforce/employees/edit', employee.employeeId]">
+                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/workforce/employees/edit', employee.employeeNo]">
                       <tabler-icon icon="edit"></tabler-icon>
                     </button>
                   </td>

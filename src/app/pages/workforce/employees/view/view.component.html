@@ -8,6 +8,7 @@
     </div>
   </div>
 </div>
+@if (employee) {
 <div class="row justify-content-between mb-4">
   <div class="col-sm-12">
     <div class="card">
@@ -17,15 +18,15 @@
             <div class="d-flex align-items-center">
               <div class="icon bg-light-primary text-primary me-3 fw-550">{{ employee.initials }}</div>
               <div>
-                <h4 class="my-0">{{ employee.employeeName }} <span class="badge bg-light-primary text-primary me-2 fw-400">{{ employee.employmentStatus }}</span> <span class="badge bg-light-secondary text-secondary fw-400">{{ employee.employmentType }}</span></h4>
-                <p class="fs-10 fw-300 text-muted mt-0">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
+                <h4 class="my-0">{{ employee.name }} <span class="badge bg-light-primary text-primary mx-2 fw-400">{{ employee.employmentStatus | titlecase}}</span> <span class="badge bg-light-secondary text-secondary fw-400">{{ employee.employmentType | titlecase }}</span></h4>
+                <p class="fs-10 fw-300 text-muted mt-0">{{ employee.employeeNo }} · {{ employee.department }} · {{ employee.position }}</p>
                 
               </div>
             </div>
           </div>
 
           <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
-            <button mat-flat-button color="primary" class="ms-2" [routerLink]="['/workforce/employees/edit', employee.employeeId]">
+            <button mat-flat-button color="primary" class="ms-2" [routerLink]="['/workforce/employees/edit', employee.id]">
               <tabler-icon icon="edit" [size]="16"></tabler-icon>
               Edit
             </button>
@@ -327,39 +328,39 @@
               <div class="row mx-0">
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Employee ID</label>
-                  <p class="text-muted">{{ employee.employeeId }}</p>
+                  <p class="text-muted">{{ employee.employeeNo }}</p>
                 </div>
                 <div class="col-sm-8 px-2 mb-3">
                   <label class="text-dark fw-500">Employee Name</label>
-                  <p class="text-muted">{{ employee.employeeName }}</p>
+                  <p class="text-muted">{{ employee.name }}</p>
                 </div>
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">NRIC / Passport No.</label>
-                  <p class="text-muted">{{ employee.nricPassportNo }}</p>
+                  <p class="text-muted">{{ employee.nricPassportNo || '-' }}</p>
                 </div>
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Date of Birth</label>
-                  <p class="text-muted">{{ employee.dateOfBirth | regionalDate:'dd/MM/yyyy' }}</p>
+                  <p class="text-muted">{{ (employee.dateOfBirth | regionalDate:'dd/MM/yyyy')  || '-' }}</p>
                 </div>
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Gender</label>
-                  <p class="text-muted">{{ employee.gender }}</p>
+                  <p class="text-muted">{{ (employee.gender | titlecase) || '-'}}</p>
                 </div>
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Nationality</label>
-                  <p class="text-muted">{{ employee.nationality }}</p>
+                  <p class="text-muted">{{ (employee.nationality | titlecase) || '-' }}</p>
                 </div>
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Race</label>
-                  <p class="text-muted">{{ employee.race }}</p>
+                  <p class="text-muted">{{ (employee.race | titlecase) || '-' }}</p>
                 </div>
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Religion</label>
-                  <p class="text-muted">{{ employee.religion }}</p>
+                  <p class="text-muted">{{ (employee.religion | titlecase) || '-' }}</p>
                 </div>
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Marital Status</label>
-                  <p class="text-muted">{{ employee.maritalStatus }}</p>
+                  <p class="text-muted">{{ (employee.maritalStatus | titlecase) || '-' }}</p>
                 </div>
               </div>
             </div>
@@ -372,15 +373,15 @@
               <div class="row mx-0">
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Email Address</label>
-                  <p class="text-muted">{{ employee.email }}</p>
+                  <p class="text-muted">{{ employee.email || '-' }}</p>
                 </div>
                 <div class="col-sm-8 px-2 mb-3">
                   <label class="text-dark fw-500">Contact No</label>
-                  <p class="text-muted">{{ employee.contactNo }}</p>
+                  <p class="text-muted">{{ employee.contactNo || '-' }}</p>
                 </div>
                 <div class="col-sm-12 px-2 mb-3">
                   <label class="text-dark fw-500">Address</label>
-                  <p class="text-muted">{{ employee.address }}</p>
+                  <p class="text-muted">{{ employee.address || '-' }}</p>
                 </div>
               </div>
             </div>
@@ -392,19 +393,19 @@
               <div class="row mx-0">
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Contact Name</label>
-                  <p class="text-muted">{{ employee.emergencyContactName }}</p>
+                  <p class="text-muted">{{ employee.emergencyContactName || '-' }}</p>
                 </div>
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Relationship</label>
-                  <p class="text-muted">{{ employee.emergencyContactRelationship }}</p>
+                  <p class="text-muted">{{ employee.emergencyContactRelationship || '-' }}</p>
                 </div>
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Contact No.</label>
-                  <p class="text-muted">{{ employee.emergencyContactNo }}</p>
+                  <p class="text-muted">{{ employee.emergencyContactNo || '-' }}</p>
                 </div>
                 <div class="col-sm-12 px-2 mb-3">
                   <label class="text-dark fw-500">Address</label>
-                  <p class="text-muted">{{ employee.address }}</p>
+                  <p class="text-muted">{{ employee.emergencyContactAddress || '-' }}</p>
                 </div>
               </div>
             </div>
@@ -420,15 +421,15 @@
               <div class="row mx-0">
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Department</label>
-                  <p class="text-muted">{{ employee.department }}</p>
+                  <p class="text-muted">{{ employee.department || '-' }}</p>
                 </div>
                 <div class="col-sm-8 px-2 mb-3">
                   <label class="text-dark fw-500">Position</label>
-                  <p class="text-muted">{{ employee.position }}</p>
+                  <p class="text-muted">{{ employee.position || '-' }}</p>
                 </div>
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Reporting Manager</label>
-                  <p class="text-muted">{{ employee.reportingManager }}</p>
+                  <p class="text-muted">{{ employee.reportingManager || '-' }}</p>
                 </div>
                 <div class="col-sm-12 px-2 mb-3">
                   <label class="text-dark fw-500">Work Location</label>
@@ -523,22 +524,24 @@
           <div class="w-100 salary-box mb-4">
             <p class="fs-10 text-muted my-0 fw-300">Basic salary</p>
             <h3 class="my-1">{{ employee.basicSalary | regionalCurrency:'1.2-2':'MYR' }}</h3>
-            <p class="fs-10 text-muted mb-0">{{ employee.salaryType }} · {{ employee.paymentMethod }}</p>
+            <p class="fs-10 text-muted mb-0">{{ employee.salaryType }} · {{ employee.paymentMethod || '-' }}</p>
           </div>
-          <div class="card">
-            <div class="card-body">
-              <div class="row mx-0">
-                <div class="col-sm-4 px-2 mb-3">
-                  <label class="text-dark fw-500">Bank</label>
-                  <p class="text-muted">{{ employee.bank }}</p>
-                </div>
-                <div class="col-sm-8 px-2 mb-3">
-                  <label class="text-dark fw-500">Bank account</label>
-                  <p class="text-muted">{{ employee.bankAccount }}</p>
+          @if(employee.paymentMethod === 'BANK' || employee.paymentMethod === 'Transfer by bank'){
+            <div class="card">
+              <div class="card-body">
+                <div class="row mx-0">
+                  <div class="col-sm-4 px-2 mb-3">
+                    <label class="text-dark fw-500">Bank</label>
+                    <p class="text-muted">{{ employee.bank || '-'  }}</p>
+                  </div>
+                  <div class="col-sm-8 px-2 mb-3">
+                    <label class="text-dark fw-500">Bank account</label>
+                    <p class="text-muted">{{ employee.bankAccount || '-'  }}</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          }
 
           <h4 class="text-primary mt-4">Statutory Entitlements</h4>
           <div class="card mb-4">
@@ -548,43 +551,43 @@
                   @if (hasStatutoryEntitlement('EPF')) {
                     <div class="col-sm-4 px-2 mb-3">
                       <label class="text-dark fw-500">EPF employee no.</label>
-                      <p class="text-muted">{{ employee.epfEmployeeNo || '—' }}</p>
+                      <p class="text-muted">{{ employee.epfEmployeeNo || '-' }}</p>
                     </div>
                     <div class="col-sm-4 px-2 mb-3">
                       <label class="text-dark fw-500">EPF employer no.</label>
-                      <p class="text-muted">{{ employee.epfEmployerNo || '—' }}</p>
+                      <p class="text-muted">{{ employee.epfEmployerNo || '-' }}</p>
                     </div>
                     <div class="col-sm-4 px-2 mb-3">
                       <label class="text-dark fw-500">EPF employee contribution rate</label>
-                      <p class="text-muted">{{ employee.epfRate ? employee.epfRate + '%' : '—' }}</p>
+                      <p class="text-muted">{{ employee.epfRate ? employee.epfRate + '%' : '-' }}</p>
                     </div>
                   }
                   @if (hasStatutoryEntitlement('SOCSO')) {
                     <div class="col-sm-4 px-2 mb-3">
                       <label class="text-dark fw-500">SOCSO number</label>
-                      <p class="text-muted">{{ employee.socsoNo || '—' }}</p>
+                      <p class="text-muted">{{ employee.socsoNo || '-' }}</p>
                     </div>
                     <div class="col-sm-4 px-2 mb-3">
                       <label class="text-dark fw-500">SOCSO contribution category</label>
-                      <p class="text-muted">{{ employee.contributionCategory || '—' }}</p>
+                      <p class="text-muted">{{ employee.contributionCategory || '-' }}</p>
                     </div>
                   }
                   @if (hasStatutoryEntitlement('LHDN')) {
                     <div class="col-sm-4 px-2 mb-3">
                       <label class="text-dark fw-500">LHDN tax number</label>
-                      <p class="text-muted">{{ employee.tin || '—' }}</p>
+                      <p class="text-muted">{{ employee.tin || '-' }}</p>
                     </div>
                   }
                   @if (hasStatutoryEntitlement('EIS')) {
                     <div class="col-sm-4 px-2 mb-3">
                       <label class="text-dark fw-500">EIS status</label>
-                      <p class="text-muted">{{ employee.eisStatus || '—' }}</p>
+                      <p class="text-muted">{{ employee.eisStatus || '-' }}</p>
                     </div>
                   }
                   @if (hasStatutoryEntitlement('HRD_CORP_LEVY')) {
                     <div class="col-sm-4 px-2 mb-3">
                       <label class="text-dark fw-500">HRD Corp employer registration no.</label>
-                      <p class="text-muted">{{ employee.hrdRegisterNo || '—' }}</p>
+                      <p class="text-muted">{{ employee.hrdRegisterNo || '-' }}</p>
                     </div>
                   }
                 </div>
@@ -639,7 +642,7 @@
                   @if (employee.overtimeCalculationBasis === 'HOURLY_RATE') {
                     <div class="col-sm-4 px-2 mb-3">
                       <label class="text-dark fw-500">Hourly rate</label>
-                      <p class="text-muted">{{ employee.overtimeHourlyRate !== null ? (employee.overtimeHourlyRate | regionalCurrency:'1.2-2':'MYR') : '—' }}</p>
+                      <p class="text-muted">{{ employee.overtimeHourlyRate !== null ? (employee.overtimeHourlyRate | regionalCurrency:'1.2-2':'MYR') : '-' }}</p>
                     </div>
                   }
                 </div>
@@ -703,7 +706,7 @@
           <div class="row mx-0 mb-3">
             <div class="col-sm-7 px-2">
               <h4 class="text-primary my-0">Leave Records</h4>
-              <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
+              <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeNo }} · {{ employee.department }} · {{ employee.position }}</p>
             </div>
             <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
               <button mat-flat-button color="primary" class="ms-2">
@@ -780,7 +783,7 @@
           <div class="row mx-0 mb-3">
             <div class="col-sm-7 px-2">
               <h4 class="text-primary my-0">Employee claims</h4>
-              <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
+              <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeNo }} · {{ employee.department }} · {{ employee.position }}</p>
             </div>
             <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
               <button mat-flat-button color="primary" class="ms-2" routerLink="/expenses-claims/claims/create">
@@ -865,7 +868,7 @@
           <div class="row mx-0 mb-3">
             <div class="col-sm-12 px-2">
               <h4 class="text-primary my-0">Overtime history</h4>
-              <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeId }} · {{ employee.department }} · {{ employee.position }}</p>
+              <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeNo }} · {{ employee.department }} · {{ employee.position }}</p>
             </div>
           </div>
           <div class="row mx-0">
@@ -935,4 +938,5 @@
 
 @if (selectedOvertimeRequest; as request) {
   <app-overtime-detail-dialog [request]="request" (closed)="closeOvertimeDetails()"></app-overtime-detail-dialog>
+}
 }

@@ -34,7 +34,7 @@ export class ApprovalComponent implements OnInit {
   }
 
   employeeName(employeeId: string): string {
-    return getEmployee(employeeId).employeeName;
+    return getEmployee(employeeId).name;
   }
 
   claimTypeLabel(type: ClaimType): string {

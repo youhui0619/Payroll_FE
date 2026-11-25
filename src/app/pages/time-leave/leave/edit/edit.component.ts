@@ -56,7 +56,7 @@ export class EditComponent {
     }
     this.leaveToEdit = application;
 
-    const employee = this.employees.find(item => item.employeeId === application.employeeId);
+    const employee = this.employees.find(item => item.employeeNo === application.employeeId);
     const department = this.departments.find(item => item.name === employee?.department);
     const [startText, endText = startText] = application.dateRange.split('~').map(value => value.trim());
     const startDate = this.parseDisplayDate(startText);
@@ -87,7 +87,7 @@ export class EditComponent {
   }
 
   get selectedEmployee(): Employee | undefined {
-    return this.employees.find(employee => employee.employeeId === this.leaveForm.controls.employeeId.value);
+    return this.employees.find(employee => employee.employeeNo === this.leaveForm.controls.employeeId.value);
   }
 
   get selectedLeavePolicy() {
@@ -103,15 +103,15 @@ export class EditComponent {
     return this.employees.filter(employee => {
       const department = this.departments.find(item => item.name === employee.department);
       return department?.id === departmentId
-        && (!query || [employee.employeeId, employee.employeeName].some(value => value.toLowerCase().includes(query)));
+        && (!query || [employee.employeeNo, employee.name].some(value => value.toLowerCase().includes(query)));
     });
   }
 
   readonly employeeDisplayName = (value: Employee | string | null): string => {
-    if (value && typeof value === 'object') return `${value.employeeId} - ${value.employeeName}`;
+    if (value && typeof value === 'object') return `${value.employeeNo} - ${value.name}`;
     if (!value) return '';
-    const employee = this.employees.find(item => item.employeeId === value);
-    return employee ? `${employee.employeeId} - ${employee.employeeName}` : value;
+    const employee = this.employees.find(item => item.employeeNo === value);
+    return employee ? `${employee.employeeNo} - ${employee.name}` : value;
   };
 
   get requestedDays(): number {
@@ -130,7 +130,7 @@ export class EditComponent {
   }
 
   onEmployeeSelected(employee: Employee): void {
-    this.leaveForm.controls.employeeId.setValue(employee.employeeId);
+    this.leaveForm.controls.employeeId.setValue(employee.employeeNo);
     this.employeeSearch.setValue(employee);
   }
 
@@ -158,7 +158,7 @@ export class EditComponent {
     }
 
     const { requestDate, departmentId, employeeId, code, startDate, endDate, reason, supportingDocuments } = this.leaveForm.getRawValue();
-    const employee = this.employees.find(item => item.employeeId === employeeId);
+    const employee = this.employees.find(item => item.employeeNo === employeeId);
     const department = this.departments.find(item => item.id === departmentId);
     const policy = this.leaveTypeOptions.find(item => item.code === code);
     if (!requestDate || !startDate || !endDate || endDate < startDate || !employee || !department || !policy || employee.department !== department.name) {
@@ -172,7 +172,7 @@ export class EditComponent {
     if (index < 0 || !existingApplication) return;
     const record: LeaveApplication = {
       ...existingApplication,
-      employeeId: employee.employeeId,
+      employeeId: employee.employeeNo,
       requestDate: this.formatDate(requestDate),
       leaveType: policy.name,
       dateRange: startDate.getTime() === endDate.getTime()

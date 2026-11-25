@@ -79,14 +79,14 @@ const payrollAmounts = [
 ];
 
 export const payrollList = payrollAmounts.map(row => {
-  const employee = employees.find(record => record.employeeId === row.employeeId);
+  const employee = employees.find(record => record.employeeNo === row.employeeId);
   if (!employee) {
     throw new Error(`Employee not found for payroll record: ${row.employeeId}`);
   }
 
   return {
     ...row,
-    employee: employee.employeeName,
+    employee: employee.name,
     initials: employee.initials,
     department: employee.department,
     position: employee.position

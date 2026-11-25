@@ -49,8 +49,8 @@
               [disabled]="!leaveForm.controls.departmentId.value" (input)="onEmployeeSearchInput()">
             <mat-autocomplete #employeeAuto="matAutocomplete" [displayWith]="employeeDisplayName"
               (optionSelected)="onEmployeeSelected($event.option.value)">
-              @for (employee of filteredEmployees; track employee.employeeId) {
-                <mat-option [value]="employee">{{ employee.employeeId }} - {{ employee.employeeName }}</mat-option>
+              @for (employee of filteredEmployees; track employee.employeeNo) {
+                <mat-option [value]="employee">{{ employee.employeeNo }} - {{ employee.name }}</mat-option>
               }
               @if (leaveForm.controls.departmentId.value && filteredEmployees.length === 0) {
                 <mat-option disabled>No employees found in this department.</mat-option>
@@ -62,8 +62,8 @@
           </mat-form-field>
           @if (selectedEmployee; as employee) {
             <div class="row mx-0 mt-2">
-              <div class="col-sm-4 px-2 mb-3"><p class="text-dark fw-500">Employee ID</p><p class="text-muted my-0">{{ employee.employeeId }}</p></div>
-              <div class="col-sm-8 px-2 mb-3"><p class="text-dark fw-500">Employee Name</p><p class="text-muted my-0">{{ employee.employeeName }}</p></div>
+              <div class="col-sm-4 px-2 mb-3"><p class="text-dark fw-500">Employee ID</p><p class="text-muted my-0">{{ employee.employeeNo }}</p></div>
+              <div class="col-sm-8 px-2 mb-3"><p class="text-dark fw-500">Employee Name</p><p class="text-muted my-0">{{ employee.name }}</p></div>
               <div class="col-sm-4 px-2 mb-3"><p class="text-dark fw-500">Department</p><p class="text-muted my-0">{{ employee.department }}</p></div>
               <div class="col-sm-8 px-2 mb-3"><p class="text-dark fw-500">Position</p><p class="text-muted my-0">{{ employee.position }}</p></div>
             </div>
@@ -138,7 +138,7 @@
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center py-2">
         <p class="text-dark fw-500 mb-0">Leave type</p>
-        <p class="mb-0">{{ selectedLeavePolicy?.name ?? '—' }}</p>
+        <p class="mb-0">{{ '—' }}</p>
       </div>
       <div class="d-flex justify-content-between align-items-center py-2">
         <p class="text-dark fw-500 mb-0">Requested duration</p>

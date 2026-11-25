@@ -58,7 +58,7 @@ export class CreateComponent {
 
   constructor(private readonly route: ActivatedRoute) {
     this.route.queryParamMap.subscribe(params => {
-      const employee = this.employees.find(item => item.employeeId === params.get('employeeId'));
+      const employee = this.employees.find(item => item.employeeNo === params.get('employeeId'));
       const overtimeDate = this.dateFromKey(params.get('date'));
       if (employee) {
         const department = this.departments.find(item => item.name === employee.department);
@@ -115,7 +115,7 @@ export class CreateComponent {
     return this.employees.filter(employee => {
       const employeeDepartment = this.departments.find(department => department.name === employee.department);
       const matchesDepartment = employeeDepartment?.id === departmentId;
-      const matchesQuery = !query || [employee.employeeName, employee.employeeId]
+      const matchesQuery = !query || [employee.name, employee.employeeNo]
         .some(value => value.toLowerCase().includes(query));
       return matchesDepartment && matchesQuery;
     });
@@ -123,14 +123,14 @@ export class CreateComponent {
 
   get selectedEmployee(): Employee | undefined {
     const employeeId = this.otForm.controls.employeeId.value;
-    return this.employees.find(employee => employee.employeeId === employeeId);
+    return this.employees.find(employee => employee.employeeNo === employeeId);
   }
 
   readonly employeeDisplayName = (value: Employee | string | null): string => {
-    if (value && typeof value === 'object') return `${value.employeeId} - ${value.employeeName}`;
+    if (value && typeof value === 'object') return `${value.employeeNo} - ${value.name}`;
     if (!value) return '';
-    const employee = this.employees.find(item => item.employeeId === value);
-    return employee ? `${employee.employeeId} - ${employee.employeeName}` : value;
+    const employee = this.employees.find(item => item.employeeNo === value);
+    return employee ? `${employee.employeeNo} - ${employee.name}` : value;
   };
 
   onDepartmentChange(): void {
@@ -139,7 +139,7 @@ export class CreateComponent {
   }
 
   onEmployeeSelected(employee: Employee): void {
-    this.otForm.controls.employeeId.setValue(employee.employeeId);
+    this.otForm.controls.employeeId.setValue(employee.employeeNo);
     this.employeeSearch.setValue(employee);
   }
 
@@ -159,7 +159,7 @@ export class CreateComponent {
     }
 
     const { requestDate, departmentId, employeeId, overtimeDate, overtimeType, startTime, endTime, breakDuration, description, supportingDocuments } = this.otForm.getRawValue();
-    const employee = this.employees.find(item => item.employeeId === employeeId);
+    const employee = this.employees.find(item => item.employeeNo === employeeId);
     const department = this.departments.find(item => item.id === departmentId);
     const selectedType = this.overtimeTypes.find(type => type.value === overtimeType);
     if (!employee || !department || employee.department !== department.name) {
@@ -191,8 +191,8 @@ export class CreateComponent {
       id: `${earningCode}-${String(nextNumber).padStart(4, '0')}`,
       requestDate: this.dateKey(requestDate),
       overtimeDate: this.dateKey(overtimeDate),
-      employeeId: employee.employeeId,
-      employeeName: employee.employeeName,
+      employeeId: employee.employeeNo,
+      employeeName: employee.name,
       departmentId: department.id,
       departmentName: department.name,
       overtimeType,

@@ -312,7 +312,7 @@
                         required
                         formControlName="employmentStatus">
                         @for (status of employmentStatuses; track status.value) {
-                          <mat-button-toggle [value]="status.value">{{ status.label }}</mat-button-toggle>
+                          <mat-button-toggle [value]="status.value">{{ status.name }}</mat-button-toggle>
                         }
                       </mat-button-toggle-group>
                       <!-- <mat-error class="text-danger">Gender is required</mat-error> -->
@@ -331,7 +331,7 @@
                         formControlName="employmentType"
                         (change)="onEmploymentTypeChange($event.value)">
                         @for (type of employmentTypes; track type.value) {
-                          <mat-button-toggle [value]="type.value">{{ type.label }}</mat-button-toggle>
+                          <mat-button-toggle [value]="type.value">{{ type.name }}</mat-button-toggle>
                         }
                       </mat-button-toggle-group>
                     </div>
@@ -774,7 +774,7 @@
                           formControlName="overtimeCalculationBasis"
                           (change)="setOvertimeCalculationBasis($event.value)">
                           @for (basis of overtimeBasisOptions; track basis.value) {
-                            <mat-radio-button class="form-radio" [value]="basis.value">{{ basis.label }}</mat-radio-button>
+                            <mat-radio-button class="form-radio" [value]="basis.value">{{ basis.name }}</mat-radio-button>
                           }
                         </mat-radio-group>
 

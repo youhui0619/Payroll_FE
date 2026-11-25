@@ -85,8 +85,8 @@ export class ViewComponent {
 
   //   return this.employees.filter(employee => {
   //     const matchesSearch = !query || [
-  //       employee.employeeName,
-  //       employee.employeeId,
+  //       employee.name,
+  //       employee.employeeNo,
   //       employee.position,
   //       employee.tin,
   //       employee.kwspNo
@@ -121,11 +121,11 @@ export class ViewComponent {
   }
 
   departmentHeadName(): string {
-    return Employees.find(item => item.employeeId === this.department.headOfDepartmentId)?.employeeName ?? '-';
+    return Employees.find(item => item.employeeNo === this.department.headOfDepartmentId)?.name ?? '-';
   }
 
   departmentHead(department: Department): string {
-    return Employees.find(employee => employee.employeeId === department.headOfDepartmentId)?.employeeName ?? 'No department head assigned';
+    return Employees.find(employee => employee.employeeNo === department.headOfDepartmentId)?.name ?? 'No department head assigned';
   }
 
   departmentEmployeeCount(department: Department): number {

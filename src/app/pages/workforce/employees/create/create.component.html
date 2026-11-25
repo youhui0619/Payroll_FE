@@ -96,8 +96,9 @@
                     </mat-label>
                     <mat-form-field appearance="outline" class="form-input w-100">
                       <mat-select placeholder="Select gender" formControlName="gender">
-                        <mat-option value="MALE">Male</mat-option>
-                        <mat-option value="FEMALE">Female</mat-option>
+                        @for (option of genderOptions; track option.value) {
+                          <mat-option [value]="option.value">{{ option.name }}</mat-option>
+                        }
                       </mat-select>
                       @if (form.controls.personal.controls.gender.hasError('required') && form.controls.personal.controls.gender.touched) {
                         <mat-error class="text-danger">Gender is required</mat-error>
@@ -111,8 +112,9 @@
                     </mat-label>
                     <mat-form-field appearance="outline" class="form-input w-100">
                       <mat-select placeholder="Select nationality" formControlName="nationality">
-                        <mat-option value="MALAYSIAN">Malaysian</mat-option>
-                        <mat-option value="SINGAPOREAN">Singaporean</mat-option>
+                        @for (option of nationalityOptions; track option.value) {
+                          <mat-option [value]="option.value">{{ option.name }}</mat-option>
+                        }
                       </mat-select>
                       @if (form.controls.personal.controls.nationality.hasError('required') && form.controls.personal.controls.nationality.touched) {
                         <mat-error class="text-danger">Nationality is required</mat-error>
@@ -126,10 +128,9 @@
                     </mat-label>
                     <mat-form-field appearance="outline" class="form-input w-100">
                       <mat-select placeholder="Select race" formControlName="race">
-                        <mat-option value="MALAY">Malay</mat-option>
-                        <mat-option value="CHINESE">Chinese</mat-option>
-                        <mat-option value="INDIAN">Indian</mat-option>
-                        <mat-option value="Other">Other</mat-option>
+                        @for (option of raceOptions; track option.value) {
+                          <mat-option [value]="option.value">{{ option.name }}</mat-option>
+                        }
                       </mat-select>
                       @if (form.controls.personal.controls.race.hasError('required') && form.controls.personal.controls.race.touched) {
                         <mat-error class="text-danger">Race is required</mat-error>
@@ -143,11 +144,9 @@
                     </mat-label>
                     <mat-form-field appearance="outline" class="form-input w-100">
                       <mat-select placeholder="Select religion" formControlName="religion">
-                        <mat-option value="ISLAM">Islam</mat-option>
-                        <mat-option value="BUDDISM">Buddhism</mat-option>
-                        <mat-option value="CHRISTIANITY">Christianity</mat-option>
-                        <mat-option value="HINDUISM">Hinduism</mat-option>
-                        <mat-option value="OTHER">Other</mat-option>
+                        @for (option of religionOptions; track option.value) {
+                          <mat-option [value]="option.value">{{ option.name }}</mat-option>
+                        }
                       </mat-select>
                       @if (form.controls.personal.controls.religion.hasError('required') && form.controls.personal.controls.religion.touched) {
                         <mat-error class="text-danger">Religion is required</mat-error>
@@ -160,10 +159,9 @@
                     </mat-label>
                     <mat-form-field appearance="outline" class="form-input w-100">
                       <mat-select placeholder="Select marital status" formControlName="maritalStatus">
-                        <mat-option value="SINGLE">Single</mat-option>
-                        <mat-option value="MARRIED">Married</mat-option>
-                        <mat-option value="DIVORCED">Divorced</mat-option>
-                        <mat-option value="WIDOWED">Widowed</mat-option>
+                        @for (option of maritalStatusOptions; track option.value) {
+                          <mat-option [value]="option.value">{{ option.name }}</mat-option>
+                        }
                       </mat-select>
                       @if (form.controls.personal.controls.maritalStatus.hasError('required') && form.controls.personal.controls.maritalStatus.touched) {
                         <mat-error class="text-danger">Marital Status is required</mat-error>
@@ -258,7 +256,7 @@
                       </mat-label>
                       <mat-form-field appearance="outline" class="form-input w-100">
                         <mat-select placeholder="Select state" formControlName="state">
-                         @for (state of stateList; track state.value) {
+                         @for (state of stateOptions; track state.value) {
                             <mat-option [value]="state.value">{{ state.name }}</mat-option>
                           }
                         </mat-select>
@@ -274,8 +272,9 @@
                       </mat-label>
                       <mat-form-field appearance="outline" class="form-input w-100">
                         <mat-select placeholder="Select country" formControlName="country">
-                          <mat-option value="MALAYSIA">Malaysia</mat-option>
-                          <mat-option value="SINGAPORE">Singapore</mat-option>
+                          @for (option of countryOptions; track option.value) {
+                            <mat-option [value]="option.value">{{ option.name }}</mat-option>
+                          }
                         </mat-select>
                         @if (form.controls.personal.controls.country.hasError('required') && form.controls.personal.controls.country.touched) {
                           <mat-error class="text-danger">Country is required</mat-error>
@@ -309,7 +308,7 @@
                       required
                       formControlName="employmentStatus">
                       @for (status of employmentStatuses; track status.value) {
-                        <mat-button-toggle [value]="status.value">{{ status.label }}</mat-button-toggle>
+                        <mat-button-toggle [value]="status.value">{{ status.name }}</mat-button-toggle>
                       }
                     </mat-button-toggle-group>
                     @if (form.controls.employment.controls.employmentStatus.hasError('required') && form.controls.employment.controls.employmentStatus.touched) {
@@ -330,7 +329,7 @@
                       formControlName="employmentType"
                       (change)="onEmploymentTypeChange($event.value)">
                       @for (type of employmentTypes; track type.value) {
-                        <mat-button-toggle [value]="type.value">{{ type.label }}</mat-button-toggle>
+                        <mat-button-toggle [value]="type.value">{{ type.name }}</mat-button-toggle>
                       }
                     </mat-button-toggle-group>
                     @if (form.controls.employment.controls.employmentType.hasError('required') && form.controls.employment.controls.employmentType.touched) {
@@ -376,9 +375,9 @@
                     <mat-label class="form-label">Reporting Manager</mat-label>
                     <mat-form-field appearance="outline" class="form-input w-100">
                       <mat-select placeholder="Select reporting manager" formControlName="managerId">
-                        <mat-option [value]="null">None</mat-option>
-                        @for (manager of managers; track manager.employeeId) {
-                          <mat-option [value]="manager.employeeId">{{ manager.employeeName }} ({{ manager.employeeId }})</mat-option>
+                        <mat-option [value]="noManagerOption.value">{{ noManagerOption.name }}</mat-option>
+                        @for (manager of managers; track manager) {
+                          <mat-option [value]="manager.id">{{ manager.name }} ({{ manager.id }})</mat-option>
                         }
                       </mat-select>
                     </mat-form-field>
@@ -566,9 +565,9 @@
                       </mat-label>
                       <mat-form-field appearance="outline" class="form-input w-100">
                         <mat-select placeholder="Select salary type" formControlName="salaryType">
-                          <mat-option value="Monthly">Monthly</mat-option>
-                          <mat-option value="Daily">Daily</mat-option>
-                          <mat-option value="Hourly">Hourly</mat-option>
+                          @for (option of salaryTypeOptions; track option.value) {
+                            <mat-option [value]="option.value">{{ option.name }}</mat-option>
+                          }
                         </mat-select>
                         @if (form.controls.payroll.controls.salaryType.hasError('required') && form.controls.payroll.controls.salaryType.touched) {
                           <mat-error class="text-danger">Salary type is required</mat-error>
@@ -585,9 +584,9 @@
                       </mat-label>
                       <mat-form-field appearance="outline" class="form-input w-100">
                         <mat-select placeholder="Select payment method" formControlName="paymentMethod" (selectionChange)="onPaymentMethodChange($event.value)">
-                          <mat-option value="Transfer by bank">Transfer by bank</mat-option>
-                          <mat-option value="Cash">Cash</mat-option>
-                          <mat-option value="Cheque">Cheque</mat-option>
+                          @for (option of paymentMethodOptions; track option.value) {
+                            <mat-option [value]="option.value">{{ option.name }}</mat-option>
+                          }
                         </mat-select>
                         @if (form.controls.payroll.controls.paymentMethod.hasError('required') && form.controls.payroll.controls.paymentMethod.touched) {
                           <mat-error class="text-danger">Payment Method is required</mat-error>
@@ -603,13 +602,9 @@
                       </mat-label>
                       <mat-form-field appearance="outline" class="form-input w-100">
                         <mat-select placeholder="Select bank" formControlName="bank">
-                          <mat-option value="Maybank">Maybank</mat-option>
-                          <mat-option value="CIMB">CIMB</mat-option>
-                          <mat-option value="Public Bank">Public Bank</mat-option>
-                          <mat-option value="RHB">RHB</mat-option>
-                          <mat-option value="Hong Leong Bank">Hong Leong Bank</mat-option>
-                          <mat-option value="AmBank">AmBank</mat-option>
-                          <mat-option value="Bank Islam">Bank Islam</mat-option>
+                          @for (option of bankOptions; track option.value) {
+                            <mat-option [value]="option.value">{{ option.name }}</mat-option>
+                          }
                         </mat-select>
                         @if (form.controls.payroll.controls.bank.hasError('required') && form.controls.payroll.controls.bank.touched) {
                           <mat-error class="text-danger">Bank is required</mat-error>
@@ -697,8 +692,9 @@
                       </mat-label>
                       <mat-form-field appearance="outline" class="form-input w-100">
                        <mat-select placeholder="Select Employee Contribution Rate" formControlName="epfRate">
-                          <mat-option value="11">11%</mat-option>
-                          <mat-option value="9">9%</mat-option>
+                          @for (option of epfRateOptions; track option.value) {
+                            <mat-option [value]="option.value">{{ option.name }}</mat-option>
+                          }
                         </mat-select>
                         @if (form.controls.payroll.controls.epfRate.hasError('required') && form.controls.payroll.controls.epfRate.touched) {
                           <mat-error class="text-danger">Employee Contribution Rate is required</mat-error>
@@ -728,9 +724,9 @@
                       </mat-label>
                       <mat-form-field appearance="outline" class="form-input w-100">
                        <mat-select placeholder="Select Contribution Category" formControlName="contributionCategory">
-                          <mat-option value="category1">Category 1 - Employer + Employee</mat-option>
-                          <mat-option value="category2">Category 2 - Employer only</mat-option>
-                          <mat-option value="no">Not applicable</mat-option>
+                          @for (option of contributionCategoryOptions; track option.value) {
+                            <mat-option [value]="option.value">{{ option.name }}</mat-option>
+                          }
                         </mat-select>
                         @if (form.controls.payroll.controls.contributionCategory.hasError('required') && form.controls.payroll.controls.contributionCategory.touched) {
                           <mat-error class="text-danger">Contribution Category is required</mat-error>
@@ -747,9 +743,9 @@
                       </mat-label>
                       <mat-form-field appearance="outline" class="form-input w-100">
                         <mat-select placeholder="Select EIS Status" formControlName="eisStatus">
-                          <mat-option value="Active">Active</mat-option>
-                          <mat-option value="Inactive">Inactive</mat-option>
-                          <mat-option value="Not Applicable">Not applicable</mat-option>
+                          @for (option of eisStatusOptions; track option.value) {
+                            <mat-option [value]="option.value">{{ option.name }}</mat-option>
+                          }
                         </mat-select>
                         @if (form.controls.payroll.controls.eisStatus.hasError('required') && form.controls.payroll.controls.eisStatus.touched) {
                           <mat-error class="text-danger">EIS Status is required</mat-error>
@@ -841,7 +837,7 @@
                       <mat-label class="form-label d-block">Overtime calculation basis</mat-label>
                       <mat-radio-group class="form-radio-group d-flex flex-column gap-2" formControlName="overtimeCalculationBasis" (change)="setOvertimeCalculationBasis($event.value)">
                         @for (basis of overtimeBasisOptions; track basis.value) {
-                          <mat-radio-button class="form-radio" [value]="basis.value">{{ basis.label }}</mat-radio-button>
+                          <mat-radio-button class="form-radio" [value]="basis.value">{{ basis.name }}</mat-radio-button>
                         }
                       </mat-radio-group>
 
@@ -1076,15 +1072,9 @@
                       </mat-label>
                       <mat-form-field appearance="outline" class="form-input w-100">
                         <mat-select placeholder="Select relationship" formControlName="emergencyContactRelationship">
-                          <mat-option value="Spouse">Spouse</mat-option>
-                          <mat-option value="Child">Child</mat-option>
-                          <mat-option value="Parent">Parent</mat-option>
-                          <mat-option value="Sibling">Sibling</mat-option>
-                          <mat-option value="Guardian">Guardian</mat-option>
-                          <mat-option value="Relative">Relative</mat-option>
-                          <mat-option value="Family member">Family member</mat-option>
-                          <mat-option value="Friend">Friend</mat-option>
-                          <mat-option value="Other">Other</mat-option>
+                          @for (option of emergencyContactRelationshipOptions; track option.value) {
+                            <mat-option [value]="option.value">{{ option.name }}</mat-option>
+                          }
                         </mat-select>
                         @if (form.controls.emergencyContact.controls.emergencyContactRelationship.hasError('required') && form.controls.emergencyContact.controls.emergencyContactRelationship.touched) {
                           <mat-error class="text-danger">Relationship is required</mat-error>
@@ -1157,7 +1147,7 @@
                       </mat-label>
                       <mat-form-field appearance="outline" class="form-input w-100">
                         <mat-select placeholder="Select state" formControlName="emergencyContactState">
-                          @for (state of stateList; track state.value) {
+                          @for (state of stateOptions; track state.value) {
                             <mat-option [value]="state.value">{{ state.name }}</mat-option>
                           }
                         </mat-select>
@@ -1173,8 +1163,9 @@
                       </mat-label>
                       <mat-form-field appearance="outline" class="form-input w-100">
                         <mat-select placeholder="Select country" formControlName="emergencyContactCountry">
-                          <mat-option value="MALAYSIA">Malaysia</mat-option>
-                          <mat-option value="SINGAPORE">Singapore</mat-option>
+                          @for (option of countryOptions; track option.value) {
+                            <mat-option [value]="option.value">{{ option.name }}</mat-option>
+                          }
                         </mat-select>
                         @if (form.controls.emergencyContact.controls.emergencyContactCountry.hasError('required') && form.controls.emergencyContact.controls.emergencyContactCountry.touched) {
                           <mat-error class="text-danger">Country is required</mat-error>

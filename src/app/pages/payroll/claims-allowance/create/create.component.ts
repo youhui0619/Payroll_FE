@@ -64,7 +64,7 @@ export class CreateComponent {
     return this.employees.filter(employee => {
       const employeeDepartment = this.departments.find(department => department.name === employee.department);
       const matchesDepartment = employeeDepartment?.id === departmentId;
-      const matchesQuery = !query || [employee.employeeName, employee.employeeId]
+      const matchesQuery = !query || [employee.name, employee.employeeNo]
         .some(value => value.toLowerCase().includes(query));
       return matchesDepartment && matchesQuery;
     });
@@ -72,14 +72,14 @@ export class CreateComponent {
 
   get selectedEmployee(): Employee | undefined {
     const employeeId = this.form.controls.employeeId.value;
-    return this.employees.find(employee => employee.employeeId === employeeId);
+    return this.employees.find(employee => employee.employeeNo === employeeId);
   }
 
   employeeDisplayName = (value: Employee | string | null): string => {
-    if (value && typeof value === 'object') return `${value.employeeId} - ${value.employeeName}`;
+    if (value && typeof value === 'object') return `${value.employeeNo} - ${value.name}`;
     if (!value) return '';
-    const employee = this.employees.find(item => item.employeeId === value);
-    return employee ? `${employee.employeeId} - ${employee.employeeName}` : value;
+    const employee = this.employees.find(item => item.employeeNo === value);
+    return employee ? `${employee.employeeNo} - ${employee.name}` : value;
   };
 
   onDepartmentChange(): void {
@@ -88,7 +88,7 @@ export class CreateComponent {
   }
 
   onEmployeeSelected(employee: Employee): void {
-    this.form.controls.employeeId.setValue(employee.employeeId);
+    this.form.controls.employeeId.setValue(employee.employeeNo);
     this.employeeSearch.setValue(employee);
   }
 
@@ -107,7 +107,7 @@ export class CreateComponent {
     }
 
     const value = form.value;
-    const employee = this.employees.find(item => item.employeeId === value.employeeId);
+    const employee = this.employees.find(item => item.employeeNo === value.employeeId);
     const department = this.departments.find(item => item.id === value.departmentId);
     if (!employee || !department || employee.department !== department.name || !value.claimDate) {
       this.form.controls.employeeId.setErrors({ selectionRequired: true });
@@ -122,8 +122,8 @@ export class CreateComponent {
     const data: ExpenseClaimRecord = {
       id: `CLM-${claimType}-${String(nextNumber).padStart(4, '0')}`,
       claimDate: this.dateKey(value.claimDate),
-      employeeId: employee.employeeId,
-      employeeName: employee.employeeName,
+      employeeId: employee.employeeNo,
+      employeeName: employee.name,
       departmentId: department.id,
       departmentName: department.name,
       claimType,

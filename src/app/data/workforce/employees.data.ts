@@ -1,98 +1,123 @@
 import type { Employee, OvertimeCalculationBasis } from '../../models/workforce/employee.model';
-import type { WorkingDayName, WorkingDaySchedule, WorkingSchedule } from '../../models/working-schedule/working-schedule.model';
+import type { EmploymentStatus, EmploymentType } from '../../models/workforce/employment-status.model';
+import type { WorkingSchedule } from '../../models/working-schedule/working-schedule.model';
 import { WORKING_SCHEDULE } from '../working-schedule/working-schedule.data';
-import { payrollSettings } from '../payroll/payroll-settings.data';
 
-type SampleEmployeeInput = Pick<Employee,
-  'employeeId' | 'employeeName' | 'nricPassportNo' | 'gender' | 'race' |
-  'religion' | 'department' | 'position' | 'basicSalary' | 'contactNo' |
-  'employmentStatus' | 'employmentType'> & {
-    dateOfBirth?: string;
-    joinedDate?: string;
-    confirmationDate?: string | null;
-    resignationDate?: string | null;
-    workingSchedule?: WorkingSchedule;
-    reportingManager?: string;
-    commissionSettingCodes?: string[];
-    includeOvertime?: boolean;
-    overtimeCalculationBasis?: OvertimeCalculationBasis;
-    overtimeHourlyRate?: number | null;
-    epfRate?: string;
-    contributionCategory?: string;
-    hrdRegisterNo?: string;
-    statutoryEntitlementCodes?: string[];
-  };
+type SampleEmployeeInput = Pick<
+  Employee,
+  | 'employeeNo'
+  | 'name'
+  | 'nricPassportNo'
+  | 'gender'
+  | 'race'
+  | 'religion'
+  | 'department'
+  | 'position'
+  | 'basicSalary'
+  | 'contactNo'
+  | 'employmentStatus'
+  | 'employmentType'
+> & Partial<Pick<
+  Employee,
+  | 'id'
+  | 'dateOfBirth'
+  | 'nationality'
+  | 'maritalStatus'
+  | 'tin'
+  | 'email'
+  | 'address'
+  | 'reportingManager'
+  | 'workLocationId'
+  | 'joinedDate'
+  | 'confirmationDate'
+  | 'resignationDate'
+  | 'workingSchedule'
+  | 'salaryType'
+  | 'paymentMethod'
+  | 'bank'
+  | 'bankAccount'
+  | 'epfEmployeeNo'
+  | 'epfEmployerNo'
+  | 'epfRate'
+  | 'kwspNo'
+  | 'socsoNo'
+  | 'contributionCategory'
+  | 'eisStatus'
+  | 'hrdRegisterNo'
+  | 'statutoryEntitlementCodes'
+  | 'commissionSettingCodes'
+  | 'includeOvertime'
+  | 'overtimeCalculationBasis'
+  | 'overtimeHourlyRate'
+  | 'leavePolicyCodes'
+  | 'leaveEntitlementOverrides'
+  | 'leaveServiceEntitlementTiers'
+  | 'emergencyContactName'
+  | 'emergencyContactRelationship'
+  | 'emergencyContactNo'
+  | 'emergencyContactAddress'
+>>;
+
+const defaultStatutoryEntitlementCodes = ['EPF', 'SOCSO', 'LHDN', 'EIS', 'HRD_CORP_LEVY'];
 
 function cloneWorkingSchedule(schedule: WorkingSchedule): WorkingSchedule {
   return { days: schedule.days.map(day => ({ ...day })) };
 }
 
-type WorkingDayScheduleOverride = Pick<WorkingDaySchedule, 'day'> & Partial<Omit<WorkingDaySchedule, 'day'>>;
-
-function createWorkingScheduleOverride(
-  baseSchedule: WorkingSchedule,
-  overrides: WorkingDayScheduleOverride[]
-): WorkingSchedule {
-  const overridesByDay = new Map<WorkingDayName, Partial<WorkingDaySchedule>>(
-    overrides.map(override => [override.day, override])
-  );
-
-  return {
-    days: baseSchedule.days.map(day => ({ ...day, ...overridesByDay.get(day.day) }))
-  };
-}
-
-const defaultStatutoryEntitlementCodes = [
-  ...(payrollSettings.includeEpf ? ['EPF'] : []),
-  ...(payrollSettings.includeSocso ? ['SOCSO'] : []),
-  ...(payrollSettings.includePcb ? ['LHDN'] : []),
-  ...(payrollSettings.includeEis ? ['EIS'] : []),
-  ...(payrollSettings.includeHrdCorpLevy ? ['HRD_CORP_LEVY'] : []),
-];
-
 function createSampleEmployee(input: SampleEmployeeInput): Employee {
-  const employeeNumber = input.employeeId.slice(-4);
+  const employeeNumber = input.employeeNo.slice(-4);
+  const fullName = input.name.trim();
+  const initials = fullName
+    .split(/\s+/)
+    .slice(0, 2)
+    .map(part => part[0]?.toUpperCase() ?? '')
+    .join('');
   const statutoryEntitlementCodes = input.statutoryEntitlementCodes ?? [...defaultStatutoryEntitlementCodes];
   const hasEpf = statutoryEntitlementCodes.includes('EPF');
   const hasSocso = statutoryEntitlementCodes.includes('SOCSO');
   const hasLhdn = statutoryEntitlementCodes.includes('LHDN');
   const hasEis = statutoryEntitlementCodes.includes('EIS');
   const hasHrdCorpLevy = statutoryEntitlementCodes.includes('HRD_CORP_LEVY');
-  const initials = input.employeeName
-    .split(/\s+/)
-    .slice(0, 2)
-    .map(part => part[0].toUpperCase())
-    .join('');
 
   return {
-    ...input,
+    id: input.id ?? input.employeeNo,
+    employeeNo: input.employeeNo,
+    name: fullName,
     initials,
+    nricPassportNo: input.nricPassportNo,
     dateOfBirth: input.dateOfBirth ?? '1992-04-15',
-    nationality: 'Malaysian',
-    maritalStatus: 'Single',
-    tin: hasLhdn ? `IG${employeeNumber}001000` : '',
-    email: `${input.employeeName.toLowerCase().replace(/\s+/g, '.')}@example.com`,
-    address: '12, Jalan Bukit Kempas, 81200 Johor Bahru, Johor',
+    gender: input.gender,
+    nationality: input.nationality ?? 'MALAYSIAN',
+    race: input.race,
+    religion: input.religion,
+    maritalStatus: input.maritalStatus ?? 'SINGLE',
+    tin: input.tin ?? (hasLhdn ? `IG${employeeNumber}001000` : ''),
+    email: input.email ?? `${fullName.toLowerCase().replace(/\s+/g, '.')}@example.com`,
+    contactNo: input.contactNo,
+    address: input.address ?? '12, Jalan Bukit Kempas, 81200 Johor Bahru, Johor',
+    department: input.department,
+    position: input.position,
     reportingManager: input.reportingManager ?? `${input.department} Manager`,
-    workLocationId: 'LOC-0003',
+    workLocationId: input.workLocationId ?? 'LOC-0003',
     employmentStatus: input.employmentStatus,
     employmentType: input.employmentType,
     joinedDate: input.joinedDate ?? '2023-01-15',
     confirmationDate: input.confirmationDate === undefined ? '2023-04-15' : input.confirmationDate,
     resignationDate: input.resignationDate ?? null,
     workingSchedule: cloneWorkingSchedule(input.workingSchedule ?? WORKING_SCHEDULE[input.employmentType]),
-    salaryType: 'Monthly',
-    paymentMethod: 'Transfer by bank',
-    bank: 'Maybank',
-    bankAccount: `100000${employeeNumber}`,
-    epfEmployeeNo: hasEpf ? `EPF-${employeeNumber}` : '',
-    epfEmployerNo: hasEpf ? `ER-${employeeNumber}` : '',
+    basicSalary: input.basicSalary,
+    salaryType: input.salaryType ?? 'MONTHLY',
+    paymentMethod: input.paymentMethod ?? 'BANK',
+    bank: input.bank ?? 'MAYBANK',
+    bankAccount: input.bankAccount ?? `100000${employeeNumber}`,
+    epfEmployeeNo: input.epfEmployeeNo ?? (hasEpf ? `EPF-${employeeNumber}` : ''),
+    epfEmployerNo: input.epfEmployerNo ?? (hasEpf ? `ER-${employeeNumber}` : ''),
     epfRate: input.epfRate ?? (hasEpf ? '11' : ''),
-    kwspNo: hasEpf ? `21${employeeNumber}4610` : '',
-    socsoNo: hasSocso ? `SOCSO-${employeeNumber}` : '',
-    contributionCategory: input.contributionCategory ?? (hasSocso ? 'category1' : ''),
-    eisStatus: hasEis ? 'Active' : 'Not Applicable',
-    hrdRegisterNo: hasHrdCorpLevy ? (input.hrdRegisterNo ?? `HRD-${employeeNumber}`) : '',
+    kwspNo: input.kwspNo ?? (hasEpf ? `21${employeeNumber}4610` : ''),
+    socsoNo: input.socsoNo ?? (hasSocso ? `SOCSO-${employeeNumber}` : ''),
+    contributionCategory: input.contributionCategory ?? (hasSocso ? 'CATEGORY1' : ''),
+    eisStatus: input.eisStatus ?? (hasEis ? 'ACTIVE' : 'NONE'),
+    hrdRegisterNo: input.hrdRegisterNo ?? (hasHrdCorpLevy ? `HRD-${employeeNumber}` : ''),
     statutoryEntitlementCodes,
     commissionSettingCodes: input.commissionSettingCodes ?? [],
     includeOvertime: input.includeOvertime ?? false,
@@ -100,207 +125,105 @@ function createSampleEmployee(input: SampleEmployeeInput): Employee {
     overtimeHourlyRate: input.includeOvertime && (input.overtimeCalculationBasis ?? 'HOURLY_RATE') === 'HOURLY_RATE'
       ? input.overtimeHourlyRate ?? null
       : null,
-    emergencyContactName: `Family of ${input.employeeName.split(' ')[0]}`,
-    emergencyContactRelationship: 'Family member',
-    emergencyContactNo: input.contactNo
+    leavePolicyCodes: input.leavePolicyCodes ?? ['AL', 'ML'],
+    leaveEntitlementOverrides: input.leaveEntitlementOverrides ?? {},
+    leaveServiceEntitlementTiers: input.leaveServiceEntitlementTiers ?? {},
+    emergencyContactName: input.emergencyContactName ?? `Family of ${fullName.split(' ')[0]}`,
+    emergencyContactRelationship: input.emergencyContactRelationship ?? 'FAMILY_MEMBER',
+    emergencyContactNo: input.emergencyContactNo ?? input.contactNo,
+    emergencyContactAddress: input.emergencyContactAddress ?? '12, Jalan Bukit Kempas, 81200 Johor Bahru, Johor'
   };
 }
 
 export const employees: Employee[] = [
-  {
-    employeeId: 'EMP-0042',
-    employeeName: 'Aisyah Nur Abdullah',
-    initials: 'AN',
-    nricPassportNo: '900101-14-5678',
-    dateOfBirth: '1990-01-01',
-    gender: 'Female',
-    nationality: 'Malaysian',
-    race: 'Malay',
-    religion: 'Islam',
-    maritalStatus: 'Single',
-    tin: 'IG58660031000',
-    email: 'aisyah.abdullah@example.com',
-    contactNo: '+60 12-345 6789',
-    address: '12, Jalan Bukit Kempas 1/18, Taman Bukit Kempas, 81200 Johor Bahru, Johor',
-    department: 'Finance',
-    position: 'Finance Executive',
-    reportingManager: 'Finance Manager',
-    workLocationId: 'LOC-0001',
-    employmentStatus: 'ACTIVE',
-    employmentType: 'PERMANENT',
-    joinedDate: '2022-03-01',
-    confirmationDate: '2022-06-01',
-    resignationDate: null,
-    workingSchedule: createWorkingScheduleOverride(WORKING_SCHEDULE.PERMANENT, [
-      { day: 'Monday', startTime: '08:30', endTime: '17:30', breakStartTime: '12:30', breakEndTime: '13:30' },
-      { day: 'Tuesday', startTime: '08:30', endTime: '17:30', breakStartTime: '12:30', breakEndTime: '13:30' },
-      { day: 'Wednesday', startTime: '08:30', endTime: '17:30', breakStartTime: '12:30', breakEndTime: '13:30' },
-      { day: 'Thursday', startTime: '08:30', endTime: '17:30', breakStartTime: '12:30', breakEndTime: '13:30' },
-      { day: 'Friday', startTime: '08:30', endTime: '17:30', breakStartTime: '12:30', breakEndTime: '13:30' },
-      { day: 'Saturday', isWorkingDay: false }
-    ]),
-    basicSalary: 4500,
-    salaryType: 'Monthly',
-    paymentMethod: 'Transfer by bank',
-    bank: 'Maybank',
-    bankAccount: '1234567890',
-    epfEmployeeNo: 'EPF-0042',
-    epfEmployerNo: 'ER-0042',
-    epfRate: '11',
-    kwspNo: '21454610',
-    socsoNo: 'SOCSO-0042',
-    contributionCategory: 'category1',
-    eisStatus: 'Active',
-    hrdRegisterNo: '',
-    statutoryEntitlementCodes: [...defaultStatutoryEntitlementCodes],
-    commissionSettingCodes: [],
-    includeOvertime: true,
-    overtimeCalculationBasis: 'HOURLY_RATE',
-    overtimeHourlyRate: 32,
-    emergencyContactName: 'Nur Abdullah',
-    emergencyContactRelationship: 'Parent',
-    emergencyContactNo: '+60 12-111 2222'
-  },
-  {
-    employeeId: 'EMP-0043',
-    employeeName: 'Daniel Lim Wei Jian',
-    initials: 'DL',
-    nricPassportNo: '880505-10-4321',
-    dateOfBirth: '1988-05-05',
-    gender: 'Male',
-    nationality: 'Malaysian',
-    race: 'Chinese',
-    religion: 'Buddhism',
-    maritalStatus: 'Married',
-    tin: 'IG5530939090',
-    email: 'daniel.lim@example.com',
-    contactNo: '+60 13-456 7890',
-    address: '8, Jalan Kempas Utama 2/5, 81200 Johor Bahru, Johor',
-    department: 'Operations',
-    position: 'Operations Executive',
-    reportingManager: 'Operations Manager',
-    workLocationId: 'LOC-0002',
-    employmentStatus: 'ACTIVE',
-    employmentType: 'PERMANENT',
-    joinedDate: '2021-07-15',
-    confirmationDate: '2021-10-15',
-    resignationDate: null,
-    workingSchedule: createWorkingScheduleOverride(WORKING_SCHEDULE.PERMANENT, [
-      { day: 'Monday', startTime: '08:00', endTime: '17:00', breakStartTime: '12:00', breakEndTime: '13:00' },
-      { day: 'Tuesday', startTime: '08:00', endTime: '17:00', breakStartTime: '12:00', breakEndTime: '13:00' },
-      { day: 'Wednesday', startTime: '08:00', endTime: '17:00', breakStartTime: '12:00', breakEndTime: '13:00' },
-      { day: 'Thursday', startTime: '08:00', endTime: '17:00', breakStartTime: '12:00', breakEndTime: '13:00' },
-      { day: 'Friday', startTime: '08:00', endTime: '17:00', breakStartTime: '12:00', breakEndTime: '13:00' },
-      { day: 'Saturday', startTime: '08:00', endTime: '12:00', breakStartTime: '', breakEndTime: '' }
-    ]),
-    basicSalary: 5200,
-    salaryType: 'Monthly',
-    paymentMethod: 'Transfer by bank',
-    bank: 'CIMB',
-    bankAccount: '9876543210',
-    epfEmployeeNo: 'EPF-0043',
-    epfEmployerNo: 'ER-0043',
-    epfRate: '11',
-    kwspNo: '12016768',
-    socsoNo: 'SOCSO-0043',
-    contributionCategory: 'category1',
-    eisStatus: 'Active',
-    hrdRegisterNo: '',
-    statutoryEntitlementCodes: [...defaultStatutoryEntitlementCodes],
-    commissionSettingCodes: [],
-    includeOvertime: true,
-    overtimeCalculationBasis: 'DAILY_RATE_CONVERTED',
-    overtimeHourlyRate: null,
-    emergencyContactName: 'Lim Wei Ming',
-    emergencyContactRelationship: 'Sibling',
-    emergencyContactNo: '+60 16-222 3333'
-  },
   createSampleEmployee({
-    employeeId: 'EMP-0044', employeeName: 'Nurul Huda Ismail', nricPassportNo: '910212-01-5678',
-    gender: 'Female', race: 'Malay', religion: 'Islam', department: 'Human Resources',
-    position: 'HR Executive', basicSalary: 4200, contactNo: '+60 12-444 0001',
-    employmentType: 'CONTRACT', employmentStatus: 'ACTIVE',
-    includeOvertime: true, overtimeCalculationBasis: 'MONTHLY_SALARY_CONVERTED'
+    employeeNo: 'EMP-0042', name: 'Aisyah Nur Abdullah', nricPassportNo: '900101-14-5678',
+    gender: 'FEMALE', race: 'MALAY', religion: 'ISLAM', department: 'Finance', position: 'Finance Executive',
+    basicSalary: 4500, contactNo: '+60 12-345 6789', employmentStatus: 'ACTIVE', employmentType: 'PERMANENT',
+    dateOfBirth: '1990-01-01', joinedDate: '2022-03-01', confirmationDate: '2022-06-01',
+    includeOvertime: true, overtimeHourlyRate: 32
   }),
   createSampleEmployee({
-    employeeId: 'EMP-0045', employeeName: 'Kelvin Wong Jun Kai', nricPassportNo: '900630-14-6789',
-    gender: 'Male', race: 'Chinese', religion: 'Buddhism', department: 'Information Technology',
-    position: 'IT Support Executive', basicSalary: 4800, contactNo: '+60 12-444 0002',
-    employmentType: 'PART-TIME', employmentStatus: 'ACTIVE',
-    includeOvertime: true, overtimeCalculationBasis: 'HOURLY_RATE', overtimeHourlyRate: 28.5
+    employeeNo: 'EMP-0043', name: 'Daniel Lim Wei Jian', nricPassportNo: '880505-10-4321',
+    gender: 'MALE', race: 'CHINESE', religion: 'BUDDISM', department: 'Operations', position: 'Operations Executive',
+    basicSalary: 5200, contactNo: '+60 13-456 7890', employmentStatus: 'ACTIVE', employmentType: 'PERMANENT',
+    dateOfBirth: '1988-05-05', joinedDate: '2021-07-15', confirmationDate: '2021-10-15',
+    overtimeCalculationBasis: 'DAILY_RATE_CONVERTED', includeOvertime: true
   }),
   createSampleEmployee({
-    employeeId: 'EMP-0046', employeeName: 'Hafiz Rahman', nricPassportNo: '920811-10-7890',
-    gender: 'Male', race: 'Malay', religion: 'Islam', department: 'Sales',
-    position: 'Sales Executive', basicSalary: 4000, contactNo: '+60 12-444 0003',
-    employmentType: 'INTERN', employmentStatus: 'PROBATION', confirmationDate: null,
-    commissionSettingCodes: ['SALES-COMM', 'NEW-CLIENT', 'QTR-PERF']
+    employeeNo: 'EMP-0044', name: 'Nurul Huda Ismail', nricPassportNo: '910212-01-5678',
+    gender: 'FEMALE', race: 'MALAY', religion: 'ISLAM', department: 'Human Resources', position: 'HR Executive',
+    basicSalary: 4200, contactNo: '+60 12-444 0001', employmentStatus: 'ACTIVE', employmentType: 'CONTRACT',
+    overtimeCalculationBasis: 'MONTHLY_SALARY_CONVERTED', includeOvertime: true
   }),
   createSampleEmployee({
-    employeeId: 'EMP-0047', employeeName: 'Priya Nair', nricPassportNo: '930305-08-8901',
-    gender: 'Female', race: 'Indian', religion: 'Hinduism', department: 'Marketing',
-    position: 'Marketing Executive', basicSalary: 4100, contactNo: '+60 12-444 0004',
-    employmentType: 'TEMPORARY', employmentStatus: 'ACTIVE'
+    employeeNo: 'EMP-0045', name: 'Kelvin Wong Jun Kai', nricPassportNo: '900630-14-6789',
+    gender: 'MALE', race: 'CHINESE', religion: 'BUDDISM', department: 'Information Technology', position: 'IT Support Executive',
+    basicSalary: 4800, contactNo: '+60 12-444 0002', employmentStatus: 'ACTIVE', employmentType: 'PART-TIME',
+    includeOvertime: true, overtimeHourlyRate: 28.5
   }),
   createSampleEmployee({
-    employeeId: 'EMP-0048', employeeName: 'Suresh Kumar', nricPassportNo: '890924-05-9012',
-    gender: 'Male', race: 'Indian', religion: 'Hinduism', department: 'Customer Service',
-    position: 'Customer Support Executive', basicSalary: 3600, contactNo: '+60 12-444 0005',
-    employmentType: 'TRAINEE', employmentStatus: 'PROBATION', confirmationDate: null
+    employeeNo: 'EMP-0046', name: 'Hafiz Rahman', nricPassportNo: '920811-10-7890',
+    gender: 'MALE', race: 'MALAY', religion: 'ISLAM', department: 'Sales', position: 'Sales Executive',
+    basicSalary: 4000, contactNo: '+60 12-444 0003', employmentStatus: 'PROBATION', employmentType: 'INTERN',
+    confirmationDate: null, commissionSettingCodes: ['SALES-COMM', 'NEW-CLIENT', 'QTR-PERF']
   }),
   createSampleEmployee({
-    employeeId: 'EMP-0049', employeeName: 'Farid Iskandar', nricPassportNo: '940117-01-0123',
-    gender: 'Male', race: 'Malay', religion: 'Islam', department: 'Procurement',
-    position: 'Procurement Executive', basicSalary: 3900, contactNo: '+60 12-444 0006',
-    employmentType: 'FREELANCE', employmentStatus: 'ACTIVE'
+    employeeNo: 'EMP-0047', name: 'Priya Nair', nricPassportNo: '930305-08-8901',
+    gender: 'FEMALE', race: 'INDIAN', religion: 'HINDUISM', department: 'Marketing', position: 'Marketing Executive',
+    basicSalary: 4100, contactNo: '+60 12-444 0004', employmentStatus: 'ACTIVE', employmentType: 'TEMPORARY'
   }),
   createSampleEmployee({
-    employeeId: 'EMP-0050', employeeName: 'Chloe Tan Mei Xin', nricPassportNo: '950719-10-1234',
-    gender: 'Female', race: 'Chinese', religion: 'Christianity', department: 'Legal and Compliance',
-    position: 'Compliance Executive', basicSalary: 5000, contactNo: '+60 12-444 0007',
-    employmentType: 'CASUAL', employmentStatus: 'ACTIVE'
+    employeeNo: 'EMP-0048', name: 'Suresh Kumar', nricPassportNo: '890924-05-9012',
+    gender: 'MALE', race: 'INDIAN', religion: 'HINDUISM', department: 'Customer Service', position: 'Customer Support Executive',
+    basicSalary: 3600, contactNo: '+60 12-444 0005', employmentStatus: 'PROBATION', employmentType: 'TRAINEE',
+    confirmationDate: null
   }),
   createSampleEmployee({
-    employeeId: 'EMP-0051', employeeName: 'Jason Lee Wei Ming', nricPassportNo: '911102-14-2345',
-    gender: 'Male', race: 'Chinese', religion: 'Buddhism', department: 'Corporate',
-    position: 'Administrative Executive', basicSalary: 3800, contactNo: '+60 12-444 0008',
-    employmentType: 'CONTRACT', employmentStatus: 'SUSPENDED'
+    employeeNo: 'EMP-0049', name: 'Farid Iskandar', nricPassportNo: '940117-01-0123',
+    gender: 'MALE', race: 'MALAY', religion: 'ISLAM', department: 'Procurement', position: 'Procurement Executive',
+    basicSalary: 3900, contactNo: '+60 12-444 0006', employmentStatus: 'ACTIVE', employmentType: 'FREELANCE'
   }),
   createSampleEmployee({
-    employeeId: 'EMP-0052', employeeName: 'Marcus Tan', nricPassportNo: '870312-10-3456',
-    gender: 'Male', race: 'Chinese', religion: 'Christianity', department: 'Information Technology',
-    position: 'IT Manager', basicSalary: 8500, contactNo: '+60 12-444 0009', reportingManager: 'Operations Manager',
-    employmentType: 'PERMANENT', employmentStatus: 'ACTIVE',
-    includeOvertime: true, overtimeCalculationBasis: 'HOURLY_RATE', overtimeHourlyRate: 50
+    employeeNo: 'EMP-0050', name: 'Chloe Tan Mei Xin', nricPassportNo: '950719-10-1234',
+    gender: 'FEMALE', race: 'CHINESE', religion: 'CHRISTIANITY', department: 'Legal and Compliance', position: 'Compliance Executive',
+    basicSalary: 5000, contactNo: '+60 12-444 0007', employmentStatus: 'ACTIVE', employmentType: 'CASUAL'
   }),
   createSampleEmployee({
-    employeeId: 'EMP-0053', employeeName: 'Siti Amina Hassan', nricPassportNo: '950624-01-4567',
-    gender: 'Female', race: 'Malay', religion: 'Islam', department: 'Information Technology',
-    position: 'Software Developer', basicSalary: 6200, contactNo: '+60 12-444 0010', reportingManager: 'IT Manager',
-    employmentType: 'PERMANENT', employmentStatus: 'RESIGNED',
-    joinedDate: '2022-01-10', confirmationDate: '2022-04-10', resignationDate: '2025-06-30'
+    employeeNo: 'EMP-0051', name: 'Jason Lee Wei Ming', nricPassportNo: '911102-14-2345',
+    gender: 'MALE', race: 'CHINESE', religion: 'BUDDISM', department: 'Corporate', position: 'Administrative Executive',
+    basicSalary: 3800, contactNo: '+60 12-444 0008', employmentStatus: 'SUSPENDED', employmentType: 'CONTRACT'
   }),
   createSampleEmployee({
-    employeeId: 'EMP-0054', employeeName: 'Arjun Menon', nricPassportNo: '920815-08-5678',
-    gender: 'Male', race: 'Indian', religion: 'Hinduism', department: 'Information Technology',
-    position: 'Systems Administrator', basicSalary: 5800, contactNo: '+60 12-444 0011', reportingManager: 'IT Manager',
-    employmentType: 'PERMANENT', employmentStatus: 'TERMINATED', resignationDate: '2025-02-28',
-    statutoryEntitlementCodes: []
+    employeeNo: 'EMP-0052', name: 'Marcus Tan', nricPassportNo: '870312-10-3456',
+    gender: 'MALE', race: 'CHINESE', religion: 'CHRISTIANITY', department: 'Information Technology', position: 'IT Manager',
+    basicSalary: 8500, contactNo: '+60 12-444 0009', reportingManager: 'Operations Manager',
+    employmentStatus: 'ACTIVE', employmentType: 'PERMANENT', includeOvertime: true, overtimeHourlyRate: 50
   }),
   createSampleEmployee({
-    employeeId: 'EMP-0055', employeeName: 'Ethan Chua', nricPassportNo: '900927-10-6789',
-    gender: 'Male', race: 'Chinese', religion: 'Buddhism', department: 'Information Technology',
-    position: 'Network Engineer', basicSalary: 7000, contactNo: '+60 12-444 0012', reportingManager: 'IT Manager',
-    employmentType: 'PERMANENT', employmentStatus: 'RETIRED', dateOfBirth: '1964-09-27',
-    joinedDate: '2000-03-01', confirmationDate: '2000-06-01', resignationDate: '2025-12-31',
-    statutoryEntitlementCodes: []
+    employeeNo: 'EMP-0053', name: 'Siti Amina Hassan', nricPassportNo: '950624-01-4567',
+    gender: 'FEMALE', race: 'MALAY', religion: 'ISLAM', department: 'Information Technology', position: 'Software Developer',
+    basicSalary: 6200, contactNo: '+60 12-444 0010', reportingManager: 'IT Manager',
+    employmentStatus: 'RESIGNED', employmentType: 'PERMANENT', joinedDate: '2022-01-10', confirmationDate: '2022-04-10',
+    resignationDate: '2025-06-30'
+  }),
+  createSampleEmployee({
+    employeeNo: 'EMP-0054', name: 'Arjun Menon', nricPassportNo: '920815-08-5678',
+    gender: 'MALE', race: 'INDIAN', religion: 'HINDUISM', department: 'Information Technology', position: 'Systems Administrator',
+    basicSalary: 5800, contactNo: '+60 12-444 0011', reportingManager: 'IT Manager',
+    employmentStatus: 'TERMINATED', employmentType: 'PERMANENT', resignationDate: '2025-02-28', statutoryEntitlementCodes: []
+  }),
+  createSampleEmployee({
+    employeeNo: 'EMP-0055', name: 'Ethan Chua', nricPassportNo: '900927-10-6789',
+    gender: 'MALE', race: 'CHINESE', religion: 'BUDDISM', department: 'Information Technology', position: 'Network Engineer',
+    basicSalary: 7000, contactNo: '+60 12-444 0012', reportingManager: 'IT Manager',
+    employmentStatus: 'RETIRED', employmentType: 'PERMANENT', dateOfBirth: '1964-09-27', joinedDate: '2000-03-01',
+    confirmationDate: '2000-06-01', resignationDate: '2025-12-31', statutoryEntitlementCodes: []
   })
 ];
 
-export function getEmployee(employeeId: string): Employee {
-  const employee = employees.find(record => record.employeeId === employeeId);
-  if (!employee) {
-    throw new Error(`Employee not found: ${employeeId}`);
-  }
+export function getEmployee(employeeNo: string): Employee {
+  const employee = employees.find(record => record.employeeNo === employeeNo || record.id === employeeNo);
+  if (!employee) throw new Error(`Employee not found: ${employeeNo}`);
   return employee;
 }

@@ -115,7 +115,7 @@
       <mat-form-field appearance="outline" class="form-input w-100" subscriptSizing="dynamic">
         <mat-select placeholder="Employment Type"  [ngModel]="filter.employmentType" (ngModelChange)="applyFilter('employmentType', $event)">
           @for (type of employmentTypes; track type.value) {
-            <mat-option [value]="type.value">{{ type.label }}</mat-option>
+            <mat-option [value]="type.value">{{ type.name }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
@@ -171,9 +171,9 @@
               </tr>
             </thead>
             <tbody>
-              @for (employee of employees.data; track employee.employeeId) {
+              @for (employee of employees.data; track employee.id) {
                 <tr>
-                  <td class="text-muted cursor-pointer text-nowrap" [routerLink]="['/workforce/employees/view', employee.employeeId]">
+                  <td class="text-muted cursor-pointer text-nowrap" [routerLink]="['/workforce/employees/view', employee.id]">
                     <div class="d-flex align-items-center justify-content-start">
                       <div class="initial-avatar me-3">{{ initials(employee.name) }}</div>
                       <div>

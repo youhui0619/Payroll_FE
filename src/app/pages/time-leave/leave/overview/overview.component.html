@@ -220,30 +220,30 @@
             </thead>
             <tbody>
 
-              @for (employee of filteredEmployees; track employee.employeeId) {
+              @for (employee of filteredEmployees; track employee.employeeNo) {
                 <tr>
-                  <td class="text-muted sticky-col sticky-col-employee border-right" [routerLink]="['/workforce/employees/view', employee.employeeId]">
+                  <td class="text-muted sticky-col sticky-col-employee border-right" [routerLink]="['/workforce/employees/view', employee.employeeNo]">
                     <div class="d-flex align-items-center justify-content-start">
                       <div class="initial-avatar me-3">{{ employee.initials }}</div>
                       <div>
-                        <p class="text-dark my-0">{{ employee.employeeName }}</p>
-                        <p class="fs-10 fw-300 text-muted my-0">{{ employee.employeeId }}</p>
+                        <p class="text-dark my-0">{{ employee.name }}</p>
+                        <p class="fs-10 fw-300 text-muted my-0">{{ employee.employeeNo }}</p>
                       </div>
                     </div>
                   </td>
                   @if (isLeaveColumnVisible('annual')) {
-                    <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employee.employeeId).annual.entitled | number:'1.1-1' }}</td>
-                    <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employee.employeeId).annual.taken | number:'1.1-1' }}</td>
-                    <td class="text-muted text-center leave-value-cell border-right"><span class="chip" [ngClass]="leaveBalanceClass(leaveBalancesFor(employee.employeeId).annual.balance, leaveBalancesFor(employee.employeeId).annual.entitled)">{{ leaveBalancesFor(employee.employeeId).annual.balance | number:'1.1-1' }}</span></td>
+                    <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employee.employeeNo).annual.entitled | number:'1.1-1' }}</td>
+                    <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employee.employeeNo).annual.taken | number:'1.1-1' }}</td>
+                    <td class="text-muted text-center leave-value-cell border-right"><span class="chip" [ngClass]="leaveBalanceClass(leaveBalancesFor(employee.employeeNo).annual.balance, leaveBalancesFor(employee.employeeNo).annual.entitled)">{{ leaveBalancesFor(employee.employeeNo).annual.balance | number:'1.1-1' }}</span></td>
                   }
                   @if (isLeaveColumnVisible('medical')) {
-                    <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employee.employeeId).medical.entitled | number:'1.1-1' }}</td>
-                    <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employee.employeeId).medical.taken | number:'1.1-1' }}</td>
-                    <td class="text-muted text-center leave-value-cell border-right"><span class="chip" [ngClass]="leaveBalanceClass(leaveBalancesFor(employee.employeeId).medical.balance, leaveBalancesFor(employee.employeeId).medical.entitled)">{{ leaveBalancesFor(employee.employeeId).medical.balance | number:'1.1-1' }}</span></td>
+                    <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employee.employeeNo).medical.entitled | number:'1.1-1' }}</td>
+                    <td class="text-muted text-center leave-value-cell">{{ leaveBalancesFor(employee.employeeNo).medical.taken | number:'1.1-1' }}</td>
+                    <td class="text-muted text-center leave-value-cell border-right"><span class="chip" [ngClass]="leaveBalanceClass(leaveBalancesFor(employee.employeeNo).medical.balance, leaveBalancesFor(employee.employeeNo).medical.entitled)">{{ leaveBalancesFor(employee.employeeNo).medical.balance | number:'1.1-1' }}</span></td>
                   }
                   <td class="text-muted as-at-cell">30 Sep 2026</td>
                   <td class="action-cell">
-                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/workforce/employees/view', employee.employeeId]">
+                    <button class="text-muted action-btn" mat-icon-button [routerLink]="['/workforce/employees/view', employee.employeeNo]">
                       <tabler-icon icon="eye"></tabler-icon>
                     </button>
                   </td>
