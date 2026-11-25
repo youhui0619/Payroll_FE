@@ -542,6 +542,7 @@
             <div class="card">
               <div class="card-body">
                 <div class="row">
+                  @if (includeBasicSalary) {
                   <div class="col-sm-6 px-2">
                     <mat-label class="form-label">Basic Salary
                       <span class="text-danger">
@@ -574,6 +575,8 @@
                         }
                       </mat-form-field>
                     </div>
+
+                  }
 
                     <div class="col-sm-4 px-2">
                       <mat-label class="form-label">Payment Method
@@ -775,41 +778,43 @@
                   }
                 </div>
             </div>
-            <h4 class="text-primary mt-4">Commission &amp; incentives</h4>
-            <div class="card mb-4">
-              <div class="card-body">
-                @for (setting of availableCommissionSettings; track setting; let last = $last) {
-                  <div
-                    class="d-flex align-items-center justify-content-between gap-3 py-3"
-                    [class.border-bottom]="!last">
-                    <div class="d-flex align-items-center gap-3">
-                      <div class="icon bg-light-primary text-primary flex-shrink-0">
-                        <tabler-icon icon="receipt"></tabler-icon>
-                      </div>
-                      <div>
-                        <div class="d-flex align-items-center gap-2">
-                          <label class="text-dark my-0">{{ setting.name }}</label>
-                          <span class="badge bg-light-primary text-primary">{{ commissionCalculationFrequencyLabel(setting.calculationFrequency) }}</span>
+            @if (includeCommissionAndIncentives) {
+              <h4 class="text-primary mt-4">Commission &amp; incentives</h4>
+              <div class="card mb-4">
+                <div class="card-body">
+                  @for (setting of availableCommissionSettings; track setting; let last = $last) {
+                    <div
+                      class="d-flex align-items-center justify-content-between gap-3 py-3"
+                      [class.border-bottom]="!last">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="icon bg-light-primary text-primary flex-shrink-0">
+                          <tabler-icon icon="receipt"></tabler-icon>
                         </div>
-                        <p class="text-muted mb-0">{{ commissionCalculationMethodLabel(setting.calculationMethod) }} · {{ commissionCalculationLabel(setting) }}</p>
+                        <div>
+                          <div class="d-flex align-items-center gap-2">
+                            <label class="text-dark my-0">{{ setting.name }}</label>
+                            <span class="badge bg-light-primary text-primary">{{ commissionCalculationFrequencyLabel(setting.calculationFrequency) }}</span>
+                          </div>
+                          <p class="text-muted mb-0">{{ commissionCalculationMethodLabel(setting.calculationMethod) }} · {{ commissionCalculationLabel(setting) }}</p>
+                        </div>
                       </div>
+                      <mat-slide-toggle
+                        color="primary"
+                        [checked]="isCommissionSelected(setting.code)"
+                        [aria-label]="'Enable ' + setting.name"
+                        (change)="setCommissionSelected(setting.code, $event.checked)">
+                      </mat-slide-toggle>
                     </div>
-                    <mat-slide-toggle
-                      color="primary"
-                      [checked]="isCommissionSelected(setting.code)"
-                      [aria-label]="'Enable ' + setting.name"
-                      (change)="setCommissionSelected(setting.code, $event.checked)">
-                    </mat-slide-toggle>
-                  </div>
-                }
-                @if (availableCommissionSettings.length === 0) {
-                  <p class="text-muted mb-0 py-3">
-                    No commission or incentive settings are available for this employee's department, position, or employee eligibility.
-                  </p>
-                }
+                  }
+                  @if (availableCommissionSettings.length === 0) {
+                    <p class="text-muted mb-0 py-3">
+                      No commission or incentive settings are available for this employee's department, position, or employee eligibility.
+                    </p>
+                  }
+                </div>
               </div>
-            </div>
-            @if (overtimeEnabledInPayrollSettings) {
+            }
+            @if (includeOvertime) {
               <h4 class="text-primary mt-4">Overtime</h4>
               <div class="card mb-4">
                 <div class="card-body">

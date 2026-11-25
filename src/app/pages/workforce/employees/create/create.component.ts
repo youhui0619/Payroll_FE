@@ -18,7 +18,6 @@ import type { EmployeeCreatePayload, OvertimeCalculationBasis } from '../../../.
 import type { EmploymentStatus, EmploymentType } from '../../../../models/workforce/employment-status.model';
 import { employmentStatuses, employmentTypes } from '../../../../data/workforce/options/employment-options.data';
 import { commissionIncentiveSettings } from '../../../../data/commission/commission-incentive-settings.data';
-import { payrollSettings } from '../../../../data/payroll/payroll-settings.data';
 import { WORKING_SCHEDULE } from '../../../../data/working-schedule/working-schedule.data';
 import type { WorkingDayName, WorkingDaySchedule, WorkingSchedule } from '../../../../models/working-schedule/working-schedule.model';
 import type {
@@ -172,7 +171,11 @@ export class CreateComponent {
   leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.active);
   commissionIncentiveSettings: CommissionIncentiveSetting[] = commissionIncentiveSettings;
   statutoryEntitlementList: typeof statutoryEntitlementOptions[number][] = [];
-  overtimeEnabledInPayrollSettings = payrollSettings.includeOvertime;
+  includeBasicSalary = false;
+  includeOvertime = false;
+  includeClaimsAndAllowance = false;
+  includeBonus = false;
+  includeCommissionAndIncentives = false;
   overtimeBasisOptions: { value: OvertimeCalculationBasis; label: string }[] = [
     { value: 'HOURLY_RATE', label: 'Hourly rate' },
     { value: 'DAILY_RATE_CONVERTED', label: 'Daily rate converted to hourly' },
@@ -214,8 +217,8 @@ export class CreateComponent {
       resignationDate: new FormControl<Date | null>(null),
     }),
     payroll: new FormGroup({
-      basicSalary: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-      salaryType: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      basicSalary: new FormControl<number | null>(null),
+      salaryType: new FormControl('', { nonNullable: true }),
       paymentMethod: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
       bank: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
       bankAccount: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -271,6 +274,33 @@ export class CreateComponent {
         this.statutoryEntitlementList = setting
           ? statutoryEntitlementOptions.filter(option => setting[option.setting])
           : [];
+        this.includeBasicSalary = setting?.includeBasicSalary ?? false;
+        this.includeOvertime = setting?.includeOvertime ?? false;
+        this.includeClaimsAndAllowance = setting?.includeClaimsAndAllowance ?? false;
+        this.includeBonus = setting?.includeBonus ?? false;
+        this.includeCommissionAndIncentives = setting?.includeCommissionAndIncentives ?? false;
+
+        const { basicSalary, salaryType, includeOvertime, overtimeHourlyRate, commissionSettingCodes } = this.form.controls.payroll.controls;
+        if (this.includeBasicSalary) {
+          basicSalary.setValidators([Validators.required, Validators.min(0)]);
+          salaryType.setValidators(Validators.required);
+        } else {
+          basicSalary.clearValidators();
+          basicSalary.setValue(null);
+          salaryType.clearValidators();
+          salaryType.setValue('');
+        }
+        basicSalary.updateValueAndValidity({ emitEvent: false });
+        salaryType.updateValueAndValidity({ emitEvent: false });
+
+        if (!this.includeOvertime) {
+          includeOvertime.setValue(false);
+          overtimeHourlyRate.setValue(null);
+          overtimeHourlyRate.clearValidators();
+          overtimeHourlyRate.updateValueAndValidity({ emitEvent: false });
+        }
+        if (!this.includeCommissionAndIncentives) commissionSettingCodes.setValue([]);
+
         this.form.controls.payroll.controls.statutoryEntitlementCodes.setValue(
           this.statutoryEntitlementList.map(option => option.code)
         );
@@ -721,7 +751,7 @@ export class CreateComponent {
     const selectedCodes = this.form.controls.payroll.controls.commissionSettingCodes;
     selectedCodes.setValue(selectedCodes.value.filter(code => availableCodes.has(code)));
     const overtimeControls = this.form.controls.payroll.controls;
-    if (!payrollSettings.includeOvertime || !overtimeControls.includeOvertime.value) {
+    if (!this.includeOvertime || !overtimeControls.includeOvertime.value) {
       overtimeControls.includeOvertime.setValue(false);
       overtimeControls.overtimeHourlyRate.setValue(null);
     }
