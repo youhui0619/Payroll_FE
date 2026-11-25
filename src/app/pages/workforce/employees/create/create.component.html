@@ -922,7 +922,7 @@
                         </div>
                         <div class="d-flex align-items-center gap-2">
                           @if (isLeavePolicySelected(policy.code) && policy.allowEmployeeSpecificSettings) {
-                            <button class="text-muted action-btn" mat-icon-button (click)="toggleLeavePolicyEditor(policy.code)">
+                            <button type="button" class="text-muted action-btn" mat-icon-button (click)="toggleLeavePolicyEditor(policy.code)">
                               <tabler-icon [icon]="isEditingLeavePolicy(policy.code) ? 'check' : 'edit'"></tabler-icon>
                             </button>
                           }
