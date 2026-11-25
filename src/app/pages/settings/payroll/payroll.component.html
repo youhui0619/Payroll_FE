@@ -91,7 +91,7 @@
           <mat-label class="form-label">Standard working hours per day <span class="text-danger">*</span></mat-label>
           <mat-form-field appearance="outline" class="form-input w-100">
             <input type="number" min="0" matInput placeholder="Enter Standard working hours per day" formControlName="standardWorkingHoursPerDay">
-            <span matTextSurfix class="text-muted ms-2">Days</span>
+            <span matTextSurfix class="text-muted ms-2">Hour</span>
           </mat-form-field>
         </div>
       </div>
@@ -192,11 +192,14 @@
           <div class="col-sm-6 px-2">
             <mat-label class="form-label">Minimum overtime duration <span class="text-danger">*</span></mat-label>
             <mat-form-field appearance="outline" class="form-input w-100">
-              <mat-select placeholder="Select deduction proration method">
+              <mat-select placeholder="Select minimum overtime duration" formControlName="minimumOvertimeDuration">
                 @for (option of minimumOvertimeDurationOptions; track option.value) {
                   <mat-option [value]="option.value">{{ option.label }}</mat-option>
                 }
               </mat-select>
+              @if (form.controls.minimumOvertimeDuration.hasError('required') && form.controls.minimumOvertimeDuration.touched) {
+                <mat-error>Minimum overtime duration is required.</mat-error>
+              }
             </mat-form-field>
           </div>
         </div>
@@ -350,7 +353,7 @@
   </div>
   <div class="d-flex align-items-center justify-content-end gap-3">
     @if (showSubmitButton) {
-      <button type="submit" mat-flat-button color="primary" [disabled]="form.invalid || submitting"><tabler-icon icon="check"></tabler-icon>{{ submitting ? 'Saving...' : 'Submit' }}</button>
+      <button type="submit" mat-flat-button color="primary" [disabled]="form.invalid || submitting"><tabler-icon icon="check" [size]="16"></tabler-icon>{{ submitting ? 'Saving...' : 'Submit' }}</button>
     }
   </div>
 </form>

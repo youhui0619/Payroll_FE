@@ -56,7 +56,7 @@ export class ClaimTypeApiService {
   }
   
   updateClaimType(id: any, data: any): Observable<any> {
-    return this.http.put(environment.apiURL + '/claims/types/'+id, data, {
+    return this.http.patch(environment.apiURL + '/claims/types/'+id, data, {
       headers: this.getHeaders(),
     });
   }

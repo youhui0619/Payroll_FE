@@ -14,7 +14,7 @@ import {
   salaryProrationMethodOptions as salaryProrationMethodOptionList,
   scheduledPayDateOptions as scheduledPayDateOptionList
 } from '../../../models/payroll/payroll-settings.model';
-import type { PayrollDay, PayrollSetting } from '../../../models/payroll/payroll-settings.model';
+import type { PayrollDay, PayrollMinimumOvertimeDuration, PayrollSetting } from '../../../models/payroll/payroll-settings.model';
 import { PayrollSettingApiService } from '../../../services/api/payroll-setting.service';
 import { ToastService } from '../../../shared/components/toast/toast.service';
 
@@ -77,6 +77,7 @@ export class PayrollComponent implements OnInit {
     blockApprovalOnValidationErrors: new FormControl(false, { nonNullable: true }),
     lockAfterFinalApproval: new FormControl(false, { nonNullable: true }),
     notifyApprovers: new FormControl(false, { nonNullable: true }),
+    minimumOvertimeDuration: new FormControl<PayrollSetting['minimumOvertimeDuration']| null>(null, { nonNullable: true, validators: [Validators.required] }),
     approvalWorkflow: new FormControl<PayrollSetting['approvalWorkflow']| null>(null, { nonNullable: true, validators: [Validators.required] })
   });
 
@@ -93,7 +94,10 @@ export class PayrollComponent implements OnInit {
         this.payrollSetting = response.data;
         console.log("payrollSetting:", this.payrollSetting);
         if(this.payrollSetting){
-          this.form.patchValue(this.payrollSetting);
+          this.form.patchValue({
+            ...this.payrollSetting,
+            minimumOvertimeDuration: this.normalizeMinimumOvertimeDuration(this.payrollSetting.minimumOvertimeDuration)
+          });
         }
       },
       error: (error) => {
@@ -106,6 +110,14 @@ export class PayrollComponent implements OnInit {
     });
   }
 
+  private normalizeMinimumOvertimeDuration(value: PayrollMinimumOvertimeDuration | string | number | null | undefined): PayrollMinimumOvertimeDuration {
+    const normalized = String(value ?? 'NONE').trim().toUpperCase().replace(/[\s-]+/g, '_');
+    if (['NONE', 'NO_MINIMUM', '0'].includes(normalized)) return 'NONE';
+    if (['15', '30', '60'].includes(normalized)) return `${normalized}_MINUTES` as PayrollMinimumOvertimeDuration;
+    if (['15_MINUTES', '30_MINUTES', '60_MINUTES'].includes(normalized)) return normalized as PayrollMinimumOvertimeDuration;
+    return 'NONE';
+  }
+
 onSubmit(form: FormGroup) {
     if (form.invalid) {
       form.markAllAsTouched();
@@ -115,8 +127,9 @@ onSubmit(form: FormGroup) {
     this.submitting = true;
     const data = {
       ...form.value,
-    makerChecker: true,
-  };
+    };
+
+    console.log("data", data)
     this.apiService.updatePayrollSetting(data).subscribe({
       next: (response) => {
         this.form.markAsPristine();

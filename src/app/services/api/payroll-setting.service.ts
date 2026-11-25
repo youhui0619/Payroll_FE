@@ -26,7 +26,7 @@ export class PayrollSettingApiService {
   }
   
   updatePayrollSetting(data: any): Observable<any> {
-    return this.http.put(environment.apiURL + '/payroll/settings/', data, {
+    return this.http.patch(environment.apiURL + '/payroll/settings/', data, {
       headers: this.getHeaders(),
     });
   }
