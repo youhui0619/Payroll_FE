@@ -34,6 +34,8 @@ import { PositionsApiService } from '../../../../services/api/positions.service'
 import { DepartmentsApiService } from '../../../../services/api/departments.service';
 import { WorkLocationApiService } from '../../../../services/api/work-location.service';
 import { LeavePolicyApiService } from '../../../../services/api/leave-policy.service';
+import { PayrollSettingApiService } from '../../../../services/api/payroll-setting.service';
+import type { PayrollSetting } from '../../../../models/payroll/payroll-settings.model';
 
 const statutoryEntitlementOptions = [
   { code: 'EPF', name: 'EPF / KWSP', setting: 'includeEpf' },
@@ -90,7 +92,7 @@ function createWorkingScheduleForm(schedule: WorkingSchedule): EmployeeWorkingSc
 @Component({
   selector: 'app-create',
   imports: [...MaterialImports, CommonModule, FormsModule, ReactiveFormsModule,  DropzoneComponent],
-  providers: [...MaterialProviders, EmployeesApiService, PositionsApiService, DepartmentsApiService, WorkLocationApiService, LeavePolicyApiService],
+  providers: [...MaterialProviders, EmployeesApiService, PositionsApiService, DepartmentsApiService, WorkLocationApiService, LeavePolicyApiService, PayrollSettingApiService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'
 })
@@ -102,6 +104,7 @@ export class CreateComponent {
     private departmentApiService: DepartmentsApiService,
     private workLocationApiService: WorkLocationApiService,
     private leavePolicyApiService: LeavePolicyApiService,
+    private payrollSettingApiService: PayrollSettingApiService,
     private toastService: ToastService
   ) {
     this.updatePositionValidator();
@@ -168,7 +171,7 @@ export class CreateComponent {
   employmentTypes = employmentTypes;
   leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.active);
   commissionIncentiveSettings: CommissionIncentiveSetting[] = commissionIncentiveSettings;
-  availableStatutoryEntitlements = statutoryEntitlementOptions.filter(option => payrollSettings[option.setting]);
+  statutoryEntitlementList: typeof statutoryEntitlementOptions[number][] = [];
   overtimeEnabledInPayrollSettings = payrollSettings.includeOvertime;
   overtimeBasisOptions: { value: OvertimeCalculationBasis; label: string }[] = [
     { value: 'HOURLY_RATE', label: 'Hourly rate' },
@@ -223,7 +226,7 @@ export class CreateComponent {
       contributionCategory: new FormControl(''),
       eisStatus: new FormControl(''),
       hrdRegisterNo: new FormControl(''),
-      statutoryEntitlementCodes: new FormControl<string[]>(this.availableStatutoryEntitlements.map(option => option.code), { nonNullable: true }),
+      statutoryEntitlementCodes: new FormControl<string[]>([], { nonNullable: true }),
       commissionSettingCodes: new FormControl<string[]>([], { nonNullable: true }),
       includeOvertime: new FormControl(false, { nonNullable: true }),
       overtimeCalculationBasis: new FormControl<OvertimeCalculationBasis>('HOURLY_RATE', { nonNullable: true }),
@@ -258,7 +261,29 @@ export class CreateComponent {
     this.getPositionList();
     this.getWorkLocationList();
     this.getLeavePolicyList();
+    this.getPayrollSetting();
+  }
 
+  getPayrollSetting() {
+    this.payrollSettingApiService.getPayrollSetting().subscribe({
+      next: response => {
+        const setting: PayrollSetting | null = response?.data ?? null;
+        this.statutoryEntitlementList = setting
+          ? statutoryEntitlementOptions.filter(option => setting[option.setting])
+          : [];
+        this.form.controls.payroll.controls.statutoryEntitlementCodes.setValue(
+          this.statutoryEntitlementList.map(option => option.code)
+        );
+        this.updateStatutoryValidators();
+      },
+      error: error => {
+        this.toastService.show({
+          title: error?.error?.code || 'Error',
+          message: error?.error?.message || 'Could not load payroll settings.',
+          icon: 'danger'
+        });
+      }
+    });
   }
 
   getDepartmentList(){
@@ -689,7 +714,7 @@ export class CreateComponent {
 
 
   onSubmit(form: FormGroup) {
-    const availableStatutoryCodes = new Set<string>(this.availableStatutoryEntitlements.map(option => option.code));
+    const availableStatutoryCodes = new Set<string>(this.statutoryEntitlementList.map(option => option.code));
     const selectedStatutoryCodes = this.form.controls.payroll.controls.statutoryEntitlementCodes;
     selectedStatutoryCodes.setValue(selectedStatutoryCodes.value.filter(code => availableStatutoryCodes.has(code)));
     const availableCodes = new Set(this.availableCommissionSettings.map(setting => setting.code));

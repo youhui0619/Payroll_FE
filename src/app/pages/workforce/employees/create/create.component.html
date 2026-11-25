@@ -633,7 +633,7 @@
               <h4 class="text-primary">Statutory Entitlements</h4>
               <div class="card mb-4">
                 <div class="card-body">
-                  @for (entitlement of availableStatutoryEntitlements; track entitlement.code; let last = $last) {
+                  @for (entitlement of statutoryEntitlementList; track entitlement.code; let last = $last) {
                     <div
                       class="d-flex align-items-center justify-content-between gap-3 py-3"
                       [class.border-bottom]="!last">
