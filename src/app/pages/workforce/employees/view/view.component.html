@@ -677,7 +677,7 @@
               <h4 class="text-primary my-0">Leave Summary</h4>
               <div class="card mt-2">
                 <div class="card-body">
-                  <p class="mb-3">Leave year: {{ leaveYear }}</p>
+                  <p class="mb-3">Leave year: {{ year }}</p>
                   <div class="table-responsive">
                     <table class="table no-wrap w-100 text-left">
                       <thead>
@@ -688,11 +688,11 @@
                         </tr>
                       </thead>
                       <tbody>
-                        @for (policy of leavePolicies; track policy) {
+                        @for (leave of employeeLeaveBalances; track leave) {
                           <tr>
-                            <td class="text-muted">{{ policy.name }}</td>
-                            <td class="text-muted">{{ leaveEntitlementLabel(policy) }}</td>
-                            <td class="text-primary fw-550">{{ leaveBalanceLabel(policy) }}</td>
+                            <td class="text-muted">{{ leave.name }}</td>
+                            <td class="text-muted">{{ leaveEntitlementLabel(leave) }}</td>
+                            <td class="text-primary fw-550">{{ leaveBalanceLabel(leave) }}</td>
                           </tr>
                         }
                         @if (leavePolicies.length === 0) {

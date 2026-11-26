@@ -8,7 +8,7 @@ import dayGridPlugin from '@fullcalendar/angular/daygrid';
 import interactionPlugin from '@fullcalendar/angular/interaction';
 import themePlugin from "@fullcalendar/angular/themes/monarch";
 import { attendanceRecords } from '../../../../data/attendance/attendance.data';
-import { getEmployeeLeaveBalances } from '../../../../data/leave/leave-balances.data';
+// import { getEmployeeLeaveBalances } from '../../../../data/leave/leave-balances.data';
 import { leavePolicies } from '../../../../data/leave/leave-policies.data';
 import { commissionIncentiveSettings } from '../../../../data/commission/commission-incentive-settings.data';
 import { LeaveApplication } from '../../../../models/leave/leave.model';
@@ -65,11 +65,16 @@ export class ViewComponent {
 
 
   employee!: EmployeeView;
+  employeeCalendar: any;
+  params: any;
   id: any = '';
-  leaveYear = new Date().getFullYear();
+  year = new Date().getFullYear();
+  month = new Date().getMonth();
+  employeeLeaveBalances:any;
+  leaveApllicationList: LeaveApplication[] = [];
+
   leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.active);
   commissionIncentiveSettings = commissionIncentiveSettings;
-  employeeLeaveBalances: ReturnType<typeof getEmployeeLeaveBalances> = getEmployeeLeaveBalances('');
   claimRequests: ExpenseClaimRecord[] = [];
   overtimeHistory: OvertimeRequestRecord[] = [];
   leaveRequests: LeaveApplication[] = [];
@@ -80,6 +85,10 @@ export class ViewComponent {
   selectedClaim: ExpenseClaimRecord | null = null;
 
   ngOnInit() {
+    this.params = {
+      year: this.year,
+      month: this.month
+      }
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id');
       if (this.id) {
@@ -95,7 +104,9 @@ export class ViewComponent {
     this.apiService.getEmployee(id).subscribe({
       next: (response) => {
         this.employee = response.data;
-        this.employeeLeaveBalances = getEmployeeLeaveBalances(this.employee.employeeNo || id);
+        // this.getEmployeeCalendar(id, this.params)
+        this.getEmployeeLeaveBalances(id, this.year);
+        // this.getEmployeeLeaveApplications(id)
         console.log("employee:", this.employee);
       },
       error: (error) => {
@@ -107,6 +118,58 @@ export class ViewComponent {
       },
     });
   }
+
+  // getEmployeeCalendar(id: any, param: any){
+  //   console.log(id)
+  //   this.apiService.getEmployeeCalendar(id, param).subscribe({
+  //     next: (response) => {
+  //       this.employeeCalendar = response.data;
+  //       console.log("employeeCalandar:", response.data);
+  //     },
+  //     error: (error) => {
+  //       this.toastService.show({
+  //         title: error.error.code,
+  //         message: error.error.message,
+  //         icon: 'danger'
+  //       });
+  //     },
+  //   });
+  // }
+
+  getEmployeeLeaveBalances(id: any, year: any){
+    console.log(id)
+    this.apiService.getEmployeeLeaveBalances(id, year).subscribe({
+      next: (response) => {
+        this.employeeLeaveBalances = response.data;
+        console.log("employeeLeaveBalances:", response.data);
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
+    });
+  }
+
+
+  // getEmployeeLeaveApplications(id: any){
+  //   console.log(id)
+  //   this.apiService.getEmployeeLeaveApplications(id).subscribe({
+  //     next: (response) => {
+  //       this.leaveApllicationList = response.data;
+  //       console.log("leaveApllicationList:", this.leaveApllicationList);
+  //     },
+  //     error: (error) => {
+  //       this.toastService.show({
+  //         title: error.error.code,
+  //         message: error.error.message,
+  //         icon: 'danger'
+  //       });
+  //     },
+  //   });
+  // }
 
 
   initials(name: string | null | undefined) {

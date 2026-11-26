@@ -817,6 +817,15 @@ export class CreateComponent {
       overtimeControls.overtimeHourlyRate.setValue(null);
     }
     const { personal, employment, payroll, taxInformation, leave, emergencyContact } = form.value;
+    const selectedLeavePolicyCodes = new Set<string>(leave.leavePolicyCodes ?? []);
+    const leaveEntitlementOverrides = Object.fromEntries(
+      Object.entries(leave.leaveEntitlementOverrides ?? {})
+        .filter(([code]) => selectedLeavePolicyCodes.has(code))
+    );
+    const leaveServiceEntitlementTiers = Object.fromEntries(
+      Object.entries(leave.leaveServiceEntitlementTiers ?? {})
+        .filter(([code]) => selectedLeavePolicyCodes.has(code))
+    );
 
     const data = {
       ...personal,
@@ -838,6 +847,8 @@ export class CreateComponent {
       ...payroll,
       ...taxInformation,
       ...leave,
+      leaveEntitlementOverrides,
+      leaveServiceEntitlementTiers,
       ...emergencyContact,
       emergencyContactAddress: this.functionAddress(
         emergencyContact.emergencyContactAddressLine1,

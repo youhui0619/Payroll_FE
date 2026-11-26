@@ -77,6 +77,30 @@ export class EmployeesApiService {
     });
   }
 
+  getEmployeeCalendar(id: any, searchTerms: any): Observable<any> {
+    const params: any = Object.fromEntries(
+    Object.entries(searchTerms || {}).filter(
+      ([key, value]) =>
+        value !== '' && value !== null && value !== undefined
+    ));
+    return this.http.get(environment.apiURL + '/attendance/employees/' +id+ '/calender', {
+      headers: this.getHeaders(),
+      params
+    });
+  }
+
+  getEmployeeLeaveBalances(id: any, searchTerms: any): Observable<any> {
+    const params: any = Object.fromEntries(
+    Object.entries(searchTerms || {}).filter(
+      ([key, value]) =>
+        value !== '' && value !== null && value !== undefined
+    ));
+    return this.http.get(environment.apiURL + '/leave/employees/' +id+ '/balances', {
+      headers: this.getHeaders(),
+      params
+    });
+  }
+
   createEmployeeSalary(id: any, data: any): Observable<any> {
     return this.http.post(environment.apiURL + '/employees/'+id+ '/salaries', data,  {
       headers: this.getHeaders(),
