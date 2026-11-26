@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 import { AuthService } from '../auth.service';
 
 @Injectable()
-export class RegionalSettingApiService {
+export class WorkScheduleSettingApiService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   private getHeaders(): HttpHeaders {

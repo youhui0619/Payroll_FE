@@ -1,10 +1,13 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { WORKING_SCHEDULE } from '../../../data/working-schedule/working-schedule.data';
 import { employmentTypes } from '../../../data/workforce/options/employment-options.data';
 import type { WorkingDayName, WorkingDaySchedule, WorkingSchedule, WorkingScheduleSettings } from '../../../models/working-schedule/working-schedule.model';
 import type { EmploymentType } from '../../../models/workforce/employment-status.model';
 import { MaterialImports, MaterialProviders } from '../../../shared/material-imports';
+import { WorkScheduleSettingApiService } from '../../../services/api/working-schedule-setting.service';
+import { ToastService } from '../../../shared/components/toast/toast.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export type WorkingDayFormGroup = FormGroup<{
   day: FormControl<WorkingDayName>;
@@ -122,11 +125,20 @@ export function createWorkingScheduleSettingsForm(settings: WorkingScheduleSetti
   styleUrl: './working-schedule.component.scss'
 })
 export class WorkingScheduleComponent {
+
+  constructor(
+    private toastService: ToastService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private apiService: WorkScheduleSettingApiService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
   @Input() showHeader = true;
   @Input() showSubmitButton = true;
-  readonly form = createWorkingScheduleSettingsForm(WORKING_SCHEDULE);
-  readonly employmentTypes = employmentTypes;
-  readonly workingDays = workingDays;
+  form = createWorkingScheduleSettingsForm(WORKING_SCHEDULE);
+  employmentTypes = employmentTypes;
+  workingDays = workingDays;
 
   get employmentTypeScheduleControls() {
     return this.form.controls.workingSchedule.controls;
@@ -135,6 +147,8 @@ export class WorkingScheduleComponent {
   get commonScheduleDayControls() {
     return this.form.controls.commonWorkingSchedule.controls.days.controls;
   }
+
+  
 
   employmentScheduleDayControls(scheduleIndex: number) {
     return this.employmentTypeScheduleControls[scheduleIndex].controls.schedule.controls.days.controls;
@@ -165,18 +179,19 @@ export class WorkingScheduleComponent {
     setWorkingDayControlsEnabled(day, enabled);
   }
 
-  onSubmit(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
+  onSubmit(form: FormGroup) {
+    if (form.invalid) {
+      form.markAllAsTouched();
       return;
     }
 
     const { allEmploymentTypesSameSchedule, commonWorkingSchedule, workingSchedule } = this.form.getRawValue();
-    const schedules = Object.fromEntries(
+    const data = Object.fromEntries(
       allEmploymentTypesSameSchedule
         ? employmentTypes.map(({ value }) => [value, cloneSchedule(commonWorkingSchedule)])
         : workingSchedule.map(({ employmentType, schedule }) => [employmentType, schedule])
     ) as Record<EmploymentType, WorkingSchedule>;
-    console.log('working schedule', schedules);
+    console.log('working schedule', data);
+    
   }
 }

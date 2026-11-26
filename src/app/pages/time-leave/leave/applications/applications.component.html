@@ -85,7 +85,7 @@
 
 <div class="row mt-4">
   <div class="d-flex align-items-center flex-wrap gap-2">
-    <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
+    <!-- <mat-form-field appearance="outline" class="form-input" subscriptSizing="dynamic">
       <input type="text" matInput placeholder="Search..." >
       <span matTextPrefix class="text-muted me-2">
         <tabler-icon icon="search" [size]="16"></tabler-icon>
@@ -111,7 +111,7 @@
         </mat-date-range-input>
         <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
         <mat-date-range-picker #rangePicker></mat-date-range-picker>
-      </mat-form-field>
+      </mat-form-field> -->
   </div>
 </div>
 
@@ -121,14 +121,29 @@
     <div class="card">
       <div class="card-header mb-3">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-          <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">Pending ({{ filteredLeaveRequests.length }})</span>  |  Annual Leave ({{ leaveCount('Annual Leave') }})  |  Medical Leave ({{ leaveCount('Medical Leave') }})  |  Unpaid Leave ({{ leaveCount('Unpaid Leave') }})  |  Emergency Leave ({{ leaveCount('Emergency Leave') }})</h6>
-          <div>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2" (click)="clearFilters()"><tabler-icon icon="x" [size]="16"></tabler-icon> Clear</button>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"><tabler-icon icon="upload" [size]="16"></tabler-icon> Import</button>
-            <button mat-flat-button color="primary-outline" class="btn-sm px-2 me-2"> <tabler-icon icon="download" [size]="16"></tabler-icon> Export</button>
+          <h6 class="fs-14 fw-400 text-muted my-0"><span class="fw-550 text-primary">All ({{ leaveApplications.data.length }})</span>  
+            <!-- |  Annual Leave ({{ leaveCount('Annual Leave') }})  
+            |  Medical Leave ({{ leaveCount('Medical Leave') }})  
+            |  Unpaid Leave ({{ leaveCount('Unpaid Leave') }})  
+            |  Emergency Leave ({{ leaveCount('Emergency Leave') }}) -->
+          </h6>
+          <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center flex-lg-nowrap gap-2">
+            <div class="d-flex flex-wrap flex-lg-nowrap gap-2 ms-auto">
+                <button mat-flat-button color="primary-outline" class="btn-sm" (click)="resetFilter()">
+                    <tabler-icon icon="x" [size]="16"></tabler-icon>
+                    Clear
+                </button>
+                <button mat-flat-button color="primary-outline" class="btn-sm">
+                    <tabler-icon icon="upload" [size]="16"></tabler-icon>
+                    Import
+                </button>
+                <button mat-flat-button color="primary-outline" class="btn-sm">
+                    <tabler-icon icon="download" [size]="16"></tabler-icon>
+                    Export
+                </button>
+            </div>
           </div>
         </div>
-      </div>
       <div class="card-body">
         <div class="row mx-0">
           <div class="col-sm-12 px-2">
@@ -136,7 +151,7 @@
               @if (loading) {
             <app-skeleton-loader [rows]="6" [columns]="6"></app-skeleton-loader>
           } @else {
-<table matSort class="mat-sort table no-wrap w-100 text-left leave-balance-table" matSort>
+              <table class="mat-sort table no-wrap w-100 text-left leave-balance-table" mat-table matSort (matSortChange)="onSortChange($event)">
                 <thead>
                   <tr>
                     <th class="text-dark">Leave Type / Ref</th>
@@ -148,7 +163,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @for (leave of filteredLeaveRequests; track leave.reference) {
+                  @for (leave of leaveApplications.data; track leave) {
                     <tr>
                       <td>
                         <div class="d-flex align-items-center">
@@ -162,7 +177,7 @@
                         </div>
                       </td>
                       <td>
-                        <p class="text-dark fw-500 my-0">{{ employeeName(leave.employeeId) }}</p>
+                        <!-- <p class="text-dark fw-500 my-0">{{ employeeName(leave.employeeId) }}</p> -->
                         <p class="fs-10 fw-300 text-muted my-0">{{ leave.employeeId }}</p>
                       </td>
                       <td class="text-muted">{{ leave.dateRange }}</td>
@@ -172,8 +187,7 @@
                         <button
                           type="button"
                           class="text-muted action-btn"
-                          mat-icon-button
-                          (click)="openLeaveDetails(leave)">
+                          mat-icon-button>
                           <tabler-icon icon="eye"></tabler-icon>
                         </button>
                         @if (leave.status === 'Pending') {
@@ -188,25 +202,29 @@
                         }
                       </td>
                     </tr>
-                  }
-                </tbody>
-              </table>
-          }
-              @if (filteredLeaveRequests.length === 0) {
-                <div class="text-center text-muted py-4">
-                  No leave requests match the selected filters.
-                </div>
-              }
-              <mat-paginator [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>
-
-            </div>
+                    }
+                    @empty {
+                      <tr>
+                        <td colspan="6" class="text-muted text-center py-4">No leave requests match your search or filters.</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+                }
+              <!-- Pagination -->
+              <mat-paginator
+                [length]="meta.total" 
+                [pageSize]="meta.pageSize" 
+                [pageSizeOptions]="[5, 10 ,20]"
+                showFirstLastButtons>
+              </mat-paginator>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
+<!-- 
 @if (selectedLeave; as leave) {
   <app-leave-detail-dialog
     [data]="leave"
@@ -214,4 +232,4 @@
     (decisionMade)="decideLeave($event)"
     (closed)="closeLeaveDialog()">
   </app-leave-detail-dialog>
-}
+} -->
