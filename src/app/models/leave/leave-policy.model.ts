@@ -16,7 +16,7 @@ export interface LeaveServiceEntitlementTier {
 }
 
 export interface LeavePolicy {
-  id: string;
+  policyId: string;
   companyId: string;
 
   // Basic information
@@ -44,6 +44,7 @@ export interface LeavePolicy {
   paid: boolean;
   effectiveFrom: string | null;
   effectiveTo: string | null;
+  balance?: number;
 }
 
 export const approvalList = [

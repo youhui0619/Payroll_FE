@@ -3,7 +3,7 @@ import type { LeavePolicy } from '../../models/leave/leave-policy.model';
 // Demo policy values for the settings screens. Adjust the entitlements to match company policy.
 export const leavePolicies: LeavePolicy[] = [
   {
-    id: 'leave-policy-al',
+    policyId: 'leave-policy-al',
     companyId: 'demo-company',
     code: 'AL',
     name: 'Annual Leave',
@@ -35,7 +35,7 @@ export const leavePolicies: LeavePolicy[] = [
     effectiveTo: null
   },
   {
-    id: 'leave-policy-ml',
+    policyId: 'leave-policy-ml',
     companyId: 'demo-company',
     code: 'ML',
     name: 'Medical Leave',
@@ -63,7 +63,7 @@ export const leavePolicies: LeavePolicy[] = [
     effectiveTo: null
   },
   {
-    id: 'leave-policy-hl',
+    policyId: 'leave-policy-hl',
     companyId: 'demo-company',
     code: 'HL',
     name: 'Hospitalisation Leave',
@@ -91,7 +91,7 @@ export const leavePolicies: LeavePolicy[] = [
     effectiveTo: null
   },
   {
-    id: 'leave-policy-mat',
+    policyId: 'leave-policy-mat',
     companyId: 'demo-company',
     code: 'MAT',
     name: 'Maternity Leave',
@@ -119,7 +119,7 @@ export const leavePolicies: LeavePolicy[] = [
     effectiveTo: null
   },
   {
-    id: 'leave-policy-pat',
+    policyId: 'leave-policy-pat',
     companyId: 'demo-company',
     code: 'PAT',
     name: 'Paternity Leave',
@@ -147,7 +147,7 @@ export const leavePolicies: LeavePolicy[] = [
     effectiveTo: null
   },
   {
-    id: 'leave-policy-ul',
+    policyId: 'leave-policy-ul',
     companyId: 'demo-company',
     code: 'UL',
     name: 'Unpaid Leave',

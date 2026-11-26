@@ -1,93 +1,150 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { departments } from '../../../../data/workforce/departments.data';
 import { employees } from '../../../../data/workforce/employees.data';
 import { leaveApplications } from '../../../../data/leave/leave-applications.data';
-import { leavePolicies } from '../../../../data/leave/leave-policies.data';
-import type { Employee } from '../../../../models/workforce/employee.model';
+import type { Employee, EmployeeOverview } from '../../../../models/workforce/employee.model';
+import type { LeavePolicy } from '../../../../models/leave/leave-policy.model';
 import type { LeaveApplication } from '../../../../models/leave/leave.model';
 import { DropzoneComponent } from '../../../../shared/dropzone/dropzone.component';
+import { ToastService } from '../../../../shared/components/toast/toast.service';
+import { LeaveApplicationApiService } from '../../../../services/api/leave-applications.service';
+import { EmployeesApiService } from '../../../../services/api/employees.service';
+import { LeavePolicyApiService } from '../../../../services/api/leave-policy.service';
+import { getEmployeeLeaveBalances } from '../../../../data/leave/leave-balances.data';
 
 @Component({
   selector: 'app-leave-create',
   standalone: true,
   imports: [...MaterialImports, CommonModule, ReactiveFormsModule, DropzoneComponent],
-  providers: [...MaterialProviders],
+  providers: [...MaterialProviders, LeaveApplicationApiService, EmployeesApiService, LeavePolicyApiService],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'
 })
 export class CreateComponent {
+
+  @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
+
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private apiService: LeaveApplicationApiService,
+    private employeeApiService: EmployeesApiService,
+    private leavePolicyApiService: LeavePolicyApiService,
+    private toastService: ToastService
+  ) {
+    // this.route.queryParamMap.subscribe(params => {
+    //   const employee = this.employees.find(item => item.employeeNo === params.get('employeeId'));
+    //   const selectedDate = this.dateFromKey(params.get('date'));
+    //   if (employee) {
+    //     const department = this.departments.find(item => item.name === employee.department);
+    //     if (department) this.form.controls.departmentId.setValue(department.id);
+    //     this.onEmployeeSelected(employee);
+    //   }
+    //   if (selectedDate) {
+    //     this.form.controls.startDate.setValue(selectedDate);
+    //     this.form.controls.endDate.setValue(selectedDate);
+    //   }
+    // });
+  }
+  employeeList: EmployeeOverview[] = [];
+  employeeSearch = new FormControl<EmployeeOverview | string>('');
+  submitting: boolean = false;
+  year = new Date().getFullYear();
+  leavePolicyList: LeavePolicy[] = [];
+
+
+
+
   readonly departments = departments.filter(department => department.active);
-  readonly employees = employees;
-  readonly leaveTypeOptions = leavePolicies.filter(policy => policy.active);
-  readonly employeeSearch = new FormControl<Employee | string>('');
-  submitted = false;
+  employees = employees;
   createdLeave: LeaveApplication | null = null;
 
-  readonly leaveForm = new FormGroup({
+  form = new FormGroup({
     requestDate: new FormControl<Date | null>(new Date(), Validators.required),
-    departmentId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     employeeId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    code: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+    policyId: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     startDate: new FormControl<Date | null>(null, Validators.required),
     endDate: new FormControl<Date | null>(null, Validators.required),
     reason: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     supportingDocuments: new FormControl<Array<File | string>>([], { nonNullable: true })
   });
 
-  constructor(private readonly route: ActivatedRoute, private readonly router: Router) {
-    this.route.queryParamMap.subscribe(params => {
-      const employee = this.employees.find(item => item.employeeNo === params.get('employeeId'));
-      const selectedDate = this.dateFromKey(params.get('date'));
-      if (employee) {
-        const department = this.departments.find(item => item.name === employee.department);
-        if (department) this.leaveForm.controls.departmentId.setValue(department.id);
-        this.onEmployeeSelected(employee);
-      }
-      if (selectedDate) {
-        this.leaveForm.controls.startDate.setValue(selectedDate);
-        this.leaveForm.controls.endDate.setValue(selectedDate);
-      }
+  
+  ngOnInit() {
+    this.getEmployeeList();
+  }
+  
+
+  getEmployeeList(){
+    this.employeeApiService.getAllEmployees(null).subscribe({
+      next: (response) => {
+        this.employeeList = response.data || [];
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
+    });
+  }
+  
+  getLeavePolicyList(id: string){
+    this.leavePolicyList = [];
+    this.form.controls.policyId.setValue('');
+    this.employeeApiService.getEmployeeLeaveBalances(id, this.year).subscribe({
+      next: (response) => {
+        // Ignore a late response if the employee has changed since this request started.
+        if (this.selectedEmployee?.id !== id) return;
+        const policies: LeavePolicy[] = Array.isArray(response?.data) ? response.data : [];
+        this.leavePolicyList = policies.filter(policy => policy.active && policy?.balance && policy?.balance > 0);
+        console.log("this.leavePolicyList",this.leavePolicyList )
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error?.error?.code || 'Error',
+          message: error?.error?.message || 'Unable to load leave policies.',
+          icon: 'danger'
+        });
+      },
     });
   }
 
-  goBack(): void {
-    void this.router.navigateByUrl('/time-leave/leave/applications');
+  goBack() {
+    return this.router.navigate(['/time-leave/leave/applications'])
   }
 
-  get selectedEmployee(): Employee | undefined {
-    return this.employees.find(employee => employee.employeeNo === this.leaveForm.controls.employeeId.value);
-  }
 
-  get selectedLeavePolicy() {
-    return this.leaveTypeOptions.find(policy => policy.code === this.leaveForm.controls.code.value);
-  }
-
-  get filteredEmployees(): Employee[] {
-    const departmentId = this.leaveForm.controls.departmentId.value;
+  get filteredEmployees() {
     const searchValue = this.employeeSearch.value;
     const query = typeof searchValue === 'string' ? searchValue.trim().toLowerCase() : '';
-    if (!departmentId) return [];
-
-    return this.employees.filter(employee => {
-      const department = this.departments.find(item => item.name === employee.department);
-      return department?.id === departmentId
-        && (!query || [employee.employeeNo, employee.name].some(value => value.toLowerCase().includes(query)));
-    });
+    return this.employeeList.filter(employee =>
+      !query || [employee.employeeNo, employee.name].some(value => value.toLowerCase().includes(query))
+    );
   }
 
-  readonly employeeDisplayName = (value: Employee | string | null): string => {
+  employeeDisplayName = (value: Employee | string | null): string => {
     if (value && typeof value === 'object') return `${value.employeeNo} - ${value.name}`;
     if (!value) return '';
-    const employee = this.employees.find(item => item.employeeNo === value);
+    const employee = this.employeeList.find(item => item.employeeNo === value);
     return employee ? `${employee.employeeNo} - ${employee.name}` : value;
   };
 
+  get selectedEmployee(): EmployeeOverview | undefined {
+    return this.employeeList.find(employee => employee.employeeNo === this.form.controls.employeeId.value);
+  }
+
+  get selectedLeavePolicy() {
+    return this.leavePolicyList.find(policy => policy.policyId === this.form.controls.policyId.value);
+  }
+
   get requestedDays(): number {
-    const { startDate, endDate } = this.leaveForm.getRawValue();
+    const { startDate, endDate } = this.form.getRawValue();
     if (!startDate || !endDate || endDate < startDate) return 0;
     return Math.round((this.startOfDay(endDate).getTime() - this.startOfDay(startDate).getTime()) / 86_400_000) + 1;
   }
@@ -96,22 +153,22 @@ export class CreateComponent {
     return `${this.requestedDays} day${this.requestedDays === 1 ? '' : 's'}`;
   }
 
-  onDepartmentChange(): void {
-    this.leaveForm.controls.employeeId.setValue('');
-    this.employeeSearch.setValue('');
-  }
-
-  onEmployeeSelected(employee: Employee): void {
-    this.leaveForm.controls.employeeId.setValue(employee.employeeNo);
+  onEmployeeSelected(employee: EmployeeOverview): void {
+    this.form.controls.employeeId.setValue(employee.employeeNo);
     this.employeeSearch.setValue(employee);
+    this.getLeavePolicyList(employee.id);
   }
 
   onEmployeeSearchInput(): void {
-    if (typeof this.employeeSearch.value === 'string') this.leaveForm.controls.employeeId.setValue('');
+    if (typeof this.employeeSearch.value === 'string') {
+      this.form.controls.employeeId.setValue('');
+      this.form.controls.policyId.setValue('');
+      this.leavePolicyList = [];
+    }
   }
 
   onLeaveTypeChange(): void {
-    const documents = this.leaveForm.controls.supportingDocuments;
+    const documents = this.form.controls.supportingDocuments;
     if (this.selectedLeavePolicy?.requireSupportingDocuments) {
       documents.setValidators([Validators.minLength(1)]);
     } else {
@@ -120,63 +177,75 @@ export class CreateComponent {
     documents.updateValueAndValidity({ emitEvent: false });
   }
 
-  onSubmit(): void {
-    this.submitted = true;
-    this.createdLeave = null;
-    if (this.leaveForm.invalid) {
-      this.leaveForm.markAllAsTouched();
-      this.employeeSearch.markAsTouched();
-      return;
-    }
+  formatDate(date: Date | string | null): string | null {
+    if (!date) return null;
 
-    const { requestDate, departmentId, employeeId, code, startDate, endDate, reason, supportingDocuments } = this.leaveForm.getRawValue();
-    const employee = this.employees.find(item => item.employeeNo === employeeId);
-    const department = this.departments.find(item => item.id === departmentId);
-    const policy = this.leaveTypeOptions.find(item => item.code === code);
-    if (!requestDate || !startDate || !endDate || endDate < startDate || !employee || !department || !policy || employee.department !== department.name) {
-      if (endDate && startDate && endDate < startDate) this.leaveForm.controls.endDate.setErrors({ invalidRange: true });
-      if (!employee || !department || employee.department !== department.name) this.leaveForm.controls.employeeId.setErrors({ selectionRequired: true });
-      return;
-    }
+    const parsedDate = date instanceof Date ? date : new Date(date);
+    if (isNaN(parsedDate.getTime())) return null;
+    const year = parsedDate.getFullYear();
+    const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
+    const day = String(parsedDate.getDate()).padStart(2, '0');
 
-    const nextReferenceNumber = leaveApplications.reduce((maximum, application) => {
-      if (!application.reference.startsWith(`${policy.code}-`)) return maximum;
-      const number = Number(application.reference.split('-').at(-1));
-      return Number.isFinite(number) ? Math.max(maximum, number) : maximum;
-    }, 100) + 1;
-    const record: LeaveApplication = {
-      employeeId: employee.employeeNo,
-      requestDate: this.formatDate(requestDate),
-      leaveType: policy.name,
-      reference: `${policy.code}-${requestDate.getFullYear()}-${nextReferenceNumber}`,
-      dateRange: startDate.getTime() === endDate.getTime()
-        ? this.formatDate(startDate)
-        : `${this.formatDate(startDate)} ~ ${this.formatDate(endDate)}`,
-      daysTaken: this.requestedDaysLabel.replace(/^./, value => value.toUpperCase()),
-      status: 'Pending',
-      statusClass: 'bg-light-info text-info',
-      iconClass: policy.leaveType === 'UNPAID' ? 'text-secondary bg-light-secondary' : 'text-primary bg-light-primary',
-      reason: reason.trim(),
-      approval: { approver: employee.reportingManager || 'Manager', status: 'Pending', comments: '', approvedDate: null },
-      supportingDocuments: supportingDocuments.map(document => typeof document === 'string' ? document : document.name)
-    };
-
-    leaveApplications.unshift(record);
-    this.createdLeave = record;
+    return `${year}-${month}-${day}`;
   }
 
-  private dateFromKey(dateKey: string | null): Date | null {
-    if (!dateKey) return null;
-    const [year, month, day] = dateKey.split('-').map(Number);
-    if (!year || !month || !day) return null;
-    return new Date(year, month - 1, day);
+
+  onSubmit(form: FormGroup) {
+    this.submitting = true;
+    if (form.invalid) {
+      form.markAllAsTouched();
+      return;
+    }
+    const value = form.value;
+    const data = {
+      ...value,
+      requestDate: this.formatDate(value.requestDate),
+      startDate: this.formatDate(value.startDate),
+      endDate: this.formatDate(value.endDate),
+    }
+
+    this.apiService.createLeaveApplication(data).subscribe({
+      next: (response) => {
+        console.log("response", response);
+
+        this.toastService.show({
+          title: "Success",
+          message: "Leave application has been created.",
+          icon: 'success'
+        });
+
+        this.formDirective.resetForm();
+        this.submitting = false;
+        setTimeout(() => {
+          this.router.navigate(['/settings/commission-incentives/overview']);
+        }, 1000);
+      },
+      error: (error) => {
+        console.log("Error:", error);
+        const errorResponse = error?.error;
+
+        if (errorResponse?.errors?.length) {
+          errorResponse.errors.forEach((err: any) => {
+            this.toastService.show({
+              title: errorResponse.code,
+              message: err.message,
+              icon: 'danger'
+            });
+          });
+        } else {
+          this.toastService.show({
+            title: errorResponse?.code || 'Error',
+            message: errorResponse?.message || 'Something went wrong.',
+            icon: 'danger'
+          });
+        }
+        this.submitting = false;
+      }
+    });
+    console.log("data", data)
   }
 
   private startOfDay(date: Date): Date {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  }
-
-  private formatDate(date: Date): string {
-    return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
   }
 }
