@@ -1096,15 +1096,9 @@
                     </div>
 
                     <div class="col-sm-6 px-2">
-                      <mat-label class="form-label">Address Line 1
-                        <span class="text-danger">
-                        *</span>
-                      </mat-label>
+                      <mat-label class="form-label">Address Line 1</mat-label>
                       <mat-form-field appearance="outline" class="form-input w-100">
                         <input type="text" matInput placeholder="Enter address line 1" formControlName="emergencyContactAddressLine1">
-                        @if (form.controls.emergencyContact.controls.emergencyContactAddressLine1.hasError('required') && form.controls.emergencyContact.controls.emergencyContactAddressLine1.touched) {
-                          <mat-error class="text-danger">Address line 1 is required</mat-error>
-                        }
                       </mat-form-field>
                     </div>
 
@@ -1116,60 +1110,38 @@
                     </div>
 
                     <div class="col-sm-3 px-2">
-                      <mat-label class="form-label">City
-                        <span class="text-danger">
-                        *</span>
-                      </mat-label>
+                      <mat-label class="form-label">City</mat-label>
                       <mat-form-field appearance="outline" class="form-input w-100">
-                        <input type="text" matInput placeholder="Enter city" formControlName="emergencyContactCity">
-                        @if (form.controls.emergencyContact.controls.emergencyContactCity.hasError('required') && form.controls.emergencyContact.controls.emergencyContactCity.touched) {
-                          <mat-error class="text-danger">City is required</mat-error>
-                        }
+                        <input type="text" matInput placeholder="Enter city"  formControlName="emergencyContactCity">
                       </mat-form-field>
                     </div>
 
                     <div class="col-sm-3 px-2">
-                      <mat-label class="form-label">Postcode
-                        <span class="text-danger">
-                        *</span>
-                      </mat-label>
+                      <mat-label class="form-label">Postcode</mat-label>
                       <mat-form-field appearance="outline" class="form-input w-100">
                         <input type="text" matInput placeholder="Enter postcode" formControlName="emergencyContactPostcode">
-                        @if (form.controls.emergencyContact.controls.emergencyContactPostcode.hasError('required') && form.controls.emergencyContact.controls.emergencyContactPostcode.touched) {
-                          <mat-error class="text-danger">Postcode is required</mat-error>
-                        }
                       </mat-form-field>
                     </div>
 
                     <div class="col-sm-3 px-2">
-                      <mat-label class="form-label">State
-                        <span class="text-danger">*</span>
-                      </mat-label>
+                      <mat-label class="form-label">State</mat-label>
                       <mat-form-field appearance="outline" class="form-input w-100">
                         <mat-select placeholder="Select state" formControlName="emergencyContactState">
                           @for (state of stateOptions; track state.value) {
                             <mat-option [value]="state.value">{{ state.name }}</mat-option>
                           }
                         </mat-select>
-                        @if (form.controls.emergencyContact.controls.emergencyContactState.hasError('required') && form.controls.emergencyContact.controls.emergencyContactState.touched) {
-                          <mat-error class="text-danger">State is required</mat-error>
-                        }
                       </mat-form-field>
                     </div>
 
                     <div class="col-sm-3 px-2">
-                      <mat-label class="form-label">Country
-                        <span class="text-danger">*</span>
-                      </mat-label>
+                      <mat-label class="form-label">Country</mat-label>
                       <mat-form-field appearance="outline" class="form-input w-100">
                         <mat-select placeholder="Select country" formControlName="emergencyContactCountry">
                           @for (option of countryOptions; track option.value) {
                             <mat-option [value]="option.value">{{ option.name }}</mat-option>
                           }
                         </mat-select>
-                        @if (form.controls.emergencyContact.controls.emergencyContactCountry.hasError('required') && form.controls.emergencyContact.controls.emergencyContactCountry.touched) {
-                          <mat-error class="text-danger">Country is required</mat-error>
-                        }
                       </mat-form-field>
                     </div>
                   </div>

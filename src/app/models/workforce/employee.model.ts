@@ -245,5 +245,5 @@ export interface Employee {
   emergencyContactName: string;
   emergencyContactRelationship: string;
   emergencyContactNo: string;
-  emergencyContactAddress?: string;
+  emergencyContactAddress?: string | null;
 }

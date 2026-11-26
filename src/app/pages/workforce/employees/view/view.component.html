@@ -16,10 +16,10 @@
         <div class="row mx-0">
           <div class="col-sm-7 px-2">
             <div class="d-flex align-items-center">
-              <div class="icon bg-light-primary text-primary me-3 fw-550">{{ employee.initials }}</div>
+              <div class="icon bg-light-primary text-primary me-3 fw-550">{{ initials(employee.name) }}</div>
               <div>
                 <h4 class="my-0">{{ employee.name }} <span class="badge bg-light-primary text-primary mx-2 fw-400">{{ employee.employmentStatus | titlecase}}</span> <span class="badge bg-light-secondary text-secondary fw-400">{{ employee.employmentType | titlecase }}</span></h4>
-                <p class="fs-10 fw-300 text-muted mt-0">{{ employee.employeeNo }} · {{ employee.department }} · {{ employee.position }}</p>
+                <p class="fs-10 fw-300 text-muted mt-0">{{ employee.employeeNo }} · {{ employee.department.name }} · {{ employee.position.title }}</p>
                 
               </div>
             </div>
@@ -421,11 +421,11 @@
               <div class="row mx-0">
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Department</label>
-                  <p class="text-muted">{{ employee.department || '-' }}</p>
+                  <p class="text-muted">{{ employee.department.name || '-' }}</p>
                 </div>
                 <div class="col-sm-8 px-2 mb-3">
                   <label class="text-dark fw-500">Position</label>
-                  <p class="text-muted">{{ employee.position || '-' }}</p>
+                  <p class="text-muted">{{ employee.position.title || '-' }}</p>
                 </div>
                 <div class="col-sm-4 px-2 mb-3">
                   <label class="text-dark fw-500">Reporting Manager</label>
@@ -433,7 +433,7 @@
                 </div>
                 <div class="col-sm-12 px-2 mb-3">
                   <label class="text-dark fw-500">Work Location</label>
-                  @if (selectedWorkLocation; as location) {
+                  @if (employee.location; as location) {
                     <div class="row mt-2">
                       <div class="col-sm-4 mb-3">
                         <label class="text-dark fw-500">Location Code</label>
@@ -445,13 +445,17 @@
                       </div>
                       <div class="col-sm-4 mb-3">
                         <label class="text-dark fw-500">Location Type</label>
-                        <p class="text-muted mb-0">{{ location.type }}</p>
+                        <p class="text-muted mb-0">{{ location.type || '-' }}</p>
                       </div>
                       <div class="col-sm-8 mb-3">
                         <label class="text-dark fw-500">Address</label>
                         <p class="text-muted mb-0">
-                          {{ location.addressLine1 }} {{ location.addressLine2 }}<br>
-                          {{ location.city }}, {{ location.state }} {{ location.postcode }}, {{ location.country }}
+                          @if (location.addressLine1 || location.addressLine2) {
+                            {{ location.addressLine1 }} {{ location.addressLine2 }}
+                          } @else { - }
+                          @if (location.city || location.state || location.postcode || location.country) {
+                            <br>{{ location.city }}@if (location.state) {, {{ location.state }}} {{ location.postcode }}@if (location.country) {, {{ location.country }}}
+                          }
                         </p>
                       </div>
                       <div class="col-sm-4 mb-3">
@@ -460,7 +464,7 @@
                       </div>
                     </div>
                   } @else {
-                    <p class="text-muted">-</p>
+                    <p class="text-muted mb-0">-</p>
                   }
                 </div>
               </div>
@@ -706,7 +710,7 @@
           <div class="row mx-0 mb-3">
             <div class="col-sm-7 px-2">
               <h4 class="text-primary my-0">Leave Records</h4>
-              <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeNo }} · {{ employee.department }} · {{ employee.position }}</p>
+              <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeNo }} · {{ employee.department.name }} · {{ employee.position.title }}</p>
             </div>
             <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
               <button mat-flat-button color="primary" class="ms-2">
@@ -783,7 +787,7 @@
           <div class="row mx-0 mb-3">
             <div class="col-sm-7 px-2">
               <h4 class="text-primary my-0">Employee claims</h4>
-              <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeNo }} · {{ employee.department }} · {{ employee.position }}</p>
+              <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeNo }} · {{ employee.department.name }} · {{ employee.position.title }}</p>
             </div>
             <div class="col-sm-5 px-2 d-flex align-items-center justify-content-end">
               <button mat-flat-button color="primary" class="ms-2" routerLink="/expenses-claims/claims/create">
@@ -868,7 +872,7 @@
           <div class="row mx-0 mb-3">
             <div class="col-sm-12 px-2">
               <h4 class="text-primary my-0">Overtime history</h4>
-              <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeNo }} · {{ employee.department }} · {{ employee.position }}</p>
+              <p class="fs-10 fw-300 text-muted mt-0 mb-2">{{ employee.employeeNo }} · {{ employee.department.name }} · {{ employee.position.title }}</p>
             </div>
           </div>
           <div class="row mx-0">

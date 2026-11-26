@@ -2,23 +2,20 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FullCalendarModule, CalendarOptions } from '@fullcalendar/angular';
 import type { EventInput } from 'fullcalendar';
 import dayGridPlugin from '@fullcalendar/angular/daygrid';
 import interactionPlugin from '@fullcalendar/angular/interaction';
 import themePlugin from "@fullcalendar/angular/themes/monarch";
-import { workLocations } from '../../../../data/workforce/work-locations.data';
 import { attendanceRecords } from '../../../../data/attendance/attendance.data';
 import { getEmployeeLeaveBalances } from '../../../../data/leave/leave-balances.data';
 import { leavePolicies } from '../../../../data/leave/leave-policies.data';
-import { claims } from '../../../../data/claims/claims.data';
-import { overtimeRequests } from '../../../../data/overtime/overtime-requests.data';
 import { commissionIncentiveSettings } from '../../../../data/commission/commission-incentive-settings.data';
 import { LeaveApplication } from '../../../../models/leave/leave.model';
 import type { ClaimStatus, ClaimType, ExpenseClaimRecord } from '../../../../models/claims/claim.model';
 import type { LeavePolicy } from '../../../../models/leave/leave-policy.model';
-import type { Employee, OvertimeCalculationBasis } from '../../../../models/workforce/employee.model';
+import type { Employee, EmployeeOverview, OvertimeCalculationBasis } from '../../../../models/workforce/employee.model';
+import type { WorkLocation } from '../../../../models/workforce/work-location.model';
 import type { OvertimeRequestRecord, OvertimeStatus, OvertimeType } from '../../../../models/overtime/overtime.model';
 import type {
   CommissionCalculationFrequency,
@@ -28,11 +25,14 @@ import type {
 import { LeaveDetailDialogComponent, type LeaveDialogData } from '../../../../shared/dialog/leave-detail-dialog/leave-detail-dialog.component';
 import { ClaimDetailDialogComponent } from '../../../../shared/dialog/claim-detail-dialog/claim-detail-dialog.component';
 import { OvertimeDetailDialogComponent } from '../../../../shared/dialog/overtime-detail-dialog/overtime-detail-dialog.component';
-import { NavigationService } from '../../../../services/navigation.service';
 import { EmployeesApiService } from '../../../../services/api/employees.service';
 import { ToastService } from '../../../../shared/components/toast/toast.service';
 import { AlertService } from '../../../../shared/components/alert/alert.service';
-import { getEmployee } from '../../../../data/workforce/employees.data';
+
+type EmployeeLocation = Pick<WorkLocation, 'id' | 'code' | 'name'> & Partial<Omit<WorkLocation, 'id' | 'code' | 'name'>>;
+type EmployeeView = Omit<Employee, 'department' | 'position'>
+  & Pick<EmployeeOverview, 'department' | 'position'>
+  & { location: EmployeeLocation | null };
 
 function dayAfter(dateString: string): string {
   const [year, month, day] = dateString.split('-').map(Number);
@@ -64,13 +64,12 @@ export class ViewComponent {
   ) {}
 
 
-  employee!: Employee;
+  employee!: EmployeeView;
   id: any = '';
-  readonly workLocations = workLocations;
-  readonly leaveYear = new Date().getFullYear();
-  readonly leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.active);
-  readonly commissionIncentiveSettings = commissionIncentiveSettings;
-  employeeLeaveBalances!: ReturnType<typeof getEmployeeLeaveBalances>;
+  leaveYear = new Date().getFullYear();
+  leavePolicies: LeavePolicy[] = leavePolicies.filter(policy => policy.active);
+  commissionIncentiveSettings = commissionIncentiveSettings;
+  employeeLeaveBalances: ReturnType<typeof getEmployeeLeaveBalances> = getEmployeeLeaveBalances('');
   claimRequests: ExpenseClaimRecord[] = [];
   overtimeHistory: OvertimeRequestRecord[] = [];
   leaveRequests: LeaveApplication[] = [];
@@ -96,6 +95,7 @@ export class ViewComponent {
     this.apiService.getEmployee(id).subscribe({
       next: (response) => {
         this.employee = response.data;
+        this.employeeLeaveBalances = getEmployeeLeaveBalances(this.employee.employeeNo || id);
         console.log("employee:", this.employee);
       },
       error: (error) => {
@@ -109,14 +109,15 @@ export class ViewComponent {
   }
 
 
-
-
-
-
-
-  get selectedWorkLocation() {
-    return this.workLocations.find(location => location.id === this.employee?.workLocationId);
+  initials(name: string | null | undefined) {
+    return (name ?? '').split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join('').toUpperCase();
   }
+
+
+
+
+
+
   selectedOvertimeRequest: OvertimeRequestRecord | null = null;
 
   get selectedCommissionSettings(): CommissionIncentiveSetting[] {
@@ -389,8 +390,8 @@ export class ViewComponent {
   }
 
   private policyBalance(policy: LeavePolicy): { entitled: number; balance: number } | undefined {
-    if (policy.code === 'AL') return this.employeeLeaveBalances.annual;
-    if (policy.code === 'ML') return this.employeeLeaveBalances.medical;
+    if (policy.code === 'AL') return this.employeeLeaveBalances?.annual;
+    if (policy.code === 'ML') return this.employeeLeaveBalances?.medical;
     return undefined;
   }
 
@@ -538,8 +539,8 @@ export class ViewComponent {
       employeeInformation: {
         name: this.employee.name,
         employeeId: this.employee.employeeNo,
-        department: this.employee.department,
-        position: this.employee.position,
+        department: this.employee.department.name,
+        position: this.employee.position.title,
         contactNo: this.employee.contactNo,
         nricNo: this.employee.nricPassportNo
       },
@@ -563,8 +564,8 @@ export class ViewComponent {
       employeeInformation: {
         name: this.employee.name,
         employeeId: this.employee.employeeNo,
-        department: this.employee.department,
-        position: this.employee.position,
+        department: this.employee.department.name,
+        position: this.employee.position.title,
         contactNo: this.employee.contactNo,
         nricNo: this.employee.nricPassportNo
       },

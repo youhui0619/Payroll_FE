@@ -258,12 +258,12 @@ export class CreateComponent {
       emergencyContactName: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
       emergencyContactRelationship: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
       emergencyContactNo: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-      emergencyContactAddressLine1: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      emergencyContactAddressLine1: new FormControl(''),
       emergencyContactAddressLine2: new FormControl(''),
-      emergencyContactCity: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-      emergencyContactPostcode: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-      emergencyContactState: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-      emergencyContactCountry: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      emergencyContactCity: new FormControl(''),
+      emergencyContactPostcode: new FormControl(''),
+      emergencyContactState: new FormControl(''),
+      emergencyContactCountry: new FormControl(''),
     }),
   });
   submitting: boolean = false;
@@ -777,6 +777,33 @@ export class CreateComponent {
   }
 
 
+  formatDate(date: Date | string | null): string | null {
+    if (!date) return null;
+
+    const parsedDate = date instanceof Date ? date : new Date(date);
+    if (isNaN(parsedDate.getTime())) return null;
+    const year = parsedDate.getFullYear();
+    const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
+    const day = String(parsedDate.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  functionAddress(
+    addressLine1: string | null | undefined,
+    addressLine2: string | null | undefined,
+    city: string | null | undefined,
+    postcode: string | null | undefined,
+    state: string | null | undefined,
+    country: string | null | undefined
+  ): string {
+    return [addressLine1, addressLine2, city, postcode, state, country]
+      .map(part => part?.trim())
+      .filter(Boolean)
+      .join(', ');
+  }
+
+
   onSubmit(form: FormGroup) {
     const availableStatutoryCodes = new Set<string>(this.statutoryEntitlementList.map(option => option.code));
     const selectedStatutoryCodes = this.form.controls.payroll.controls.statutoryEntitlementCodes;
@@ -790,30 +817,36 @@ export class CreateComponent {
       overtimeControls.overtimeHourlyRate.setValue(null);
     }
     const { personal, employment, payroll, taxInformation, leave, emergencyContact } = form.value;
-    const { employeeNo, name, ...personalFields } = personal;
-    const toDateString = (value: Date | string | null | undefined): string | null => {
-      if (!value) return null;
-      if (typeof value === 'string') return value;
-      const year = value.getFullYear();
-      const month = String(value.getMonth() + 1).padStart(2, '0');
-      const day = String(value.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    };
+
     const data = {
-      ...personalFields,
-      employeeNo: employeeNo,
-      name: name,
-      dateOfBirth: toDateString(personal.dateOfBirth),
+      ...personal,
+      address: this.functionAddress(
+        personal.addressLine1,
+        personal.addressLine2,
+        personal.city,
+        personal.postcode,
+        personal.state,
+        personal.country
+      ),
+      dateOfBirth: this.formatDate(personal.dateOfBirth),
       ...employment,
       positionId: employment.positionId || null,
-      managerId: employment.managerId || null,
-      joinedDate: toDateString(employment.joinedDate),
-      confirmationDate: toDateString(employment.confirmationDate),
-      resignationDate: toDateString(employment.resignationDate),
+      managerId: employment.managerId || 'e22d6008-70f0-409c-b956-b17755120810',
+      joinedDate: this.formatDate(employment.joinedDate),
+      confirmationDate: this.formatDate(employment.confirmationDate),
+      resignationDate: this.formatDate(employment.resignationDate),
       ...payroll,
       ...taxInformation,
       ...leave,
       ...emergencyContact,
+      emergencyContactAddress: this.functionAddress(
+        emergencyContact.emergencyContactAddressLine1,
+        emergencyContact.emergencyContactAddressLine2,
+        emergencyContact.emergencyContactCity,
+        emergencyContact.emergencyContactPostcode,
+        emergencyContact.emergencyContactState,
+        emergencyContact.emergencyContactCountry
+      ) || null,
     };
     console.log('employee data', data);
 
