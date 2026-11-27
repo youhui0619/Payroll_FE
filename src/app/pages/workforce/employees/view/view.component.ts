@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone } from '@angular/core';
 import { MaterialImports, MaterialProviders } from '../../../../shared/material-imports';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FullCalendarModule, CalendarOptions } from '@fullcalendar/angular';
@@ -60,12 +60,15 @@ export class ViewComponent {
     private apiService: EmployeesApiService,
     private toastService: ToastService,
     private alertService: AlertService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone
   ) {}
 
 
   employee!: EmployeeView;
   employeeCalendar: any;
+  attendance: any;
+  attendanceSummary: any;
   params: any;
   id: any = '';
   year = new Date().getFullYear();
@@ -104,7 +107,7 @@ export class ViewComponent {
     this.apiService.getEmployee(id).subscribe({
       next: (response) => {
         this.employee = response.data;
-        this.getEmployeeCalendar(id, this.params)
+        this.getEmployeeAttendanceCalendar(id, this.params)
         this.getEmployeeLeaveBalances(id, this.year);
         // this.getEmployeeLeaveApplications(id)
         console.log("employee:", this.employee);
@@ -119,12 +122,22 @@ export class ViewComponent {
     });
   }
 
-  getEmployeeCalendar(id: any, param: any){
-    console.log(id)
-    this.apiService.getEmployeeCalendar(id, param).subscribe({
+  getEmployeeAttendanceCalendar(id: any, param: any){
+    this.apiService.getEmployeeAttendanceCalendar(id, param).subscribe({
       next: (response) => {
         this.employeeCalendar = response.data;
-        console.log("employeeCalandar:", response.data);
+        const calendarEmployee = response.data?.employees?.[0];
+        this.attendance = calendarEmployee?.days ?? [];
+        this.attendanceSummary = calendarEmployee?.summary ?? null;
+        this.attendanceEvents = this.toAttendanceEvents(this.attendance);
+        this.calendarOptions = {
+          ...this.calendarOptions,
+          events: [...this.attendanceEvents, ...this.publicHolidayEvents]
+        };
+        this.cdr.markForCheck();
+        console.log("getEmployeeAttendanceCalendar:", response.data);
+        console.log("attendance:", this.attendance);
+        console.log("attendanceSummary:", this.attendanceSummary);
       },
       error: (error) => {
         this.toastService.show({
@@ -134,6 +147,112 @@ export class ViewComponent {
         });
       },
     });
+  }
+
+  private toAttendanceEvents(days: any[]): EventInput[] {
+    const events: EventInput[] = [];
+
+    for (const day of days ?? []) {
+      const date = day?.date;
+      if (!date) continue;
+
+      if (day.attendance) {
+        const attendance = day.attendance;
+        const clockIn = attendance.clockIn ? this.formatCalendarTime(attendance.clockIn) : null;
+        const clockOut = attendance.clockOut ? this.formatCalendarTime(attendance.clockOut) : null;
+        const timeRange = [clockIn, clockOut].filter(Boolean).join(' – ');
+        events.push({
+          id: `attendance-${attendance.id ?? date}`,
+          title: timeRange ? `Attendance · ${timeRange}` : 'Attendance recorded',
+          start: date,
+          allDay: true,
+          backgroundColor: '#e8f3ff',
+          borderColor: '#e8f3ff',
+          textColor: '#1769aa',
+          extendedProps: {
+            eventType: 'attendance',
+            remark: attendance.remark,
+            hoursWorkedMinutes: attendance.hoursWorkedMinutes,
+            durationMinutes: attendance.durationMinutes
+          }
+        });
+      }
+
+      if (day.leave) {
+        const leave = day.leave;
+        const leaveType = `${leave.policyCode ?? ''} ${leave.policyName ?? ''}`.toLowerCase();
+        const typeClass = leaveType.includes('medical') || leave.policyCode === 'ML'
+          ? 'medical'
+          : leaveType.includes('emergency') || leave.policyCode === 'EL'
+            ? 'emergency'
+            : leaveType.includes('unpaid') || leave.policyCode === 'UL'
+              ? 'unpaid'
+              : 'annual';
+        const colors = leaveEventColors[typeClass];
+        events.push({
+          id: `${leave.id ?? date}`,
+          title: `${leave.policyName ?? 'Leave'}`,
+          start: date,
+          allDay: true,
+          classNames: [`leave-${typeClass}`, 'bg-light-secondary', 'text-secondary'],
+          backgroundColor: 'var(--light-secondary)',
+          borderColor: 'var(--light-secondary)',
+          textColor: 'var(--secondary)',
+          extendedProps: { eventType: 'leave', typeClass, ...leave }
+        });
+      }
+
+      if (day.overtime) {
+        const overtime = day.overtime;
+        events.push({
+          id: `${overtime.id ?? date}`,
+          title: `Overtime · ${this.overtimeDuration(overtime.netMinutes ?? 0)}`,
+          start: date,
+          allDay: true,
+          classNames: ['bg-light-warning', 'text-warning'],
+          backgroundColor: 'var(--light-warning)',
+          borderColor: 'var(--light-warning)',
+          textColor: 'var(--warning)',
+          extendedProps: { eventType: 'overtime', ...overtime }
+        });
+      }
+
+      if (day.holiday) {
+        const holiday = day.holiday;
+        events.push({
+          id: `holiday-${holiday.id ?? date}`,
+          title: holiday.name ?? holiday.holidayName ?? 'Public Holiday',
+          start: date,
+          allDay: true,
+          backgroundColor: '#e6f6f5',
+          borderColor: '#e6f6f5',
+          textColor: '#087f78',
+          extendedProps: { eventType: 'public-holiday', holidayName: holiday.name ?? holiday.holidayName }
+        });
+      }
+    }
+
+    return events;
+  }
+
+  private formatCalendarTime(value: string): string {
+    return new Date(value).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  onCalendarDatesSet(dateInfo: { view: { currentStart: Date } }) {
+    const displayedDate = dateInfo.view.currentStart;
+    const year = displayedDate.getFullYear();
+    const month = displayedDate.getMonth() + 1;
+
+    if (this.params?.year === year && this.params?.month === month) return;
+
+    this.year = year;
+    this.month = month - 1;
+    this.params = { year, month };
+
+    if (this.id) {
+     return this.getEmployeeAttendanceCalendar(this.id, this.params);
+    }
   }
 
   getEmployeeLeaveBalances(id: any, year: any){
@@ -552,8 +671,9 @@ export class ViewComponent {
     fixedWeekCount: false,
     height: 'auto',
     contentHeight: 'auto',
+    datesSet: (dateInfo) => this.ngZone.run(() => this.onCalendarDatesSet(dateInfo)),
     events: [...this.attendanceEvents, ...this.publicHolidayEvents],
-    eventClick: (info) => this.openLeaveDetails(info.event.id),
+    eventClick: (info) => this.openCalendarEventDetails(info.event.extendedProps, info.event.startStr),
     eventDidMount: (info) => {
       if (info.event.extendedProps['eventType'] === 'public-holiday') {
         info.el.title = info.event.extendedProps['holidayName'];
@@ -566,6 +686,35 @@ export class ViewComponent {
         info.el.querySelectorAll<HTMLElement>('*').forEach(element => {
           element.style.setProperty('color', 'var(--info)', 'important');
         });
+        return;
+      }
+      if (info.event.extendedProps['eventType'] === 'overtime') {
+        info.el.classList.add('bg-light-warning', 'text-warning');
+        info.el.style.setProperty('--fc-event-bg-color', 'var(--light-warning)', 'important');
+        info.el.style.setProperty('--fc-event-border-color', 'var(--light-warning)', 'important');
+        info.el.style.setProperty('--fc-event-text-color', 'var(--warning)', 'important');
+        info.el.style.setProperty('background-color', 'var(--light-warning)', 'important');
+        info.el.style.setProperty('border-color', 'var(--light-warning)', 'important');
+        info.el.style.setProperty('color', 'var(--warning)', 'important');
+        info.el.querySelectorAll<HTMLElement>('*').forEach(element => {
+          element.style.setProperty('color', 'var(--warning)', 'important');
+        });
+        return;
+      }
+      if (info.event.extendedProps['eventType'] === 'leave') {
+        info.el.classList.add('bg-light-secondary', 'text-secondary');
+        info.el.style.setProperty('--fc-event-bg-color', 'var(--light-secondary)', 'important');
+        info.el.style.setProperty('--fc-event-border-color', 'var(--light-secondary)', 'important');
+        info.el.style.setProperty('--fc-event-text-color', 'var(--secondary)', 'important');
+        info.el.style.setProperty('background-color', 'var(--light-secondary)', 'important');
+        info.el.style.setProperty('border-color', 'var(--light-secondary)', 'important');
+        info.el.style.setProperty('color', 'var(--secondary)', 'important');
+        info.el.querySelectorAll<HTMLElement>('*').forEach(element => {
+          element.style.setProperty('color', 'var(--secondary)', 'important');
+        });
+        return;
+      }
+      if (info.event.extendedProps['eventType'] === 'attendance') {
         return;
       }
       const colors = leaveEventColors[info.event.extendedProps['typeClass']] ?? leaveEventColors['annual'];
@@ -616,6 +765,86 @@ export class ViewComponent {
       },
       approval: record.approval
     };
+  }
+
+  private openCalendarEventDetails(event: Record<string, any>, date: string): void {
+    if (event['eventType'] === 'leave') {
+      const status = this.displayStatus(event['status']);
+      const approval = event['approval'] ?? {};
+      this.selectedLeave = {
+        title: event['policyName'] ?? 'Leave details',
+        subtitle: `Leave request · ${event['reference'] ?? event['id'] ?? ''}`,
+        status,
+        statusClass: this.leaveStatusClass(status),
+        employeeInformation: {
+          name: this.employee.name,
+          employeeId: this.employee.employeeNo,
+          department: this.employee.department?.name ?? '',
+          position: this.employee.position?.title ?? '',
+          contactNo: this.employee.contactNo ?? '',
+          nricNo: this.employee.nricPassportNo ?? ''
+        },
+        details: {
+          leaveType: event['policyName'] ?? 'Leave',
+          reference: event['reference'] ?? event['id'] ?? '',
+          date,
+          duration: event['days'] ? `${event['days']} days` : '1 day',
+          reason: event['reason'] ?? ''
+        },
+        approval: {
+          approver: approval['approver'] ?? '—',
+          status,
+          comments: approval['comments'] ?? '',
+          approvedDate: approval['approvedDate'] ?? null
+        }
+      };
+      return;
+    }
+
+    if (event['eventType'] === 'overtime') {
+      const status = this.displayStatus(event['status']);
+      const approval = event['approval'] ?? {};
+      this.selectedOvertimeRequest = {
+        id: event['id'] ?? `overtime-${date}`,
+        requestDate: event['requestDate'] ?? date,
+        overtimeDate: date,
+        employeeId: this.employee.employeeNo,
+        employeeName: this.employee.name,
+        departmentId: this.employee.department?.id ?? '',
+        departmentName: this.employee.department?.name ?? '',
+        overtimeType: event['overtimeType'] ?? 'NORMAL_WORKING_DAY',
+        startTime: event['startTime'] ?? (event['attendance']?.clockIn ? this.formatCalendarTime(event['attendance'].clockIn) : '—'),
+        endTime: event['endTime'] ?? (event['attendance']?.clockOut ? this.formatCalendarTime(event['attendance'].clockOut) : '—'),
+        totalMinutes: event['totalMinutes'] ?? event['netMinutes'] ?? 0,
+        breakDurationMinutes: event['breakDurationMinutes'] ?? 0,
+        netMinutes: event['netMinutes'] ?? 0,
+        hourlyRateMultiplier: event['hourlyRateMultiplier'] ?? 1,
+        earningCode: event['earningCode'] ?? '—',
+        description: event['description'] ?? '',
+        supportingDocuments: event['supportingDocuments'] ?? [],
+        status: status as OvertimeStatus,
+        submittedAt: event['submittedAt'] ?? `${date}T00:00:00`,
+        approval: {
+          approver: approval['approver'] ?? '—',
+          approvedDate: approval['approvedDate'] ?? null,
+          comments: approval['comments'] ?? ''
+        }
+      };
+    }
+  }
+
+  private displayStatus(status: string | undefined): string {
+    if (!status) return 'Pending';
+    return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+  }
+
+  private leaveStatusClass(status: string): string {
+    switch (status) {
+      case 'Approved': return 'bg-light-primary text-primary';
+      case 'Rejected': return 'bg-light-danger text-danger';
+      case 'Pending': return 'bg-light-warning text-warning';
+      default: return 'bg-light-secondary text-secondary';
+    }
   }
 
   openLeaveRequestDetails(leave: LeaveApplication): void {

@@ -89,6 +89,18 @@ export class EmployeesApiService {
     });
   }
 
+  getEmployeeAttendanceCalendar(id: any, searchTerms: any): Observable<any> {
+    const params: any = Object.fromEntries(
+    Object.entries(searchTerms || {}).filter(
+      ([key, value]) =>
+        value !== '' && value !== null && value !== undefined
+    ));
+    return this.http.get(environment.apiURL + '/attendance/employees/' +id+ '/calendar', {
+      headers: this.getHeaders(),
+      params
+    });
+  }
+
   getEmployeeLeaveBalances(id: any, searchTerms: any): Observable<any> {
     const params: any = Object.fromEntries(
     Object.entries(searchTerms || {}).filter(

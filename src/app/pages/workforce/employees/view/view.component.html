@@ -61,7 +61,7 @@
             <div class="summary-info">
               <p class="fs-12 text-muted">Days attended
               </p>
-              <h3 class="mb-0">22 <span class="text-muted fw-400 fs-12">days</span></h3>
+              <h3 class="mb-0">{{ attendanceSummary.presentDays }} <span class="text-muted fw-400 fs-12">days</span></h3>
             </div>
             <div class="text-primary bg-light-primary text-end icon">
               <tabler-icon icon="users"></tabler-icon>
@@ -76,9 +76,9 @@
         <div class="card-body">
           <div  class="d-flex align-items-center justify-content-between">
             <div class="summary-info">
-              <p class="fs-12 text-muted">Annual Leave days
+              <p class="fs-12 text-muted">Leave days
               </p>
-              <h3 class="mb-0">2 <span class="text-muted fw-400 fs-12">days</span></h3>
+              <h3 class="mb-0">{{ attendanceSummary.leaveDays }} <span class="text-muted fw-400 fs-12">days</span></h3>
             </div>
             <div class="text-primary bg-light-primary text-end icon">
               <tabler-icon icon="user-check"></tabler-icon>
@@ -94,9 +94,9 @@
         <div class="card-body">
           <div  class="d-flex align-items-center justify-content-between">
             <div class="summary-info">
-              <p class="fs-12 text-muted">Unpaid Leave days
+              <p class="fs-12 text-muted">Working Time
               </p>
-              <h3 class="mb-0">2 <span class="text-muted fw-400 fs-12">days</span></h3>
+              <h3 class="mb-0">{{ attendanceSummary.workedMinutes }} <span class="text-muted fw-400 fs-12">minutes</span></h3>
             </div>
             <div class="text-primary bg-light-primary text-end icon">
               <tabler-icon icon="user-check"></tabler-icon>
@@ -111,9 +111,9 @@
         <div class="card-body">
           <div class="d-flex align-items-center justify-content-between">
             <div class="summary-info">
-              <p class="fs-12 text-muted">Medical Leave days
+              <p class="fs-12 text-muted">Total Overtime Minutes
               </p>
-              <h3 class="mb-0">1 <span class="text-muted fw-400 fs-12">days</span></h3>
+              <h3 class="mb-0">{{ attendanceSummary.overtimeMinutes }} <span class="text-muted fw-400 fs-12">minutes</span></h3>
             </div>
             <div class="text-primary bg-light-primary text-end icon">
               <tabler-icon icon="hourglass-empty"></tabler-icon>
