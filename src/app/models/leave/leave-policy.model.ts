@@ -16,6 +16,7 @@ export interface LeaveServiceEntitlementTier {
 }
 
 export interface LeavePolicy {
+  id: string;
   policyId: string;
   companyId: string;
 

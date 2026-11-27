@@ -840,7 +840,7 @@ export class CreateComponent {
       dateOfBirth: this.formatDate(personal.dateOfBirth),
       ...employment,
       positionId: employment.positionId || null,
-      managerId: employment.managerId || 'e22d6008-70f0-409c-b956-b17755120810',
+      managerId: employment.managerId || null,
       joinedDate: this.formatDate(employment.joinedDate),
       confirmationDate: this.formatDate(employment.confirmationDate),
       resignationDate: this.formatDate(employment.resignationDate),
@@ -850,14 +850,14 @@ export class CreateComponent {
       leaveEntitlementOverrides,
       leaveServiceEntitlementTiers,
       ...emergencyContact,
-      emergencyContactAddress: this.functionAddress(
-        emergencyContact.emergencyContactAddressLine1,
-        emergencyContact.emergencyContactAddressLine2,
-        emergencyContact.emergencyContactCity,
-        emergencyContact.emergencyContactPostcode,
-        emergencyContact.emergencyContactState,
-        emergencyContact.emergencyContactCountry
-      ) || null,
+      // emergencyContactAddress: this.functionAddress(
+      //   emergencyContact.emergencyContactAddressLine1,
+      //   emergencyContact.emergencyContactAddressLine2,
+      //   emergencyContact.emergencyContactCity,
+      //   emergencyContact.emergencyContactPostcode,
+      //   emergencyContact.emergencyContactState,
+      //   emergencyContact.emergencyContactCountry
+      // ) || null,
     };
     console.log('employee data', data);
 

@@ -87,7 +87,7 @@ export class ViewComponent {
   ngOnInit() {
     this.params = {
       year: this.year,
-      month: this.month
+      month: this.month + 1
       }
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id');
@@ -104,7 +104,7 @@ export class ViewComponent {
     this.apiService.getEmployee(id).subscribe({
       next: (response) => {
         this.employee = response.data;
-        // this.getEmployeeCalendar(id, this.params)
+        this.getEmployeeCalendar(id, this.params)
         this.getEmployeeLeaveBalances(id, this.year);
         // this.getEmployeeLeaveApplications(id)
         console.log("employee:", this.employee);
@@ -119,22 +119,22 @@ export class ViewComponent {
     });
   }
 
-  // getEmployeeCalendar(id: any, param: any){
-  //   console.log(id)
-  //   this.apiService.getEmployeeCalendar(id, param).subscribe({
-  //     next: (response) => {
-  //       this.employeeCalendar = response.data;
-  //       console.log("employeeCalandar:", response.data);
-  //     },
-  //     error: (error) => {
-  //       this.toastService.show({
-  //         title: error.error.code,
-  //         message: error.error.message,
-  //         icon: 'danger'
-  //       });
-  //     },
-  //   });
-  // }
+  getEmployeeCalendar(id: any, param: any){
+    console.log(id)
+    this.apiService.getEmployeeCalendar(id, param).subscribe({
+      next: (response) => {
+        this.employeeCalendar = response.data;
+        console.log("employeeCalandar:", response.data);
+      },
+      error: (error) => {
+        this.toastService.show({
+          title: error.error.code,
+          message: error.error.message,
+          icon: 'danger'
+        });
+      },
+    });
+  }
 
   getEmployeeLeaveBalances(id: any, year: any){
     console.log(id)

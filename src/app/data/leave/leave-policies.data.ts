@@ -3,6 +3,7 @@ import type { LeavePolicy } from '../../models/leave/leave-policy.model';
 // Demo policy values for the settings screens. Adjust the entitlements to match company policy.
 export const leavePolicies: LeavePolicy[] = [
   {
+    id: 'leave-policy-ul',
     policyId: 'leave-policy-al',
     companyId: 'demo-company',
     code: 'AL',
@@ -35,6 +36,7 @@ export const leavePolicies: LeavePolicy[] = [
     effectiveTo: null
   },
   {
+    id: 'leave-policy-ul',
     policyId: 'leave-policy-ml',
     companyId: 'demo-company',
     code: 'ML',
@@ -63,6 +65,7 @@ export const leavePolicies: LeavePolicy[] = [
     effectiveTo: null
   },
   {
+    id: 'leave-policy-ul',
     policyId: 'leave-policy-hl',
     companyId: 'demo-company',
     code: 'HL',
@@ -91,6 +94,7 @@ export const leavePolicies: LeavePolicy[] = [
     effectiveTo: null
   },
   {
+    id: 'leave-policy-ul',
     policyId: 'leave-policy-mat',
     companyId: 'demo-company',
     code: 'MAT',
@@ -119,6 +123,7 @@ export const leavePolicies: LeavePolicy[] = [
     effectiveTo: null
   },
   {
+    id: 'leave-policy-ul',
     policyId: 'leave-policy-pat',
     companyId: 'demo-company',
     code: 'PAT',
@@ -147,6 +152,7 @@ export const leavePolicies: LeavePolicy[] = [
     effectiveTo: null
   },
   {
+    id: 'leave-policy-ul',
     policyId: 'leave-policy-ul',
     companyId: 'demo-company',
     code: 'UL',

@@ -83,7 +83,7 @@ export class EmployeesApiService {
       ([key, value]) =>
         value !== '' && value !== null && value !== undefined
     ));
-    return this.http.get(environment.apiURL + '/attendance/employees/' +id+ '/calender', {
+    return this.http.get(environment.apiURL + '/employees/' +id+ '/calendar', {
       headers: this.getHeaders(),
       params
     });
